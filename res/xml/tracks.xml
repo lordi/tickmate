@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracks>
+
+	<section name="Diet/Nutrition/Drugs">
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegan"
+			description="Ate no animal products" />
+
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegetarian"
+			description="Ate neither meat nor fish" />
+
+		<track icon="@drawable/glyphicons_291_celebration_white" name="Alcohol"
+			description="Drank an alcoholic beverage" />
+
+		<track icon="@drawable/glyphicons_294_coffe_cup_white" name="Coffee"
+			description="Had a cup of coffee" />
+
+		<track icon="@drawable/glyphicons_275_fast_food_white" name="Fast food"
+			description="Went to a fast food restaurant" />
+
+		<track icon="@drawable/glyphicons_272_cake_white" name="Sweets"
+			description="Ate sweets or cake" />
+
+		<track icon="@drawable/glyphicons_362_smoking_white" name="Smoke"
+			description="Got my daily rush of nicotin" />
+
+		<track icon="@drawable/glyphicons_298_hospital_white" name="Medication"
+			description="Took my medication" />
+
+
+	</section>
+	<section name="Practise">
+		<track icon="@drawable/glyphicons_314_table_tennis_white" name="Sport"
+			description="Practiced my favourite sport" />
+
+		<track icon="@drawable/glyphicons_326_piano_white" name="Instrument"
+			description="Played my favourite instrument" />
+
+		<track icon="@drawable/glyphicons_175_stop_white" name="Yoga"
+			description="" />
+
+		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Work out"
+			description="Exercised " />
+
+
+		<track icon="@drawable/glyphicons_334_candle_white" name="Meditation"
+			description="Silenced my mind" />
+
+	</section>
+    
+	
+    <section name="Home">
+    	<track
+	        icon="@drawable/glyphicons_002_dog_white"
+        	name="Dog"
+        	description="Walked the dog"/>
+		        
+    	<track
+	        icon="@drawable/glyphicons_310_flower_white"
+        	name="Plants"
+        	description="Poured the plants"/>
+		
+		<track
+	        icon="@drawable/glyphicons_067_cleaning_white"
+        	name="Cleaning"
+        	description="The rooms are tidy"/>
+			
+    </section>
+    
+    <section name="Transportation">
+    	<track
+	        icon="@drawable/glyphicons_014_train_white"
+        	name="Public transport"
+        	description="Took the bus or the train"/>
+				
+    	<track
+	        icon="@drawable/glyphicons_005_car_white"
+        	name="Car"
+        	description="Used the car"/>
+		
+    	<track
+	        icon="@drawable/glyphicons_306_bicycle_white"
+        	name="Bike"
+        	description="Used my bike to get somewhere"/>
+		
+    </section>
+    
+        
+    <section name="Social life/Sexuality">
+    	<track
+	        icon="@drawable/glyphicons_410_facebook_white"
+        	name="Social network"
+        	description="Used my favourite social network site"/>
+			
+    	<track
+	        icon="@drawable/myicons_smiley_white"
+        	name="Smile"
+        	description="Made someone smile or laugh"/>
+			
+    	<track
+	        icon="@drawable/glyphicons_273_drink_white"
+        	name="Clubbing"
+        	description="Went out to a club or a bar"/>
+				
+    	<track
+	        icon="@drawable/glyphicons_012_heart_white"
+        	name="I love you"
+        	description="Said someone that I love him/her"/>
+			
+    	<track
+	        icon="@drawable/glyphicons_022_fire_white"
+        	name="Sex"
+        	description="Had sexual intercourse"/>
+			
+    </section>
+    
+    <section name="Hygiene">
+    	<track
+	        icon="@drawable/glyphicons_097_vector_path_line_white"
+        	name="Floss"
+        	description="Flossed my shiney teeth"/>
+			
+    </section>
+    
+    <section name="General/Abstract">
+	    <track
+			icon="@drawable/glyphicons_152_check_white"
+	        name="Todo"
+        	description="Got some noteworthy things done"/>
+		
+	    <track
+			icon="@drawable/glyphicons_343_thumbs_up_white"
+	        name="Good day"
+        	description="Overall I consider this a good day"/>
+						
+		<track icon="@drawable/glyphicons_282_cardio_white" name="Symptom"
+			description="A symptom of an illness occurred" />
+		
+		<track icon="@drawable/glyphicons_049_star_white" name="Custom"
+			description="User-specified track" />
+			    	    
+    </section>
+    
+</tracks>

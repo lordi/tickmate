@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/on_64" android:state_checked="true" android:state_pressed="true"/>
+    <item android:drawable="@drawable/on_64" android:state_checked="true" android:state_focused="false"/>
+    <item android:drawable="@drawable/off_64" android:state_checked="false" android:state_pressed="true"/>
+    <item android:drawable="@drawable/off_64" android:state_checked="false" android:state_focused="false"/>
+<!--  <item android:drawable="@drawable/toggle_checked" android:state_checked="true" android:state_pressed="true"/>
+    <item android:drawable="@drawable/toggle_checked" android:state_checked="true" android:state_focused="false"/>
+    <item android:drawable="@drawable/toggle_unchecked" android:state_checked="false" android:state_pressed="true"/>
+    <item android:drawable="@drawable/toggle_unchecked" android:state_checked="false" android:state_focused="false"/>
+     -->   
+</selector>
