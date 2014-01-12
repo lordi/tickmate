@@ -1,18 +1,6 @@
 package de.smasi.tickmate;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import de.smasi.tickmate.database.TracksDataSource;
-import de.smasi.tickmate.models.Track;
-import de.smasi.tickmate.views.EditTracksActivity;
-import de.smasi.tickmate.views.TrackListAdapter;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -23,16 +11,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import de.smasi.tickmate.views.EditTracksActivity;
 
 public class Tickmate extends FragmentActivity implements ActionBar.TabListener {
 

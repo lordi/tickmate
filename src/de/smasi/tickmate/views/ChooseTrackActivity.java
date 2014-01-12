@@ -7,23 +7,16 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import de.smasi.tickmate.R;
-import de.smasi.tickmate.R.layout;
-import de.smasi.tickmate.R.menu;
-import de.smasi.tickmate.database.TracksDataSource;
-import de.smasi.tickmate.models.Track;
-import android.os.Bundle;
-import android.app.Activity;
 import android.app.ListActivity;
-import android.content.Intent;
 import android.content.res.XmlResourceParser;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.support.v4.app.NavUtils;
+import de.smasi.tickmate.R;
+import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.models.Track;
 
 public class ChooseTrackActivity extends ListActivity {
 	

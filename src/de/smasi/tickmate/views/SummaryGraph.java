@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
 public class SummaryGraph extends View {

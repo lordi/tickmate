@@ -2,7 +2,6 @@ package de.smasi.tickmate.models;
 
 import android.content.Context;
 import android.content.res.Resources;
-import de.smasi.tickmate.R;
 
 public class Track {
 	String name;

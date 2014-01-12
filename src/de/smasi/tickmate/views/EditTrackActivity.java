@@ -1,23 +1,17 @@
 package de.smasi.tickmate.views;
 
-import de.smasi.tickmate.R;
-import de.smasi.tickmate.R.layout;
-import de.smasi.tickmate.R.menu;
-import de.smasi.tickmate.database.TracksDataSource;
-import de.smasi.tickmate.models.Track;
-import android.os.Bundle;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.EditText;
-import android.support.v4.app.NavUtils;
+import android.widget.ImageButton;
+import de.smasi.tickmate.R;
+import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.models.Track;
 
 public class EditTrackActivity extends Activity {
 	

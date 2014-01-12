@@ -1,6 +1,5 @@
 package de.smasi.tickmate.views;
 
-import java.sql.Date;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,23 +7,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import de.smasi.tickmate.R;
-import de.smasi.tickmate.R.layout;
-import de.smasi.tickmate.R.menu;
-import de.smasi.tickmate.database.TracksDataSource;
-import de.smasi.tickmate.models.Tick;
-import de.smasi.tickmate.models.Track;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.support.v4.app.NavUtils;
+import de.smasi.tickmate.R;
+import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.models.Tick;
+import de.smasi.tickmate.models.Track;
 
 public class ShowTrackActivity extends Activity {
 	

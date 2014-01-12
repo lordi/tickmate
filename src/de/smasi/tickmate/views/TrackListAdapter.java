@@ -1,8 +1,5 @@
 package de.smasi.tickmate.views;
 
-import de.smasi.tickmate.R;
-import de.smasi.tickmate.models.Track;
-import android.R.integer;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -11,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import de.smasi.tickmate.R;
+import de.smasi.tickmate.models.Track;
 
 public class TrackListAdapter extends ArrayAdapter<Track> {
 	private final Context context;

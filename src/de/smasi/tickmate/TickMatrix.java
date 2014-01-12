@@ -1,39 +1,26 @@
 package de.smasi.tickmate;
 
-import android.R.color;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.text.format.DateFormat;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.ToggleButton;
-
-import java.awt.font.TextAttribute;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Track;
-import de.smasi.tickmate.views.EditTrackActivity;
 import de.smasi.tickmate.views.ShowTrackActivity;
 
 public class TickMatrix extends LinearLayout implements OnCheckedChangeListener {
