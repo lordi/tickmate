@@ -7,6 +7,6 @@ Tickmate is an Android App and will be available from the Play Store in the near
 
 ![Screenshot](artwork/screenshot.png)
 
-Contains Icons from the [Glyphicons FREE Icon set](http://glyphicons.com/) (CC-BY-3.0)
+Contains icons from the [Glyphicons FREE icon set](http://glyphicons.com/) (CC-BY-3.0)
 
 Bitcoin donations are happily accepted: 18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu
