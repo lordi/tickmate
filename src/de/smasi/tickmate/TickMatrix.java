@@ -29,7 +29,12 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 	
 	public TickMatrix(Context context, AttributeSet attrs) {
 		super(context, attrs);
+	}
+	
+	public void buildView() {
+		Context context = getContext();
 		this.setOrientation(VERTICAL);
+		this.removeAllViews();
 		int rows=14;
 				
 		TracksDataSource ds = new TracksDataSource(context);
@@ -45,7 +50,6 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			tv.setPadding(20, 20, 20, 20);
 			tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			tv.setTextColor(context.getResources().getColor(android.R.color.secondary_text_dark));
-			setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			this.addView(tv);
 			return;			
 		}
@@ -62,31 +66,9 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		b2.setPadding(0, 0, 0, 0);
 		b2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0.8f));
 		
-		//headertop.addView(b2);
 		for (Track track : tracks) {
 			TrackButton b = new TrackButton(context, track);
-			/*b.setText(track.getName());
-			b.setWidth(80); 
-			b.setImageResource(track.getIconId(context));
-			b.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					
-					Intent intent = new Intent(getContext(), ShowTrackActivity.class);
-					intent.putExtra("track_id", track.getId());
-					startActivityForResult(intent, 1);
-					
-				}
-			});
-			*/
-			/*
-			b.setMaxWidth(32);
-			b.setMinimumWidth(32);
-			b.setMaxHeight(32);
-			b.setMinimumHeight(32);
-			
-			b.setPadding(32, 32, 32, 32); */
+
 			b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, (1.0f)/tracks.size()));
 			//b.setPadding(0, 0, 0, 0);
 			headerrow.addView(b);
@@ -114,15 +96,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		
 		LinearLayout tickgrid = new LinearLayout(getContext());
 		tickgrid.setOrientation(LinearLayout.VERTICAL);
-		/* TODO find correct color */
-		/*
-		tickgrid.setBackgroundResource(android.R.color.holo_blue_dark);
-		setBackgroundResource(android.R.color.background_dark);
 		
-		tickgrid.setBackgroundColor(0xff111111);
-		tickgrid.setVerticalGravity(Gravity.CENTER);
-		tickgrid.setHorizontalGravity(Gravity.LEFT);
-		*/
 		for (int y=0; y < rows; y++) {
 			cal.add(Calendar.DATE, 1);
 			Date date = cal.getTime();
@@ -187,7 +161,6 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			}
 			l2.setWeightSum(1.0f);
 			l2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 90, 0.2f));
-			//row.addView(l2);
 
 			row.addView(l);
 			row.addView(l2);
@@ -212,17 +185,15 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		sv.addView(tickgrid);
 		addView(headertop);
 		addView(sv);
+		
+		sv.post(new Runnable() { 
+	        public void run() { 
+	        	sv.fullScroll(View.FOCUS_DOWN);
+	        } 
+		});
 	}
 	
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		// TODO Auto-generated method stub
-		if (sv != null) {
-			sv.fullScroll(View.FOCUS_DOWN);
-		}
-		super.onLayout(changed, l, t, r, b);
-	}
-
+	
 	public class TrackButton extends ImageButton implements OnClickListener{
 		Track track;
 		
@@ -275,7 +246,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 	@Override
 	public void onCheckedChanged(CompoundButton arg0, boolean ticked) {
 		TickButton tb = (TickButton)arg0;
-		//Log.v("Tickmatrix", "C " + arg0.getId() +": "+  ticked + " in " + tb.getTrack().getName());
+		
 		TracksDataSource ds = new TracksDataSource(this.getContext());
 		ds.open();
 		if (ticked) {
@@ -286,6 +257,4 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		}
 		ds.close();		
 	}
-
-
 }

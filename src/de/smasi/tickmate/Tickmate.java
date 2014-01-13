@@ -63,7 +63,8 @@ public class Tickmate extends FragmentActivity implements ActionBar.TabListener 
 						actionBar.setSelectedNavigationItem(position);
 					}
 				});
-
+		
+		
 		// For each of the sections in the app, add a tab to the action bar.
 		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
 			// Create a tab with text corresponding to the page title defined by
@@ -73,7 +74,7 @@ public class Tickmate extends FragmentActivity implements ActionBar.TabListener 
 			actionBar.addTab(actionBar.newTab()
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
-		}
+		}			
 	}
 
 	@Override
@@ -151,11 +152,18 @@ public class Tickmate extends FragmentActivity implements ActionBar.TabListener 
 					container, false);
 			return rootView;
 		}
+
+		@Override
+		public void onResume() {
+			super.onResume();
+
+			TickMatrix tm = (TickMatrix)getView().findViewById(R.id.tickMatrix1);
+			tm.buildView();
+		}
 	}
 	
 	public void editTracks(View view) {
 		Intent intent = new Intent(this, EditTracksActivity.class);
 	    startActivity(intent);
 	}
-
 }
