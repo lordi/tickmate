@@ -192,6 +192,7 @@ public class ShowTrackActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.action_edit:
 		case R.id.action_edit_menu:
 			Intent intent = new Intent(this, EditTrackActivity.class);
 			intent.putExtra("track_id", track.getId());
