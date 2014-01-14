@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">Tickmate</string>
+	<string name="action_settings">Regulación</string>
+	<string name="title_section_ticks">Ticks</string>
+	<string name="title_section_weeks">Semanas</string>
+	<string name="title_section_months">Meses</string>
+	<string name="title_activity_edit_tracks">Mis Tracks</string>
+	<string name="my_tracks">Mis Tracks</string>
+	<string name="title_activity_choose_track">Track nuevo</string>
+	<string name="choose_track">Track nuevo</string>
+	<string name="title_activity_edit_track">Editar Track</string>
+	<string name="edit_description_hint">Descripción</string>
+	<string name="today">Hoy</string>
+	<string name="yesterday">Ayer</string>
+	<string name="inactive">Desactivado</string>
+	<string name="edit">Editar</string>
+	<string name="deactivate">Desactivar</string>
+	<string name="delete">Borrar</string>
+	<string name="title_activity_show_track">detalles de Tracks</string>
+	<string name="title_section_weekdays">Día de la semana</string>
+	<string name="numer_of_occurances">Existencia (total):</string>
+	<string name="no_tracks_found">Aún no se añadía Tracks. Toca aquí, para editar la lista de Tracks.</string>  
+</resources>
