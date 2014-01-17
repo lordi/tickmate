@@ -11,5 +11,5 @@ Contains icons from the [Glyphicons FREE icon set](http://glyphicons.com/) (CC-B
 
 Bitcoin donations are happily accepted at [18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu](http://blockchain.info/de/address/18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu).
 
-Translations are gratefully accepted as well, see [tracks.xml](res/xml/tracks.xml) and [strings.xml](res/xml/strings.xml).
+Translations are gratefully accepted as well, see [tracks.xml](res/xml/tracks.xml) and [strings.xml](res/values/strings.xml).
 
