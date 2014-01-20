@@ -1,9 +1,9 @@
 Tickmate
 ========
 
-Tickmate is basically a one bit journal. For each day, you can specify whether something occurred or not. The occurrences can be arbitrary things, like flossing your teeth or having a drink. You are able to quantify your habits and the accumulated data can be displayed for the past weeks or months to track changes over time. This way, it may help you to get over your old habits or embody new ones.
+Tickmate is basically a one bit journal. For each day, you can specify whether something has occurred or not. The occurrences can be arbitrary things, like flossing your teeth or having a drink. You are able to quantify your habits and the accumulated data can be displayed for the past weeks or months to track changes over time. This way, it may help you to get over your old habits or embody new ones.
 
-Tickmate is an Android App and will be available from the [Play Store](https://play.google.com/store/apps/details?id=de.smasi.tickmate). I hope it will also be available from F-Droid in the near future.
+Tickmate is an Android App and will be available from the [Play Store](https://play.google.com/store/apps/details?id=de.smasi.tickmate) and [F-Droid](https://f-droid.org/repository/browse/?fdid=de.smasi.tickmate).
 
 ![Screenshot](artwork/screenshot.png)
 
