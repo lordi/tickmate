@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracks>
+
+	<section name="Diæt/Ernæring/Stoffer">
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegansk"
+			description="Spiste ingen animalske produkter" />
+
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegetar"
+			description="Spiste hverken kød eller fisk" />
+
+		<track icon="@drawable/glyphicons_291_celebration_white" name="Alkohol"
+			description="Drak alkohol" />
+
+		<track icon="@drawable/glyphicons_294_coffe_cup_white" name="Kaffe"
+			description="Fik en kop kaffe" />
+
+		<track icon="@drawable/glyphicons_275_fast_food_white" name="Fast food"
+			description="Har været på fast food restaurant" />
+
+		<track icon="@drawable/glyphicons_272_cake_white" name="Søde sager"
+			description="Spiste slik eller kage" />
+
+		<track icon="@drawable/glyphicons_362_smoking_white" name="Rygning"
+			description="Fik mit daglige nikotin rush" />
+
+		<track icon="@drawable/glyphicons_298_hospital_white" name="Medicin"
+			description="Tog min medicin" />
+
+
+	</section>
+	<section name="Øvelse">
+		<track icon="@drawable/glyphicons_314_table_tennis_white" name="Sport"
+			description="Praktiserede min favorit sport" />
+
+		<track icon="@drawable/glyphicons_326_piano_white" name="Instrument"
+			description="Spillede mit favorit instrument" />
+
+		<track icon="@drawable/glyphicons_175_stop_white" name="Yoga"
+			description="" />
+
+		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Motion"
+			description="Træning " />
+
+
+		<track icon="@drawable/glyphicons_334_candle_white" name="Meditation"
+			description="Beroligede mit sind" />
+
+	</section>
+    
+	
+    <section name="Home">
+    	<track
+	        icon="@drawable/glyphicons_002_dog_white"
+        	name="Hunden"
+        	description="Gik med hunden"/>
+		        
+    	<track
+	        icon="@drawable/glyphicons_310_flower_white"
+        	name="Planter"
+        	description="Vandede planterne"/>
+		
+		<track
+	        icon="@drawable/glyphicons_067_cleaning_white"
+        	name="Rengøring"
+        	description="Værelserne er rene"/>
+			
+    </section>
+    
+    <section name="Transportation">
+    	<track
+	        icon="@drawable/glyphicons_014_train_white"
+        	name="Offentlig transport"
+        	description="Tog bussen eller toget"/>
+				
+    	<track
+	        icon="@drawable/glyphicons_005_car_white"
+        	name="Bil"
+        	description="Brugte bilen"/>
+		
+    	<track
+	        icon="@drawable/glyphicons_306_bicycle_white"
+        	name="Cykel"
+        	description="Brugte min cykle til at komme afsted"/>
+		
+    </section>
+    
+        
+    <section name="Social liv/Seksualitet">
+    	<track
+	        icon="@drawable/glyphicons_410_facebook_white"
+        	name="Sociale netværk"
+        	description="Brugte min favorit socialt-netværks side"/>
+			
+    	<track
+	        icon="@drawable/myicons_smiley_white"
+        	name="Smil"
+        	description="Fik nogen til at smile eller grine"/>
+			
+    	<track
+	        icon="@drawable/glyphicons_273_drink_white"
+        	name="I byen"
+        	description="Gik i byen på en klub eller bar"/>
+				
+    	<track
+	        icon="@drawable/glyphicons_012_heart_white"
+        	name="Jeg elsker dig"
+        	description="Sagde til nogen at jeg elsker ham/hende"/>
+			
+    	<track
+	        icon="@drawable/glyphicons_022_fire_white"
+        	name="Sex"
+        	description="Havde seksuelt samleje"/>
+			
+    </section>
+    
+    <section name="Hygiejne">
+    	<track
+	        icon="@drawable/glyphicons_097_vector_path_line_white"
+        	name="Tandtråd"
+        	description="Brugte tandtråd på mine rene tænder"/>
+			
+    </section>
+    
+    <section name="Generalt/Abstrakt">
+	    <track
+			icon="@drawable/glyphicons_152_check_white"
+	        name="Todo"
+        	description="Fik gjort noget bemærkelsesværdigt"/>
+		
+	    <track
+			icon="@drawable/glyphicons_343_thumbs_up_white"
+	        name="En god dag"
+        	description="Jeg syntes samlet set det har været en god dag"/>
+						
+		<track icon="@drawable/glyphicons_282_cardio_white" name="Symptom"
+			description="Jeg har haft symptomer på sygdom" />
+		
+		<track icon="@drawable/glyphicons_049_star_white" name="brugerdefineret"
+			description="Brugerdefineret track" />
+			    	    
+    </section>
+    
+</tracks>
