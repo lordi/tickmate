@@ -36,7 +36,7 @@
 			description="Played my favourite instrument" />
 
 		<track icon="@drawable/glyphicons_175_stop_white" name="Yoga"
-			description="" />
+			description="Made peace with my body" />
 
 		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Work out"
 			description="Exercised " />
@@ -57,7 +57,7 @@
     	<track
 	        icon="@drawable/glyphicons_310_flower_white"
         	name="Plants"
-        	description="Poured the plants"/>
+        	description="Watered the plants"/>
 		
 		<track
 	        icon="@drawable/glyphicons_067_cleaning_white"
@@ -75,7 +75,7 @@
     	<track
 	        icon="@drawable/glyphicons_005_car_white"
         	name="Car"
-        	description="Used the car"/>
+        	description="Did some driving"/>
 		
     	<track
 	        icon="@drawable/glyphicons_306_bicycle_white"
@@ -89,7 +89,7 @@
     	<track
 	        icon="@drawable/glyphicons_410_facebook_white"
         	name="Social network"
-        	description="Used my favourite social network site"/>
+        	description="Used my favourite social networking site"/>
 			
     	<track
 	        icon="@drawable/myicons_smiley_white"
@@ -104,7 +104,7 @@
     	<track
 	        icon="@drawable/glyphicons_012_heart_white"
         	name="I love you"
-        	description="Said someone that I love him/her"/>
+        	description="Told someone I love them"/>
 			
     	<track
 	        icon="@drawable/glyphicons_022_fire_white"
@@ -117,7 +117,7 @@
     	<track
 	        icon="@drawable/glyphicons_097_vector_path_line_white"
         	name="Floss"
-        	description="Flossed my shiney teeth"/>
+        	description="Flossed my shiny teeth"/>
 			
     </section>
     
