@@ -135,7 +135,7 @@
 		<track icon="@drawable/glyphicons_282_cardio_white" name="Symptom"
 			description="Jeg har haft symptomer på sygdom" />
 		
-		<track icon="@drawable/glyphicons_049_star_white" name="brugerdefineret"
+		<track icon="@drawable/glyphicons_049_star_white" name="Brugerdefineret"
 			description="Brugerdefineret track" />
 			    	    
     </section>
