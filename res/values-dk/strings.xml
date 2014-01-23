@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tickmate</string>
+    <string name="action_settings">Indstillinger</string>
+    <string name="title_section_ticks">Mine kryds</string>
+    <string name="title_section_weeks">Uger</string>
+    <string name="title_section_months">Måneder</string>
+    <string name="title_activity_edit_tracks">Mine tracks</string>
+    <string name="my_tracks">Mine tracks</string>
+    <string name="title_activity_choose_track">Nyt track</string>
+    <string name="choose_track">Nyt track</string>
+    <string name="title_activity_edit_track">Rediger track</string>
+    <string name="edit_description_hint">Beskrivelse</string>
+    <string name="today">i dag</string>
+    <string name="yesterday">i går</string>
+    <string name="inactive">inaktiv</string>
+    <string name="edit">Rediger</string>
+    <string name="deactivate">De-aktiver</string>
+    <string name="delete">Slet</string>
+    <string name="title_activity_show_track">Track detaljer</string>
+    <string name="title_section_weekdays">Dage i ugen</string>
+    <string name="numer_of_occurances">Antal hændelser:</string>
+    <string name="no_tracks_found">Ingen tracks er blevet tilføjet. Tap her for at åbne trackliste redgering.</string>
+
+</resources>
