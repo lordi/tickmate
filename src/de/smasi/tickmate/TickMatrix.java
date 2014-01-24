@@ -36,6 +36,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		this.setOrientation(VERTICAL);
 		this.removeAllViews();
 		int rows=14;
+		float rowHeight = -1.0f;
 				
 		TracksDataSource ds = new TracksDataSource(context);
 		ds.open();
@@ -125,6 +126,8 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 				tickgrid.addView(splitter);
 				
 			}
+			
+			
 			String day_name=cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
 			t_weekday.setText(day_name.toUpperCase());
 			
@@ -140,12 +143,25 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			l.setOrientation(LinearLayout.VERTICAL);
 			l.addView(t_weekday);
 			l.addView(t_date);
+			t_date.setEllipsize(null);
+			t_weekday.setEllipsize(null);
 			
-			l.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0.8f));
+			// Some screen characteristics:
+			//float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+			//int densityDpi = context.getResources().getDisplayMetrics().densityDpi;
+			//Log.d("tickmate", t_weekday.getTextSize() + "|" + t_date.getTextSize() + "|" + scaledDensity + "|" + densityDpi);
+			// Small screen, normal font	27.0|16.5|1.5|240
+			// Small screen, huge font  	35.0|21.449999|1.9499999|240
+			// Huge screen, normal font 	24.0|14.643751|1.3312501|213
+			// Huge screen, huge font   	31.0|19.036875|1.730625|213
+
+			if (rowHeight < 0f) {
+				rowHeight = t_weekday.getTextSize() + t_date.getTextSize() + 40.0f;
+			}
+			
+			l.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, (int)rowHeight, 0.8f));
 			l.setGravity(Gravity.CENTER_VERTICAL);
-			//l2.addView(l);			
-			
-			
+					
 			LinearLayout l2 = new LinearLayout(getContext());
 			l2.setOrientation(LinearLayout.HORIZONTAL);
 			for (Track track : tracks) {
@@ -160,7 +176,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 				l2.addView(checker);
 			}
 			l2.setWeightSum(1.0f);
-			l2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 90, 0.2f));
+			l2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, (int)rowHeight, 0.2f));
 
 			row.addView(l);
 			row.addView(l2);
