@@ -79,14 +79,18 @@ public class ShowTrackActivity extends Activity {
 	}
 	
 	private void retrieveGraphData() {
+		Calendar today = Calendar.getInstance();
+		Locale locale = Locale.getDefault();
+		
+		// Collect week days
 		this.weekdaysKeys = new LinkedList<String>();
-		this.weekdaysKeys.add("MO");
-		this.weekdaysKeys.add("DI");
-		this.weekdaysKeys.add("MI");
-		this.weekdaysKeys.add("DO");
-		this.weekdaysKeys.add("FR");
-		this.weekdaysKeys.add("SA");
-		this.weekdaysKeys.add("SO");
+		Calendar day = (Calendar) today.clone();
+		day.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		
+		for (int i = 0; i < 7; i++) {
+			this.weekdaysKeys.add(day.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, locale).toUpperCase());
+			day.add(Calendar.DATE, 1);
+		}		
 		this.weekdaysData = new LinkedList<Integer>();
 		this.weekdaysData.add(0);
 		this.weekdaysData.add(0);
@@ -95,8 +99,7 @@ public class ShowTrackActivity extends Activity {
 		this.weekdaysData.add(0);
 		this.weekdaysData.add(0);	
 		this.weekdaysData.add(0);
-		
-		Calendar today = Calendar.getInstance();
+
 		
 		// Collect months
 		Map<Integer, Integer> monthyear_to_index = new HashMap<Integer, Integer>(); 
@@ -105,7 +108,7 @@ public class ShowTrackActivity extends Activity {
 		Calendar month = (Calendar) today.clone();
 		month.clear(Calendar.HOUR);
 		for (int i = 0; i < 7; i++) {
-			this.monthsKeys.add(0, month.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
+			this.monthsKeys.add(0, month.getDisplayName(Calendar.MONTH, Calendar.SHORT, locale));
 			int index = month.get(Calendar.YEAR) + month.get(Calendar.MONTH) * 10000;
 			monthyear_to_index.put(index, 6-i);
 			month.add(Calendar.MONTH, -1);
