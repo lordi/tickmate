@@ -36,11 +36,10 @@
 			description="Played my favourite instrument" />
 
 		<track icon="@drawable/glyphicons_175_stop_white" name="Yoga"
-			description="Made peace with my body" />
+			description="Practiced yoga" />
 
 		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Work out"
 			description="Exercised " />
-
 
 		<track icon="@drawable/glyphicons_334_candle_white" name="Meditation"
 			description="Silenced my mind" />

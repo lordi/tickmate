@@ -4,11 +4,11 @@
 		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegano"
 			description="No comido ningún producto animal" />
 		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegetariano"
-			description="no comido ni carne ni pescado" />
+			description="No comido ni carne ni pescado" />
 		<track icon="@drawable/glyphicons_291_celebration_white" name="Alcohol"
-			description="consumido alcohol" />
+			description="Consumido alcohol" />
 		<track icon="@drawable/glyphicons_294_coffe_cup_white" name="Café"
-			description="bebido café" />
+			description="Bebido café" />
 		<track icon="@drawable/glyphicons_275_fast_food_white" name="Fast food"
 			description="Comido en un restaurante de fast food" />
 		<track icon="@drawable/glyphicons_272_cake_white" name="Ducles"
@@ -24,7 +24,7 @@
 		<track icon="@drawable/glyphicons_326_piano_white" name="Instrumento"
 			description="Tocado mi instrumento favorito" />
 		<track icon="@drawable/glyphicons_175_stop_white" name="Yoga"
-			description="Hecho ejercicios de Yoga" />
+			description="Hecho ejercicios de yoga" />
 		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Entrenar"
 			description="Práctica deportiva" />
 		<track icon="@drawable/glyphicons_334_candle_white" name="Meditar"
