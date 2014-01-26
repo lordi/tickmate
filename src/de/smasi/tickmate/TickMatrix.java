@@ -183,12 +183,11 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		for (Track track : tracks) {
 			TrackButton b = new TrackButton(context, track);
 
-			b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, (1.0f)/tracks.size()));
-			//b.setPadding(0, 0, 0, 0);
+			b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, (1.0f)/tracks.size()));
 			headerrow.addView(b);
 		}
 		headerrow.setWeightSum(1.0f);
-		headerrow.setPadding(0, 5, 10, 5);
+		headerrow.setPadding(5, 5, 10, 5);
 		headerrow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, rowHeight, 0.2f));
 		
 		headertop.addView(b2);
