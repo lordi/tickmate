@@ -35,8 +35,8 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		Context context = getContext();
 		this.setOrientation(VERTICAL);
 		this.removeAllViews();
-		int rows=14;
-		float rowHeight = -1.0f;
+		int rows = 14; // number of days that will be displayed
+		int rowHeight = -1;
 				
 		TracksDataSource ds = new TracksDataSource(context);
 		ds.open();
@@ -54,33 +54,6 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			this.addView(tv);
 			return;			
 		}
-		
-		LinearLayout headertop = new LinearLayout(getContext());
-		headertop.setOrientation(LinearLayout.HORIZONTAL);
-		
-		LinearLayout headerrow = new LinearLayout(getContext());
-		headerrow.setOrientation(LinearLayout.HORIZONTAL);
-	
-		TextView b2 = new TextView(context);
-		b2.setText("");
-		
-		b2.setPadding(0, 0, 0, 0);
-		b2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0.8f));
-		
-		for (Track track : tracks) {
-			TrackButton b = new TrackButton(context, track);
-
-			b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, (1.0f)/tracks.size()));
-			//b.setPadding(0, 0, 0, 0);
-			headerrow.addView(b);
-		}
-		headerrow.setWeightSum(1.0f);
-		headerrow.setPadding(0, 5, 10, 5);
-		headerrow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 90, 0.2f));
-		
-		headertop.addView(b2);
-		headertop.addView(headerrow);
-		headertop.setWeightSum(1.0f);
 		
 		
 		Calendar cal = Calendar.getInstance();
@@ -155,11 +128,11 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			// Huge screen, normal font 	24.0|14.643751|1.3312501|213
 			// Huge screen, huge font   	31.0|19.036875|1.730625|213
 
-			if (rowHeight < 0f) {
-				rowHeight = t_weekday.getTextSize() + t_date.getTextSize() + 40.0f;
+			if (rowHeight <= 0) {
+				rowHeight = (int)(t_weekday.getTextSize() + t_date.getTextSize()) + 40;
 			}
 			
-			l.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, (int)rowHeight, 0.8f));
+			l.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, rowHeight, 0.8f));
 			l.setGravity(Gravity.CENTER_VERTICAL);
 					
 			LinearLayout l2 = new LinearLayout(getContext());
@@ -176,7 +149,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 				l2.addView(checker);
 			}
 			l2.setWeightSum(1.0f);
-			l2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, (int)rowHeight, 0.2f));
+			l2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, rowHeight, 0.2f));
 
 			row.addView(l);
 			row.addView(l2);
@@ -193,8 +166,34 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		
 		
 		tickgrid.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		
 		tickgrid.setPadding(10, 0, 10, 5);
+		
+		LinearLayout headertop = new LinearLayout(getContext());
+		headertop.setOrientation(LinearLayout.HORIZONTAL);
+		
+		LinearLayout headerrow = new LinearLayout(getContext());
+		headerrow.setOrientation(LinearLayout.HORIZONTAL);
+	
+		TextView b2 = new TextView(context);
+		b2.setText("");
+		
+		b2.setPadding(0, 0, 0, 0);
+		b2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, rowHeight, 0.8f));
+		
+		for (Track track : tracks) {
+			TrackButton b = new TrackButton(context, track);
+
+			b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, (1.0f)/tracks.size()));
+			//b.setPadding(0, 0, 0, 0);
+			headerrow.addView(b);
+		}
+		headerrow.setWeightSum(1.0f);
+		headerrow.setPadding(0, 5, 10, 5);
+		headerrow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, rowHeight, 0.2f));
+		
+		headertop.addView(b2);
+		headertop.addView(headerrow);
+		headertop.setWeightSum(1.0f);		
 		headertop.setPadding(10, 0, 10, 0);
 		headertop.setBackgroundResource(R.drawable.bottom_line);
 		sv = new ScrollView(getContext());
