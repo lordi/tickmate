@@ -115,7 +115,7 @@
     <section name="Гигиена">
     	<track
 	        icon="@drawable/glyphicons_097_vector_path_line_white"
-        	name="Floss"
+          name="Зубная нить"
         	description="Чистка моих белоснежных зубов нитью"/>
 			
     </section>
