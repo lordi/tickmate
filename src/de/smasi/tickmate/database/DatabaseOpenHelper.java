@@ -15,8 +15,12 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_YEAR = "year";
     public static final String COLUMN_MONTH = "month";
     public static final String COLUMN_DAY = "day";
+    public static final String COLUMN_HOUR = "hour";
+    public static final String COLUMN_MINUTE = "minute";
+    public static final String COLUMN_SECOND = "second";
     public static final String COLUMN_MODIFIED = "modified";
     public static final String COLUMN_TRACK_ID = "_track_id";
+    public static final String COLUMN_MULTIPLE_ENTRIES_PER_DAY = "multiple_entries_per_day";
 
     private static final String DATABASE_NAME = "tickmate.db";
     private static final int DATABASE_VERSION = 9;
@@ -32,7 +36,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         + COLUMN_NAME + " text not null, "
         + COLUMN_DESCRIPTION + " text not null, "
         + COLUMN_ICON + " text not null, "
-        + COLUMN_ENABLED + " integer not null "
+        + COLUMN_ENABLED + " integer not null,"
+        + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer not null"
         + ");";
     private static final String DATABASE_CREATE_TICKS =
         "create table " + TABLE_TICKS + "("
@@ -40,7 +45,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         + COLUMN_TRACK_ID + " integer,"
         + COLUMN_YEAR + " integer,"
         + COLUMN_MONTH + " integer,"
-        + COLUMN_DAY + " integer"
+        + COLUMN_DAY + " integer,"
+        + COLUMN_HOUR + " integer,"
+        + COLUMN_MINUTE + " integer,"
+        + COLUMN_SECOND + " integer"
         + ");";
     
 	@Override
@@ -51,6 +59,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		/* TODO: Alter table depending on version umber */
 	    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);
 	    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKS);
 	    onCreate(db);

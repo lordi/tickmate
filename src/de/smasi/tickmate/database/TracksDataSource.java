@@ -26,14 +26,18 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_NAME,
 			DatabaseOpenHelper.COLUMN_ENABLED,
 			DatabaseOpenHelper.COLUMN_DESCRIPTION,
-			DatabaseOpenHelper.COLUMN_ICON
+			DatabaseOpenHelper.COLUMN_ICON,
+			DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY
 	};
 	private String[] allColumnsTicks = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_TRACK_ID,
 			DatabaseOpenHelper.COLUMN_YEAR,
 			DatabaseOpenHelper.COLUMN_MONTH,
-			DatabaseOpenHelper.COLUMN_DAY
+			DatabaseOpenHelper.COLUMN_DAY,
+			DatabaseOpenHelper.COLUMN_HOUR,
+			DatabaseOpenHelper.COLUMN_MINUTE,
+			DatabaseOpenHelper.COLUMN_SECOND
 	};
 	
 	List<Tick> ticks;
@@ -60,7 +64,7 @@ public class TracksDataSource {
 	public Track getTrack(int id) {
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
-				null, null, null);
+				null, null, null, null);
 		cursor.moveToFirst();
 		Track newTrack = cursorToTrack(cursor);
 		cursor.close();
@@ -71,7 +75,7 @@ public class TracksDataSource {
 		List<Track> tracks = new ArrayList<Track>();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, null, null, null, null, null);
+				allColumns, null, null, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -88,7 +92,7 @@ public class TracksDataSource {
 		List<Track> tracks = new ArrayList<Track>();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null, null);
+				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -105,7 +109,7 @@ public class TracksDataSource {
 		ticks = new ArrayList<Tick>();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
-				allColumnsTicks, null, null, null, null, null);
+				allColumnsTicks, null, null, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -180,6 +184,7 @@ public class TracksDataSource {
 		Track track = new Track(cursor.getString(1), cursor.getString(3));
 		track.setId(cursor.getInt(0));
 		track.setEnabled(cursor.getInt(2) >= 1);
+		track.setMultipleEntriesEnabled(cursor.getInt(5) >= 1);
 		track.setIcon(cursor.getString(4));
 		return track;
 	}
@@ -197,9 +202,10 @@ public class TracksDataSource {
 
 		values.put(DatabaseOpenHelper.COLUMN_NAME, t.getName());
 		values.put(DatabaseOpenHelper.COLUMN_ENABLED, t.isEnabled() ? 1 : 0);
+		values.put(DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY, t.multipleEntriesEnabled() ? 1 : 0);
 		values.put(DatabaseOpenHelper.COLUMN_DESCRIPTION, t.getDescription());
 		values.put(DatabaseOpenHelper.COLUMN_ICON, t.getIcon());
-
+		
 		if (t.getId() > 0) {
 			Log.d("Tickmate", "saving track id=" + t.getId());
 			database.update(DatabaseOpenHelper.TABLE_TRACKS, values,
