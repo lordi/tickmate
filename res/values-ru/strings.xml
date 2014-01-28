@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tickmate</string>
+    <string name="action_settings">Настройки</string>
+    <string name="title_section_ticks">Тики</string>
+    <string name="title_section_weeks">Недели</string>
+    <string name="title_section_months">Месяцы</string>
+    <string name="title_activity_edit_tracks">Мои отслеживания</string>
+    <string name="my_tracks">Мои отслеживания</string>
+    <string name="title_activity_choose_track">Добавить отслеживание</string>
+    <string name="choose_track">Добавить отслеживание</string>
+    <string name="title_activity_edit_track">Редактировать отслеживание</string>
+    <string name="edit_description_hint">Описание</string>
+    <string name="today">сегодня</string>
+    <string name="yesterday">вчера</string>
+    <string name="inactive">неактивно</string>
+    <string name="edit">Редактировать</string>
+    <string name="deactivate">Отключить</string>
+    <string name="delete">Удалить</string>
+    <string name="title_activity_show_track">Подробности отслеживания</string>
+    <string name="title_section_weekdays">Дни недели</string>
+    <string name="numer_of_occurances">Количество вхождений:</string>
+    <string name="no_tracks_found">Отслеживания еще не добавлены. Нажмите, чтобы открыть редактор отслеживаний.</string>
+
+</resources>
