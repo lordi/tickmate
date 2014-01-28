@@ -1,9 +1,10 @@
 Localization
 ------------
 
-  * German (me)
-  * Spanish (Teti)
   * Danish (Johan Hilge Thygesen)
+  * German (me)
+  * Russian (@kwinto)
+  * Spanish (Teti)
 
 Contribute
 ----------
