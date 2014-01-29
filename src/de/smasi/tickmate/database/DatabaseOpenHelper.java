@@ -59,7 +59,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		/* TODO: Alter table depending on version umber */
+		/* TODO: Alter table depending on version number to support older versions */
 	    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);
 	    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKS);
 	    onCreate(db);

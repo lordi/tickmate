@@ -170,11 +170,39 @@ public class TracksDataSource {
 		
 		return ticks;
 	}
+	
+	public List<Tick> getTicksForDay(Track track, Calendar date) {
+		List<Tick> ticks = new ArrayList<Tick>();
+
+		if (database == null)
+			this.open();
+		
+		String[] args = { Integer.toString(track.getId()),
+				Integer.toString(date.get(Calendar.YEAR)),
+				Integer.toString(date.get(Calendar.MONTH)),
+				Integer.toString(date.get(Calendar.DAY_OF_MONTH)) };
+		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
+				allColumnsTicks,
+				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
+				DatabaseOpenHelper.COLUMN_YEAR +"=? AND " + 
+				DatabaseOpenHelper.COLUMN_MONTH +"=? AND " +
+				DatabaseOpenHelper.COLUMN_DAY +"=?",
+				args, null, null, null);
+		
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Tick tick = cursorToTick(cursor);
+			ticks.add(tick);
+			cursor.moveToNext();
+		}
+
+		// Make sure to close the cursor
+		cursor.close();
+		
+		return ticks;
+	}
 
 	public boolean isTicked(Track t, Calendar date) {
-		date.clear(Calendar.HOUR);
-		date.clear(Calendar.MINUTE);
-		date.clear(Calendar.SECOND);
 		date.clear(Calendar.MILLISECOND);
 		//Log.v("Tickmate", "checking for " + t.getId() + " and " + date.toString());
 		return ticks.contains(new Tick(t.getId(), date));
@@ -194,6 +222,9 @@ public class TracksDataSource {
 		c.set(Calendar.YEAR, cursor.getInt(2));
 		c.set(Calendar.MONTH, cursor.getInt(3));
 		c.set(Calendar.DAY_OF_MONTH, cursor.getInt(4));
+		c.set(Calendar.HOUR_OF_DAY, cursor.getInt(5));
+		c.set(Calendar.MINUTE, cursor.getInt(6));
+		c.set(Calendar.SECOND, cursor.getInt(7));
 		return new Tick(cursor.getInt(1), c);
 	}
 
@@ -219,14 +250,15 @@ public class TracksDataSource {
 
 	public void setTick(Track track, Calendar date) {
 		ContentValues values = new ContentValues();
-		date.clear(Calendar.HOUR);
-		date.clear(Calendar.MINUTE);
-		date.clear(Calendar.SECOND);
 		values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, track.getId());
 		values.put(DatabaseOpenHelper.COLUMN_YEAR,date.get(Calendar.YEAR));
 		values.put(DatabaseOpenHelper.COLUMN_MONTH,date.get(Calendar.MONTH));
 		values.put(DatabaseOpenHelper.COLUMN_DAY,date.get(Calendar.DAY_OF_MONTH));
-		Log.d("Tickmate", "insert at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH));
+		values.put(DatabaseOpenHelper.COLUMN_HOUR, date.get(Calendar.HOUR_OF_DAY));
+		values.put(DatabaseOpenHelper.COLUMN_MINUTE, date.get(Calendar.MINUTE));
+		values.put(DatabaseOpenHelper.COLUMN_SECOND, date.get(Calendar.SECOND));
+		Log.d("Tickmate", "insert at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
+				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
 		database.insert(DatabaseOpenHelper.TABLE_TICKS, null, values);
 	}
 
@@ -235,16 +267,20 @@ public class TracksDataSource {
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
 				Integer.toString(date.get(Calendar.MONTH)),
-				Integer.toString(date.get(Calendar.DAY_OF_MONTH)) };
-		database.delete(DatabaseOpenHelper.TABLE_TICKS,
+				Integer.toString(date.get(Calendar.DAY_OF_MONTH)),
+				Integer.toString(date.get(Calendar.HOUR_OF_DAY)),
+				Integer.toString(date.get(Calendar.MINUTE)),
+				Integer.toString(date.get(Calendar.SECOND)) };
+		int affectedRows = database.delete(DatabaseOpenHelper.TABLE_TICKS,
 				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
 				DatabaseOpenHelper.COLUMN_YEAR+"=? AND " + 
 				DatabaseOpenHelper.COLUMN_MONTH+"=? AND " +
-				DatabaseOpenHelper.COLUMN_DAY+"=? ", args);
-		date.clear(Calendar.HOUR);
-		date.clear(Calendar.MINUTE);
-		date.clear(Calendar.SECOND);
-		Log.d("Tickmate", "delete at "+timestamp);
+				DatabaseOpenHelper.COLUMN_DAY+"=? AND " +
+				DatabaseOpenHelper.COLUMN_HOUR+"=? AND " +
+				DatabaseOpenHelper.COLUMN_MINUTE+"=? AND " +
+				DatabaseOpenHelper.COLUMN_SECOND+"=?", args);
+		Log.d("Tickmate", "delete " + affectedRows + "rows at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
+				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
 	}
 
 	public int getTickCount(int track_id) {
