@@ -187,7 +187,10 @@ public class TracksDataSource {
 				DatabaseOpenHelper.COLUMN_YEAR +"=? AND " + 
 				DatabaseOpenHelper.COLUMN_MONTH +"=? AND " +
 				DatabaseOpenHelper.COLUMN_DAY +"=?",
-				args, null, null, null);
+				args, null, null,
+				DatabaseOpenHelper.COLUMN_HOUR + ", " +
+				DatabaseOpenHelper.COLUMN_MINUTE + ", " +
+				DatabaseOpenHelper.COLUMN_SECOND + " ASC");
 		
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -281,6 +284,46 @@ public class TracksDataSource {
 				DatabaseOpenHelper.COLUMN_SECOND+"=?", args);
 		Log.d("Tickmate", "delete " + affectedRows + "rows at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
 				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
+	}
+	
+	public boolean removeLastTickOfDay(Track track, Calendar date) {
+		List<Tick> ticks = this.getTicksForDay(track, date);
+		
+		Tick tick = ticks.get(ticks.size()-1);
+		
+		if (database == null)
+			this.open();
+		
+		String[] args = { Integer.toString(track.getId()),
+				Integer.toString(tick.date.get(Calendar.YEAR)),
+				Integer.toString(tick.date.get(Calendar.MONTH)),
+				Integer.toString(tick.date.get(Calendar.DAY_OF_MONTH)),
+				Integer.toString(tick.date.get(Calendar.HOUR_OF_DAY)),
+				Integer.toString(tick.date.get(Calendar.MINUTE)),
+				Integer.toString(tick.date.get(Calendar.SECOND)) };
+		// FIXME: This also removes all ticks added in the same second as the last tick.
+		int affectedRows = database.delete(DatabaseOpenHelper.TABLE_TICKS,
+				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
+				DatabaseOpenHelper.COLUMN_YEAR+"=? AND " + 
+				DatabaseOpenHelper.COLUMN_MONTH+"=? AND " +
+				DatabaseOpenHelper.COLUMN_DAY+"=? AND " +
+				DatabaseOpenHelper.COLUMN_HOUR+"=? AND " +
+				DatabaseOpenHelper.COLUMN_MINUTE+"=? AND " +
+				DatabaseOpenHelper.COLUMN_SECOND+"=?", args);
+		Log.d("Tickmate", "delete " + affectedRows + "rows at " +
+				tick.date.get(Calendar.YEAR) + " " +
+				tick.date.get(Calendar.MONTH) + " " +
+				tick.date.get(Calendar.DAY_OF_MONTH) + " - " +
+				tick.date.get(Calendar.HOUR_OF_DAY) + ":" +
+				tick.date.get(Calendar.MINUTE) + ":" +
+				tick.date.get(Calendar.SECOND));
+		
+		database.close();
+		
+		if (affectedRows > 0)
+			return true;
+		
+		return false;
 	}
 
 	public int getTickCount(int track_id) {

@@ -23,5 +23,5 @@
     <string name="numer_of_occurances">Number of occurrences:</string>
     <string name="no_tracks_found">No tracks have been added. Tap here to open the track list editor.</string>
     <string name="multiple_entries">Multiple entries per day</string>
-
+    <string name="tick_deleted">Removed last tick</string>
 </resources>

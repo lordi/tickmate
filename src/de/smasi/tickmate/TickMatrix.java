@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Tick;
@@ -239,13 +240,14 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 	}
 	
 	
-	public class MultiTickButton extends Button implements OnClickListener {
+	public class MultiTickButton extends Button implements OnClickListener, OnLongClickListener {
 		Track track;
 		Calendar date;
 
 		public MultiTickButton(Context context, Track track, Calendar date) {
 			super(context);
 			this.setOnClickListener(this);
+			this.setOnLongClickListener(this);
 			this.track = track;
 			this.date = date;
 			int size = 32;
@@ -287,6 +289,21 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			ds.close();
 			
 			this.updateText();
+		}
+		
+		@Override
+		public boolean onLongClick(View v) {
+			TracksDataSource ds = new TracksDataSource(this.getContext());
+			ds.open();
+			boolean success = ds.removeLastTickOfDay(this.getTrack(), this.getDate());
+			ds.close();
+			
+			if (success) {
+				this.updateText();
+				Toast.makeText(this.getContext(), R.string.tick_deleted, Toast.LENGTH_SHORT).show();
+			}
+			
+			return true;
 		}
 	}
 
