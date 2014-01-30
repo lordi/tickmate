@@ -43,7 +43,7 @@ public class TracksDataSource {
 	List<Tick> ticks;
 
 	public TracksDataSource(Context context) {
-		dbHelper = new DatabaseOpenHelper(context);
+		dbHelper = DatabaseOpenHelper.getInstance(context.getApplicationContext());
 	}
 
 	public void open() throws SQLException {
@@ -173,9 +173,10 @@ public class TracksDataSource {
 	
 	public List<Tick> getTicksForDay(Track track, Calendar date) {
 		List<Tick> ticks = new ArrayList<Tick>();
-
-		if (database == null)
+		
+		if (this.database == null) {
 			this.open();
+		}
 		
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
@@ -232,6 +233,8 @@ public class TracksDataSource {
 	}
 
 	public void storeTrack(Track t) {
+		this.open();
+		
 		ContentValues values = new ContentValues();
 
 		values.put(DatabaseOpenHelper.COLUMN_NAME, t.getName());
@@ -249,9 +252,13 @@ public class TracksDataSource {
 			Log.d("Tickmate", "inserting track id=" + t.getId());
 			database.insert(DatabaseOpenHelper.TABLE_TRACKS, null, values);
 		}
+		
+		this.close();
 	}
 
 	public void setTick(Track track, Calendar date) {
+		this.open();
+		
 		ContentValues values = new ContentValues();
 		values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, track.getId());
 		values.put(DatabaseOpenHelper.COLUMN_YEAR,date.get(Calendar.YEAR));
@@ -263,9 +270,13 @@ public class TracksDataSource {
 		Log.d("Tickmate", "insert at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
 				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
 		database.insert(DatabaseOpenHelper.TABLE_TICKS, null, values);
+
+		this.close();
 	}
 
 	public void removeTick(Track track, Calendar date) {
+		this.open();
+		
 		long timestamp = (long)(date.getTimeInMillis()/1000.0);
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
@@ -284,15 +295,19 @@ public class TracksDataSource {
 				DatabaseOpenHelper.COLUMN_SECOND+"=?", args);
 		Log.d("Tickmate", "delete " + affectedRows + "rows at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
 				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
+
+		this.close();
 	}
 	
 	public boolean removeLastTickOfDay(Track track, Calendar date) {
 		List<Tick> ticks = this.getTicksForDay(track, date);
 		
+		if (ticks.size() == 0)
+			return false;
+		
 		Tick tick = ticks.get(ticks.size()-1);
 		
-		if (database == null)
-			this.open();
+		this.open();
 		
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(tick.date.get(Calendar.YEAR)),
@@ -318,7 +333,7 @@ public class TracksDataSource {
 				tick.date.get(Calendar.MINUTE) + ":" +
 				tick.date.get(Calendar.SECOND));
 		
-		database.close();
+		this.close();
 		
 		if (affectedRows > 0)
 			return true;

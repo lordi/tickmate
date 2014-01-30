@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
+	private static DatabaseOpenHelper sharedInstance;
+
     public static final String TABLE_TRACKS = "tracks";
     public static final String TABLE_TICKS = "ticks";
     public static final String COLUMN_ID = "_id";
@@ -27,7 +29,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-     }
+    }
+    
+    public static DatabaseOpenHelper getInstance(Context context) {
+    	if (sharedInstance == null) {
+			sharedInstance = new DatabaseOpenHelper(context.getApplicationContext());
+		}
+    	return sharedInstance;
+    }
     
     // Database creation sql statement
     private static final String DATABASE_CREATE_TRACKS = 

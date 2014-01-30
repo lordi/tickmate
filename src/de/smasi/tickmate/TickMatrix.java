@@ -284,8 +284,16 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		@Override
 		public void onClick(View v) {
 			TracksDataSource ds = new TracksDataSource(this.getContext());
+			
+			Calendar c = Calendar.getInstance();
+			c.set(Calendar.MILLISECOND, 0);
+
 			ds.open();
-			ds.setTick(this.getTrack(), this.getDate());
+			if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
+				ds.setTick(this.getTrack(), c);
+			} else {
+				ds.setTick(this.getTrack(), this.date);
+			}
 			ds.close();
 			
 			this.updateText();
