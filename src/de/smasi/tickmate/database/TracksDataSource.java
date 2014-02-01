@@ -229,7 +229,9 @@ public class TracksDataSource {
 		c.set(Calendar.HOUR_OF_DAY, cursor.getInt(5));
 		c.set(Calendar.MINUTE, cursor.getInt(6));
 		c.set(Calendar.SECOND, cursor.getInt(7));
-		return new Tick(cursor.getInt(1), c);
+		Tick tick = new Tick(cursor.getInt(1), c);
+		tick.tick_id = cursor.getInt(0);
+		return tick;
 	}
 
 	public void storeTrack(Track t) {
@@ -277,7 +279,6 @@ public class TracksDataSource {
 	public void removeTick(Track track, Calendar date) {
 		this.open();
 		
-		long timestamp = (long)(date.getTimeInMillis()/1000.0);
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
 				Integer.toString(date.get(Calendar.MONTH)),
@@ -310,21 +311,10 @@ public class TracksDataSource {
 		this.open();
 		
 		String[] args = { Integer.toString(track.getId()),
-				Integer.toString(tick.date.get(Calendar.YEAR)),
-				Integer.toString(tick.date.get(Calendar.MONTH)),
-				Integer.toString(tick.date.get(Calendar.DAY_OF_MONTH)),
-				Integer.toString(tick.date.get(Calendar.HOUR_OF_DAY)),
-				Integer.toString(tick.date.get(Calendar.MINUTE)),
-				Integer.toString(tick.date.get(Calendar.SECOND)) };
-		// FIXME: This also removes all ticks added in the same second as the last tick.
+				Integer.toString(tick.tick_id) };
 		int affectedRows = database.delete(DatabaseOpenHelper.TABLE_TICKS,
 				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
-				DatabaseOpenHelper.COLUMN_YEAR+"=? AND " + 
-				DatabaseOpenHelper.COLUMN_MONTH+"=? AND " +
-				DatabaseOpenHelper.COLUMN_DAY+"=? AND " +
-				DatabaseOpenHelper.COLUMN_HOUR+"=? AND " +
-				DatabaseOpenHelper.COLUMN_MINUTE+"=? AND " +
-				DatabaseOpenHelper.COLUMN_SECOND+"=?", args);
+				DatabaseOpenHelper.COLUMN_ID +"=?", args);
 		Log.d("Tickmate", "delete " + affectedRows + "rows at " +
 				tick.date.get(Calendar.YEAR) + " " +
 				tick.date.get(Calendar.MONTH) + " " +

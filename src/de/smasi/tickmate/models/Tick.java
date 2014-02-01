@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 public class Tick {
 	public int track_id;
+	public int tick_id;
 	public Calendar date; // unix timestamp
 	
 	public Tick(int track_id, Calendar date) {
