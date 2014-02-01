@@ -24,4 +24,6 @@
     <string name="no_tracks_found">No tracks have been added. Tap here to open the track list editor.</string>
     <string name="multiple_entries">Multiple entries per day</string>
     <string name="tick_deleted">Removed last tick</string>
+    <string name="alert_delete_track_title">Delete track</string>
+    <string name="alert_delete_track_message">Are you sure you want to delete all data for this track?</string>
 </resources>

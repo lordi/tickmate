@@ -47,7 +47,7 @@ public class TracksDataSource {
 	}
 
 	public void open() throws SQLException {
-		Log.w("tickmate", "Opening database");
+		Log.d("tickmate", "Opening database");
 		database = dbHelper.getWritableDatabase();
 	}
 
@@ -56,14 +56,22 @@ public class TracksDataSource {
 	}
 
 	public void deleteTrack(Track track) {
-		if (this.database == null) {
+		long id = track.getId();
+		
+		if (database == null || !database.isOpen()) {
 			this.open();
 		}
-		long id = track.getId();
-		System.out.println("Track deleted with id: " + id);
-		database.delete(DatabaseOpenHelper.TABLE_TRACKS,
+		
+		try {
+			int rows = database.delete(DatabaseOpenHelper.TABLE_TRACKS,
 				DatabaseOpenHelper.COLUMN_ID + " = " + id, null);
-		this.close();
+			if (rows > 0)
+				System.out.println("Track deleted with id: " + id);
+		} finally {
+			if (this.database != null) {
+				this.close();
+			}
+		}
 	}
 
 	public Track getTrack(int id) {		
@@ -192,7 +200,6 @@ public class TracksDataSource {
 				Integer.toString(date.get(Calendar.YEAR)),
 				Integer.toString(date.get(Calendar.MONTH)),
 				Integer.toString(date.get(Calendar.DAY_OF_MONTH)) };
-		Log.w("tickmate", "database: " + database);
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks,
 				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +

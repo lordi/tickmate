@@ -1,5 +1,6 @@
 package de.smasi.tickmate.views;
 
+import java.security.interfaces.DSAKey;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,6 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -23,6 +26,7 @@ import de.smasi.tickmate.models.Track;
 
 public class ShowTrackActivity extends Activity {
 	
+	private TracksDataSource ds;
 	private Track track;
 	private int tickCount;
 	private List<Tick> ticks;
@@ -55,7 +59,7 @@ public class ShowTrackActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_track);
 		
-		TracksDataSource ds = new TracksDataSource(this);
+		this.ds = new TracksDataSource(this);
 		
 		int track_id = getIntent().getExtras().getInt("track_id");
 		
@@ -182,6 +186,11 @@ public class ShowTrackActivity extends Activity {
 		image_icon.setImageResource(track.getIconId(this));
 	}
 	
+	private void deleteTrack() {
+		this.ds.deleteTrack(this.track);
+		NavUtils.navigateUpFromSameTask(this);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -193,6 +202,22 @@ public class ShowTrackActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit:
+		case R.id.action_delete:
+			new AlertDialog.Builder(this)
+			.setTitle(R.string.alert_delete_track_title)
+		    .setMessage(R.string.alert_delete_track_message)
+		    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		        	deleteTrack();
+		        }
+		     })
+		    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            // do nothing
+		        }
+		     })
+		    .show();			
+			return true;
 		case R.id.action_edit_menu:
 			Intent intent = new Intent(this, EditTrackActivity.class);
 			intent.putExtra("track_id", track.getId());
