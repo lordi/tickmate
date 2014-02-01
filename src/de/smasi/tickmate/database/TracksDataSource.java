@@ -47,6 +47,7 @@ public class TracksDataSource {
 	}
 
 	public void open() throws SQLException {
+		Log.w("tickmate", "Opening database");
 		database = dbHelper.getWritableDatabase();
 	}
 
@@ -55,13 +56,17 @@ public class TracksDataSource {
 	}
 
 	public void deleteTrack(Track track) {
+		if (this.database == null) {
+			this.open();
+		}
 		long id = track.getId();
 		System.out.println("Track deleted with id: " + id);
 		database.delete(DatabaseOpenHelper.TABLE_TRACKS,
 				DatabaseOpenHelper.COLUMN_ID + " = " + id, null);
+		this.close();
 	}
 
-	public Track getTrack(int id) {
+	public Track getTrack(int id) {		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
 				null, null, null, null);
@@ -73,7 +78,7 @@ public class TracksDataSource {
 
 	public List<Track> getMyTracks() {
 		List<Track> tracks = new ArrayList<Track>();
-
+		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, null, null, null, null, null, null);
 
@@ -85,12 +90,13 @@ public class TracksDataSource {
 		}
 		// Make sure to close the cursor
 		cursor.close();
+		
 		return tracks;
 	}
 	
 	public List<Track> getActiveTracks() {
 		List<Track> tracks = new ArrayList<Track>();
-
+		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null, null, null);
 
@@ -102,6 +108,7 @@ public class TracksDataSource {
 		}
 		// Make sure to close the cursor
 		cursor.close();
+		
 		return tracks;
 	}
 
@@ -148,12 +155,16 @@ public class TracksDataSource {
 
 		//Log.d("Tickmate", "loaded: track_id=" + cursor.getInt(0) + " @ " + cursor.getString(1) + " = " + cursor.getInt(2));
 		cursor.close();
+		
 		return ret;
 	}
 
 	public List<Tick> getTicks(int track_id) {
 		List<Tick> ticks = new ArrayList<Tick>();
-
+		
+		if (database == null)
+			this.open();
+		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + Integer.toString(track_id),
 				null, null, null, null);
@@ -174,14 +185,14 @@ public class TracksDataSource {
 	public List<Tick> getTicksForDay(Track track, Calendar date) {
 		List<Tick> ticks = new ArrayList<Tick>();
 		
-		if (this.database == null) {
+		if (database == null)
 			this.open();
-		}
 		
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
 				Integer.toString(date.get(Calendar.MONTH)),
 				Integer.toString(date.get(Calendar.DAY_OF_MONTH)) };
+		Log.w("tickmate", "database: " + database);
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks,
 				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
