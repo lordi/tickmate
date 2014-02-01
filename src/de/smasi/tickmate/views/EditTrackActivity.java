@@ -19,6 +19,7 @@ public class EditTrackActivity extends Activity {
 	EditText edit_name;
 	EditText edit_description;
 	CheckBox edit_enabled;
+	CheckBox edit_multiple_entries_enabled;
 	ImageButton edit_icon;
 	
 
@@ -47,6 +48,8 @@ public class EditTrackActivity extends Activity {
 		edit_name.setText(track.getName());
 		edit_enabled = (CheckBox) findViewById(R.id.edit_enabled);
 		edit_enabled.setChecked(track.isEnabled());		
+		edit_multiple_entries_enabled = (CheckBox) findViewById(R.id.multiple_entries_enabled);
+		edit_multiple_entries_enabled.setChecked(track.multipleEntriesEnabled());
 		edit_description = (EditText) findViewById(R.id.edit_description);
 		edit_description.setText(track.getDescription());
 		edit_icon = (ImageButton) findViewById(R.id.edit_icon);
@@ -58,13 +61,16 @@ public class EditTrackActivity extends Activity {
 		String newName = edit_name.getText().toString();
 		String newDescription = edit_description.getText().toString();
 		boolean newEnabled = edit_enabled.isChecked();
+		boolean newMultipleEntriesEnabled = edit_multiple_entries_enabled.isChecked();
 		
 		Log.v("Tickmate", "stop");
 		if (!track.getName().equals(newName) 
 				|| track.isEnabled() != newEnabled
+				|| track.multipleEntriesEnabled() != newMultipleEntriesEnabled
 				|| track.getDescription() != newDescription) {
 			track.setName(newName);
 			track.setEnabled(newEnabled);
+			track.setMultipleEntriesEnabled(newMultipleEntriesEnabled);
 			track.setDescription(newDescription);
 			TracksDataSource ds = new TracksDataSource(this);
 			ds.open();

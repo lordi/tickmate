@@ -26,23 +26,28 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_NAME,
 			DatabaseOpenHelper.COLUMN_ENABLED,
 			DatabaseOpenHelper.COLUMN_DESCRIPTION,
-			DatabaseOpenHelper.COLUMN_ICON
+			DatabaseOpenHelper.COLUMN_ICON,
+			DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY
 	};
 	private String[] allColumnsTicks = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_TRACK_ID,
 			DatabaseOpenHelper.COLUMN_YEAR,
 			DatabaseOpenHelper.COLUMN_MONTH,
-			DatabaseOpenHelper.COLUMN_DAY
+			DatabaseOpenHelper.COLUMN_DAY,
+			DatabaseOpenHelper.COLUMN_HOUR,
+			DatabaseOpenHelper.COLUMN_MINUTE,
+			DatabaseOpenHelper.COLUMN_SECOND
 	};
 	
 	List<Tick> ticks;
 
 	public TracksDataSource(Context context) {
-		dbHelper = new DatabaseOpenHelper(context);
+		dbHelper = DatabaseOpenHelper.getInstance(context.getApplicationContext());
 	}
 
 	public void open() throws SQLException {
+		Log.w("tickmate", "Opening database");
 		database = dbHelper.getWritableDatabase();
 	}
 
@@ -51,16 +56,20 @@ public class TracksDataSource {
 	}
 
 	public void deleteTrack(Track track) {
+		if (this.database == null) {
+			this.open();
+		}
 		long id = track.getId();
 		System.out.println("Track deleted with id: " + id);
 		database.delete(DatabaseOpenHelper.TABLE_TRACKS,
 				DatabaseOpenHelper.COLUMN_ID + " = " + id, null);
+		this.close();
 	}
 
-	public Track getTrack(int id) {
+	public Track getTrack(int id) {		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
-				null, null, null);
+				null, null, null, null);
 		cursor.moveToFirst();
 		Track newTrack = cursorToTrack(cursor);
 		cursor.close();
@@ -69,9 +78,9 @@ public class TracksDataSource {
 
 	public List<Track> getMyTracks() {
 		List<Track> tracks = new ArrayList<Track>();
-
+		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, null, null, null, null, null);
+				allColumns, null, null, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -81,14 +90,15 @@ public class TracksDataSource {
 		}
 		// Make sure to close the cursor
 		cursor.close();
+		
 		return tracks;
 	}
 	
 	public List<Track> getActiveTracks() {
 		List<Track> tracks = new ArrayList<Track>();
-
+		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null, null);
+				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -98,6 +108,7 @@ public class TracksDataSource {
 		}
 		// Make sure to close the cursor
 		cursor.close();
+		
 		return tracks;
 	}
 
@@ -105,7 +116,7 @@ public class TracksDataSource {
 		ticks = new ArrayList<Tick>();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
-				allColumnsTicks, null, null, null, null, null);
+				allColumnsTicks, null, null, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -144,12 +155,16 @@ public class TracksDataSource {
 
 		//Log.d("Tickmate", "loaded: track_id=" + cursor.getInt(0) + " @ " + cursor.getString(1) + " = " + cursor.getInt(2));
 		cursor.close();
+		
 		return ret;
 	}
 
 	public List<Tick> getTicks(int track_id) {
 		List<Tick> ticks = new ArrayList<Tick>();
-
+		
+		if (database == null)
+			this.open();
+		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + Integer.toString(track_id),
 				null, null, null, null);
@@ -166,11 +181,43 @@ public class TracksDataSource {
 		
 		return ticks;
 	}
+	
+	public List<Tick> getTicksForDay(Track track, Calendar date) {
+		List<Tick> ticks = new ArrayList<Tick>();
+		
+		if (database == null)
+			this.open();
+		
+		String[] args = { Integer.toString(track.getId()),
+				Integer.toString(date.get(Calendar.YEAR)),
+				Integer.toString(date.get(Calendar.MONTH)),
+				Integer.toString(date.get(Calendar.DAY_OF_MONTH)) };
+		Log.w("tickmate", "database: " + database);
+		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
+				allColumnsTicks,
+				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
+				DatabaseOpenHelper.COLUMN_YEAR +"=? AND " + 
+				DatabaseOpenHelper.COLUMN_MONTH +"=? AND " +
+				DatabaseOpenHelper.COLUMN_DAY +"=?",
+				args, null, null,
+				DatabaseOpenHelper.COLUMN_HOUR + ", " +
+				DatabaseOpenHelper.COLUMN_MINUTE + ", " +
+				DatabaseOpenHelper.COLUMN_SECOND + " ASC");
+		
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Tick tick = cursorToTick(cursor);
+			ticks.add(tick);
+			cursor.moveToNext();
+		}
+
+		// Make sure to close the cursor
+		cursor.close();
+		
+		return ticks;
+	}
 
 	public boolean isTicked(Track t, Calendar date) {
-		date.clear(Calendar.HOUR);
-		date.clear(Calendar.MINUTE);
-		date.clear(Calendar.SECOND);
 		date.clear(Calendar.MILLISECOND);
 		//Log.v("Tickmate", "checking for " + t.getId() + " and " + date.toString());
 		return ticks.contains(new Tick(t.getId(), date));
@@ -180,6 +227,7 @@ public class TracksDataSource {
 		Track track = new Track(cursor.getString(1), cursor.getString(3));
 		track.setId(cursor.getInt(0));
 		track.setEnabled(cursor.getInt(2) >= 1);
+		track.setMultipleEntriesEnabled(cursor.getInt(5) >= 1);
 		track.setIcon(cursor.getString(4));
 		return track;
 	}
@@ -189,17 +237,25 @@ public class TracksDataSource {
 		c.set(Calendar.YEAR, cursor.getInt(2));
 		c.set(Calendar.MONTH, cursor.getInt(3));
 		c.set(Calendar.DAY_OF_MONTH, cursor.getInt(4));
-		return new Tick(cursor.getInt(1), c);
+		c.set(Calendar.HOUR_OF_DAY, cursor.getInt(5));
+		c.set(Calendar.MINUTE, cursor.getInt(6));
+		c.set(Calendar.SECOND, cursor.getInt(7));
+		Tick tick = new Tick(cursor.getInt(1), c);
+		tick.tick_id = cursor.getInt(0);
+		return tick;
 	}
 
 	public void storeTrack(Track t) {
+		this.open();
+		
 		ContentValues values = new ContentValues();
 
 		values.put(DatabaseOpenHelper.COLUMN_NAME, t.getName());
 		values.put(DatabaseOpenHelper.COLUMN_ENABLED, t.isEnabled() ? 1 : 0);
+		values.put(DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY, t.multipleEntriesEnabled() ? 1 : 0);
 		values.put(DatabaseOpenHelper.COLUMN_DESCRIPTION, t.getDescription());
 		values.put(DatabaseOpenHelper.COLUMN_ICON, t.getIcon());
-
+		
 		if (t.getId() > 0) {
 			Log.d("Tickmate", "saving track id=" + t.getId());
 			database.update(DatabaseOpenHelper.TABLE_TRACKS, values,
@@ -209,36 +265,81 @@ public class TracksDataSource {
 			Log.d("Tickmate", "inserting track id=" + t.getId());
 			database.insert(DatabaseOpenHelper.TABLE_TRACKS, null, values);
 		}
+		
+		this.close();
 	}
 
 	public void setTick(Track track, Calendar date) {
+		this.open();
+		
 		ContentValues values = new ContentValues();
-		date.clear(Calendar.HOUR);
-		date.clear(Calendar.MINUTE);
-		date.clear(Calendar.SECOND);
 		values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, track.getId());
 		values.put(DatabaseOpenHelper.COLUMN_YEAR,date.get(Calendar.YEAR));
 		values.put(DatabaseOpenHelper.COLUMN_MONTH,date.get(Calendar.MONTH));
 		values.put(DatabaseOpenHelper.COLUMN_DAY,date.get(Calendar.DAY_OF_MONTH));
-		Log.d("Tickmate", "insert at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH));
+		values.put(DatabaseOpenHelper.COLUMN_HOUR, date.get(Calendar.HOUR_OF_DAY));
+		values.put(DatabaseOpenHelper.COLUMN_MINUTE, date.get(Calendar.MINUTE));
+		values.put(DatabaseOpenHelper.COLUMN_SECOND, date.get(Calendar.SECOND));
+		Log.d("Tickmate", "insert at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
+				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
 		database.insert(DatabaseOpenHelper.TABLE_TICKS, null, values);
+
+		this.close();
 	}
 
 	public void removeTick(Track track, Calendar date) {
-		long timestamp = (long)(date.getTimeInMillis()/1000.0);
+		this.open();
+		
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
 				Integer.toString(date.get(Calendar.MONTH)),
-				Integer.toString(date.get(Calendar.DAY_OF_MONTH)) };
-		database.delete(DatabaseOpenHelper.TABLE_TICKS,
+				Integer.toString(date.get(Calendar.DAY_OF_MONTH)),
+				Integer.toString(date.get(Calendar.HOUR_OF_DAY)),
+				Integer.toString(date.get(Calendar.MINUTE)),
+				Integer.toString(date.get(Calendar.SECOND)) };
+		int affectedRows = database.delete(DatabaseOpenHelper.TABLE_TICKS,
 				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
 				DatabaseOpenHelper.COLUMN_YEAR+"=? AND " + 
 				DatabaseOpenHelper.COLUMN_MONTH+"=? AND " +
-				DatabaseOpenHelper.COLUMN_DAY+"=? ", args);
-		date.clear(Calendar.HOUR);
-		date.clear(Calendar.MINUTE);
-		date.clear(Calendar.SECOND);
-		Log.d("Tickmate", "delete at "+timestamp);
+				DatabaseOpenHelper.COLUMN_DAY+"=? AND " +
+				DatabaseOpenHelper.COLUMN_HOUR+"=? AND " +
+				DatabaseOpenHelper.COLUMN_MINUTE+"=? AND " +
+				DatabaseOpenHelper.COLUMN_SECOND+"=?", args);
+		Log.d("Tickmate", "delete " + affectedRows + "rows at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
+				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
+
+		this.close();
+	}
+	
+	public boolean removeLastTickOfDay(Track track, Calendar date) {
+		List<Tick> ticks = this.getTicksForDay(track, date);
+		
+		if (ticks.size() == 0)
+			return false;
+		
+		Tick tick = ticks.get(ticks.size()-1);
+		
+		this.open();
+		
+		String[] args = { Integer.toString(track.getId()),
+				Integer.toString(tick.tick_id) };
+		int affectedRows = database.delete(DatabaseOpenHelper.TABLE_TICKS,
+				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
+				DatabaseOpenHelper.COLUMN_ID +"=?", args);
+		Log.d("Tickmate", "delete " + affectedRows + "rows at " +
+				tick.date.get(Calendar.YEAR) + " " +
+				tick.date.get(Calendar.MONTH) + " " +
+				tick.date.get(Calendar.DAY_OF_MONTH) + " - " +
+				tick.date.get(Calendar.HOUR_OF_DAY) + ":" +
+				tick.date.get(Calendar.MINUTE) + ":" +
+				tick.date.get(Calendar.SECOND));
+		
+		this.close();
+		
+		if (affectedRows > 0)
+			return true;
+		
+		return false;
 	}
 
 	public int getTickCount(int track_id) {

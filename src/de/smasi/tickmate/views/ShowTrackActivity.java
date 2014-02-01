@@ -143,6 +143,7 @@ public class ShowTrackActivity extends Activity {
 			if (monthyear_to_index.containsKey(monthyear)) {
 				int index = monthyear_to_index.get(monthyear);
 				int newcount2 = this.monthsData.get(index)+1;
+				this.monthsMaximum = (newcount2 > 31) ? newcount2 : 31;
 				this.monthsData.set(index, newcount2);
 			}
 			
@@ -150,17 +151,13 @@ public class ShowTrackActivity extends Activity {
 			if (weekyear_to_index.containsKey(weekyear)) {
 				int index = weekyear_to_index.get(weekyear);
 				int newcount2 = this.weeksData.get(index)+1;
+				this.weeksMaximum = (newcount2 > 7) ? newcount2 : 7;
 				this.weeksData.set(index, newcount2);
 			}			
 			
 			//tick.date.get(Calendar.YEAR) tick.date.get(Calendar.MONTH);
 			
 		}
-		
-		
-		this.monthsMaximum = 31;
-		this.weeksMaximum = 7;
-		
 		
 	}
 	
