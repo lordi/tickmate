@@ -67,14 +67,14 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		Calendar today = (Calendar)cal.clone();
 		Calendar yday = (Calendar)cal.clone();
 		yday.add(Calendar.DATE, -1);
-		cal.add(Calendar.DATE, -rows);
+		cal.add(Calendar.DATE, + 1);
 		java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
 		
 		LinearLayout tickgrid = new LinearLayout(getContext());
 		tickgrid.setOrientation(LinearLayout.VERTICAL);
-		
+
 		for (int y=0; y < rows; y++) {
-			cal.add(Calendar.DATE, 1);
+			cal.add(Calendar.DATE, -1);
 			Date date = cal.getTime();
 			String s = dateFormat.format(date);
 			
@@ -88,7 +88,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			else
 				t_date.setText(s);
 			
-			if (cal.get(Calendar.DAY_OF_WEEK) == 2) {
+			if (cal.get(Calendar.DAY_OF_WEEK) == 1) {
 				TextView splitter2 = new TextView(getContext());
 				splitter2.setText("");
 				splitter2.setHeight(5);
@@ -215,7 +215,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		
 		sv.post(new Runnable() { 
 	        public void run() { 
-	        	sv.fullScroll(View.FOCUS_DOWN);
+	        	sv.fullScroll(View.FOCUS_UP);
 	        } 
 		});
 	}

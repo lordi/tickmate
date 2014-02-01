@@ -202,6 +202,11 @@ public class ShowTrackActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_edit:
+		case R.id.action_edit_menu:
+			Intent intent = new Intent(this, EditTrackActivity.class);
+			intent.putExtra("track_id", track.getId());
+			startActivityForResult(intent, 1);				
+			return true;
 		case R.id.action_delete:
 			new AlertDialog.Builder(this)
 			.setTitle(R.string.alert_delete_track_title)
@@ -217,11 +222,6 @@ public class ShowTrackActivity extends Activity {
 		        }
 		     })
 		    .show();			
-			return true;
-		case R.id.action_edit_menu:
-			Intent intent = new Intent(this, EditTrackActivity.class);
-			intent.putExtra("track_id", track.getId());
-			startActivityForResult(intent, 1);				
 			return true;
 		case android.R.id.home:
 			// This ID represents the Home or Up button. In the case of this

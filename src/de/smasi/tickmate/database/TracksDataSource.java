@@ -47,7 +47,7 @@ public class TracksDataSource {
 	}
 
 	public void open() throws SQLException {
-		Log.d("tickmate", "Opening database");
+//		Log.d("tickmate", "Opening database");
 		database = dbHelper.getWritableDatabase();
 	}
 
