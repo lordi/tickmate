@@ -88,7 +88,8 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			else
 				t_date.setText(s);
 			
-			if (cal.get(Calendar.DAY_OF_WEEK) == 1) {
+			// add splitter for first weekday depending on current locale
+			if (cal.get(Calendar.DAY_OF_WEEK) == cal.getFirstDayOfWeek()) {
 				TextView splitter2 = new TextView(getContext());
 				splitter2.setText("");
 				splitter2.setHeight(5);
