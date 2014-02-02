@@ -22,5 +22,8 @@
     <string name="title_section_weekdays">Days of week</string>
     <string name="numer_of_occurances">Number of occurrences:</string>
     <string name="no_tracks_found">No tracks have been added. Tap here to open the track list editor.</string>
+    <string name="jump_to_date">Jump to date…</string>
+    <string name="jump_to_today">Jump to today</string>
+    <string name="title_activity_about">About Tickmate</string>
 
 </resources>

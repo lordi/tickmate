@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -26,9 +27,34 @@ import de.smasi.tickmate.views.ShowTrackActivity;
 public class TickMatrix extends LinearLayout implements OnCheckedChangeListener {
 	
 	ScrollView sv = null;
+	Calendar displayDay = null;
 	
 	public TickMatrix(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		unsetDate();
+	}
+
+	public void setDate(int year, int month, int day) {
+		displayDay.set(year, month, day);
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+		today.set(Calendar.MILLISECOND, 0);
+				
+		// Make sure endday is not after today.
+		if (displayDay.compareTo(today) > 0) { 
+			displayDay = today;
+		}
+						
+	}
+	
+	public Calendar getDate() {
+		return displayDay;	
+	}
+	
+	public void unsetDate() {
+		displayDay = Calendar.getInstance();
 	}
 	
 	public void buildView() {
@@ -37,12 +63,11 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		this.removeAllViews();
 		int rows = 14; // number of days that will be displayed
 		int rowHeight = -1;
-				
+		
 		TracksDataSource ds = new TracksDataSource(context);
 		ds.open();
-		List<Track> tracks = ds.getMyTracks();
-		ds.retrieveTicks();
-		ds.close();
+		
+		List<Track> tracks = ds.getMyTracks(); 
 		
 		if (tracks.size() == 0) {
 			TextView tv = new TextView(context);
@@ -52,20 +77,43 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			tv.setTextColor(context.getResources().getColor(android.R.color.secondary_text_dark));
 			this.addView(tv);
+			ds.close();
 			return;			
-		}
+		}		
+					
+		displayDay.set(Calendar.HOUR, 0);
+		displayDay.set(Calendar.MINUTE, 0);
+		displayDay.set(Calendar.SECOND, 0);
+		displayDay.set(Calendar.MILLISECOND, 0);
 		
 		
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+		today.set(Calendar.MILLISECOND, 0);
 				
-		Calendar today = (Calendar)cal.clone();
-		Calendar yday = (Calendar)cal.clone();
+		Calendar yday = (Calendar)today.clone();
 		yday.add(Calendar.DATE, -1);
-		cal.add(Calendar.DATE, -rows);
+		
+		Calendar endday = (Calendar)displayDay.clone();
+		endday.add(Calendar.DATE, rows/4);
+		
+		// Make sure endday is not after today.
+		if (endday.compareTo(today) > 0) { 
+			endday = (Calendar)today.clone();
+		}
+				
+		Calendar startday = (Calendar)endday.clone();
+		startday.add(Calendar.DATE, -rows);
+		
+		// This will be the Calendar object will use for iteration
+		Calendar cal = (Calendar)startday.clone();
+		
+		// TODO: Limit ticks to range [startday, endday]
+		ds.retrieveTicks();		
+		ds.close();
+		
 		java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
 		
 		LinearLayout tickgrid = new LinearLayout(getContext());
@@ -79,9 +127,9 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			TextView t_weekday = new TextView(getContext());
 			TextView t_date = new TextView(getContext());
 			
-			if (cal.compareTo(today) >= 0)
+			if (cal.compareTo(today) == 0)
 				t_date.setText(context.getString(R.string.today));
-			else if (cal.compareTo(yday) >= 0)
+			else if (cal.compareTo(yday) == 0)
 				t_date.setText(context.getString(R.string.yesterday));
 			else
 				t_date.setText(s);
@@ -155,8 +203,8 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			row.addView(l2);
 			row.setGravity(Gravity.CENTER);
 			
-			if (y == rows - 1) { // cal.get(Calendar.DAY_OF_WEEK) == 1 || cal.get(Calendar.DAY_OF_WEEK) == 7) {
-				row.setBackgroundResource(android.R.drawable. dark_header);
+			if (cal.compareTo(displayDay) == 0) {
+				row.setBackgroundResource(android.R.drawable.dark_header);
 				row.setPadding(0, 0, 0, 0);
 			}
 			

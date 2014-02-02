@@ -49,18 +49,20 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.views.ShowTrackActivity" />
-            </activity>
+        </activity>
         <activity
             android:name="de.smasi.tickmate.views.ShowTrackActivity"
-            android:label="@string/title_activity_show_track"
-             >
+            android:label="@string/title_activity_show_track" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.Tickmate" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.views.EditTracksActivity" />
-            
+        </activity>
+        <activity
+            android:name="de.smasi.tickmate.views.AboutActivity"
+            android:label="@string/title_activity_about" >
         </activity>
     </application>
 
