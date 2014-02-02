@@ -38,6 +38,10 @@ public class Track {
 		}
 		return this.iconId;
 	}
+	
+	public boolean isGroupHeader() {
+		return getName().startsWith("--- ");
+	}
 
 	public void setIcon(String resName) {
 		this.iconId = -1;
