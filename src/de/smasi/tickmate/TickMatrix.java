@@ -62,6 +62,9 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		
 		
 		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 				
 		Calendar today = (Calendar)cal.clone();
@@ -147,12 +150,8 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 					counter.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT, (1.0f)/tracks.size()));
 					l2.addView(counter);
 				} else {
-					Calendar c = (Calendar) cal.clone();
-					c.set(Calendar.HOUR, 0);
-					c.set(Calendar.MINUTE, 0);
-					c.set(Calendar.SECOND, 0);
-					TickButton checker = new TickButton(getContext(), track, c);
-					checker.setChecked(ds.isTicked(track, c));
+					TickButton checker = new TickButton(getContext(), track, (Calendar) cal.clone());
+					checker.setChecked(ds.isTicked(track, (Calendar) cal.clone()));
 					checker.setOnCheckedChangeListener(this);
 					//checker.setLayoutParams(new LayoutParams(32, 32, 0.2f));
 					//checker.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, (1.0f-0.2f)/tracks.size()));
@@ -273,12 +272,13 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		private void updateText() {
 			TracksDataSource ds = new TracksDataSource(this.getContext());
 			List<Tick> ticks = ds.getTicksForDay(this.getTrack(), this.getDate());
-			this.setText(Integer.toString(ticks.size()));
 			
 			if (ticks.size() > 0) {
 				this.setBackgroundResource(R.drawable.counter_positive);
+				this.setText(Integer.toString(ticks.size()));
 			} else {
 				this.setBackgroundResource(R.drawable.counter_neutral);
+				this.setText("");
 			}
 		}
 		
