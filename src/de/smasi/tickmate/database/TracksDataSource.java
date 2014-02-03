@@ -218,7 +218,7 @@ public class TracksDataSource {
 			cursor.moveToNext();
 		}
 
-		Log.d("Tickmate", ticks.size() + "ticks for day " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH));
+//		Log.d("Tickmate", ticks.size() + "ticks for day " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH));
 		// Make sure to close the cursor
 		cursor.close();
 		

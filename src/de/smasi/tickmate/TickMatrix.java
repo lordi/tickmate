@@ -5,13 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.R.color;
-import android.app.FragmentManager.OnBackStackChangedListener;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;

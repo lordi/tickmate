@@ -1,6 +1,5 @@
 package de.smasi.tickmate.views;
 
-import java.security.interfaces.DSAKey;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,10 +13,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import de.smasi.tickmate.R;
@@ -34,7 +31,6 @@ public class ShowTrackActivity extends Activity {
 	
 	/* Form fields */
 	private TextView text_name;
-	private ImageButton edit_icon;
 	private TextView text_count;
 	private TextView text_description;
 	private ImageView image_icon;
