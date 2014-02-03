@@ -151,7 +151,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 					l2.addView(counter);
 				} else {
 					TickButton checker = new TickButton(getContext(), track, (Calendar) cal.clone());
-					checker.setChecked(ds.isTicked(track, (Calendar) cal.clone()));
+					checker.setChecked(ds.isTicked(track, (Calendar) cal.clone(), false));
 					checker.setOnCheckedChangeListener(this);
 					//checker.setLayoutParams(new LayoutParams(32, 32, 0.2f));
 					//checker.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, (1.0f-0.2f)/tracks.size()));
@@ -291,9 +291,9 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 
 			ds.open();
 			if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
-				ds.setTick(this.getTrack(), c);
+				ds.setTick(this.getTrack(), c, false);
 			} else {
-				ds.setTick(this.getTrack(), this.date);
+				ds.setTick(this.getTrack(), this.date, false);
 			}
 			ds.close();
 			
@@ -355,7 +355,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		TracksDataSource ds = new TracksDataSource(this.getContext());
 		ds.open();
 		if (ticked) {
-			ds.setTick(tb.getTrack(), tb.getDate());
+			ds.setTick(tb.getTrack(), tb.getDate(), true);
 		}
 		else {
 			ds.removeTick(tb.getTrack(), tb.getDate());
