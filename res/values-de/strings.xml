@@ -22,5 +22,9 @@
     <string name="title_section_weekdays">Wochentage</string>
     <string name="numer_of_occurances">Vorkommen (gesamt):</string>
     <string name="no_tracks_found">Noch sind keine Tracks hinzugefügt worden. Tap hier, um die Trackliste zu bearbeiten.</string>
+    <string name="multiple_entries">Mehrere Einträge pro Tag</string>
+    <string name="tick_deleted">Letzter Eintrag entfernt.</string>
+    <string name="alert_delete_track_title">Track entfernen</string>
+    <string name="alert_delete_track_message">Diesen Track wirklich löschen?</string>
     
 </resources>

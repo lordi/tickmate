@@ -9,6 +9,7 @@ public class Track {
 	String icon;
 	int id;
 	boolean enabled;
+	boolean multiple_entries_enabled;
 	int iconId;
 	
 	public Track(String name) {
@@ -66,6 +67,14 @@ public class Track {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public boolean multipleEntriesEnabled() {
+		return multiple_entries_enabled;
+	}
+
+	public void setMultipleEntriesEnabled(boolean enabled) {
+		this.multiple_entries_enabled = enabled;
 	}
 
 	public int getId() {
