@@ -5,13 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.R.color;
-import android.app.FragmentManager.OnBackStackChangedListener;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -62,19 +59,22 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		
 		
 		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 				
 		Calendar today = (Calendar)cal.clone();
 		Calendar yday = (Calendar)cal.clone();
 		yday.add(Calendar.DATE, -1);
-		cal.add(Calendar.DATE, -rows);
+		cal.add(Calendar.DATE, + 1);
 		java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
 		
 		LinearLayout tickgrid = new LinearLayout(getContext());
 		tickgrid.setOrientation(LinearLayout.VERTICAL);
-		
+
 		for (int y=0; y < rows; y++) {
-			cal.add(Calendar.DATE, 1);
+			cal.add(Calendar.DATE, -1);
 			Date date = cal.getTime();
 			String s = dateFormat.format(date);
 			
@@ -88,7 +88,8 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			else
 				t_date.setText(s);
 			
-			if (cal.get(Calendar.DAY_OF_WEEK) == 2) {
+			// add splitter for first weekday depending on current locale
+			if (cal.get(Calendar.DAY_OF_WEEK) == cal.getFirstDayOfWeek()) {
 				TextView splitter2 = new TextView(getContext());
 				splitter2.setText("");
 				splitter2.setHeight(5);
@@ -146,12 +147,8 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 					counter.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT, (1.0f)/tracks.size()));
 					l2.addView(counter);
 				} else {
-					Calendar c = (Calendar) cal.clone();
-					c.set(Calendar.HOUR, 0);
-					c.set(Calendar.MINUTE, 0);
-					c.set(Calendar.SECOND, 0);
-					TickButton checker = new TickButton(getContext(), track, c);
-					checker.setChecked(ds.isTicked(track, c));
+					TickButton checker = new TickButton(getContext(), track, (Calendar) cal.clone());
+					checker.setChecked(ds.isTicked(track, (Calendar) cal.clone(), false));
 					checker.setOnCheckedChangeListener(this);
 					//checker.setLayoutParams(new LayoutParams(32, 32, 0.2f));
 					//checker.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, (1.0f-0.2f)/tracks.size()));
@@ -215,7 +212,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		
 		sv.post(new Runnable() { 
 	        public void run() { 
-	        	sv.fullScroll(View.FOCUS_DOWN);
+	        	sv.fullScroll(View.FOCUS_UP);
 	        } 
 		});
 	}
@@ -272,12 +269,13 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		private void updateText() {
 			TracksDataSource ds = new TracksDataSource(this.getContext());
 			List<Tick> ticks = ds.getTicksForDay(this.getTrack(), this.getDate());
-			this.setText(Integer.toString(ticks.size()));
 			
 			if (ticks.size() > 0) {
 				this.setBackgroundResource(R.drawable.counter_positive);
+				this.setText(Integer.toString(ticks.size()));
 			} else {
 				this.setBackgroundResource(R.drawable.counter_neutral);
+				this.setText("");
 			}
 		}
 		
@@ -290,9 +288,9 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 
 			ds.open();
 			if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
-				ds.setTick(this.getTrack(), c);
+				ds.setTick(this.getTrack(), c, false);
 			} else {
-				ds.setTick(this.getTrack(), this.date);
+				ds.setTick(this.getTrack(), this.date, false);
 			}
 			ds.close();
 			
@@ -354,7 +352,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		TracksDataSource ds = new TracksDataSource(this.getContext());
 		ds.open();
 		if (ticked) {
-			ds.setTick(tb.getTrack(), tb.getDate());
+			ds.setTick(tb.getTrack(), tb.getDate(), true);
 		}
 		else {
 			ds.removeTick(tb.getTrack(), tb.getDate());

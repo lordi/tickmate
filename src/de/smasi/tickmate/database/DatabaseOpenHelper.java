@@ -24,6 +24,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_MODIFIED = "modified";
     public static final String COLUMN_TRACK_ID = "_track_id";
     public static final String COLUMN_MULTIPLE_ENTRIES_PER_DAY = "multiple_entries_per_day";
+    public static final String COLUMN_HAS_TIME_INFO = "has_time_info";
 
     private static final String DATABASE_NAME = "tickmate.db";
     private static final int DATABASE_VERSION = 10;
@@ -47,7 +48,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         + COLUMN_DESCRIPTION + " text not null, "
         + COLUMN_ICON + " text not null, "
         + COLUMN_ENABLED + " integer not null,"
-        + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer not null"
+        + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0"
         + ");";
     private static final String DATABASE_CREATE_TICKS =
         "create table " + TABLE_TICKS + "("
@@ -58,7 +59,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         + COLUMN_DAY + " integer,"
         + COLUMN_HOUR + " integer,"
         + COLUMN_MINUTE + " integer,"
-        + COLUMN_SECOND + " integer"
+        + COLUMN_SECOND + " integer,"
+        + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0"
         + ");";
     
 	@Override
@@ -70,14 +72,15 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		/* TODO: Alter table depending on version number to support older versions */
 		Log.d("tickmate", "Upgrading database");
 		if (oldVersion == 9 && newVersion == 10) {
 			Log.d("tickmate", "Adding columns from version 10");
 			db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN " + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0;");
+			
 			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_HOUR + " integer;");
 			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_MINUTE + " integer;");
 			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_SECOND + " integer;");
+			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0;");
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKS);

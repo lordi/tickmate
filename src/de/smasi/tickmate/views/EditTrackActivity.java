@@ -6,6 +6,8 @@ import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -50,6 +52,12 @@ public class EditTrackActivity extends Activity {
 		edit_enabled.setChecked(track.isEnabled());		
 		edit_multiple_entries_enabled = (CheckBox) findViewById(R.id.multiple_entries_enabled);
 		edit_multiple_entries_enabled.setChecked(track.multipleEntriesEnabled());
+		edit_multiple_entries_enabled.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				onStop();
+			}
+	    });
 		edit_description = (EditText) findViewById(R.id.edit_description);
 		edit_description.setText(track.getDescription());
 		edit_icon = (ImageButton) findViewById(R.id.edit_icon);

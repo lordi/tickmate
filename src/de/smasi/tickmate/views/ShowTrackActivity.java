@@ -8,12 +8,13 @@ import java.util.Locale;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import de.smasi.tickmate.R;
@@ -23,13 +24,13 @@ import de.smasi.tickmate.models.Track;
 
 public class ShowTrackActivity extends Activity {
 	
+	private TracksDataSource ds;
 	private Track track;
 	private int tickCount;
 	private List<Tick> ticks;
 	
 	/* Form fields */
 	private TextView text_name;
-	private ImageButton edit_icon;
 	private TextView text_count;
 	private TextView text_description;
 	private ImageView image_icon;
@@ -55,7 +56,7 @@ public class ShowTrackActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_track);
 		
-		TracksDataSource ds = new TracksDataSource(this);
+		this.ds = new TracksDataSource(this);
 		
 		int track_id = getIntent().getExtras().getInt("track_id");
 		
@@ -128,7 +129,7 @@ public class ShowTrackActivity extends Activity {
 			week.add(Calendar.WEEK_OF_YEAR, -1);
 			this.weeksData.add(0, 0);			
 		}
-		
+
 		
 		for (Tick tick : ticks) {
 			int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - 2;
@@ -139,25 +140,33 @@ public class ShowTrackActivity extends Activity {
 			}
 			this.weekdaysData.set(day_of_week, newcount);
 			
-			int monthyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.MONTH) * 10000;
-			if (monthyear_to_index.containsKey(monthyear)) {
-				int index = monthyear_to_index.get(monthyear);
-				int newcount2 = this.monthsData.get(index)+1;
-				this.monthsMaximum = (newcount2 > 31) ? newcount2 : 31;
-				this.monthsData.set(index, newcount2);
-			}
-			
 			int weekyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.WEEK_OF_YEAR) * 10000;
 			if (weekyear_to_index.containsKey(weekyear)) {
 				int index = weekyear_to_index.get(weekyear);
 				int newcount2 = this.weeksData.get(index)+1;
-				this.weeksMaximum = (newcount2 > 7) ? newcount2 : 7;
+				if (newcount2 > this.weeksMaximum)
+					this.weeksMaximum = newcount2;
 				this.weeksData.set(index, newcount2);
-			}			
+			}
 			
+			int monthyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.MONTH) * 10000;
+			if (monthyear_to_index.containsKey(monthyear)) {
+				int index = monthyear_to_index.get(monthyear);
+				int newcount2 = this.monthsData.get(index)+1;
+				if (newcount2 > this.monthsMaximum)
+					this.monthsMaximum = newcount2;
+				this.monthsData.set(index, newcount2);
+			}
+
 			//tick.date.get(Calendar.YEAR) tick.date.get(Calendar.MONTH);
 			
 		}
+		
+		if (this.weeksMaximum < 7)
+			this.weeksMaximum = 7;
+		
+		if (this.monthsMaximum < 31)
+			this.monthsMaximum = 31;
 		
 	}
 	
@@ -173,13 +182,18 @@ public class ShowTrackActivity extends Activity {
 		
 		graph_weekdays = (SummaryGraph) findViewById(R.id.summaryGraph_weekdays);
 		graph_weekdays.setData(this.weekdaysData, this.weekdaysKeys, this.weekdaysMaximum);
-		graph_months = (SummaryGraph) findViewById(R.id.summaryGraph_months);
-		graph_months.setData(this.monthsData, this.monthsKeys, this.monthsMaximum);
 		graph_weeks = (SummaryGraph) findViewById(R.id.summaryGraph_weeks);
 		graph_weeks.setData(this.weeksData, this.weeksKeys, this.weeksMaximum);
-
+		graph_months = (SummaryGraph) findViewById(R.id.summaryGraph_months);
+		graph_months.setData(this.monthsData, this.monthsKeys, this.monthsMaximum);
+		
 		image_icon = (ImageView) findViewById(R.id.image_icon);
 		image_icon.setImageResource(track.getIconId(this));
+	}
+	
+	private void deleteTrack() {
+		this.ds.deleteTrack(this.track);
+		NavUtils.navigateUpFromSameTask(this);
 	}
 	
 	@Override
@@ -197,6 +211,22 @@ public class ShowTrackActivity extends Activity {
 			Intent intent = new Intent(this, EditTrackActivity.class);
 			intent.putExtra("track_id", track.getId());
 			startActivityForResult(intent, 1);				
+			return true;
+		case R.id.action_delete:
+			new AlertDialog.Builder(this)
+			.setTitle(R.string.alert_delete_track_title)
+		    .setMessage(R.string.alert_delete_track_message)
+		    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		        	deleteTrack();
+		        }
+		     })
+		    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            // do nothing
+		        }
+		     })
+		    .show();			
 			return true;
 		case android.R.id.home:
 			// This ID represents the Home or Up button. In the case of this
