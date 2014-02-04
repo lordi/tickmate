@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.smasi.tickmate"
     android:versionCode="10"
-    android:versionName="1.0.10" >
+    android:versionName="1.1.0-beta" >
 
     <uses-sdk
         android:minSdkVersion="11"
