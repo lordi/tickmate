@@ -83,13 +83,15 @@ public class ChooseTrackActivity extends ListActivity {
 		
 		Track t = (Track) getListView().getAdapter().getItem(position);
 		
-		TracksDataSource ds = new TracksDataSource(this);
-		ds.open();
-		ds.storeTrack(t);
-		ds.close();
-		
-		setResult(RESULT_OK);     
-		finish();
+		if (!t.isGroupHeader()) {
+			TracksDataSource ds = new TracksDataSource(this);
+			ds.open();
+			ds.storeTrack(t);
+			ds.close();
+			
+			setResult(RESULT_OK);     
+			finish();
+		}
 	}
 
 	/**
