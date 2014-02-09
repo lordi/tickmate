@@ -92,4 +92,8 @@ public class Track {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public boolean isCustomTrack() {
+		return icon.contains("_star_");
+	}
 }

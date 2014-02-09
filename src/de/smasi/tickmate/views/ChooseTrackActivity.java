@@ -8,6 +8,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.util.Log;
@@ -88,8 +89,9 @@ public class ChooseTrackActivity extends ListActivity {
 			ds.open();
 			ds.storeTrack(t);
 			ds.close();
-			
-			setResult(RESULT_OK);     
+			Intent data = new Intent();
+			data.putExtra("insert_id", t.getId());
+			setResult(RESULT_OK, data);     
 			finish();
 		}
 	}

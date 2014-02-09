@@ -81,14 +81,36 @@ public class EditTracksActivity extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
+		editTrack((Track)tracksAdapter.getItem(position));
+	}
+	
+	private void showTrack(Track t) {
 		Intent intent = new Intent(this, ShowTrackActivity.class);
-		intent.putExtra("track_id", ((Track)tracksAdapter.getItem(position)).getId());
+		intent.putExtra("track_id", t.getId());
 	    startActivityForResult(intent, 1);				
 	}
+	
+	private void editTrack(Track t) {
+		Intent intent = new Intent(this, EditTrackActivity.class);
+		intent.putExtra("track_id", t.getId());
+	    startActivityForResult(intent, 1);				
+	}	
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.v("Tickmate", "tracks sub activity returned." + resultCode);
+		if (data != null && data.getExtras() != null) {
+			//Log.v("Tickmate", "tracks sub activity returned." + resultCode + ":"+data.getExtras().getInt("insert_id"));
+			
+			int insert_id = data.getExtras().getInt("insert_id");
+			TracksDataSource ds = new TracksDataSource(this);
+			ds.open();
+			Track t = ds.getTrack(insert_id);
+			ds.close();		
+			if (t.isCustomTrack()) {
+				editTrack(t);								
+			}
+		}
+		
 		loadTracks();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -101,9 +123,7 @@ public class EditTracksActivity extends ListActivity {
 		
 		case R.id.edit_tracks_edit:
 			Track t = (Track)tracksAdapter.getItem((int)info.id);
-			Intent intent = new Intent(this, EditTrackActivity.class);
-			intent.putExtra("track_id", t.getId());
-			startActivityForResult(intent, 1);	
+			editTrack(t);
 			return true;
 			/*
 		case R.id.edit_tracks_deactivate:
