@@ -17,6 +17,9 @@
 		<track icon="@drawable/glyphicons_275_fast_food_white" name="Fast food"
 			description="Bei einem Fastfood-Restaurant gegessen" />
 
+		<track icon="@drawable/glyphicons_273_drink_white" name="Softdrink"
+			description="Softdrink getrunken" />
+
 		<track icon="@drawable/glyphicons_272_cake_white" name="Süßigkeiten"
 			description="Süßigkeiten oder Chips genascht" />
 
@@ -42,7 +45,6 @@
 
 		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Trainiert"
 			description="Kraft- oder Fitnesstraining" />
-
 
 		<track icon="@drawable/glyphicons_334_candle_white" name="Meditation"
 			description="Lieblingsmeditation praktiziert" />

@@ -17,6 +17,9 @@
 		<track icon="@drawable/glyphicons_275_fast_food_white" name="Fast food"
 			description="Har været på fast food restaurant" />
 
+		<track icon="@drawable/glyphicons_273_drink_white" name="Soft drink"
+			description="Drank a soft drink" />
+
 		<track icon="@drawable/glyphicons_272_cake_white" name="Søde sager"
 			description="Spiste slik eller kage" />
 
