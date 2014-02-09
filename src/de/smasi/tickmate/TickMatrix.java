@@ -70,7 +70,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		TracksDataSource ds = new TracksDataSource(context);
 		ds.open();
 		
-		List<Track> tracks = ds.getMyTracks(); 
+		List<Track> tracks = ds.getActiveTracks(); 
 		
 		if (tracks.size() == 0) {
 			TextView tv = new TextView(context);
