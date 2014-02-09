@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
 
 public class SummaryGraph extends View {
+	Path path;
+	
 	public SummaryGraph(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
@@ -38,19 +40,11 @@ public class SummaryGraph extends View {
 
 	private void init() {
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));		
-		paint = new Paint(Paint.ANTI_ALIAS_FLAG );
+		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		path = new Path();
 		this.data = new LinkedList<Integer>();
-		this.data.add(1);
-		this.data.add(2);
-		this.data.add(3);
-		this.data.add(4);
 		this.keys = new LinkedList<String>();
-		this.keys.add("CO");
-		this.keys.add("MING");
-		this.keys.add("SO");
-		this.keys.add("ON");
 		this.maximum = 7;
-		
 	}
 
 
@@ -65,7 +59,6 @@ public class SummaryGraph extends View {
 		
 	    paint.setAntiAlias(true);
 	    paint.setTextAlign(Align.CENTER);
-	    
 	
 		// normal
 		paint.setStrokeWidth(0);
@@ -85,8 +78,8 @@ public class SummaryGraph extends View {
 		paint.setTextSize(18.0f);
 		int len = this.data.size();
 		
-		Path p = new Path();
-		p.moveTo(0, height);
+		path.reset();
+		path.moveTo(0, height);
 		float oldH = height;
 		
 		for (int i=0; i < len; i++) {
@@ -94,26 +87,25 @@ public class SummaryGraph extends View {
 			float h = (height0-val/(1.0f*this.maximum)*height0) + 26.0f;
 			float x0 = (i)*width/len;
 			float x = (i+0.5f)*width/len;
-			p.cubicTo(x0, oldH, x0, h, x, h);
+			path.cubicTo(x0, oldH, x0, h, x, h);
 			oldH = h;
 		}
-		p.cubicTo(width, oldH, width, height, width, height);
+		path.cubicTo(width, oldH, width, height, width, height);
 		
 		paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));
 		paint.setStrokeWidth(2.2f);
 		paint.setStyle(Style.STROKE);
-		canvas.drawPath(p, paint);
+		canvas.drawPath(path, paint);
 		paint.setStyle(Style.FILL);
 		paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));
 		paint.setAlpha(64);
-		canvas.drawPath(p, paint);
+		canvas.drawPath(path, paint);
 		paint.setStyle(Style.FILL);
 		paint.setAlpha(255);
 			
 		for (int i=0; i < len; i++) {
 			int val = this.data.get(i);
 			float h = (height0-val/(1.0f*this.maximum)*height0) + 26.0f;
-			float x0 = (i)*width/len;
 			float x = (i+0.5f)*width/len;
 			paint.setStrokeWidth(1);
 			paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));

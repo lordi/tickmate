@@ -3,7 +3,6 @@ package de.smasi.tickmate.views;
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.TextView;
 import de.smasi.tickmate.R;

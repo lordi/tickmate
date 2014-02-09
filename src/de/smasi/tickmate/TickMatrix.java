@@ -61,6 +61,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 	
 	public void buildView() {
 		Context context = getContext();
+		Locale locale = Locale.getDefault();
 		this.setOrientation(VERTICAL);
 		this.removeAllViews();
 		int rows = 14; // number of days that will be displayed
@@ -148,12 +149,10 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 				splitter.setBackgroundResource(R.drawable.center_line);
 				splitter.setPadding(0, 20, 0, 0);
 				tickgrid.addView(splitter);
-				
-			}
+			}			
 			
-			
-			String day_name=cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
-			t_weekday.setText(day_name.toUpperCase());
+			String day_name=cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, locale);
+			t_weekday.setText(day_name.toUpperCase(locale));
 			
 			t_weekday.setTextAppearance(getContext(), android.R.style.TextAppearance_Medium);
 			t_date.setWidth(120);

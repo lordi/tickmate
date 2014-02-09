@@ -1,5 +1,7 @@
 package de.smasi.tickmate.views;
 
+import java.util.Locale;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -29,7 +31,7 @@ public class TrackListAdapter extends ArrayAdapter<Track> {
 		if (this.values[position].isGroupHeader()) {
 			rowView = inflater.inflate(R.layout.rowlayout_header, parent, false);
 			TextView textView = (TextView) rowView.findViewById(R.id.section_header);
-			textView.setText(values[position].getName().substring(4).toUpperCase());			
+			textView.setText(values[position].getName().substring(4).toUpperCase(Locale.getDefault()));			
 		}
 		else {
 			rowView = inflater.inflate(R.layout.rowlayout, parent, false);
@@ -42,7 +44,7 @@ public class TrackListAdapter extends ArrayAdapter<Track> {
 				textView.setText(t.getName());
 				textView.setTypeface(null, Typeface.NORMAL);
 				textViewS.setTypeface(null, Typeface.NORMAL);
-				imageView.setAlpha(255);
+				imageView.setAlpha(1.0f);
 			}
 			else {
 				textView.setText(t.getName() + " (" + context.getString(R.string.inactive) + ")");
@@ -51,7 +53,7 @@ public class TrackListAdapter extends ArrayAdapter<Track> {
 				textView.setTextColor(gray);
 				textViewS.setTypeface(null, Typeface.ITALIC);
 				textViewS.setTextColor(gray);
-				imageView.setAlpha(128);
+				imageView.setAlpha(0.5f);
 			}
 			textViewS.setText(t.getDescription());
 			
