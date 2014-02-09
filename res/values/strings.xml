@@ -29,5 +29,6 @@
     <string name="jump_to_date">Jump to date…</string>
     <string name="jump_to_today">Jump to today</string>
     <string name="title_activity_about">About Tickmate</string>
+    <string name="title_icon_chooser">Choose an icon</string>
 
 </resources>

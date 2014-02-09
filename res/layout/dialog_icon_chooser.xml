@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridView
+	android:id="@+id/icon_chooser_gridview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+
+	android:paddingLeft="10dp"
+	android:paddingRight="10dp"
+    android:columnWidth="50dp"
+    android:numColumns="auto_fit"
+    android:verticalSpacing="6dp"
+    android:horizontalSpacing="6dp"
+    android:stretchMode="columnWidth"
+    android:gravity="center">
+    
+</GridView>
