@@ -270,8 +270,9 @@ public class TracksDataSource {
 					DatabaseOpenHelper.COLUMN_ID + "=?",
 					new String[] { Integer.toString(t.getId()) });
 		} else {
-			Log.d("Tickmate", "inserting track id=" + t.getId());
-			database.insert(DatabaseOpenHelper.TABLE_TRACKS, null, values);
+			long t_id = database.insert(DatabaseOpenHelper.TABLE_TRACKS, null, values);
+			t.setId((int)t_id);
+			Log.d("Tickmate", "inserted track id=" + t.getId());
 		}
 		
 		this.close();
