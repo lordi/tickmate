@@ -113,8 +113,8 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 		// This will be the Calendar object will use for iteration
 		Calendar cal = (Calendar)startday.clone();
 		
-		// TODO: Limit ticks to range [startday, endday]
-		ds.retrieveTicks();		
+		// Limit ticks to range [startday, endday]
+		ds.retrieveTicks(startday, endday);		
 		ds.close();
 		
 		java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);

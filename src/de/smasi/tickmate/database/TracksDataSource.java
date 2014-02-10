@@ -120,11 +120,22 @@ public class TracksDataSource {
 		return tracks;
 	}
 
-	public void retrieveTicks(/* TODO: from, to */) {
+	public void retrieveTicks(Calendar startday, Calendar endday) {
 		ticks = new ArrayList<Tick>();
 
+		String[] args = { 
+				Integer.toString(startday.get(Calendar.YEAR)),
+				Integer.toString(startday.get(Calendar.YEAR)),
+				Integer.toString(startday.get(Calendar.MONTH)),
+				Integer.toString(endday.get(Calendar.YEAR)),
+				Integer.toString(endday.get(Calendar.YEAR)),
+				Integer.toString(endday.get(Calendar.MONTH))
+		};
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
-				allColumnsTicks, null, null, null, null, null, null);
+				allColumnsTicks, 
+				"(" + DatabaseOpenHelper.COLUMN_YEAR + " > ? or (" + DatabaseOpenHelper.COLUMN_YEAR + " = ? and " + DatabaseOpenHelper.COLUMN_MONTH + " >= ?)) and " +
+				"(" + DatabaseOpenHelper.COLUMN_YEAR + " < ? or (" + DatabaseOpenHelper.COLUMN_YEAR + " = ? and " + DatabaseOpenHelper.COLUMN_MONTH + " <= ?))",
+				args, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
