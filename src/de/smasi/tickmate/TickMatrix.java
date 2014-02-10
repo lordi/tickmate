@@ -192,6 +192,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 				if (track.multipleEntriesEnabled()) {
 					MultiTickButton counter = new MultiTickButton(getContext(), track, (Calendar) cal.clone());
 					counter.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT, (1.0f)/tracks.size()));
+					counter.setTickCount(ds.getTickCountForDay(track, cal));
 					l2.addView(counter);
 				} else {
 					TickButton checker = new TickButton(getContext(), track, (Calendar) cal.clone());
@@ -216,7 +217,6 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 				row.setBackgroundResource(android.R.drawable.dark_header);
 				row.setPadding(0, 0, 0, 0);
 			}
-			
 			
 			tickgrid.addView(row);	
 		}
@@ -287,6 +287,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 	public class MultiTickButton extends Button implements OnClickListener, OnLongClickListener {
 		Track track;
 		Calendar date;
+		int count;
 
 		public MultiTickButton(Context context, Track track, Calendar date) {
 			super(context);
@@ -301,8 +302,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			this.setHeight(size);
 			this.setMinHeight(size);
 			this.setPadding(0, 0, 0, 0);
-			
-			this.updateText();
+			count = 0;			
 		}
 		
 		Track getTrack () {
@@ -313,13 +313,21 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			return date;		
 		}
 		
-		private void updateText() {
+		public void setTickCount(int count) {
+			this.count = count;
+			updateText();
+		}
+		
+		private void updateStatus() {
 			TracksDataSource ds = new TracksDataSource(this.getContext());
-			List<Tick> ticks = ds.getTicksForDay(this.getTrack(), this.getDate());
-			
-			if (ticks.size() > 0) {
+			count = ds.getTicksForDay(this.getTrack(), this.getDate()).size();
+			updateText();
+		}
+		
+		private void updateText() {		
+			if (count > 0) {
 				this.setBackgroundResource(R.drawable.counter_positive);
-				this.setText(Integer.toString(ticks.size()));
+				this.setText(Integer.toString(count));
 			} else {
 				this.setBackgroundResource(R.drawable.counter_neutral);
 				this.setText("");
@@ -341,7 +349,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			}
 			ds.close();
 			
-			this.updateText();
+			updateStatus();
 		}
 		
 		@Override
@@ -352,7 +360,7 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener 
 			ds.close();
 			
 			if (success) {
-				this.updateText();
+				updateStatus();
 				Toast.makeText(this.getContext(), R.string.tick_deleted, Toast.LENGTH_SHORT).show();
 			}
 			

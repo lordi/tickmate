@@ -2,7 +2,9 @@ package de.smasi.tickmate.database;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -201,6 +203,22 @@ public class TracksDataSource {
 		return ticks;
 	}
 	
+	public int getTickCountForDay(Track track, Calendar date) {
+		
+		int tickCount = 0;
+		for (int i = 0; i < ticks.size(); i++) {
+			Calendar d = ticks.get(i).date;
+			if (ticks.get(i).track_id == track.getId() &&
+				d.get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
+				d.get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
+				d.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)) {
+				tickCount++;
+			}
+		}
+	
+		return tickCount;
+	}
+	
 	public List<Tick> getTicksForDay(Track track, Calendar date) {
 		List<Tick> ticks = new ArrayList<Tick>();
 		
@@ -238,7 +256,7 @@ public class TracksDataSource {
 
 	public boolean isTicked(Track t, Calendar date, boolean hasTimeInfo) {
 		date.clear(Calendar.MILLISECOND);
-		Log.v("Tickmate", "checking for " + t.getId() + " and " + date.toString());
+		//Log.v("Tickmate", "checking for " + t.getId() + " and " + date.toString());
 		return ticks.contains(new Tick(t.getId(), date));
 	}
 	
