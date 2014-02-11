@@ -2,7 +2,7 @@ v1.1.0
 ------
 
  * Add option to count multiple ticks per day (thanks Adrian Geuss)
- * Ability to choose icon
+ * Ability to choose the icon for each track
  * Russian translation (thanks @kwinto)
  * No longer show disabled tracks in main view
  * Ability to jump to a specific date to review/change ticks
