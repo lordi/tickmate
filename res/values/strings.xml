@@ -30,5 +30,12 @@
     <string name="jump_to_today">Jump to today</string>
     <string name="title_activity_about">About Tickmate</string>
     <string name="title_icon_chooser">Choose an icon</string>
-
+    <string name="about_description">Tickmate is basically a one bit journal. For each day, you can specify 
+        whether something has occurred or not. The occurrences can be arbitrary things, like flossing your 
+        teeth or having a drink. You are able to quantify your habits and the accumulated data can be 
+        displayed for the past weeks or months to track changes over time. This way, it may help you to 
+        get over your old habits or embody new ones.
+\n\nTickmate is open source, GPLv3 licensed software.
+\n\nContains icons from the Glyphicons FREE icon set (CC-BY-3.0)
+    </string>
 </resources>

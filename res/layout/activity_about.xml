@@ -21,8 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:maxLines="20"
         android:layout_weight="0.05"
-        android:text=""
+        android:gravity="left"
+        android:text="@string/about_description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

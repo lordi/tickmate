@@ -30,4 +30,12 @@
     <string name="jump_to_today">Zu heute springen</string>
     <string name="title_activity_about">Über Tickmate</string>
     <string name="title_icon_chooser">Symbol auswählen</string>
+    <string name="about_description">Tickmate ist ein "Ein-Bit-Tagebuch". Du kannst für jeden Tag angeben, ob
+    	etwas passiert ist oder nicht, z.B. ob du Zahnseide verwendet hast oder einen über
+    	den Durst getrunken hast. Du kannst somit deine Angewohnheiten oder sonstige Sachen quantifzieren
+    	und dir die Verändung über die letzten Wochen und Monate anzeigen lassen. Vielleicht hilft Tickmate
+    	so dabei, deine Angewohnheiten objektiv zu sehen und sie gegebenenfalls zu ändern.
+\n\nTickmate ist Open-Source-Software (GPLv3).
+\n\nBenutzt Icons von Glyphicons FREE icon set (CC-BY-3.0).
+    </string>    
 </resources>
