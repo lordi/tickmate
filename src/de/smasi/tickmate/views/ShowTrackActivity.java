@@ -57,8 +57,12 @@ public class ShowTrackActivity extends Activity {
 		setContentView(R.layout.activity_show_track);
 		
 		this.ds = new TracksDataSource(this);
-		
-		int track_id = getIntent().getExtras().getInt("track_id");
+		Bundle extras = getIntent().getExtras();
+		if (extras == null) {
+			finish();
+			return;
+		}
+		int track_id = extras.getInt("track_id");
 		
 		ds.open();
 		track = ds.getTrack(track_id);
