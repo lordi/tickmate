@@ -1,6 +1,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
  
     <item
+        android:id="@+id/action_jump_to_date"
+        android:orderInCategory="110"
+        android:showAsAction="never"
+        android:title="@string/jump_to_date"/>
+    
+    <item
+        android:id="@+id/action_jump_to_today"
+        android:orderInCategory="111"
+        android:showAsAction="never"
+        android:title="@string/jump_to_today"/>
+    
+    <item
+        android:id="@+id/action_export_db"
+        android:orderInCategory="120"
+        android:showAsAction="never"
+        android:title="@string/export_db"/>
+    
+    <item
+        android:id="@+id/action_import_db"
+        android:orderInCategory="121"
+        android:showAsAction="never"
+        android:title="@string/import_db"/>
+    
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="180"
         android:showAsAction="never"
@@ -13,18 +37,8 @@
         android:showAsAction="never"
         android:title="@string/title_activity_about"/>
     
-    <item
-        android:id="@+id/action_jump_to_date"
-        android:orderInCategory="110"
-        android:showAsAction="never"
-        android:title="@string/jump_to_date"/>
     
-    <item
-        android:id="@+id/action_jump_to_today"
-        android:orderInCategory="111"
-        android:showAsAction="never"
-        android:title="@string/jump_to_today"/>
-    
+        
     <item android:id="@+id/action_edit_tracks"
         android:title="@string/my_tracks"
         android:menuCategory="secondary"

@@ -1,17 +1,25 @@
 package de.smasi.tickmate;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Toast;
+import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
 
@@ -24,6 +32,12 @@ public class Tickmate extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_tickmate_ticks);
 		matrix = (TickMatrix)findViewById(R.id.tickMatrix1);
+		
+		try {
+			DatabaseOpenHelper.getInstance(this).exportDatabase("test123.db");
+		} catch (IOException e) {
+			Log.w("tickmate", "IOEXception: " +e.toString());
+		}
 	}
 
 	@Override
@@ -40,6 +54,12 @@ public class Tickmate extends Activity {
 	            return true;	            
 			case R.id.action_jump_to_today:
 				this.jumpToToday();
+	            return true;
+			case R.id.action_export_db:
+				this.exportDB();
+	            return true;	            
+			case R.id.action_import_db:
+				this.importDB();
 	            return true;	            
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -55,7 +75,7 @@ public class Tickmate extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		matrix.buildView();
+		refresh();
 	}
 	
 	public void editTracks(View v) {
@@ -71,16 +91,73 @@ public class Tickmate extends Activity {
 	public void jumpToDate() {
 		DialogFragment newFragment = new DatePickerFragment();
 	    newFragment.show(getFragmentManager(), "datePicker");
-	}	
+	}
 	
+	public void exportDB() {
+		final EditText input = new EditText(this);
+		Calendar today = Calendar.getInstance();
+		
+		int year = today.get(Calendar.YEAR);
+		int month = today.get(Calendar.MONTH) + 1;
+		int day = today.get(Calendar.DAY_OF_MONTH);
+		
+		input.setText(String.format("tickmate-backup-%04d%02d%02d.db", year, month, day));
+		new AlertDialog.Builder(this)
+		    .setTitle(R.string.export_db)
+		    .setView(input)
+		    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int whichButton) {
+		            Editable value = input.getText();
+		            String name = value.toString();
+	            	try {
+						DatabaseOpenHelper.getInstance(Tickmate.this).exportDatabase(name);
+						Toast.makeText(Tickmate.this, R.string.export_db_success, Toast.LENGTH_LONG).show();
+					} catch (IOException e) {
+						Toast.makeText(Tickmate.this, e.toString(), Toast.LENGTH_LONG).show();
+					}
+		        }
+		    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int whichButton) {
+		            // Do nothing.
+		        }
+		    }).show();
+	}
+	
+	public void importDB() {
+	    final String[] items = DatabaseOpenHelper.getInstance(this).getExternalDatabaseNames();
+	    if (items.length == 0) {
+	    	Toast.makeText(Tickmate.this, R.string.import_db_none_found, Toast.LENGTH_LONG).show();
+	    }
+	    else {
+		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		    builder.setTitle(R.string.import_db);
+		    
+		    builder.setItems(items, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) {
+					try {
+						DatabaseOpenHelper.getInstance(Tickmate.this).importDatabase(items[which]);
+						Toast.makeText(Tickmate.this, R.string.import_db_success, Toast.LENGTH_LONG).show();
+						refresh();
+					} catch (IOException e) {
+						Toast.makeText(Tickmate.this, e.toString(), Toast.LENGTH_LONG).show();
+					}            	
+		        }
+		    });
+		    builder.show();
+	    }
+	}	
 	public void jumpToToday() {
 		matrix.unsetDate();
-		matrix.buildView();
+		refresh();
 	}
 	
 	public void setDate(int year, int month, int day) {
 		matrix.setDate(year, month, day);
-		matrix.buildView();
+		refresh();
+	}
+	
+	public void refresh() {
+		matrix.buildView();		
 	}
 	
 	public Calendar getDate() {

@@ -38,4 +38,9 @@
 \n\nTickmate is open source, GPLv3 licensed software.
 \n\nContains icons from the Glyphicons FREE icon set (CC-BY-3.0)
     </string>
+    <string name="import_db">Import database</string>
+    <string name="export_db">Backup database</string>
+    <string name="import_db_success">Database imported successfully.</string>
+    <string name="export_db_success">Datebase exported successfully. </string>
+    <string name="import_db_none_found">No backup databases have been found.</string>
 </resources>

@@ -1,12 +1,21 @@
 package de.smasi.tickmate.database;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	private static DatabaseOpenHelper sharedInstance;
+	private Context context;
 
     public static final String TABLE_TRACKS = "tracks";
     public static final String TABLE_TICKS = "ticks";
@@ -31,6 +40,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
     
     public static DatabaseOpenHelper getInstance(Context context) {
@@ -86,5 +96,85 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKS);
 		    onCreate(db);
 		}
+	}
+	
+	private String getDatabasePath() {
+		String db_path = context.getDatabasePath(DATABASE_NAME).getAbsolutePath();
+		Log.v("tickmate", "internal database path: " + db_path);
+		return db_path;
+	}
+	
+	private String getExternalDatabasePath(String name) throws IOException {
+		String db_path = new File(getExternalDatabaseFolder(), name).getAbsolutePath();
+		Log.v("tickmate", "external database path: " + db_path);
+		return db_path;
+	}
+
+	/**
+	 * Copies the database file at the specified location over the current
+	 * internal application database.
+	 * */
+	public boolean exportDatabase(String externalName) throws IOException {
+	    // Close the SQLiteOpenHelper so it will commit the created empty
+	    // database to internal storage.
+	    close();
+	    
+	    context.getFilesDir();
+	    	    
+	    File extDb = new File(getExternalDatabasePath(externalName));
+	    File myDb = new File(getDatabasePath());
+	    
+	    FileUtils.copyFile(new FileInputStream(myDb), new FileOutputStream(extDb));
+	    return true;
+	}
+	
+	/**
+	 * Copies the database file at the specified location over the current
+	 * internal application database.
+	 * */
+	public boolean importDatabase(String externalName) throws IOException {
+
+	    // Close the SQLiteOpenHelper so it will commit the created empty
+	    // database to internal storage.
+	    close();
+	    
+	    File extDb = new File(getExternalDatabasePath(externalName));
+	    File myDb = new File(getDatabasePath());
+	    if (extDb.exists()) {
+	        FileUtils.copyFile(new FileInputStream(extDb), new FileOutputStream(myDb));
+	        // Access the copied database so SQLiteHelper will cache it and mark
+	        // it as created.
+	        getWritableDatabase().close();
+	        return true;
+	    }
+	    return false;
+	}
+
+	public String[] getExternalDatabaseNames() {
+		
+		 File ext_dir;
+		try {
+			ext_dir = getExternalDatabaseFolder();
+		} catch (IOException e) {
+			return new String[0];
+		}
+        FilenameFilter filter = new FilenameFilter() {
+            public boolean accept(File dir, String filename) {
+                File sel = new File(dir, filename);
+                return filename.endsWith(".db") && !sel.isDirectory();
+            }
+        };
+        return ext_dir.list(filter);
+
+	}
+
+	private File getExternalDatabaseFolder() throws IOException {
+		File ext_dir = new File(Environment.getExternalStorageDirectory(), "Tickmate");
+		if (!ext_dir.exists()) {
+			if (ext_dir.mkdir() == false) {
+				throw new IOException("Could not create external storage directory.");
+			}
+		}		
+		return ext_dir;
 	}
 }
