@@ -1,20 +1,21 @@
-package de.smasi;
+package de.smasi.tickmate.tests;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
-import java.util.LinkedList;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.Tickmate;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Track;
-
-import org.robolectric.RobolectricTestRunner;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class DatabaseTest {
@@ -66,6 +67,7 @@ public class DatabaseTest {
 		String hello = new Tickmate().getResources().getString(
 				R.string.about_description);
 		assertThat(hello, containsString("Tickmate"));
+
 	}
 
 }
