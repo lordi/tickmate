@@ -49,20 +49,21 @@ public class TracksDataSource {
 	}
 
 	public void open() throws SQLException {
-//		Log.d("tickmate", "Opening database");
-		database = dbHelper.getWritableDatabase();
+		if (database == null || !database.isOpen()) {
+  			Log.d("tickmate", "Opening database");
+			database = dbHelper.getWritableDatabase();
+		}
 	}
 
 	public void close() {
+		Log.d("tickmate", "Closing database");
 		dbHelper.close();
 	}
 
 	public void deleteTrack(Track track) {
 		long id = track.getId();
 		
-		if (database == null || !database.isOpen()) {
-			this.open();
-		}
+		this.open();
 		
 		try {
 			int rows = database.delete(DatabaseOpenHelper.TABLE_TRACKS,
@@ -77,6 +78,7 @@ public class TracksDataSource {
 	}
 
 	public Track getTrack(int id) {		
+		this.open();
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
 				null, null, null, null);
@@ -89,6 +91,8 @@ public class TracksDataSource {
 	public List<Track> getMyTracks() {
 		List<Track> tracks = new ArrayList<Track>();
 		
+		this.open();
+
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, null, null, null, null, null, null);
 
@@ -107,6 +111,8 @@ public class TracksDataSource {
 	public List<Track> getActiveTracks() {
 		List<Track> tracks = new ArrayList<Track>();
 		
+		this.open();
+
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null, null, null);
 
@@ -125,6 +131,7 @@ public class TracksDataSource {
 	public void retrieveTicks(Calendar startday, Calendar endday) {
 		ticks = new ArrayList<Tick>();
 
+		this.open();
 		String[] args = { 
 				Integer.toString(startday.get(Calendar.YEAR)),
 				Integer.toString(startday.get(Calendar.YEAR)),
@@ -183,8 +190,7 @@ public class TracksDataSource {
 	public List<Tick> getTicks(int track_id) {
 		List<Tick> ticks = new ArrayList<Tick>();
 		
-		if (database == null)
-			this.open();
+		this.open();
 		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + Integer.toString(track_id),
@@ -222,8 +228,7 @@ public class TracksDataSource {
 	public List<Tick> getTicksForDay(Track track, Calendar date) {
 		List<Tick> ticks = new ArrayList<Tick>();
 		
-		if (database == null)
-			this.open();
+		this.open();
 		
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
@@ -345,15 +350,14 @@ public class TracksDataSource {
 	}
 	
 	public boolean removeLastTickOfDay(Track track, Calendar date) {
+		this.open();
 		List<Tick> ticks = this.getTicksForDay(track, date);
 		
 		if (ticks.size() == 0)
 			return false;
 		
 		Tick tick = ticks.get(ticks.size()-1);
-		
-		this.open();
-		
+				
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(tick.tick_id) };
 		int affectedRows = database.delete(DatabaseOpenHelper.TABLE_TICKS,
@@ -376,6 +380,7 @@ public class TracksDataSource {
 	}
 
 	public int getTickCount(int track_id) {
+		this.open();
 		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				new String[] {

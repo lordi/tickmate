@@ -1,5 +1,7 @@
 package de.smasi.tickmate.models;
 
+import java.util.Calendar;
+
 import android.content.Context;
 import android.content.res.Resources;
 
@@ -31,6 +33,12 @@ public class Track {
 		this.iconId = -1;
 		this.icon = "glyphicons_001_leaf_white";
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		Track other = (Track)o;
+		return other.id == id;
+	}	
 
 	public int getIconId(Context ctx) {
 		if (this.iconId == -1) {

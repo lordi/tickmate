@@ -1,14 +1,14 @@
 package de.smasi.tickmate.tests;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 
+import org.hamcrest.core.IsNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import de.smasi.tickmate.R;
@@ -70,4 +70,12 @@ public class DatabaseTest {
 
 	}
 
+	@Test
+	public void trackDefaultIconResolvesToResID() throws Exception {
+		Track t = new Track("Test track", "Cats and dogs");
+		assertThat(t.getDescription(), is("Cats and dogs"));
+		assertThat(t.getIcon(), not(is("")));
+		assertThat(t.getIcon(), not(nullValue()));
+		assert(t.getIconId(Robolectric.application.getApplicationContext()) > 0);
+	}
 }
