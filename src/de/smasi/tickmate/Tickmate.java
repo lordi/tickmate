@@ -126,7 +126,13 @@ public class Tickmate extends Activity {
 	public void importDB() {
 	    final String[] items = DatabaseOpenHelper.getInstance(this).getExternalDatabaseNames();
 	    if (items.length == 0) {
-	    	Toast.makeText(Tickmate.this, R.string.import_db_none_found, Toast.LENGTH_LONG).show();
+	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	    	builder.setMessage(R.string.import_db_none_found)
+	    		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) {
+			        }
+			    })
+	    	    .show();
 	    }
 	    else {
 		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -134,13 +140,25 @@ public class Tickmate extends Activity {
 		    
 		    builder.setItems(items, new DialogInterface.OnClickListener() {
 		        public void onClick(DialogInterface dialog, int which) {
-					try {
-						DatabaseOpenHelper.getInstance(Tickmate.this).importDatabase(items[which]);
-						Toast.makeText(Tickmate.this, R.string.import_db_success, Toast.LENGTH_LONG).show();
-						refresh();
-					} catch (IOException e) {
-						Toast.makeText(Tickmate.this, e.toString(), Toast.LENGTH_LONG).show();
-					}            	
+		        	final int that = which;
+				    AlertDialog.Builder builder = new AlertDialog.Builder(Tickmate.this);
+				    builder.setMessage(R.string.import_db_really)
+			    		.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					        public void onClick(DialogInterface dialog, int which) {
+					    		try {
+									DatabaseOpenHelper.getInstance(Tickmate.this).importDatabase(items[that]);
+									Toast.makeText(Tickmate.this, R.string.import_db_success, Toast.LENGTH_LONG).show();
+									refresh();
+								} catch (IOException e) {
+									Toast.makeText(Tickmate.this, e.toString(), Toast.LENGTH_LONG).show();
+								}            
+					        }
+					    })
+			    		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+					        public void onClick(DialogInterface dialog, int which) {
+					        }
+					    })
+			    	    .show();						
 		        }
 		    });
 		    builder.show();
