@@ -104,7 +104,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 		return db_path;
 	}
 	
-	private String getExternalDatabasePath(String name) throws IOException {
+	public String getExternalDatabasePath(String name) throws IOException {
 		String db_path = new File(getExternalDatabaseFolder(), name).getAbsolutePath();
 		Log.v("tickmate", "external database path: " + db_path);
 		return db_path;
@@ -119,8 +119,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	    // database to internal storage.
 	    close();
 	    
-	    context.getFilesDir();
-	    	    
 	    File extDb = new File(getExternalDatabasePath(externalName));
 	    File myDb = new File(getDatabasePath());
 	    
