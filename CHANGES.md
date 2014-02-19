@@ -1,3 +1,8 @@
+v1.1.1
+------
+
+ * External storage export and import
+
 v1.1.0
 ------
 
