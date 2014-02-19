@@ -11,5 +11,7 @@ Contains icons from the [Glyphicons FREE icon set](http://glyphicons.com/) (CC-B
 
 Bitcoin donations are happily accepted at [18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu](http://blockchain.info/de/address/18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu), DogeCoin at DM76PSQBeDKYnf82qCud6B4fwTNNcZjVEZ. Wow.
 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=&url=https://github.com/lordi/tickmate&title=Tickmate&language=&tags=github&category=software) 
+
 [Translations](LOCALIZATION.md) are gratefully accepted as well.
 
