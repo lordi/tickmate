@@ -167,7 +167,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	}
 
 	private File getExternalDatabaseFolder() throws IOException {
-		File ext_dir = new File(Environment.getExternalStorageDirectory(), "Tickmate");
+		File ext_dir = new File(FileUtils.getRemovableStorageDirectory(), "Tickmate");
 		if (!ext_dir.exists()) {
 			if (ext_dir.mkdir() == false) {
 				throw new IOException("Could not create external storage directory.");
