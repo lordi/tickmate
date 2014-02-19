@@ -37,5 +37,11 @@
     	so dabei, deine Angewohnheiten objektiv zu sehen und sie gegebenenfalls zu ändern.
 \n\nTickmate ist Open-Source-Software (GPLv3).
 \n\nBenutzt Icons von Glyphicons FREE icon set (CC-BY-3.0).
-    </string>    
+    </string>
+    <string name="import_db">Datenbank importieren</string>
+    <string name="export_db">Datenbank sichern</string>
+    <string name="import_db_success">Datenbank erfolgreich importiert.</string>
+    <string name="export_db_success">Datenbank erfolgreich gesichert. </string>
+    <string name="import_db_none_found">Es konnten keine gesicherten Datenbank gefunden werden.</string>
+    <string name="import_db_really">Sind Sie sicher, dass Sie die ausgewählte Datenbank importieren möchten? Dies kann NICHT rückgängig gemacht werden und wird alle vorhandenen Tracks und Ticks ersetzen.</string>
 </resources>
