@@ -32,12 +32,6 @@ public class Tickmate extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_tickmate_ticks);
 		matrix = (TickMatrix)findViewById(R.id.tickMatrix1);
-		
-		try {
-			DatabaseOpenHelper.getInstance(this).exportDatabase("test123.db");
-		} catch (IOException e) {
-			Log.w("tickmate", "IOEXception: " +e.toString());
-		}
 	}
 
 	@Override
