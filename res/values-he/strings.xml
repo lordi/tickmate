@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+	<string name="app_name">Tickmate</string>
+
+	<string name="action_settings">הגדרות</string>
+
+	<string name="title_section_ticks">My ticks</string>
+
+	<string name="title_section_weeks">שבועות</string>
+
+	<string name="title_section_months">חודשים</string>
+
+	<string name="title_activity_edit_tracks">המעקבים שלי</string>
+
+	<string name="my_tracks">המעקבים שלי</string>
+
+	<string name="title_activity_choose_track">הוסף</string>
+
+	<string name="choose_track">בחר</string>
+
+	<string name="title_activity_edit_track">ערוך</string>
+
+	<string name="edit_description_hint">תאור</string>
+
+	<string name="today">היום</string>
+
+	<string name="yesterday">אתמול</string>
+
+	<string name="inactive">לא פעיל</string>
+
+	<string name="edit">ערוך</string>
+
+	<string name="deactivate">הפוך ללא פעיל</string>
+
+	<string name="delete">מחק</string>
+
+	<string name="title_activity_show_track">פרטי מעקב</string>
+
+	<string name="title_section_weekdays">ימי השבוע</string>
+
+	<string name="numer_of_occurances">מספר הארועים:</string>
+
+	<string name="no_tracks_found">אין מעקבים פעילים. לחץ כאן בכדי
+		לפתוח את עורך
+		המעקבים.
+	</string>
+
+	<string name="multiple_entries">מספר פעמים ביום</string>
+
+	<string name="tick_deleted">מעקב אחרון הוסר.</string>
+
+	<string name="alert_delete_track_title">מחק מעקב</string>
+
+	<string name="alert_delete_track_message">האם את/ה בטוח/ה שאתה
+		רוצה להסיר את המעקב?
+	</string>
+
+	<string name="jump_to_date">עבור לתאריך…</string>
+
+	<string name="jump_to_today">עבור להיום</string>
+
+	<string name="title_activity_about">אודות Tickmate</string>
+
+	<string name="title_icon_chooser">בחר סמל</string>
+
+	<string name="about_description">Tickmateהיא בעצם יומן עשייה. בכל
+		יום, תוכל לציין האם משהו קרה, או לא קרה.
+
+		תוכל לבחור בפעולות יום יומיות, כמו צחצוח שיניים, שתיית משקה מסוים
+		ועוד.בנוסף, ביכולתך לציין את הכמות ולא רק את עצם הביצוע, למשל, לא רק
+		האם שתיתי קפה היום, אלא כמה כוסות קפה שתית.המעקב מוצג לאורך שבוע אחד,
+		החודש האחרון ותקופה של חצי שנה לאחור.תוכל לבחון, למשל, תקופה של
+		התעסקות בספורט – האם אכלת מאכלים מסויימים, או צרכת אלכוהול או אפילו
+		ויתרת על ספורט לאותו השבוע.
+
+		הסבר זה כתוב בלשון זכר אך מתייחס לשני המינים באופן שווה.
+
+		\n\nTickmate is open source, GPLv3 licensed software.
+
+		\n\nContains icons from the Glyphicons FREE icon set (CC-BY-3.0)
+
+	</string>
+
+	<string name="import_db">ייבא נתונים</string>
+
+	<string name="export_db">גבה נתונים</string>
+
+	<string name="import_db_success">הנתונים יובאו בהצלחה !</string>
+
+	<string name="export_db_success">הנתונים יוצאו בהצלחה</string>
+
+	<string name="import_db_none_found">! לא נמצא בסיס מידע לגיבוי</string>
+
+	<string name="import_db_really">האם את/ה בטוח שברצונך לייבא את
+		הנתונים ? פעולה זו
+		היא בלתי הפיכה ותחליף את כל המעקבים הנוכחיים !
+	</string>
+
+</resources>

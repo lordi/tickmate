@@ -3,6 +3,7 @@ Localization
 
   * Danish (Johan Hilge Thygesen)
   * German (me)
+  * Hebrew (Michal)
   * Russian (@kwinto)
   * Spanish (Teti)
 
