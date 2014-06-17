@@ -1,11 +1,15 @@
 package de.smasi.tickmate.views;
 
+import java.io.IOError;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.widget.TextView;
 import de.smasi.tickmate.R;
+import de.smasi.tickmate.database.DatabaseOpenHelper;
 
 public class AboutActivity extends Activity {
 
@@ -14,6 +18,7 @@ public class AboutActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 		TextView title = (TextView) findViewById(R.id.about_title);
+		TextView desc = (TextView) findViewById(R.id.about_description);
 		PackageInfo pInfo;
 		String version;
 		try {
@@ -23,6 +28,14 @@ public class AboutActivity extends Activity {
 			version = "";
 		}
 		title.setText(getString(R.string.app_name) + " " + version);
+		
+		try {
+			DatabaseOpenHelper db = new DatabaseOpenHelper(this);
+			desc.setText(getString(R.string.about_description) + "\n\nBackup folder: " + db.getExternalDatabaseFolder().getAbsoluteFile());
+		} catch (IOException e) {
+			// TODO: handle exception
+		}
+		
 	}
 
 }

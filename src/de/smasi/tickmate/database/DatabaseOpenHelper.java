@@ -16,7 +16,8 @@ import android.util.Log;
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	private static DatabaseOpenHelper sharedInstance;
 	private Context context;
-
+    private static final String TAG = "DatabaseOpenHelper";
+    
     public static final String TABLE_TRACKS = "tracks";
     public static final String TABLE_TICKS = "ticks";
     public static final String COLUMN_ID = "_id";
@@ -166,13 +167,44 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
 	}
 
-	private File getExternalDatabaseFolder() throws IOException {
-		File ext_dir = new File(FileUtils.getRemovableStorageDirectory(), "Tickmate");
-		if (!ext_dir.exists()) {
-			if (ext_dir.mkdir() == false) {
-				throw new IOException("Could not create external storage directory.");
+	public File getExternalDatabaseFolder() throws IOException {
+    	
+		// On Android 4.4, it is not possible to write on the external SD card
+		// So fall back to getExternalFilesDir
+		// We choose the first writable folder from the following list:
+		File[] ext_dirs = {
+            new File(FileUtils.getRemovableStorageDirectory(), "Tickmate"),
+            new File(FileUtils.getRemovableStorageDirectory(), "Android/data/" + context.getPackageName()),
+            this.context.getExternalFilesDir("backup"),
+            this.context.getExternalFilesDir(null),
+            this.context.getFilesDir()
+		};
+		
+		boolean valid = false;
+		File ext_dir = null;
+		for (int i = 0; !valid && i < ext_dirs.length; i++) {
+			ext_dir = ext_dirs[i];
+			if (ext_dir == null) {
+				Log.v(TAG, "path is null");
+				continue;
 			}
-		}		
+			valid = true;
+			if (!ext_dir.exists()) {
+				if (ext_dir.mkdirs() == false) {
+					valid = false;
+					Log.v(TAG, ext_dir.getAbsolutePath() + ": no mkdirs");
+					continue;
+				}
+			}		
+			if (valid && !ext_dir.canWrite()) { // check writing permissions
+				valid = false;
+				Log.v(TAG, ext_dir.getAbsolutePath() + ": no write");
+				continue;
+			}	
+		}
+		if (!valid) {
+			throw new IOException("Could not find external storage directory.");
+		}
 		return ext_dir;
 	}
 }
