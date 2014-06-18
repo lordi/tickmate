@@ -33,7 +33,7 @@ public class DatabaseTest {
 		Tickmate tm = new Tickmate();
 		TracksDataSource ds = new TracksDataSource(tm);
 		ds.open();
-		assertThat(ds.getMyTracks().size(), is(0));
+		assertThat(ds.getTracks().size(), is(0));
 		ds.close();
 		Track t = new Track("Testing", "Run my tests");
 		t.setEnabled(true);
@@ -43,7 +43,7 @@ public class DatabaseTest {
 		ds.storeTrack(t);
 		ds.close();
 		ds.open();
-		assertThat(ds.getMyTracks().size(), is(1));
+		assertThat(ds.getTracks().size(), is(1));
 		ds.close();
 
 		DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tm);
@@ -59,14 +59,14 @@ public class DatabaseTest {
 		ds.storeTrack(t2);
 		ds.close();
 		ds.open();
-		assertThat(ds.getMyTracks().size(), is(2));
+		assertThat(ds.getTracks().size(), is(2));
 		ds.close();
 
 		db.importDatabase("test.db");
 
 		// reimported previous database, so track count should be one again:
 		ds.open();
-		assertThat(ds.getMyTracks().size(), is(1));
+		assertThat(ds.getTracks().size(), is(1));
 		ds.close();
 	}
 
@@ -101,7 +101,7 @@ public class DatabaseTest {
 		// the legacy db should have 8 tracks (6 active)
 		TracksDataSource ds = new TracksDataSource(tm);
 		ds.open();
-		assertThat(ds.getMyTracks().size(), is(8));
+		assertThat(ds.getTracks().size(), is(8));
 		assertThat(ds.getActiveTracks().size(), is(6));
 		assertThat(ds.getTickCount(1), is(28));
 		assertThat(ds.getTickCount(2), is(2));

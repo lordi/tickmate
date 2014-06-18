@@ -88,7 +88,7 @@ public class TracksDataSource {
 		return newTrack;
 	}
 
-	public List<Track> getMyTracks() {
+	public List<Track> getTracks() {
 		List<Track> tracks = new ArrayList<Track>();
 		
 		this.open();
