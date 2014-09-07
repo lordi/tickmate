@@ -185,6 +185,7 @@ public class ShowTrackActivity extends Activity {
 		retrieveGraphData();
 		
 		graph_weekdays = (SummaryGraph) findViewById(R.id.summaryGraph_weekdays);
+		graph_weekdays.setCyclic(true);
 		graph_weekdays.setData(this.weekdaysData, this.weekdaysKeys, this.weekdaysMaximum);
 		graph_weeks = (SummaryGraph) findViewById(R.id.summaryGraph_weeks);
 		graph_weeks.setData(this.weeksData, this.weeksKeys, this.weeksMaximum);
