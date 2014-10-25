@@ -41,6 +41,7 @@ def window(day, n=20):
             ticktrix[x, y] = 1
     return ticktrix
 
+last_day -= datetime.timedelta(10)
 print "Fitting for day:", last_day
 
 my_window = window(last_day)
@@ -49,9 +50,17 @@ target_data = my_window[0,:].T
 training_data = my_window[1:,:].T
 
 print "Target:", target_data.shape
+print target_data
 print "Training:", training_data.shape
+print training_data
 
 reg = linear_model.LinearRegression()
 reg.fit(training_data, target_data)
-print "Coefficents:", reg.coef_
+print "Coefficents:", reg.coef_.shape
+print reg.coef_
+
+print "Applied to training data:"
+print np.dot(training_data, reg.coef_)
+print "Forecast:"
+print np.dot(my_window[:19,:].T, reg.coef_)
 
