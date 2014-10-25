@@ -37,7 +37,7 @@ public class EditTracksActivity extends ListActivity {
 		TracksDataSource ds = new TracksDataSource(this);
 		Track[] ms = new Track[0];
 		ds.open();
-		ms = ds.getMyTracks().toArray(ms);
+		ms = ds.getTracks().toArray(ms);
 		ds.close();
 		tracksAdapter = new TrackListAdapter(this, ms);
 		this.getListView().setAdapter(tracksAdapter);

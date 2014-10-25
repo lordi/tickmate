@@ -32,7 +32,18 @@ public class SummaryGraph extends View {
 	private List<Integer> data;
 	private List<String> keys;
 	private Integer maximum;
+	private boolean cyclic;
 	
+	public boolean isCyclic() {
+		return cyclic;
+	}
+
+
+	public void setCyclic(boolean cyclic) {
+		this.cyclic = cyclic;
+	}
+
+
 	public SummaryGraph(Context context) {
 		super(context);
 		init();
@@ -45,6 +56,7 @@ public class SummaryGraph extends View {
 		this.data = new LinkedList<Integer>();
 		this.keys = new LinkedList<String>();
 		this.maximum = 7;
+		this.cyclic = false;
 	}
 
 
@@ -78,9 +90,18 @@ public class SummaryGraph extends View {
 		paint.setTextSize(18.0f);
 		int len = this.data.size();
 		
+		if (len == 0)
+			return;
+		
+		// this part needs some refactoring
 		path.reset();
-		path.moveTo(0, height);
+		path.moveTo((float) ((-0.5)*width/len), height);
 		float oldH = height;
+		if (this.cyclic) {
+			float h = (height0-this.data.get(len - 1)/(1.0f*this.maximum)*height0) + 26.0f;
+			path.lineTo((float) ((-0.5)*width/len), h);
+			oldH = h;
+		}
 		
 		for (int i=0; i < len; i++) {
 			int val = this.data.get(i);
@@ -90,8 +111,16 @@ public class SummaryGraph extends View {
 			path.cubicTo(x0, oldH, x0, h, x, h);
 			oldH = h;
 		}
-		path.cubicTo(width, oldH, width, height, width, height);
-		
+
+		if (this.cyclic) {
+			float h = (height0-this.data.get(0)/(1.0f*this.maximum)*height0) + 26.0f;
+			float x = (float) ((len+0.5f)*width/len);
+			path.cubicTo(width, oldH, width, h, x, h);
+			path.lineTo((float) ((len+0.5f)*width/len), height);
+		}
+		else 
+			path.cubicTo((float) ((len+0.5f)*width/len), oldH, width, height, width, height);
+	
 		paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));
 		paint.setStrokeWidth(2.2f);
 		paint.setStyle(Style.STROKE);
