@@ -194,7 +194,7 @@ public class TracksDataSource {
 		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + Integer.toString(track_id),
-				null, null, null, null);
+				null, null, null, "year, month, day");
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {

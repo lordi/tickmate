@@ -1,4 +1,4 @@
-package de.smasi.tickmate.views;
+package de.smasi.tickmate.widgets;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -85,7 +85,8 @@ public class SummaryGraph extends View {
 		paint.setStrokeWidth(2);
 		paint.setStyle(Paint.Style.STROKE);  
 		paint.setColor(getResources().getColor(android.R.color.holo_blue_light));
-		canvas.drawRect(0, 0, width, height, paint);
+		//canvas.drawRect(0, 0, width, height, paint);
+		canvas.drawLine(0, height, width, height, paint);
 		paint.setStyle(Paint.Style.FILL);  
 		paint.setTextSize(18.0f);
 		int len = this.data.size();

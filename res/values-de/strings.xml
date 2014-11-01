@@ -44,4 +44,7 @@
     <string name="export_db_success">Datenbank erfolgreich gesichert. </string>
     <string name="import_db_none_found">Es konnten keine gesicherten Datenbank gefunden werden.</string>
     <string name="import_db_really">Sind Sie sicher, dass Sie die ausgewählte Datenbank importieren möchten? Dies kann NICHT rückgängig gemacht werden und wird alle vorhandenen Tracks und Ticks ersetzen.</string>
+    <string name="show_track_total">Insgesamt</string>
+    <string name="show_track_weeklymean">Wochenmittel</string>
+    <string name="show_track_dayssincelast">Tage seit letztem</string>
 </resources>
