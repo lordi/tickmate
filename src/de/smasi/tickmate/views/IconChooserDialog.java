@@ -1,16 +1,13 @@
 package de.smasi.tickmate.views;
 
-import de.smasi.tickmate.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import de.smasi.tickmate.R;
 
 public class IconChooserDialog extends Dialog {
 	

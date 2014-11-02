@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import de.smasi.tickmate.database.TracksDataSource;
-import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.views.ShowTrackActivity;
 
