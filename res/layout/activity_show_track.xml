@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="top"
     android:gravity="top"
@@ -18,7 +18,7 @@
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="top"
             android:orientation="vertical" >
 
@@ -42,7 +42,7 @@
                         android:id="@+id/textView_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Name"
+                        android:text=""
                         android:textAppearance="?android:attr/textAppearanceLarge" />
 
                     <TextView
@@ -67,20 +67,20 @@
                     <de.smasi.tickmate.widgets.SummaryNumber
                         android:id="@+id/summaryNumber1"
                         android:layout_width="wrap_content"
-                        android:layout_height="80dp"
-                        android:layout_weight="0.3" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.0" />
 
                     <de.smasi.tickmate.widgets.SummaryNumber
                         android:id="@+id/summaryNumber2"
                         android:layout_width="wrap_content"
                         android:layout_height="80dp"
-                        android:layout_weight="0.3" />
+                        android:layout_weight="1.0" />
 
                     <de.smasi.tickmate.widgets.SummaryNumber
                         android:id="@+id/summaryNumber3"
                         android:layout_width="wrap_content"
                         android:layout_height="80dp"
-                        android:layout_weight="0.3" />
+                        android:layout_weight="1.0" />
 
                 </TableRow>
             </TableLayout>

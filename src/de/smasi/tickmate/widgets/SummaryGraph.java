@@ -1,15 +1,20 @@
 package de.smasi.tickmate.widgets;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.smasi.tickmate.R;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
 
@@ -18,13 +23,13 @@ public class SummaryGraph extends View {
 	
 	public SummaryGraph(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init();
+		init(context);
 	}
 
 
 	public SummaryGraph(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
+		init(context);
 	}
 
 
@@ -33,6 +38,7 @@ public class SummaryGraph extends View {
 	private List<String> keys;
 	private Integer maximum;
 	private boolean cyclic;
+	private float density;
 	
 	public boolean isCyclic() {
 		return cyclic;
@@ -46,17 +52,21 @@ public class SummaryGraph extends View {
 
 	public SummaryGraph(Context context) {
 		super(context);
-		init();
+		init(context);
 	}
 
-	private void init() {
+	private void init(Context context) {
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));		
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		path = new Path();
+
 		this.data = new LinkedList<Integer>();
 		this.keys = new LinkedList<String>();
 		this.maximum = 7;
 		this.cyclic = false;
+		
+		this.density = context.getResources().getDisplayMetrics().density;
+
 	}
 
 
@@ -74,9 +84,13 @@ public class SummaryGraph extends View {
 	
 		// normal
 		paint.setStrokeWidth(0);
+		
+		int textSize = getResources().getDimensionPixelSize(R.dimen.fontsize_small);
+		paint.setTextSize(textSize);
 
-		float height = getHeight() - 24.0f;
-		float height0 = height - 26.0f;
+		float bottomGap = textSize + 4.0f * density;
+		float height = getHeight() - (textSize + 1.0f * density);
+		float height0 = height - bottomGap;
 		float width = getWidth();
 
 		// vertical lines
@@ -88,7 +102,7 @@ public class SummaryGraph extends View {
 		//canvas.drawRect(0, 0, width, height, paint);
 		canvas.drawLine(0, height, width, height, paint);
 		paint.setStyle(Paint.Style.FILL);  
-		paint.setTextSize(18.0f);
+
 		int len = this.data.size();
 		
 		if (len == 0)
@@ -99,14 +113,14 @@ public class SummaryGraph extends View {
 		path.moveTo((float) ((-0.5)*width/len), height);
 		float oldH = height;
 		if (this.cyclic) {
-			float h = (height0-this.data.get(len - 1)/(1.0f*this.maximum)*height0) + 26.0f;
+			float h = (height0-this.data.get(len - 1)/(1.0f*this.maximum)*height0) + bottomGap;
 			path.lineTo((float) ((-0.5)*width/len), h);
 			oldH = h;
 		}
 		
 		for (int i=0; i < len; i++) {
 			int val = this.data.get(i);
-			float h = (height0-val/(1.0f*this.maximum)*height0) + 26.0f;
+			float h = (height0-val/(1.0f*this.maximum)*height0) + bottomGap;
 			float x0 = (i)*width/len;
 			float x = (i+0.5f)*width/len;
 			path.cubicTo(x0, oldH, x0, h, x, h);
@@ -114,7 +128,7 @@ public class SummaryGraph extends View {
 		}
 
 		if (this.cyclic) {
-			float h = (height0-this.data.get(0)/(1.0f*this.maximum)*height0) + 26.0f;
+			float h = (height0-this.data.get(0)/(1.0f*this.maximum)*height0) + bottomGap;
 			float x = (float) ((len+0.5f)*width/len);
 			path.cubicTo(width, oldH, width, h, x, h);
 			path.lineTo((float) ((len+0.5f)*width/len), height);
@@ -135,7 +149,7 @@ public class SummaryGraph extends View {
 			
 		for (int i=0; i < len; i++) {
 			int val = this.data.get(i);
-			float h = (height0-val/(1.0f*this.maximum)*height0) + 26.0f;
+			float h = (height0-val/(1.0f*this.maximum)*height0) + bottomGap;
 			float x = (i+0.5f)*width/len;
 			paint.setStrokeWidth(1);
 			paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));
@@ -149,12 +163,7 @@ public class SummaryGraph extends View {
 				canvas.drawCircle((i+0.5f)*width/len, h, 3.0f, paint);
 			}
 			paint.setColor(getResources().getColor(android.R.color.secondary_text_dark));
-			canvas.drawText(keys.get(i), (i+0.5f)*width/len, height+20.0f,paint);
-			
+			canvas.drawText(keys.get(i), (i+0.5f)*width/len, height+(textSize+ 1.0f * density),paint);			
 		}
 	}
-	
-
-	
-
 }

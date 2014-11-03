@@ -1,5 +1,6 @@
 package de.smasi.tickmate.widgets;
 
+import de.smasi.tickmate.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -57,7 +58,9 @@ public class SummaryNumber extends View {
 	
 		// normal
 		paint.setStrokeWidth(0);
-
+		
+		int bottomtextsize = getResources().getDimensionPixelSize(R.dimen.fontsize_small);
+		
 		float height = getHeight() - 24.0f;
 		float height0 = height - 26.0f;
 		float width = getWidth();
@@ -71,7 +74,6 @@ public class SummaryNumber extends View {
 		paint.setAlpha(64);
 		paint.setStyle(Paint.Style.FILL);  
 
-		float bottomtextsize = 16.0f;
 		float padding = 3.0f;
 		float cx = (float)(width/2.0);
 		float cy = (float)((height - bottomtextsize - padding)/2.0);
@@ -87,8 +89,10 @@ public class SummaryNumber extends View {
 		else {
 			canvas.drawText(String.format(String.format("%%.%df", decimals), number), cx, (float)(cy+cy/3.0), paint);
 		}
+		
 		paint.setTextSize(bottomtextsize);
-
+		paint.setColor(getResources().getColor(android.R.color.secondary_text_dark));
+		
 		canvas.drawText(this.bottomtext, cx, (float)height, paint);
 	}
 	

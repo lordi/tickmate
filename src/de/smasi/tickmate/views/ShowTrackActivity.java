@@ -109,7 +109,7 @@ public class ShowTrackActivity extends Activity {
 		day.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 		
 		for (int i = 0; i < 7; i++) {
-			this.weekdaysKeys.add(day.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, locale).toUpperCase());
+			this.weekdaysKeys.add(day.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, locale).toUpperCase(locale));
 			day.add(Calendar.DATE, 1);
 		}		
 		this.weekdaysData = new LinkedList<Integer>();

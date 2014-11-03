@@ -4,7 +4,7 @@
         android:id="@+id/action_choose_track"
         android:orderInCategory="100"
         android:icon="@android:drawable/ic_menu_add"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="@string/choose_track"/>
     
     <item
