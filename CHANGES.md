@@ -1,3 +1,9 @@
+v1.1.2
+------
+
+ * Fix external storage bug in Android 4.4
+ * Prettier track summary page
+
 v1.1.1
 ------
 
