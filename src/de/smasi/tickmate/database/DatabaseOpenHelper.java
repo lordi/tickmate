@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
+import de.smasi.tickmate.models.Track;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,6 +26,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_ICON = "icon";
     public static final String COLUMN_ENABLED = "enabled";
+    public static final String COLUMN_ORDER = "order";
     public static final String COLUMN_YEAR = "year";
     public static final String COLUMN_MONTH = "month";
     public static final String COLUMN_DAY = "day";
@@ -84,14 +86,29 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d("tickmate", "Upgrading database");
-		if (oldVersion == 9 && newVersion == 10) {
-			Log.d("tickmate", "Adding columns from version 10");
-			db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN " + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0;");
-			
-			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_HOUR + " integer;");
-			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_MINUTE + " integer;");
-			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_SECOND + " integer;");
-			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0;");
+		if (oldVersion >= 9 && newVersion <= 11) {
+			if (oldVersion <= 9) {
+				Log.d("tickmate", "Migrating database to version 10");
+				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN " + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0;");
+				
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_HOUR + " integer;");
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_MINUTE + " integer;");
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_SECOND + " integer;");
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0;");
+			}
+			if (oldVersion <= 10) {
+				Log.d("tickmate", "Migrating database to version 11");
+				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN " + COLUMN_ORDER + " integer DEFAULT 0;");
+				
+				// Apply the default order to all tracks
+				TracksDataSource ds = new TracksDataSource(context);
+				int i = 1;
+				for (Track t : ds.getTracks()) {
+					t.setOrder(i);
+					ds.storeTrack(t);
+					i++;
+				}				
+			}
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKS);
