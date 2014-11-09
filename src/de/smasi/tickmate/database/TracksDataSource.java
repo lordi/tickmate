@@ -2,9 +2,7 @@ package de.smasi.tickmate.database;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -194,7 +192,7 @@ public class TracksDataSource {
 		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + Integer.toString(track_id),
-				null, null, null, null);
+				null, null, null, "year, month, day");
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {

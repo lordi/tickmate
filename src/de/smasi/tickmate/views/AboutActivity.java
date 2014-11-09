@@ -1,6 +1,5 @@
 package de.smasi.tickmate.views;
 
-import java.io.IOError;
 import java.io.IOException;
 
 import android.app.Activity;

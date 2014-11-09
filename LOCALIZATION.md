@@ -1,6 +1,7 @@
 Localization
 ------------
 
+  * Czech (@svetlemodry)
   * Danish (Johan Hilge Thygesen)
   * German (me)
   * Hebrew (Michal)

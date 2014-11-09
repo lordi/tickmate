@@ -21,17 +21,23 @@ import de.smasi.tickmate.R;
 import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
+import de.smasi.tickmate.widgets.SummaryGraph;
+import de.smasi.tickmate.widgets.SummaryNumber;
 
 public class ShowTrackActivity extends Activity {
-	
+
 	private TracksDataSource ds;
 	private Track track;
+	
+	/* Statistics */
 	private int tickCount;
 	private List<Tick> ticks;
+	private Calendar firstTickDate;
+	private Calendar lastTickDate;	
+	private Calendar today;
 	
 	/* Form fields */
 	private TextView text_name;
-	private TextView text_count;
 	private TextView text_description;
 	private ImageView image_icon;
 	private SummaryGraph graph_weekdays;
@@ -68,6 +74,17 @@ public class ShowTrackActivity extends Activity {
 		track = ds.getTrack(track_id);
 		tickCount = ds.getTickCount(track_id);
 		ticks = ds.getTicks(track_id);
+		
+		if (ticks.size() > 0) {
+			firstTickDate = ticks.get(0).date;
+			lastTickDate = ticks.get(ticks.size() - 1).date;
+		}
+		else {
+			firstTickDate = null;
+			lastTickDate = null;
+		}
+		today = Calendar.getInstance();
+	
 		ds.close();
 		loadTrack();		
 		// Show the Up button in the action bar.
@@ -84,7 +101,6 @@ public class ShowTrackActivity extends Activity {
 	}
 	
 	private void retrieveGraphData() {
-		Calendar today = Calendar.getInstance();
 		Locale locale = Locale.getDefault();
 		
 		// Collect week days
@@ -93,7 +109,7 @@ public class ShowTrackActivity extends Activity {
 		day.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 		
 		for (int i = 0; i < 7; i++) {
-			this.weekdaysKeys.add(day.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, locale).toUpperCase());
+			this.weekdaysKeys.add(day.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, locale).toUpperCase(locale));
 			day.add(Calendar.DATE, 1);
 		}		
 		this.weekdaysData = new LinkedList<Integer>();
@@ -179,9 +195,24 @@ public class ShowTrackActivity extends Activity {
 		text_name.setText(track.getName());
 		text_description = (TextView) findViewById(R.id.TextView_description);
 		text_description.setText(track.getDescription());
-		text_count = (TextView) findViewById(R.id.textView_count);
-		text_count.setText(" " + Integer.toString(tickCount));
+		SummaryNumber sn1 = (SummaryNumber) findViewById(R.id.summaryNumber1);
+		SummaryNumber sn2 = (SummaryNumber) findViewById(R.id.summaryNumber2);
+		SummaryNumber sn3 = (SummaryNumber) findViewById(R.id.summaryNumber3);
+
+		double milliSecsInADay = 1000.0 * 3600 * 24;
+		double weeklymean = -1;
+		double days_since_last = -1;
 		
+		if (firstTickDate != null && lastTickDate != null) {
+			double weeks = Math.ceil(((double)(today.getTimeInMillis() - firstTickDate.getTimeInMillis())) / milliSecsInADay / 7.0); 
+			days_since_last = ((double)(today.getTimeInMillis() - lastTickDate.getTimeInMillis())) / milliSecsInADay; 
+			weeklymean = tickCount/weeks;
+		}
+		
+		sn1.setData(tickCount, 0, (String) getText(R.string.show_track_total));
+		sn2.setData(weeklymean, 1, (String) getText(R.string.show_track_weeklymean));
+		sn3.setData(days_since_last, 0, (String) getText(R.string.show_track_dayssincelast));
+
 		retrieveGraphData();
 		
 		graph_weekdays = (SummaryGraph) findViewById(R.id.summaryGraph_weekdays);

@@ -43,7 +43,7 @@
         android:title="@string/my_tracks"
         android:menuCategory="secondary"
         android:icon="@drawable/glyphicons_113_justify_white" 
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         ></item>
         
     

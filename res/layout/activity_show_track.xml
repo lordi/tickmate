@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="top"
     android:gravity="top"
@@ -18,7 +18,7 @@
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="top"
             android:orientation="vertical" >
 
@@ -30,46 +30,59 @@
                     android:id="@+id/image_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:src="@drawable/glyphicons_004_girl_white" />
 
-                <TextView
-                    android:id="@+id/textView_name"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/textView_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/TextView_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/TextView_description"
+            <TableLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_weight="1.0"
+                android:paddingTop="20dp" >
 
                 <TableRow
                     android:id="@+id/tableRow1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 
-                    <TextView
-                        android:id="@+id/TextView03"
+                    <de.smasi.tickmate.widgets.SummaryNumber
+                        android:id="@+id/summaryNumber1"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/numer_of_occurances"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.0" />
 
-                    <TextView
-                        android:id="@+id/textView_count"
+                    <de.smasi.tickmate.widgets.SummaryNumber
+                        android:id="@+id/summaryNumber2"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:layout_height="80dp"
+                        android:layout_weight="1.0" />
+
+                    <de.smasi.tickmate.widgets.SummaryNumber
+                        android:id="@+id/summaryNumber3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_weight="1.0" />
 
                 </TableRow>
-
             </TableLayout>
 
             <TextView
@@ -81,7 +94,7 @@
                 android:text="@string/title_section_weekdays"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <de.smasi.tickmate.views.SummaryGraph
+            <de.smasi.tickmate.widgets.SummaryGraph
                 android:id="@+id/summaryGraph_weekdays"
                 android:layout_width="wrap_content"
                 android:layout_height="80dp" />
@@ -95,7 +108,7 @@
                 android:text="@string/title_section_weeks"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <de.smasi.tickmate.views.SummaryGraph
+            <de.smasi.tickmate.widgets.SummaryGraph
                 android:id="@+id/summaryGraph_weeks"
                 android:layout_width="wrap_content"
                 android:layout_height="80dp" />
@@ -109,7 +122,7 @@
                 android:text="@string/title_section_months"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <de.smasi.tickmate.views.SummaryGraph
+            <de.smasi.tickmate.widgets.SummaryGraph
                 android:id="@+id/summaryGraph_months"
                 android:layout_width="wrap_content"
                 android:layout_height="80dp" />

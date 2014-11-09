@@ -1,7 +1,5 @@
 package de.smasi.tickmate.models;
 
-import java.util.Calendar;
-
 import android.content.Context;
 import android.content.res.Resources;
 

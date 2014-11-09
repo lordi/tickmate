@@ -44,4 +44,7 @@
     <string name="export_db_success">Database exported successfully. </string>
     <string name="import_db_none_found">No backup databases have been found.</string>
     <string name="import_db_really">Are you sure that you want to import the selected database? This will replace all tracks and ticks and will NOT be reversible.</string>
+    <string name="show_track_total">Total</string>
+    <string name="show_track_weeklymean">Weekly mean</string>
+    <string name="show_track_dayssincelast">Days since last</string>
 </resources>
