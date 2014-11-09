@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -128,22 +127,22 @@ public class EditTracksActivity extends ListActivity {
 			}
 		
 		case R.id.edit_tracks_moveup: {
-			Track t = (Track)tracksAdapter.getItem((int)info.id);
-			TracksDataSource ds = new TracksDataSource(this);
-			ds.moveTrack(t, -1);
-			ds.close();
-			loadTracks();
-			return true;
-		}	
+				Track t = (Track)tracksAdapter.getItem((int)info.id);
+				TracksDataSource ds = new TracksDataSource(this);
+				ds.moveTrack(t, TracksDataSource.DIRECTION_UP);
+				ds.close();
+				loadTracks();
+				return true;
+			}	
 		
 		case R.id.edit_tracks_movedown: {
-			Track t = (Track)tracksAdapter.getItem((int)info.id);
-			TracksDataSource ds = new TracksDataSource(this);
-			ds.moveTrack(t, 1);
-			ds.close();
-			loadTracks();
-			return true;
-		}
+				Track t = (Track)tracksAdapter.getItem((int)info.id);
+				TracksDataSource ds = new TracksDataSource(this);
+				ds.moveTrack(t, TracksDataSource.DIRECTION_DOWN);
+				ds.close();
+				loadTracks();
+				return true;
+			}
 		
 		case R.id.edit_tracks_activate: {
 				Track t = (Track)tracksAdapter.getItem((int)info.id);

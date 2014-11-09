@@ -16,6 +16,9 @@ import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
 
 public class TracksDataSource {
+	
+	public static final int DIRECTION_UP = -1;
+	public static final int DIRECTION_DOWN = 1;
 
 	// Database fields
 	private SQLiteDatabase database;
@@ -89,14 +92,7 @@ public class TracksDataSource {
 
 	public List<Track> getTracks() {
 		List<Track> tracks = new ArrayList<Track>();
-		/*
-		int trackOrder = 0;
-		Log.v("XXX", "O" + track.getOrder() + " : " + trackOrder);
-		if (track.getOrder() < trackOrder) {
-			track.setOrder(trackOrder);
-		}
-		trackOrder = track.getOrder() + 1;
-		*/
+
 		this.open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
@@ -406,7 +402,7 @@ public class TracksDataSource {
 		return c;
 	}
 	
-	public void resortTracks() {
+	public void orderTracks() {
 		this.open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
@@ -426,16 +422,16 @@ public class TracksDataSource {
 		cursor.close();
 	}
 
-	public void moveTrack(Track t, int i) {
+	public void moveTrack(Track t, int dir) {
 		this.open();
-		resortTracks();
+		orderTracks();
 		
 		Track t_updated = getTrack(t.getId());
-		t_updated.setOrder(t_updated.getOrder() + i * 15);
+		t_updated.setOrder(t_updated.getOrder() + dir * 15);
 		//Log.d("Tickmate", t_updated.getName() + " got " + t_updated.getOrder());
 
 		storeTrack(t_updated);
 
-		resortTracks();
+		orderTracks();
 	}
 }
