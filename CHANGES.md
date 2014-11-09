@@ -1,3 +1,9 @@
+master
+------
+
+ * Czech translation (thanks @svetlemodry)
+ * Ability to re-order tracks
+
 v1.1.2
 ------
 
