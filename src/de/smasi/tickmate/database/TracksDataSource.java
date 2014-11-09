@@ -16,6 +16,9 @@ import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
 
 public class TracksDataSource {
+	
+	public static final int DIRECTION_UP = -1;
+	public static final int DIRECTION_DOWN = 1;
 
 	// Database fields
 	private SQLiteDatabase database;
@@ -27,7 +30,8 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_ENABLED,
 			DatabaseOpenHelper.COLUMN_DESCRIPTION,
 			DatabaseOpenHelper.COLUMN_ICON,
-			DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY
+			DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY,
+			"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\""
 	};
 	private String[] allColumnsTicks = {
 			DatabaseOpenHelper.COLUMN_ID,
@@ -88,11 +92,12 @@ public class TracksDataSource {
 
 	public List<Track> getTracks() {
 		List<Track> tracks = new ArrayList<Track>();
-		
+
 		this.open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, null, null, null, null, null, null);
+				allColumns, null, null, null, null,
+				"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -108,11 +113,11 @@ public class TracksDataSource {
 	
 	public List<Track> getActiveTracks() {
 		List<Track> tracks = new ArrayList<Track>();
-		
 		this.open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null, null, null);
+				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null,
+				"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -120,6 +125,7 @@ public class TracksDataSource {
 			tracks.add(track);
 			cursor.moveToNext();
 		}
+		
 		// Make sure to close the cursor
 		cursor.close();
 		
@@ -269,6 +275,7 @@ public class TracksDataSource {
 		track.setEnabled(cursor.getInt(2) >= 1);
 		track.setMultipleEntriesEnabled(cursor.getInt(5) >= 1);
 		track.setIcon(cursor.getString(4));
+		track.setOrder(cursor.getInt(6));
 		return track;
 	}
 	
@@ -295,7 +302,8 @@ public class TracksDataSource {
 		values.put(DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY, t.multipleEntriesEnabled() ? 1 : 0);
 		values.put(DatabaseOpenHelper.COLUMN_DESCRIPTION, t.getDescription());
 		values.put(DatabaseOpenHelper.COLUMN_ICON, t.getIcon());
-		
+		values.put("\"" + DatabaseOpenHelper.COLUMN_ORDER + "\"", t.getOrder());
+
 		if (t.getId() > 0) {
 			Log.d("Tickmate", "saving track id=" + t.getId());
 			database.update(DatabaseOpenHelper.TABLE_TRACKS, values,
@@ -392,5 +400,38 @@ public class TracksDataSource {
 		}
 		cursor.close();		
 		return c;
+	}
+	
+	public void orderTracks() {
+		this.open();
+
+		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
+				allColumns, null, null, null, null,
+				"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
+		
+		int trackOrder = 0;
+		cursor.moveToFirst();
+		for (trackOrder = 0; !cursor.isAfterLast(); trackOrder += 10) {
+			Track track = cursorToTrack(cursor);
+			//Log.d("Tickmate", track.getName() + " is " + track.getOrder() + ", gets " + trackOrder);
+			track.setOrder(trackOrder);
+			storeTrack(track);
+			cursor.moveToNext();
+		}
+		// Make sure to close the cursor
+		cursor.close();
+	}
+
+	public void moveTrack(Track t, int dir) {
+		this.open();
+		orderTracks();
+		
+		Track t_updated = getTrack(t.getId());
+		t_updated.setOrder(t_updated.getOrder() + dir * 15);
+		//Log.d("Tickmate", t_updated.getName() + " got " + t_updated.getOrder());
+
+		storeTrack(t_updated);
+
+		orderTracks();
 	}
 }

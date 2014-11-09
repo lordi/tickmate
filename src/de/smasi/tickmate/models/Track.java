@@ -11,6 +11,7 @@ public class Track {
 	boolean enabled;
 	boolean multiple_entries_enabled;
 	int iconId;
+	int order;
 	
 	public Track(String name) {
 		super();
@@ -20,6 +21,7 @@ public class Track {
 		this.description = "";
 		this.iconId = -1;
 		this.icon = "glyphicons_001_leaf_white";
+		this.order = 0;
 	}
 
 	public Track(String name, String description) {
@@ -30,8 +32,17 @@ public class Track {
 		this.description = description;
 		this.iconId = -1;
 		this.icon = "glyphicons_001_leaf_white";
+		this.order = 0;
 	}
 	
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		Track other = (Track)o;

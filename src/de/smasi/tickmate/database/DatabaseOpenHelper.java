@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
+import de.smasi.tickmate.models.Track;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -23,6 +25,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_ICON = "icon";
     public static final String COLUMN_ENABLED = "enabled";
+    public static final String COLUMN_ORDER = "order";
     public static final String COLUMN_YEAR = "year";
     public static final String COLUMN_MONTH = "month";
     public static final String COLUMN_DAY = "day";
@@ -35,7 +38,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_HAS_TIME_INFO = "has_time_info";
 
     private static final String DATABASE_NAME = "tickmate.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
     
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -82,14 +85,20 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d("tickmate", "Upgrading database");
-		if (oldVersion == 9 && newVersion == 10) {
-			Log.d("tickmate", "Adding columns from version 10");
-			db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN " + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0;");
-			
-			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_HOUR + " integer;");
-			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_MINUTE + " integer;");
-			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_SECOND + " integer;");
-			db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN " + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0;");
+		if (oldVersion >= 9 && newVersion <= 11) {
+			if (oldVersion <= 9) {
+				Log.d("tickmate", "Migrating database to version 10");
+				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_MULTIPLE_ENTRIES_PER_DAY + "\" integer DEFAULT 0;");
+				
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_HOUR + "\" integer;");
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_MINUTE + "\" integer;");
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_SECOND + "\" integer;");
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0;");
+			}
+			if (oldVersion <= 10) {
+				Log.d("tickmate", "Migrating database to version 11");
+				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_ORDER + "\" integer DEFAULT -1;");			
+			}
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKS);
