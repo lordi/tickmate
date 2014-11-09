@@ -47,4 +47,8 @@
     <string name="show_track_total">Total</string>
     <string name="show_track_weeklymean">Weekly mean</string>
     <string name="show_track_dayssincelast">Days since last</string>
+    <string name="move_up">Move up</string>
+    <string name="move_down">Move down</string>
+    <string name="activate">Activate</string>
+    
 </resources>

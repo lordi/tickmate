@@ -121,29 +121,59 @@ public class EditTracksActivity extends ListActivity {
 	    
 		switch (item.getItemId()) {
 		
-		case R.id.edit_tracks_edit:
+		case R.id.edit_tracks_edit: {
+				Track t = (Track)tracksAdapter.getItem((int)info.id);
+				editTrack(t);
+				return true;
+			}
+		
+		case R.id.edit_tracks_moveup: {
 			Track t = (Track)tracksAdapter.getItem((int)info.id);
-			editTrack(t);
-			return true;
-			/*
-		case R.id.edit_tracks_deactivate:
-			Track t2 = (Track)tracksAdapter.getItem((int)info.id);
 			TracksDataSource ds = new TracksDataSource(this);
-			ds.open();
-			ds.deleteTrack(t2);
+			ds.moveTrack(t, -1);
 			ds.close();
 			loadTracks();
 			return true;
-			*/
-			
-		case R.id.edit_tracks_delete:
-			Track t3 = (Track)tracksAdapter.getItem((int)info.id);
-			TracksDataSource ds2 = new TracksDataSource(this);
-			ds2.open();
-			ds2.deleteTrack(t3);
-			ds2.close();
+		}	
+		
+		case R.id.edit_tracks_movedown: {
+			Track t = (Track)tracksAdapter.getItem((int)info.id);
+			TracksDataSource ds = new TracksDataSource(this);
+			ds.moveTrack(t, 1);
+			ds.close();
 			loadTracks();
 			return true;
+		}
+		
+		case R.id.edit_tracks_activate: {
+				Track t = (Track)tracksAdapter.getItem((int)info.id);
+				TracksDataSource ds = new TracksDataSource(this);
+				t.setEnabled(true);
+				ds.storeTrack(t);
+				ds.close();
+				loadTracks();
+				return true;
+			}		
+		
+		case R.id.edit_tracks_deactivate: {
+				Track t = (Track)tracksAdapter.getItem((int)info.id);
+				TracksDataSource ds = new TracksDataSource(this);
+				t.setEnabled(false);
+				ds.storeTrack(t);
+				ds.close();
+				loadTracks();
+				return true;
+			}
+			
+		case R.id.edit_tracks_delete: {
+				Track t = (Track)tracksAdapter.getItem((int)info.id);
+				TracksDataSource ds = new TracksDataSource(this);
+				ds.open();
+				ds.deleteTrack(t);
+				ds.close();
+				loadTracks();
+				return true;
+			}
 		}		
 		return super.onContextItemSelected(item);
 	}
@@ -152,9 +182,19 @@ public class EditTracksActivity extends ListActivity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		// TODO Auto-generated method stub
+	    AdapterContextMenuInfo info = (AdapterContextMenuInfo)menuInfo;
+
 		super.onCreateContextMenu(menu, v, menuInfo);
 	    MenuInflater inflater = getMenuInflater();
+	    
+		Track t = (Track)tracksAdapter.getItem((int)info.id);
+
 	    inflater.inflate(R.menu.edit_tracks_context_menu, menu);
+	    
+	    menu.findItem(R.id.edit_tracks_deactivate).setVisible(t.isEnabled());
+	    menu.findItem(R.id.edit_tracks_activate).setVisible(!t.isEnabled());
+
+
 	}
 
 }
