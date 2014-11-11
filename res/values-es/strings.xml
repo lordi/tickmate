@@ -1,25 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-	<string name="app_name">Tickmate</string>
-	<string name="action_settings">Regulación</string>
-	<string name="title_section_ticks">Ticks</string>
-	<string name="title_section_weeks">Semanas</string>
-	<string name="title_section_months">Meses</string>
-	<string name="title_activity_edit_tracks">Mis Tracks</string>
-	<string name="my_tracks">Mis Tracks</string>
-	<string name="title_activity_choose_track">Track nuevo</string>
-	<string name="choose_track">Track nuevo</string>
-	<string name="title_activity_edit_track">Editar Track</string>
-	<string name="edit_description_hint">Descripción</string>
-	<string name="today">Hoy</string>
-	<string name="yesterday">Ayer</string>
-	<string name="inactive">Desactivado</string>
-	<string name="edit">Editar</string>
-	<string name="deactivate">Desactivar</string>
-	<string name="delete">Borrar</string>
-	<string name="title_activity_show_track">detalles de Tracks</string>
-	<string name="title_section_weekdays">Día de la semana</string>
-	<string name="numer_of_occurances">Existencia (total):</string>
-	<string name="no_tracks_found">Aún no se añadía Tracks. Toca aquí, para editar la lista de Tracks.</string>  
+    <string name="app_name">Tickmate</string>
+    <string name="action_settings">Configuración</string>
+    <string name="title_section_ticks">Tildes</string>
+    <string name="title_section_weeks">Semanas</string>
+    <string name="title_section_months">Meses</string>
+    <string name="title_activity_edit_tracks">Editar pistas</string>
+    <string name="my_tracks">Pistas</string>
+    <string name="title_activity_choose_track">Agregar pista</string>
+    <string name="choose_track">Pista nueva</string>
+    <string name="title_activity_edit_track">Editar pista</string>
+    <string name="edit_description_hint">Descripción</string>
+    <string name="today">Hoy</string>
+    <string name="yesterday">Ayer</string>
+    <string name="inactive">Desactivado</string>
+    <string name="edit">Editar</string>
+    <string name="deactivate">Desactivar</string>
+    <string name="delete">Borrar</string>
+    <string name="title_activity_show_track">Detalles de la pista</string>
+    <string name="title_section_weekdays">Día de la semana</string>
+    <string name="numer_of_occurances">Tildes totales:</string>
+    <string name="no_tracks_found">No agregó ninguna pista. Toque aquí para abrir el editor de pistas.</string>
+    <string name="multiple_entries">Permitir varias tildes por día</string>
+    <string name="tick_deleted">Última tilde borrada</string>
+    <string name="alert_delete_track_title">Eliminar pista</string>
+    <string name="alert_delete_track_message">¿Está seguro que desea eliminar esta pista?</string>
+    <string name="jump_to_date">Ir a fecha…</string>
+    <string name="jump_to_today">Ir a hoy</string>
+    <string name="title_activity_about">Acerca de Tickmate</string>
+    <string name="title_icon_chooser">Elija un ícono</string>
+    <string name="about_description">Básicamente, Tickmate es un diario de 1-bit. 
+    	Puedes marcar para cada día si ocurrió cualquier cosa en particular;
+    	como haber tomado algo o haberse acordado de usar hilo dental.
+    	Puedes cuantificar tus hábitos y ver cómo se desarrollan en el tiempo,
+    	ayudándote a superar tus malas costumbres y desarrollar otras nuevas.
+\n\nTickmate es software de código abierto y está licenciado bajo la GPL v3.
+\n\nContiene íconos de Glyphicons FREE icon set (CC-BY-3.0)
+    </string>
+    <string name="import_db">Importar datos</string>
+    <string name="export_db">Exportar datos…</string>
+    <string name="import_db_success">Datos importados con éxito.</string>
+    <string name="export_db_success">Datos exportados con éxito.</string>
+    <string name="import_db_none_found">No se encontró ninguna copia de seguridad de la base de datos.</string>
+    <string name="import_db_really">¿Está seguro que desea importar esa base de datos?
+    	Esta acción es irreversibe y reemplazará todos los tildes y pistas actuales.</string>
+    <string name="show_track_total">Total</string>
+    <string name="show_track_weeklymean">Promedio semanal</string>
+    <string name="show_track_dayssincelast">Días desde la última vez</string>
+    <string name="move_up">Mover arriba</string>
+    <string name="move_down">Mover abajo</string>
+    <string name="activate">Activar</string>
+    
 </resources>
