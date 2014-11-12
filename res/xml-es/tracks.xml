@@ -2,74 +2,111 @@
 <tracks>
 	<section name="Alimentación/consumo">
 		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegano"
-			description="No comido ningún producto animal" />
+			description="No comí ningún producto animal" />
+
 		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegetariano"
-			description="No comido ni carne ni pescado" />
+			description="No comí carne ni pescado" />
+
 		<track icon="@drawable/glyphicons_291_celebration_white" name="Alcohol"
-			description="Consumido alcohol" />
+			description="Consumí alcohol" />
+
 		<track icon="@drawable/glyphicons_294_coffe_cup_white" name="Café"
-			description="Bebido café" />
-		<track icon="@drawable/glyphicons_275_fast_food_white" name="Fast food"
-			description="Comido en un restaurante de fast food" />
-		<track icon="@drawable/glyphicons_272_cake_white" name="Ducles"
-			description="Picado dulces o patatas fritas" />
-		<track icon="@drawable/glyphicons_362_smoking_white" name="Fumar"
-			description="Fumado una ciarillo" />
-		<track icon="@drawable/glyphicons_298_hospital_white" name="medicamentos"
-			description="Tocado mis medicamentos" />
+			description="Tomé café" />
+
+		<track icon="@drawable/glyphicons_275_fast_food_white" name="Comida rápida"
+			description="Comí en un local de comida rápida" />
+
+		<track icon="@drawable/glyphicons_273_drink_white" name="Gaseosa"
+			description="Tomé un refresco sin alcohol" />
+			
+		<track icon="@drawable/glyphicons_272_cake_white" name="Dulces"
+			description="Comí tortas o caramelos" />
+
+		<track icon="@drawable/glyphicons_362_smoking_white" name="Cigarrillo"
+			description="Obtuve mi dosis diaria de nicotina" />
+
+		<track icon="@drawable/glyphicons_298_hospital_white" name="Medicamentos"
+			description="Tomé mis medicamentos" />
 	</section>
-	<section name="Training">
+
+
+	<section name="Práctica">
 		<track icon="@drawable/glyphicons_314_table_tennis_white" name="Deporte"
-			description="Practicado mi deporte favorito" />
+			description="Practiqué mi deporte favorito" />
+
 		<track icon="@drawable/glyphicons_326_piano_white" name="Instrumento"
-			description="Tocado mi instrumento favorito" />
+			description="Toqué mi instrumento favorito" />
+
 		<track icon="@drawable/glyphicons_175_stop_white" name="Yoga"
-			description="Hecho ejercicios de yoga" />
+			description="Hice ejercicios de yoga" />
+
 		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Entrenar"
-			description="Práctica deportiva" />
+			description="Hice ejercicio" />
+
 		<track icon="@drawable/glyphicons_334_candle_white" name="Meditar"
-			description="Puesto en práctica la meditación favorito" />
+			description="Silencié mi mente" />
 	</section>
+
+
 	<section name="En casa">
 		<track icon="@drawable/glyphicons_002_dog_white" name="Perro"
-			description="Ido con el perro una vuelta" />
-		<track icon="@drawable/glyphicons_310_flower_white" name="Planta"
-			description="Regado las plantas" />
-		<track icon="@drawable/glyphicons_067_cleaning_white" name="Ordenado"
-			description="Todo será limpio" />
+			description="Paseé el perro" />
+			
+		<track icon="@drawable/glyphicons_310_flower_white" name="Jardín"
+			description="Regué las plantas" />
+			
+		<track icon="@drawable/glyphicons_067_cleaning_white" name="Orden"
+			description="Todo está limpio" />
 	</section>
-	<section name="En camino">
-		<track icon="@drawable/glyphicons_014_train_white" name="transportepúblico"
-			description="Tomado el autobús, tranvía o tren" />
+
+
+	<section name="Transporte">
+		<track icon="@drawable/glyphicons_014_train_white" name="Transporte Público"
+			description="Tomé el autobús, tranvía o tren" />
+
 		<track icon="@drawable/glyphicons_005_car_white" name="Coche"
-			description="Sido en camino con el coche" />
+			description="Conducí un poco" />
+
 		<track icon="@drawable/glyphicons_306_bicycle_white" name="Bicicleta"
-			description="Sido en camino con la bicicleta" />
+			description="Fui por ahí en bici." />
 	</section>
-	<section name="Vida social/sexualidad">
+
+
+	<section name="Vida social/sexual">
 		<track icon="@drawable/glyphicons_410_facebook_white" name="Red social"
-			description="Useado mi favorito página de red social" />
-		<track icon="@drawable/myicons_smiley_white" name="sonreír"
-			description="Hecho reír a algien" />
-		<track icon="@drawable/glyphicons_273_drink_white" name="bailar"
-			description="Ido a un club o un bar" />
-		<track icon="@drawable/glyphicons_012_heart_white" name="te amo"
-			description="Dicho a algien, que la/lo amo" />
+			description="Navegué en mi red social favorita" />
+
+		<track icon="@drawable/myicons_smiley_white" name="Sonrisa"
+			description="Hice reír a algien" />
+
+		<track icon="@drawable/glyphicons_273_drink_white" name="De noche"
+			description="Fui a un bar o discoteca" />
+
+		<track icon="@drawable/glyphicons_012_heart_white" name="Te amo"
+			description="Le dije a alguien que la/lo amo" />
+
 		<track icon="@drawable/glyphicons_022_fire_white" name="Sexo"
-			description="Tenido relaciones sexuales" />
+			description="Tuve relaciones sexuales" />
 	</section>
-	<section name="higiene">
-		<track icon="@drawable/glyphicons_097_vector_path_line_white"
-			name="Seda dental" description="Usado seda dental" />
+
+
+	<section name="Higiene">
+		<track icon="@drawable/glyphicons_097_vector_path_line_white" name="Hilo dental" 
+		description="¡Dientes blancos y relucientes!" />
 	</section>
+
+
 	<section name="En general">
-		<track icon="@drawable/glyphicons_152_check_white" name="Tareas"
-			description="Zanjado cosas de la lista de tareas" />
+		<track icon="@drawable/glyphicons_152_check_white" name="Productivo"
+			description="Hice cosas importantes" />
+
 		<track icon="@drawable/glyphicons_343_thumbs_up_white" name="Buen día"
-			description="En total tenido un buen día" />
-		<track icon="@drawable/glyphicons_282_cardio_white" name="Signo de enfermedad"
-			description="Notado un signo de enfermedad" />
-		<track icon="@drawable/glyphicons_049_star_white" name="Track propio"
-			description="Track definido por el usuario" />
+			description="Hoy tuve un buen día" />
+
+		<track icon="@drawable/glyphicons_282_cardio_white" name="Síntoma"
+			description="Notado un signo de alguna enfermedad" />
+
+		<track icon="@drawable/glyphicons_049_star_white" name="Pista personalizada"
+			description="Pista definida por el usuario" />
 	</section>
 </tracks>
