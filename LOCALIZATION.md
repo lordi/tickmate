@@ -6,7 +6,7 @@ Localization
   * German (me)
   * Hebrew (Michal)
   * Russian (@kwinto)
-  * Spanish (Teti)
+  * Spanish (@agusdallalba, Teti)
 
 Contribute
 ----------
