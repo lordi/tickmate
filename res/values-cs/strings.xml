@@ -47,4 +47,8 @@
     <string name="show_track_total">Celkem</string>
     <string name="show_track_weeklymean">Týdenní průměr</string>
     <string name="show_track_dayssincelast">Dnů od posledně</string>
+    <string name="move_up">Posunout níž</string>
+    <string name="move_down">Posunout výš</string>
+    <string name="activate">Aktivovat</string>
+    
 </resources>
