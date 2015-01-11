@@ -7,46 +7,47 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
-  
-  	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
-    	</uses-permission>
-  	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" >
-    	</uses-permission>
-    	
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" >
+    </uses-permission>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="de.smasi.tickmate.Tickmate"
+            android:name=".Tickmate"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="de.smasi.tickmate.views.EditTracksActivity"
+            android:name=".views.EditTracksActivity"
             android:label="@string/title_activity_edit_tracks"
-            android:parentActivityName="de.smasi.tickmate.Tickmate" >
+            android:parentActivityName=".Tickmate" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.Tickmate" />
         </activity>
         <activity
-            android:name="de.smasi.tickmate.views.ChooseTrackActivity"
+            android:name=".views.ChooseTrackActivity"
             android:label="@string/title_activity_choose_track"
-            android:theme="@android:style/Theme.Dialog"
-            android:parentActivityName="de.smasi.tickmate.views.EditTracksActivity" >
+            android:parentActivityName=".views.EditTracksActivity"
+            android:theme="@android:style/Theme.Dialog" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.views.EditTracksActivity" />
         </activity>
         <activity
-            android:name="de.smasi.tickmate.views.EditTrackActivity"
+            android:name=".views.EditTrackActivity"
             android:label="@string/title_activity_edit_track"
-            android:parentActivityName="de.smasi.tickmate.views.EditTracksActivity" >
+            android:parentActivityName=".views.EditTracksActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.views.EditTracksActivity" />
@@ -55,7 +56,7 @@
                 android:value="de.smasi.tickmate.views.ShowTrackActivity" />
         </activity>
         <activity
-            android:name="de.smasi.tickmate.views.ShowTrackActivity"
+            android:name=".views.ShowTrackActivity"
             android:label="@string/title_activity_show_track" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -65,8 +66,16 @@
                 android:value="de.smasi.tickmate.views.EditTracksActivity" />
         </activity>
         <activity
-            android:name="de.smasi.tickmate.views.AboutActivity"
+            android:name=".views.AboutActivity"
             android:label="@string/title_activity_about" >
+        </activity>
+        <activity
+            android:name="de.smasi.tickmate.views.HistoryGraphActivity"
+            android:label="@string/title_activity_history_graph"
+            android:parentActivityName=".Tickmate" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.smasi.tickmate.Tickmate" />
         </activity>
     </application>
 
