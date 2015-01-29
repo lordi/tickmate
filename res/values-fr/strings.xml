@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tickmate</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="title_section_ticks">Mes entrées</string>
+    <string name="title_section_weeks">Semaines</string>
+    <string name="title_section_months">Mois</string>
+    <string name="title_activity_edit_tracks">Mes séries</string>
+    <string name="my_tracks">Mes séries</string>
+    <string name="title_activity_choose_track">Ajouter une série</string>
+    <string name="choose_track">Ajouter une série</string>
+    <string name="title_activity_edit_track">Éditer la série</string>
+    <string name="edit_description_hint">Description</string>
+    <string name="today">aujourd'hui</string>
+    <string name="yesterday">hier</string>
+    <string name="inactive">inactif</string>
+    <string name="edit">Éditer</string>
+    <string name="deactivate">Désactiver</string>
+    <string name="delete">Supprimer</string>
+    <string name="title_activity_show_track">Détails</string>
+    <string name="title_section_weekdays">Jours de la semaine</string>
+    <string name="numer_of_occurances">Nombre d'occurences :</string>
+    <string name="no_tracks_found">Aucune série n'a été ajoutée. Cliquer ici pour éditer la liste des séries.</string>
+    <string name="multiple_entries">Plusieurs entrées par jour</string>
+    <string name="tick_deleted">Dernière entrée supprimée.</string>
+    <string name="alert_delete_track_title">Supprimer la série</string>
+    <string name="alert_delete_track_message">Êtes-vous sûr de vouloir supprimer la série ?</string>
+    <string name="jump_to_date">Aller à la date…</string>
+    <string name="jump_to_today">Aller à aujourd'hui</string>
+    <string name="title_activity_about">À propos de Tickmate</string>
+    <string name="title_icon_chooser">Choisir une icône</string>
+    <string name="about_description">Tickmate est un journal binaire. Chaque jour, vous pouvez noter
+        ce qui s'est passé ou non. Les entrées peuvent être définies librement, comme par exemple
+        l'utilisation du fil dentaire ou la prise de boisson. Vous serez ainsi capable de quantifier
+        vos habitudes, et les données accumulées peuvent être affichées sur les dernières semaines ou
+        les derniers mois, afin d'en suivre les changements au cours du temps. Ainsi, Tickmate peut
+        vous aider à vous débarrasser de mauvaises habitudes ou à en développer de nouvelles.
+\n\nTickmate est un logiciel open source sous licence GPLv3.
+\n\nIl contient des icônes du set d'icônes gratuit Glyphicons FREE (CC-BY-3.0)
+    </string>
+    <string name="import_db">Importer la base de données</string>
+    <string name="export_db">Exporter la base de données</string>
+    <string name="import_db_success">La base de donnée a été importée avec succès.</string>
+    <string name="export_db_success">La base de donnée a été exportée avec succès.</string>
+    <string name="import_db_none_found">Aucune sauvegarde de la base de données n'a été trouvée.</string>
+    <string name="import_db_really">Êtes-vous sûr de vouloir importer la base de données ? Ceci écrasera toutes les données existantes et n'est PAS réversible.</string>
+    <string name="show_track_total">Total</string>
+    <string name="show_track_weeklymean">Moyenne hebdomadaire</string>
+    <string name="show_track_dayssincelast">Jours depuis la dernière entrée</string>
+    <string name="move_up">Monter</string>
+    <string name="move_down">Descendre</string>
+    <string name="activate">Activer</string>
+
+</resources>
