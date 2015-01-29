@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tracks>
 
-	<section name="Nutrition / Drogues">
+	<section name="Nutrition/Drogues">
 		<track icon="@drawable/glyphicons_001_leaf_white" name="Végan"
 			description="Mangé aucun produit animal" />
 
@@ -31,7 +31,7 @@
 
 
 	</section>
-	<section name="Practise">
+	<section name="Exercice">
 		<track icon="@drawable/glyphicons_314_table_tennis_white" name="Sport"
 			description="Pratiqué mon sport favori" />
 
@@ -87,7 +87,7 @@
     </section>
 
 
-    <section name="Vie sociale / Sexualité">
+    <section name="Vie sociale/Sexualité">
     	<track
 	        icon="@drawable/glyphicons_410_facebook_white"
         	name="Réseaux sociaux"
@@ -119,26 +119,26 @@
     	<track
 	        icon="@drawable/glyphicons_097_vector_path_line_white"
         	name="Fil dentaire"
-        	description="Flossed my shiny teeth"/>
+        	description="Nettoyé mes belles dents au fil dentaire"/>
 
     </section>
 
-    <section name="General/Abstract">
+    <section name="Général/Abstrait">
 	    <track
 			icon="@drawable/glyphicons_152_check_white"
 	        name="Todo"
-        	description="Got some noteworthy things done"/>
+        	description="Fait quelque chose de spécial"/>
 
 	    <track
 			icon="@drawable/glyphicons_343_thumbs_up_white"
-	        name="Good day"
-        	description="Overall I consider this a good day"/>
+	        name="Bonne journée"
+        	description="Aujourd'hui est un bon jour"/>
 
-		<track icon="@drawable/glyphicons_282_cardio_white" name="Symptom"
-			description="A symptom of an illness occurred" />
+		<track icon="@drawable/glyphicons_282_cardio_white" name="Symptôme"
+			description="Un symptôme d'une maladie s'est manifesté" />
 
-		<track icon="@drawable/glyphicons_049_star_white" name="Custom"
-			description="User-specified track" />
+		<track icon="@drawable/glyphicons_049_star_white" name="Personnalisé"
+			description="Série définie par l'utilisateur" />
 
     </section>
 
