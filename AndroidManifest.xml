@@ -69,14 +69,16 @@
             android:name=".views.AboutActivity"
             android:label="@string/title_activity_about" >
         </activity>
-        <activity
-            android:name="de.smasi.tickmate.views.HistoryGraphActivity"
-            android:label="@string/title_activity_history_graph"
-            android:parentActivityName=".Tickmate" >
+          <activity
+            android:name=".views.TrackPreferenceActivity"
+            android:label="@string/title_activity_edit_track" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.smasi.tickmate.Tickmate" />
-        </activity>
+                android:value="de.smasi.tickmate.views.EditTracksActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.smasi.tickmate.views.ShowTrackActivity" />
+        </activity>   
     </application>
 
 </manifest>

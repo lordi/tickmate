@@ -90,7 +90,7 @@ public class EditTracksActivity extends ListActivity {
 	}
 	
 	private void editTrack(Track t) {
-		Intent intent = new Intent(this, EditTrackActivity.class);
+		Intent intent = new Intent(this, TrackPreferenceActivity.class);
 		intent.putExtra("track_id", t.getId());
 	    startActivityForResult(intent, 1);				
 	}	

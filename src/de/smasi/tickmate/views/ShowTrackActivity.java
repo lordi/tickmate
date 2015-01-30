@@ -244,7 +244,7 @@ public class ShowTrackActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.action_edit:
 		case R.id.action_edit_menu:
-			Intent intent = new Intent(this, EditTrackActivity.class);
+			Intent intent = new Intent(this, TrackPreferenceActivity.class);
 			intent.putExtra("track_id", track.getId());
 			startActivityForResult(intent, 1);				
 			return true;
