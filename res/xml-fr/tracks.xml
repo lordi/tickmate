@@ -42,7 +42,7 @@
 			description="Fait du yoga" />
 
 		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Activité physique"
-			description="Fait de l'exercice" />
+			description="Fait de l\'exercice" />
 
 		<track icon="@drawable/glyphicons_334_candle_white" name="Méditation"
 			description="Calmé mon esprit" />
@@ -96,7 +96,7 @@
     	<track
 	        icon="@drawable/myicons_smiley_white"
         	name="Sourire"
-        	description="Fait sourire ou rire quelqu'un"/>
+        	description="Fait sourire ou rire quelqu\'un"/>
 
     	<track
 	        icon="@drawable/glyphicons_273_drink_white"
@@ -105,8 +105,8 @@
 
     	<track
 	        icon="@drawable/glyphicons_012_heart_white"
-        	name="Je t'aime"
-        	description="Dit 'je t'aime' à quelqu'un "/>
+        	name="Je t\'aime"
+        	description="Dit \'je t\'aime\' à quelqu'un "/>
 
     	<track
 	        icon="@drawable/glyphicons_022_fire_white"
@@ -132,13 +132,13 @@
 	    <track
 			icon="@drawable/glyphicons_343_thumbs_up_white"
 	        name="Bonne journée"
-        	description="Aujourd'hui est un bon jour"/>
+        	description="Aujourd\'hui est un bon jour"/>
 
 		<track icon="@drawable/glyphicons_282_cardio_white" name="Symptôme"
-			description="Un symptôme d'une maladie s'est manifesté" />
+			description="Un symptôme d\'une maladie s\'est manifesté" />
 
 		<track icon="@drawable/glyphicons_049_star_white" name="Personnalisé"
-			description="Série définie par l'utilisateur" />
+			description="Série définie par l\'utilisateur" />
 
     </section>
 
