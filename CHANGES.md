@@ -1,8 +1,13 @@
 master
 ------
 
+v1.2.0
+------
+
  * Czech translation (thanks @svetlemodry)
+ * French translation (thanks @dmaulat)
  * Ability to re-order tracks
+ * Use android preference framework for track settings
 
 v1.1.2
 ------
