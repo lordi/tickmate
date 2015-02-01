@@ -29,7 +29,6 @@ public class IconPreference extends EditTextPreference {
 
     @Override
 	protected void onBindDialogView(View view) {
-		// TODO Auto-generated method stub
 		super.onBindDialogView(view);
 	      GridView gridview = (GridView) view.findViewById(R.id.icon_chooser_gridview);
 
@@ -47,6 +46,7 @@ public class IconPreference extends EditTextPreference {
 	public IconPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
+		setLayoutResource(R.layout.icon_preference);
 		setDialogLayoutResource(R.layout.dialog_icon_chooser);
 		setDialogTitle(R.string.title_icon_chooser);
 	}
