@@ -45,17 +45,6 @@
                 android:value="de.smasi.tickmate.views.EditTracksActivity" />
         </activity>
         <activity
-            android:name=".views.EditTrackActivity"
-            android:label="@string/title_activity_edit_track"
-            android:parentActivityName=".views.EditTracksActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.smasi.tickmate.views.EditTracksActivity" />
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.smasi.tickmate.views.ShowTrackActivity" />
-        </activity>
-        <activity
             android:name=".views.ShowTrackActivity"
             android:label="@string/title_activity_show_track" >
             <meta-data
@@ -69,17 +58,17 @@
             android:name=".views.AboutActivity"
             android:label="@string/title_activity_about" >
         </activity>
-          <activity
+        <activity
             android:name=".views.TrackPreferenceActivity"
             android:label="@string/title_activity_edit_track"
             android:parentActivityName=".views.EditTracksActivity" >
-              <meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.views.EditTracksActivity" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.views.ShowTrackActivity" />
-        </activity>   
+        </activity>
     </application>
 
 </manifest>
