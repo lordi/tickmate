@@ -43,6 +43,7 @@ public class ShowTrackActivity extends Activity {
 	private SummaryGraph graph_weekdays;
 	private SummaryGraph graph_weeks;
 	private SummaryGraph graph_months;
+	private SummaryGraph graph_quarters;
 	
 	/* Graphs */
 	private List<Integer> weekdaysData;
@@ -56,6 +57,10 @@ public class ShowTrackActivity extends Activity {
 	private List<Integer> weeksData;
 	private List<String> weeksKeys;
 	private int weeksMaximum;
+	
+	private List<Integer> quarterData;
+	private List<String> quarterKeys;
+	private int quarterMaximum;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +154,20 @@ public class ShowTrackActivity extends Activity {
 			week.add(Calendar.WEEK_OF_YEAR, -1);
 			this.weeksData.add(0, 0);			
 		}
-
+		
+		Map<Integer, Integer> quarteryear_to_index = new HashMap<Integer, Integer>(); 
+		this.quarterKeys = new LinkedList<String>();
+		this.quarterData = new LinkedList<Integer>();
+		Calendar quarter = (Calendar) today.clone();
+		quarter.clear(Calendar.HOUR);
+		for (int i = 0; i < 7; i++) {
+			//month.getDisplayName(Calendar.WEEK_OF_YEAR, Calendar.SHORT, Locale.getDefault())
+			this.quarterKeys.add(0, "Q" + Integer.toString(quarter.get(Calendar.MONTH)/3+1));
+			int index = quarter.get(Calendar.YEAR) * 4 + quarter.get(Calendar.MONTH) / 3;
+			quarteryear_to_index.put(index, 6-i);
+			quarter.add(Calendar.MONTH, -3);
+			this.quarterData.add(0, 0);			
+		}
 		
 		for (Tick tick : ticks) {
 			int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - 2;
@@ -177,8 +195,15 @@ public class ShowTrackActivity extends Activity {
 					this.monthsMaximum = newcount2;
 				this.monthsData.set(index, newcount2);
 			}
-
-			//tick.date.get(Calendar.YEAR) tick.date.get(Calendar.MONTH);
+			
+			int quarteryear = tick.date.get(Calendar.YEAR) * 4 + tick.date.get(Calendar.MONTH) / 3;
+			if (quarteryear_to_index.containsKey(quarteryear)) {
+				int index = quarteryear_to_index.get(quarteryear);
+				int newcount2 = this.quarterData.get(index)+1;
+				if (newcount2 > this.quarterMaximum)
+					this.quarterMaximum = newcount2;
+				this.quarterData.set(index, newcount2);
+			}
 			
 		}
 		
@@ -187,6 +212,11 @@ public class ShowTrackActivity extends Activity {
 		
 		if (this.monthsMaximum < 31)
 			this.monthsMaximum = 31;
+
+		if (this.quarterMaximum < 31)
+			this.quarterMaximum = 31;
+	}
+	
 		
 	}
 	
@@ -222,6 +252,8 @@ public class ShowTrackActivity extends Activity {
 		graph_weeks.setData(this.weeksData, this.weeksKeys, this.weeksMaximum);
 		graph_months = (SummaryGraph) findViewById(R.id.summaryGraph_months);
 		graph_months.setData(this.monthsData, this.monthsKeys, this.monthsMaximum);
+		graph_quarters = (SummaryGraph) findViewById(R.id.summaryGraph_quarters);
+		graph_quarters.setData(this.quarterData, this.quarterKeys, this.quarterMaximum);
 		
 		image_icon = (ImageView) findViewById(R.id.image_icon);
 		image_icon.setImageResource(track.getIconId(this));

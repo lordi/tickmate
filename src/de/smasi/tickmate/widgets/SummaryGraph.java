@@ -89,7 +89,7 @@ public class SummaryGraph extends View {
 		paint.setTextSize(textSize);
 
 		float bottomGap = textSize + 4.0f * density;
-		float height = getHeight() - (textSize + 1.0f * density);
+		float height = getHeight() - (textSize + 3.0f * density);
 		float height0 = height - bottomGap;
 		float width = getWidth();
 

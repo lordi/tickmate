@@ -97,7 +97,7 @@
             <de.smasi.tickmate.widgets.SummaryGraph
                 android:id="@+id/summaryGraph_weekdays"
                 android:layout_width="wrap_content"
-                android:layout_height="80dp" />
+                android:layout_height="82dp" />
 
             <TextView
                 android:id="@+id/TextView01"
@@ -111,7 +111,7 @@
             <de.smasi.tickmate.widgets.SummaryGraph
                 android:id="@+id/summaryGraph_weeks"
                 android:layout_width="wrap_content"
-                android:layout_height="80dp" />
+                android:layout_height="82dp" />
 
             <TextView
                 android:id="@+id/TextView02"
@@ -125,7 +125,21 @@
             <de.smasi.tickmate.widgets.SummaryGraph
                 android:id="@+id/summaryGraph_months"
                 android:layout_width="wrap_content"
-                android:layout_height="80dp" />
+                android:layout_height="82dp" />
+    
+            <TextView
+                android:id="@+id/TextView03"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/title_section_quarters"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <de.smasi.tickmate.widgets.SummaryGraph
+                android:id="@+id/summaryGraph_quarters"
+                android:layout_width="wrap_content"
+                android:layout_height="82dp" />
         </LinearLayout>
 
     </ScrollView>

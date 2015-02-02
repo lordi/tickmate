@@ -47,11 +47,15 @@
     <string name="show_track_total">Total</string>
     <string name="show_track_weeklymean">Weekly mean</string>
     <string name="show_track_dayssincelast">Days since last</string>
+    
+    <!-- New in 1.2.0 -->
+    
     <string name="move_up">Move up</string>
     <string name="move_down">Move down</string>
     <string name="activate">Activate</string>
     <string name="track_name">Name</string>
-    <string name="track_enabled">Active</string>
+    <string name="track_enabled">Enabled</string>
     <string name="track_icon">Symbol</string>
+    <string name="title_section_quarters">Quarters</string>
     
 </resources>
