@@ -75,23 +75,8 @@ public class ShowTrackActivity extends Activity {
 		}
 		int track_id = extras.getInt("track_id");
 		
-		ds.open();
-		track = ds.getTrack(track_id);
-		tickCount = ds.getTickCount(track_id);
-		ticks = ds.getTicks(track_id);
-		
-		if (ticks.size() > 0) {
-			firstTickDate = ticks.get(0).date;
-			lastTickDate = ticks.get(ticks.size() - 1).date;
-		}
-		else {
-			firstTickDate = null;
-			lastTickDate = null;
-		}
-		today = Calendar.getInstance();
-	
-		ds.close();
-		loadTrack();		
+		loadTrack(track_id);
+				
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}
@@ -217,10 +202,28 @@ public class ShowTrackActivity extends Activity {
 			this.quarterMaximum = 31;
 	}
 	
+	private void loadTrack(int track_id) {
+		ds.open();
+		track = ds.getTrack(track_id);
+		tickCount = ds.getTickCount(track_id);
+		ticks = ds.getTicks(track_id);
+		
+		if (ticks.size() > 0) {
+			firstTickDate = ticks.get(0).date;
+			lastTickDate = ticks.get(ticks.size() - 1).date;
+		}
+		else {
+			firstTickDate = null;
+			lastTickDate = null;
+		}
+		today = Calendar.getInstance();
+	
+		ds.close();
+		fillTrackUI();
 		
 	}
 	
-	private void loadTrack() {
+	private void fillTrackUI() {
 		text_name = (TextView) findViewById(R.id.textView_name);
 		text_name.setText(track.getName());
 		text_description = (TextView) findViewById(R.id.TextView_description);
@@ -307,6 +310,12 @@ public class ShowTrackActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		loadTrack(track.getId());
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 }
