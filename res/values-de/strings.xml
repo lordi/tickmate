@@ -47,4 +47,14 @@
     <string name="show_track_total">Insgesamt</string>
     <string name="show_track_weeklymean">Wochenmittel</string>
     <string name="show_track_dayssincelast">Tage seit letztem</string>
+    
+    <!-- Neu in 1.2.0 -->
+    
+    <string name="move_up">Nach oben</string>
+    <string name="move_down">Nach unten</string>
+    <string name="activate">Aktivieren</string>
+    <string name="track_name">Name</string>
+    <string name="track_enabled">Aktiviert</string>
+    <string name="track_icon">Symbol</string>
+    <string name="title_section_quarters">Quartale</string>
 </resources>
