@@ -3,6 +3,7 @@ Localization
 
   * Czech (@svetlemodry)
   * Danish (Johan Hilge Thygesen)
+  * French (@dmaulat)
   * German (me)
   * Hebrew (Michal)
   * Russian (@kwinto)
