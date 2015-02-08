@@ -8,7 +8,7 @@
     <string name="title_section_months">Měsíce</string>
     <string name="title_activity_edit_tracks">Moje stopy</string>
     <string name="my_tracks">Moje stopy</string>
-    <string name="title_activity_choose_track">Přidání stopy</string>
+    <string name="title_activity_choose_track">Přidat stopu</string>
     <string name="choose_track">Přidat stopu</string>
     <string name="title_activity_edit_track">Upravit stopu</string>
     <string name="edit_description_hint">Popis</string>
@@ -22,33 +22,39 @@
     <string name="title_section_weekdays">Dny týdne</string>
     <string name="numer_of_occurances">Počet událostí:</string>
     <string name="no_tracks_found">Nebyly přidány žádné stopy. Tapni sem pro otevření editoru seznamu stop.</string>
-    <string name="multiple_entries">Několikanásobné zápisy za den</string>
+    <string name="multiple_entries">Několik zápisů za den</string>
     <string name="tick_deleted">Poslední značka odstraněna.</string>
     <string name="alert_delete_track_title">Smazat stopu</string>
-    <string name="alert_delete_track_message">Opravdu si přejete smazat tuto stopu?</string>
-    <string name="jump_to_date">Přeskočit na datum…</string>
-    <string name="jump_to_today">Přeskočit na dnešek</string>
+    <string name="alert_delete_track_message">Opravdu chcete smazat tuto stopu?</string>
+    <string name="jump_to_date">Přeskočit na datum...</string>
+    <string name="jump_to_today">Přeskočit na dnes</string>
     <string name="title_activity_about">O aplikaci Tickmate</string>
     <string name="title_icon_chooser">Vybrat ikonu</string>
     <string name="about_description">Tickmate je v podstatě jednoduchý deník. Pro každý den můžete zaznamenat
-        jestli se něco stalo nebo ne. Tyto události mohou být triviální věci jako použití zubní nitě při čištění
-	zubů nebo vypití sklenice piva. Budete schopni vyčíslit své zvyky a nahromaděná data pak můžete 
-	zobrazit i za předešlé týdny nebo měsíce a sledovat změny v čase. Touto cestou si můžete ulehčit
-	překonání starých zlozvyků nebo se naučit nové návyky.
-\n\nTickmate je open source software, zveřejněný pod GPLv3 licencí.
-\n\nObsahuje ikony z balíku Glyphicons FREE (CC-BY-3.0)
-    </string>
+      jestli se něco stalo nebo ne. Tyto události mohou být jakkoliv triviální, jako použití
+      zubní nitě při čištění zubů nebo vypití sklenice piva. Budete schopni vyčíslit své zvyky a nahromaděná data pak můžete
+      zobrazit i za předešlé týdny nebo měsíce a sledovat změny v čase. Touto cestou si můžete ulehčit
+      překonání starých zlozvyků nebo se naučit nové návyky.
+      \n\nTickmate je open source software, zveřejněný pod GPLv3 licencí.
+      \n\nObsahuje ikony z balíku Glyphicons FREE (CC-BY-3.0)</string>
     <string name="import_db">Importovat databázi</string>
     <string name="export_db">Zálohovat databázi</string>
     <string name="import_db_success">Databáze úspěšně importována.</string>
-    <string name="export_db_success">Databáze úspěšně exportována. </string>
+    <string name="export_db_success">Databáze úspěšně exportována.</string>
     <string name="import_db_none_found">Nebyla nalezena žádná záložní databáze.</string>
-    <string name="import_db_really">Opravdu si přejete importovat vybranou databázi? Všechny stopy a značky budou nahrazeny a NEBUDE možné to vrátit.</string>
+    <string name="import_db_really">Opravdu chcete importovat vybranou databázi? Všechny stopy a značky budou nahrazeny a NEBUDE možné je vrátit.</string>
     <string name="show_track_total">Celkem</string>
     <string name="show_track_weeklymean">Týdenní průměr</string>
     <string name="show_track_dayssincelast">Dnů od posledně</string>
-    <string name="move_up">Posunout níž</string>
-    <string name="move_down">Posunout výš</string>
+    
+    <!-- New in 1.2.0 -->
+    
+    <string name="move_up">Posunout výš</string>
+    <string name="move_down">Posunout níž</string>
     <string name="activate">Aktivovat</string>
+    <string name="track_name">Jméno</string>
+    <string name="track_enabled">Povoleno</string>
+    <string name="track_icon">Symbol</string>
+    <string name="title_section_quarters">Čtvrtletí</string>
     
 </resources>
