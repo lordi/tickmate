@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.Tickmate;
@@ -25,6 +26,7 @@ import de.smasi.tickmate.database.FileUtils;
 import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Track;
 
+@Config(emulateSdk = 17) 
 @RunWith(RobolectricTestRunner.class)
 public class DatabaseTest {
 
@@ -91,11 +93,11 @@ public class DatabaseTest {
 	public void legacyDatabaseVersion10ShouldBeImportable() throws Exception {
 		// File testDb = new File(getClass().getResource("test.sql").getFile());
 		Tickmate tm = new Tickmate();
-		InputStream fis = tm.getAssets().open("test/smiley-version10.db");
+		InputStream is = tm.getAssets().open("test/smiley-version10.db");
 		DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tm);
 		File extDb = new File(db.getExternalDatabasePath("smiley.db"));
 
-		FileUtils.copyFile((FileInputStream) fis, new FileOutputStream(extDb));
+		FileUtils.saveStreamToFile(is, new FileOutputStream(extDb));
 		db.importDatabase("smiley.db");
 
 		// the legacy db should have 8 tracks (6 active)

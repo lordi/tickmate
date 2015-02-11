@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +54,11 @@ public class FileUtils {
         }
     }
 
+    public static void saveStreamToFile(InputStream fromStream, FileOutputStream toFile) throws IOException {
+        byte[] buffer = new byte[fromStream.available()];
+        fromStream.read(buffer);
+        toFile.write(buffer);
+    }
 
     public static class StorageInfo {
 
