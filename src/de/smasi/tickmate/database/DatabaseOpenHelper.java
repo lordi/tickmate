@@ -9,6 +9,7 @@ import java.io.IOException;
 import de.smasi.tickmate.models.Track;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -38,7 +39,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_HAS_TIME_INFO = "has_time_info";
 
     private static final String DATABASE_NAME = "tickmate.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
     
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -60,7 +61,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         + COLUMN_DESCRIPTION + " text not null, "
         + COLUMN_ICON + " text not null, "
         + COLUMN_ENABLED + " integer not null,"
-        + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0"
+        + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0,"
+        + "\"" + COLUMN_ORDER + "\" integer DEFAULT -1"
         + ");";
     private static final String DATABASE_CREATE_TICKS =
         "create table " + TABLE_TICKS + "("
@@ -85,7 +87,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d("tickmate", "Upgrading database");
-		if (oldVersion >= 9 && newVersion <= 11) {
+		if (oldVersion >= 9 && newVersion <= 12) {
 			if (oldVersion <= 9) {
 				Log.d("tickmate", "Migrating database to version 10");
 				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_MULTIPLE_ENTRIES_PER_DAY + "\" integer DEFAULT 0;");
@@ -98,6 +100,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 			if (oldVersion <= 10) {
 				Log.d("tickmate", "Migrating database to version 11");
 				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_ORDER + "\" integer DEFAULT -1;");			
+			}
+			if (oldVersion == 11) {
+				try {
+					db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_ORDER + "\" integer DEFAULT -1;");
+				}
+				catch (SQLException e) {
+					Log.d("tickmate", "Ignoring SQL error: " + e.toString());
+				}
 			}
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);
