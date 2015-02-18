@@ -1,6 +1,8 @@
 package de.smasi.tickmate.views;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -116,7 +118,7 @@ public class EditTracksActivity extends ListActivity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 	    
 		switch (item.getItemId()) {
 		
@@ -165,14 +167,24 @@ public class EditTracksActivity extends ListActivity {
 			}
 			
 		case R.id.edit_tracks_delete: {
-				Track t = (Track)tracksAdapter.getItem((int)info.id);
-				TracksDataSource ds = new TracksDataSource(this);
-				ds.open();
-				ds.deleteTrack(t);
-				ds.close();
-				loadTracks();
-				return true;
-			}
+			new AlertDialog.Builder(this)
+			.setTitle(R.string.alert_delete_track_title)
+			.setMessage(R.string.alert_delete_track_message)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+			    public void onClick(DialogInterface dialog, int whichButton) {
+			    	Track t = (Track)tracksAdapter.getItem((int)info.id);
+					TracksDataSource ds = new TracksDataSource(EditTracksActivity.this);
+					ds.open();
+					ds.deleteTrack(t);
+					ds.close();
+					loadTracks();
+			    }})
+			 .setNegativeButton(android.R.string.no, null).show();
+			
+			return true;
+		}
 		}		
 		return super.onContextItemSelected(item);
 	}

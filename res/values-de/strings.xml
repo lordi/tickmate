@@ -25,7 +25,6 @@
     <string name="multiple_entries">Mehrere Einträge pro Tag</string>
     <string name="tick_deleted">Letzter Eintrag entfernt.</string>
     <string name="alert_delete_track_title">Track entfernen</string>
-    <string name="alert_delete_track_message">Diesen Track wirklich löschen?</string>
     <string name="jump_to_date">Zu Datum springen…</string>
     <string name="jump_to_today">Zu heute springen</string>
     <string name="title_activity_about">Über Tickmate</string>
@@ -57,4 +56,7 @@
     <string name="track_enabled">Aktiviert</string>
     <string name="track_icon">Symbol</string>
     <string name="title_section_quarters">Quartale</string>
+
+    <!--  New or updated in master / might change until release -->
+    <string name="alert_delete_track_message">Wollen Sie diesen Track wirklich löschen? Die Aktion kann nicht rückgängig gemacht werden und alle Ticks sind verloren, wenn kein Backup gemacht wurde.</string>
 </resources>
