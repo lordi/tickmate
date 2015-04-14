@@ -1,0 +1,97 @@
+package de.smasi.tickmate.widgets;
+
+import java.util.Calendar;
+
+import android.content.Context;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.widget.Button;
+import android.widget.Toast;
+import de.smasi.tickmate.R;
+import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.models.Track;
+
+public class MultiTickButton extends Button implements OnClickListener, OnLongClickListener {
+	Track track;
+	Calendar date;
+	int count;
+
+	public MultiTickButton(Context context, Track track, Calendar date) {
+		super(context);
+		this.setOnClickListener(this);
+		this.setOnLongClickListener(this);
+		this.track = track;
+		this.date = date;
+		int size = 32;
+		this.setWidth(size);
+		this.setMinWidth(size);
+		this.setMaxWidth(size);
+		this.setHeight(size);
+		this.setMinHeight(size);
+		this.setPadding(0, 0, 0, 0);
+		count = 0;			
+	}
+	
+	Track getTrack () {
+		return track;
+	}
+	
+	Calendar getDate () {
+		return date;		
+	}
+	
+	public void setTickCount(int count) {
+		this.count = count;
+		updateText();
+	}
+	
+	private void updateStatus() {
+		TracksDataSource ds = new TracksDataSource(this.getContext());
+		count = ds.getTicksForDay(this.getTrack(), this.getDate()).size();
+		updateText();
+	}
+	
+	private void updateText() {		
+		if (count > 0) {
+			this.setBackgroundResource(R.drawable.counter_positive);
+			this.setText(Integer.toString(count));
+		} else {
+			this.setBackgroundResource(R.drawable.counter_neutral);
+			this.setText("");
+		}
+	}
+	
+	@Override
+	public void onClick(View v) {
+		TracksDataSource ds = new TracksDataSource(this.getContext());
+		
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MILLISECOND, 0);
+
+		ds.open();
+		if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
+			ds.setTick(this.getTrack(), c, false);
+		} else {
+			ds.setTick(this.getTrack(), this.date, false);
+		}
+		ds.close();
+		
+		updateStatus();
+	}
+	
+	@Override
+	public boolean onLongClick(View v) {
+		TracksDataSource ds = new TracksDataSource(this.getContext());
+		ds.open();
+		boolean success = ds.removeLastTickOfDay(this.getTrack(), this.getDate());
+		ds.close();
+		
+		if (success) {
+			updateStatus();
+			Toast.makeText(this.getContext(), R.string.tick_deleted, Toast.LENGTH_SHORT).show();
+		}
+		
+		return true;
+	}
+}
