@@ -1,4 +1,4 @@
-package de.smasi.tickmate.widgets;
+package de.smasi.tickmate;
 
 import java.util.Calendar;
 import java.util.Date;

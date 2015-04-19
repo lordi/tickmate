@@ -31,7 +31,6 @@ import android.widget.Toast;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
-import de.smasi.tickmate.widgets.TickAdapter;
 
 public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener {
     static final int DATE_DIALOG_ID = 0;
