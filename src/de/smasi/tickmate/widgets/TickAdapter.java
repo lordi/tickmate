@@ -11,7 +11,6 @@ import de.smasi.tickmate.widgets.MultiTickButton;
 import de.smasi.tickmate.widgets.TickButton;
 import de.smasi.tickmate.widgets.TrackButton;
 import de.smasi.tickmate.database.TracksDataSource;
-import de.smasi.tickmate.models.DayRange;	
 import de.smasi.tickmate.models.Track;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +32,6 @@ import android.widget.LinearLayout.LayoutParams;
 
 public class TickAdapter extends BaseAdapter {
 
-	private List<DayRange> values;
 	private final Context context;
 	private Calendar startday, today, yday;
 	int count, count_ahead;

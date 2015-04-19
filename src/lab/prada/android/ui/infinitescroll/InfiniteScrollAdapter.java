@@ -1,4 +1,4 @@
-package lab.prada.android.ui.lab.prada.android.ui.infinitescroll;
+package lab.prada.android.ui.infinitescroll;
 
 import android.content.Context;
 import android.database.DataSetObserver;

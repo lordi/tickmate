@@ -3,7 +3,7 @@ package de.smasi.tickmate;
 import java.io.IOException;
 import java.util.Calendar;
 
-import lab.prada.android.ui.lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
+import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -35,7 +35,6 @@ import de.smasi.tickmate.widgets.TickAdapter;
 
 public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener {
     static final int DATE_DIALOG_ID = 0;
-    //TickMatrix matrix;
 
     private InfiniteScrollAdapter<TickAdapter> mAdapter;
     private Handler mHandler;
