@@ -240,7 +240,8 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
             public void run() {
                 mAdapter.getAdapter().addCount(5);
                 mAdapter.handledRefresh();
+                getListView().setSelection(2);
             }
-        }, 1000);
+        }, 500);
     }
 }
