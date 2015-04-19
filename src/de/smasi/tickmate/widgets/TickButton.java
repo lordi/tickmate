@@ -7,12 +7,15 @@ import android.animation.AnimatorSet;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CompoundButton;
 import android.widget.ToggleButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import de.smasi.tickmate.R;
+import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Track;
 
 
-public class TickButton extends ToggleButton implements OnClickListener {
+public class TickButton extends ToggleButton implements OnClickListener, OnCheckedChangeListener {
 
 	AnimatorSet highlight;
 	Track track;
@@ -41,6 +44,7 @@ public class TickButton extends ToggleButton implements OnClickListener {
 		this.setTextOff("");
 		this.setAlpha((float) 0.8);
 		this.setOnClickListener(this);
+		this.setOnCheckedChangeListener(this);
 	}
 	
 	public Track getTrack () {
@@ -53,7 +57,22 @@ public class TickButton extends ToggleButton implements OnClickListener {
 	
 	@Override
 	public void onClick(View v) {
-		highlight.start();
+		// highlight.start();
+	}
+	
+	@Override
+	public void onCheckedChanged(CompoundButton arg0, boolean ticked) {
+		TickButton tb = (TickButton)arg0;
+		
+		TracksDataSource ds = new TracksDataSource(this.getContext());
+		ds.open();
+		if (ticked) {
+			ds.setTick(tb.getTrack(), tb.getDate(), true);
+		}
+		else {
+			ds.removeTick(tb.getTrack(), tb.getDate());
+		}
+		ds.close();		
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.Intent;
@@ -37,15 +38,16 @@ import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.DayRange;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.views.ShowTrackActivity;
-import de.smasi.tickmate.widgets.DayRangeAdapter;
+import de.smasi.tickmate.widgets.TickAdapter;
 import de.smasi.tickmate.widgets.MultiTickButton;
 import de.smasi.tickmate.widgets.TickButton;
 
-public class TickMatrix extends LinearLayout implements OnCheckedChangeListener, LoaderCallbacks<DayRange>, OnScrollListener  {
+public class TickMatrix extends LinearLayout implements OnCheckedChangeListener, OnScrollListener  {
 	
 	ListView sv = null;
+	LinkedList<DayRange> mList = new LinkedList<DayRange>();
 	Calendar displayDay = null;
-    DayRangeAdapter mAdapter;
+    TickAdapter mAdapter;
 	
 	public TickMatrix(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -176,16 +178,16 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener,
 		svlin.addView(t);
 		svlin.addView(tickgrid);
 		*/
-		List<DayRange> days = new LinkedList<DayRange>();
 		
-		days.add(new DayRange(startday, endday));
-		days.add(new DayRange(startday, endday));
+		mList.add(new DayRange(startday, endday));
+		//days.add(new DayRange(startday, endday));
 
-        mAdapter = new DayRangeAdapter(getContext(), days); 
+        //mAdapter = new DayRangeAdapter(getContext(), mList); 
+		//mAdapter.setNotifyOnChange(false);
+        //sv.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+		sv.setStackFromBottom(true);
         sv.setAdapter(mAdapter);
         sv.setOnScrollListener(this);
-        sv.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-		sv.setStackFromBottom(true);
 			
 		addView(headertop);
 		addView(sv);
@@ -368,19 +370,6 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener,
 	}
 	
 	@Override
-	public Loader<DayRange> onCreateLoader(int id, Bundle args) {
-		return new TestLoader(getContext());
-	}
-
-	@Override
-	public void onLoadFinished(Loader<DayRange> loader, DayRange data) {
-	}
-
-	@Override
-	public void onLoaderReset(Loader<DayRange> loader) {
-	}
-
-	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
 		
@@ -393,18 +382,20 @@ public class TickMatrix extends LinearLayout implements OnCheckedChangeListener,
 				"first: " + Integer.toString(firstVisibleItem) +
 				", vis: " + Integer.toString(visibleItemCount) +
 				", total: " + Integer.toString(totalItemCount));
-		if (firstVisibleItem == 0 && totalItemCount < 10) {
+		if (firstVisibleItem == 0 && totalItemCount < 100) {
+			DayRange dr = mList.get(0); //mList.size() - 1);//(DayRange) view.getAdapter().getItem(0);
 			
-			Calendar today = Calendar.getInstance();
-			today.set(Calendar.HOUR, 0);
-			today.set(Calendar.MINUTE, 0);
-			today.set(Calendar.SECOND, 0);
-			today.set(Calendar.MILLISECOND, 0);
-					
-			Calendar yday = (Calendar)today.clone();
-			yday.add(Calendar.DATE, -1);
-		
-			mAdapter.add(new DayRange(yday, today));
+			Calendar prevstart = dr.getStartDay();
+			Calendar end = (Calendar)prevstart.clone();
+			end.add(Calendar.DATE, -1);
+			Calendar start = (Calendar)end.clone();
+			start.add(Calendar.DATE, -2);
+			mList.add(0, new DayRange(start, end));
+			((Activity) getContext()).runOnUiThread(new Runnable() {
+			    public void run() {
+			        mAdapter.notifyDataSetChanged();
+			    }
+			});
 		}
 	}
 	

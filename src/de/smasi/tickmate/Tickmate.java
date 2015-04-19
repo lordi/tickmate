@@ -3,34 +3,70 @@ package de.smasi.tickmate;
 import java.io.IOException;
 import java.util.Calendar;
 
+import lab.prada.android.ui.lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
+import de.smasi.tickmate.widgets.TickAdapter;
 
-public class Tickmate extends Activity {
+public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener {
     static final int DATE_DIALOG_ID = 0;
-    TickMatrix matrix;
+    //TickMatrix matrix;
+
+    private InfiniteScrollAdapter<TickAdapter> mAdapter;
+    private Handler mHandler;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_tickmate_ticks);
-		matrix = (TickMatrix)findViewById(R.id.tickMatrix1);
+		//setContentView(R.layout.fragment_tickmate_ticks);
+		//matrix = (TickMatrix)findViewById(R.id.tickMatrix1);
+        setContentView(R.layout.activity_tickmate_list);
+        
+		Calendar today = Calendar.getInstance();
+		
+        RelativeLayout progress = new RelativeLayout(this);
+        progress.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, 100));
+        progress.setGravity(Gravity.CENTER);
+        progress.addView(new ProgressBar(this));
+
+        mAdapter = new InfiniteScrollAdapter<TickAdapter>(this,
+                new TickAdapter(this, today), progress);
+        mAdapter.addListener(this);
+        mHandler = new Handler();
+        
+        LinearLayout header_group = ((LinearLayout) findViewById(R.id.header));
+        header_group.addView(mAdapter.getOriginalAdapter().getHeader());
+        
+        //getListView().addHeaderView(mAdapter.getOriginalAdapter().getHeader());
+		getListView().setStackFromBottom(true);
+
+        getListView().setAdapter(mAdapter);
+        //((ListView)this.findViewById(R.id.listView)).setAdapter(mAdapter);
 	}
 
 	@Override
@@ -157,23 +193,28 @@ public class Tickmate extends Activity {
 		    builder.show();
 	    }
 	}	
+	
 	public void jumpToToday() {
-		matrix.unsetDate();
+		Calendar day = Calendar.getInstance();
+		mAdapter.getAdapter().setDate(day);
 		refresh();
 	}
 	
 	public void setDate(int year, int month, int day) {
-		matrix.setDate(year, month, day);
+		Calendar thatday = Calendar.getInstance();
+		thatday.set(year, month, day);
+		mAdapter.getAdapter().setDate(thatday);
 		refresh();
 	}
 	
 	public void refresh() {
-		matrix.buildView();		
+		getListView().invalidateViews();
 	}
 	
 	public Calendar getDate() {
-		return matrix.getDate();
+		return mAdapter.getAdapter().getDate();
 	}
+	
 	
 	public static class DatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
@@ -193,4 +234,15 @@ public class Tickmate extends Activity {
 			((Tickmate)getActivity()).setDate(year, month, day);
 		}
 	}
+	
+    @Override
+    public void onInfiniteScrolled() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.getAdapter().addCount(5);
+                mAdapter.handledRefresh();
+            }
+        }, 1000);
+    }
 }

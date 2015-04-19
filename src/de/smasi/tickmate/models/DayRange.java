@@ -11,5 +11,20 @@ public class DayRange {
 		this.startday = startday;
 		this.endday = endday;
 	}
+	
+	public Calendar getStartDay() {
+		return startday;
+	}
 
+	public void setStartDay(Calendar startday) {
+		this.startday = startday;
+	}
+
+	public Calendar getEndDay() {
+		return endday;
+	}
+
+	public void setEndDay(Calendar endday) {
+		this.endday = endday;
+	}
 }
