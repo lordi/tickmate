@@ -330,7 +330,7 @@ public class TracksDataSource {
 		values.put(DatabaseOpenHelper.COLUMN_MINUTE, date.get(Calendar.MINUTE));
 		values.put(DatabaseOpenHelper.COLUMN_SECOND, date.get(Calendar.SECOND));
 		values.put(DatabaseOpenHelper.COLUMN_HAS_TIME_INFO, hasTimeInfo ? 1 : 0);
-		Log.d("Tickmate", "insert at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
+		Log.d("Tickmate", "Inserting tick at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
 				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
 		database.insert(DatabaseOpenHelper.TABLE_TICKS, null, values);
 
