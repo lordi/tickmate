@@ -171,25 +171,17 @@ public class TickAdapter extends BaseAdapter {
 		return tv;
 	}
 
-	public View buildRow(Calendar startday) {
-		int rows = 1;
-		int rowHeight = -1;
+	public View buildRow(Calendar cal) {
+		Locale locale = Locale.getDefault();
+		Date date = cal.getTime();
 		java.text.DateFormat dateFormat = android.text.format.DateFormat
 				.getDateFormat(context);
-		Calendar cal = startday;
-
-		Calendar endday = (Calendar) startday.clone();
-		endday.add(Calendar.DATE, 1);
 
 		Log.v(TAG, "Inflating row " + dateFormat.format(startday.getTime()));
-
-		Context context = this.context;
-		Locale locale = Locale.getDefault();
 
 		LinearLayout tickgrid = new LinearLayout(this.context);
 		tickgrid.setOrientation(LinearLayout.VERTICAL);
 
-		Date date = cal.getTime();
 		String s = dateFormat.format(date);
 
 		TextView t_weekday = new TextView(this.context);
@@ -238,10 +230,8 @@ public class TickAdapter extends BaseAdapter {
 		t_weekday.setEllipsize(null);
 
 		// Some screen characteristics:
-		// float scaledDensity =
-		// context.getResources().getDisplayMetrics().scaledDensity;
-		// int densityDpi =
-		// context.getResources().getDisplayMetrics().densityDpi;
+		// float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+		// int densityDpi = context.getResources().getDisplayMetrics().densityDpi;
 		// Log.d("tickmate", t_weekday.getTextSize() + "|" +
 		// t_date.getTextSize() + "|" + scaledDensity + "|" + densityDpi);
 		// Small screen, normal font 27.0|16.5|1.5|240
@@ -249,9 +239,7 @@ public class TickAdapter extends BaseAdapter {
 		// Huge screen, normal font 24.0|14.643751|1.3312501|213
 		// Huge screen, huge font 31.0|19.036875|1.730625|213
 
-		if (rowHeight <= 0) {
-			rowHeight = (int) (t_weekday.getTextSize() + t_date.getTextSize()) + 40;
-		}
+		int rowHeight = (int) (t_weekday.getTextSize() + t_date.getTextSize()) + 40;
 
 		l.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				rowHeight, 0.8f));
@@ -272,12 +260,6 @@ public class TickAdapter extends BaseAdapter {
 			} else {
 				boolean checked = ds.isTicked(track, cal, false);
 				TickButton checker = new TickButton(this.context, track, cal, checked);
-				// checker.setLayoutParams(new LayoutParams(32, 32, 0.2f));
-				// checker.setLayoutParams(new
-				// LayoutParams(LayoutParams.MATCH_PARENT,
-				// LayoutParams.MATCH_PARENT, (1.0f-0.2f)/tracks.size()));
-				// checker.setLayoutParams(new LayoutParams(0,0,
-				// (1.0f-0.2f)/tracks.size()));
 				checker.setLayoutParams(new LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
 						(1.0f) / tracks.size()));
@@ -297,14 +279,10 @@ public class TickAdapter extends BaseAdapter {
 			row.setBackgroundResource(android.R.drawable.dark_header);
 			row.setPadding(0, 0, 0, 0);
 		}
-
+		
 		tickgrid.addView(row);
-
-		// tickgrid.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-		// LayoutParams.WRAP_CONTENT));
 		tickgrid.setPadding(10, 0, 10, 5);
 		return tickgrid;
-
 	}
 
 	@Override
