@@ -69,13 +69,11 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.MILLISECOND, 0);
 
-		ds.open();
 		if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
 			ds.setTick(this.getTrack(), c, false);
 		} else {
 			ds.setTick(this.getTrack(), this.date, false);
 		}
-		ds.close();
 		
 		updateStatus();
 	}
@@ -83,9 +81,7 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 	@Override
 	public boolean onLongClick(View v) {
 		TracksDataSource ds = new TracksDataSource(this.getContext());
-		ds.open();
 		boolean success = ds.removeLastTickOfDay(this.getTrack(), this.getDate());
-		ds.close();
 		
 		if (success) {
 			updateStatus();

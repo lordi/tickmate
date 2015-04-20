@@ -15,22 +15,17 @@ import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Track;
 
 
-public class TickButton extends ToggleButton implements OnClickListener, OnCheckedChangeListener {
+public class TickButton extends ToggleButton implements OnCheckedChangeListener {
 
 	AnimatorSet highlight;
 	Track track;
 	Calendar date;
 
-	public TickButton(Context context, Track track, Calendar date) {
+	public TickButton(Context context, Track track, Calendar date, boolean checked) {
 		super(context);		
-		
-		highlight = (AnimatorSet) AnimatorInflater.loadAnimator(context,
-			    R.animator.tick_highlight);
-		highlight.setTarget(this);
-		//highlight.start();
 			
 		this.track = track;
-		this.date = date;
+		this.date = (Calendar)date.clone();
 		//this.setLayoutParams(new android.widget.LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 20));
 		this.setBackgroundResource(R.drawable.toggle_button);
 		int size = 32;
@@ -42,8 +37,9 @@ public class TickButton extends ToggleButton implements OnClickListener, OnCheck
 		this.setPadding(0, 0, 0, 0);
 		this.setTextOn("");
 		this.setTextOff("");
-		this.setAlpha((float) 0.8);
-		this.setOnClickListener(this);
+		//this.setAlpha((float) 0.8);
+		
+		setChecked(checked);
 		this.setOnCheckedChangeListener(this);
 	}
 	
@@ -56,23 +52,16 @@ public class TickButton extends ToggleButton implements OnClickListener, OnCheck
 	}
 	
 	@Override
-	public void onClick(View v) {
-		// highlight.start();
-	}
-	
-	@Override
 	public void onCheckedChanged(CompoundButton arg0, boolean ticked) {
 		TickButton tb = (TickButton)arg0;
 		
 		TracksDataSource ds = new TracksDataSource(this.getContext());
-		ds.open();
 		if (ticked) {
 			ds.setTick(tb.getTrack(), tb.getDate(), true);
 		}
 		else {
 			ds.removeTick(tb.getTrack(), tb.getDate());
 		}
-		ds.close();		
 	}
 
 }
