@@ -1,6 +1,16 @@
 master
 ------
 
+v1.2.2
+------
+
+ * Refactor tick matrix implementation, support endless scrolling
+
+v1.2.1
+------
+
+ * Bugfix release
+
 v1.2.0
 ------
 
