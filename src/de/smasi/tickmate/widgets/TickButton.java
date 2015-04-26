@@ -19,9 +19,10 @@ public class TickButton extends ToggleButton implements OnCheckedChangeListener 
 
 	AnimatorSet highlight;
 	Track track;
+	TracksDataSource ds;
 	Calendar date;
 
-	public TickButton(Context context, Track track, Calendar date, boolean checked) {
+	public TickButton(Context context, Track track, Calendar date, TracksDataSource ds) {
 		super(context);		
 			
 		this.track = track;
@@ -38,8 +39,10 @@ public class TickButton extends ToggleButton implements OnCheckedChangeListener 
 		this.setTextOn("");
 		this.setTextOff("");
 		//this.setAlpha((float) 0.8);
+
+		this.ds = ds;
 		
-		setChecked(checked);
+		setChecked(ds.isTicked(track, date, false));
 		this.setOnCheckedChangeListener(this);
 	}
 	

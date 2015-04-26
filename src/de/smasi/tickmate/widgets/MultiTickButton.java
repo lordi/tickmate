@@ -14,10 +14,11 @@ import de.smasi.tickmate.models.Track;
 
 public class MultiTickButton extends Button implements OnClickListener, OnLongClickListener {
 	Track track;
+	TracksDataSource ds;
 	Calendar date;
 	int count;
 
-	public MultiTickButton(Context context, Track track, Calendar date) {
+	public MultiTickButton(Context context, Track track, Calendar date, TracksDataSource ds) {
 		super(context);
 		this.setOnClickListener(this);
 		this.setOnLongClickListener(this);
@@ -30,7 +31,8 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 		this.setHeight(size);
 		this.setMinHeight(size);
 		this.setPadding(0, 0, 0, 0);
-		count = 0;			
+		this.ds = ds;
+		setTickCount(ds.getTickCountForDay(track, date));
 	}
 	
 	Track getTrack () {
@@ -64,8 +66,6 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 	
 	@Override
 	public void onClick(View v) {
-		TracksDataSource ds = new TracksDataSource(this.getContext());
-		
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.MILLISECOND, 0);
 

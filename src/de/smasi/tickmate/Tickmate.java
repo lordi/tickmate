@@ -206,6 +206,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	}
 	
 	public void refresh() {
+		mAdapter.getAdapter().notifyDataSetChanged();
 		getListView().invalidateViews();
 	}
 	

@@ -162,7 +162,6 @@ public class TracksDataSource {
 	}
 	
 	public Map<Integer, Map<Long, Integer> > retrieveTicksByMonths() {
-		ticks = new ArrayList<Tick>();
 		Map<Integer, Map<Long, Integer> > ret = new HashMap<Integer, Map<Long, Integer> >();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,

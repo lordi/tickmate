@@ -177,7 +177,7 @@ public class TickAdapter extends BaseAdapter {
 		java.text.DateFormat dateFormat = android.text.format.DateFormat
 				.getDateFormat(context);
 
-		Log.v(TAG, "Inflating row " + dateFormat.format(startday.getTime()));
+		Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 
 		LinearLayout tickgrid = new LinearLayout(this.context);
 		tickgrid.setOrientation(LinearLayout.VERTICAL);
@@ -251,15 +251,13 @@ public class TickAdapter extends BaseAdapter {
 
 			if (track.multipleEntriesEnabled()) {
 				MultiTickButton counter = new MultiTickButton(this.context,
-						track, (Calendar) cal.clone());
+						track, (Calendar) cal.clone(), ds);
 				counter.setLayoutParams(new LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
 						(1.0f) / tracks.size()));
-				counter.setTickCount(ds.getTickCountForDay(track, cal));
 				l2.addView(counter);
 			} else {
-				boolean checked = ds.isTicked(track, cal, false);
-				TickButton checker = new TickButton(this.context, track, cal, checked);
+				TickButton checker = new TickButton(this.context, track, cal, ds);
 				checker.setLayoutParams(new LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
 						(1.0f) / tracks.size()));
@@ -287,12 +285,21 @@ public class TickAdapter extends BaseAdapter {
 
 	@Override
 	public void notifyDataSetChanged() {
-		Log.v(TAG, "Data range has been updated.");
+		java.text.DateFormat dateFormat = android.text.format.DateFormat
+				.getDateFormat(context);
+		
 		super.notifyDataSetChanged();
 		ds.open();
+		tracks = ds.getActiveTracks();
+
+		Calendar startday = (Calendar)this.startday.clone();
+		Calendar endday = (Calendar)startday.clone();
+		startday.add(Calendar.DATE, -this.count);
+		
+		Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(endday.getTime()));
 
 		// Limit ticks to range [startday, endday]
-		ds.retrieveTicks(startday, startday);
+		ds.retrieveTicks(startday, endday);
 		ds.close();
 
 	}
