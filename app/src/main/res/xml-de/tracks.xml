@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tracks>
+
+	<section name="Ernährung/Konsum">
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegan"
+			description="Keine tierischen Produkte gegessen" />
+
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Vegetarisch"
+			description="Weder Fleisch noch Fisch gegessen" />
+
+		<track icon="@drawable/glyphicons_291_celebration_white" name="Alkohol"
+			description="Alkohol konsumiert" />
+
+		<track icon="@drawable/glyphicons_294_coffe_cup_white" name="Kaffee"
+			description="Kaffee getrunken" />
+
+		<track icon="@drawable/glyphicons_275_fast_food_white" name="Fast food"
+			description="Bei einem Fastfood-Restaurant gegessen" />
+
+		<track icon="@drawable/glyphicons_273_drink_white" name="Softdrink"
+			description="Softdrink getrunken" />
+
+		<track icon="@drawable/glyphicons_272_cake_white" name="Süßigkeiten"
+			description="Süßigkeiten oder Chips genascht" />
+
+		<track icon="@drawable/glyphicons_362_smoking_white" name="Rauchen"
+			description="Eine Zigarette geraucht" />
+
+		<track icon="@drawable/glyphicons_298_hospital_white" name="Medikamente"
+			description="Meine Medikamente genommen" />
+
+
+	</section>
+
+
+	<section name="Training">
+		<track icon="@drawable/glyphicons_314_table_tennis_white" name="Sport"
+			description="Meinen Lieblingssport gemacht" />
+
+		<track icon="@drawable/glyphicons_326_piano_white" name="Instrument"
+			description="Mein Lieblingsinstrument gespielt" />
+
+		<track icon="@drawable/glyphicons_175_stop_white" name="Yoga"
+			description="Yogaübungen gemacht" />
+
+		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Trainiert"
+			description="Kraft- oder Fitnesstraining" />
+
+		<track icon="@drawable/glyphicons_334_candle_white" name="Meditation"
+			description="Lieblingsmeditation praktiziert" />
+
+	</section>
+
+	<section name="Zu Hause">
+		<track icon="@drawable/glyphicons_002_dog_white" name="Hund"
+			description="Eine Runde mit dem Hund gegangen" />
+
+		<track icon="@drawable/glyphicons_310_flower_white" name="Pflanzen"
+			description="Pflanzen gegossen" />
+
+		<track icon="@drawable/glyphicons_067_cleaning_white" name="Aufgeräumt"
+			description="Alles ist wieder sauber" />
+
+	</section>
+
+	<section name="Unterwegs">
+		<track icon="@drawable/glyphicons_014_train_white" name="Öffentliche Verkehrsmittel"
+			description="Bus, Straßenbahn oder Zug genommen" />
+
+		<track icon="@drawable/glyphicons_005_car_white" name="Auto"
+			description="Mit dem Auto unterwegs gewesen" />
+
+		<track icon="@drawable/glyphicons_306_bicycle_white" name="Fahrrad"
+			description="Mit dem Fahrrad unterwegs gewesen" />
+
+
+	</section>
+
+	<section name="Soziales Leben/Sexualität">
+		<track icon="@drawable/glyphicons_410_facebook_white" name="Social network"
+			description="Used my favourite social network site" />
+
+		<track icon="@drawable/myicons_smiley_white" name="Smile"
+			description="Jemanden zum Lachen gebracht" />
+
+		<track icon="@drawable/glyphicons_273_drink_white" name="Tanzen"
+			description="In einen Club oder eine Bar gegangen" />
+
+		<track icon="@drawable/glyphicons_012_heart_white" name="I love you"
+			description="Jemandem gesagt, dass ich sie/ihn liebe" />
+
+		<track icon="@drawable/glyphicons_022_fire_white" name="Sex"
+			description="Geschlechtsverkehr gehabt" />
+
+	</section>
+
+	<section name="Hygiene">
+		<track icon="@drawable/glyphicons_097_vector_path_line_white"
+			name="Zahnseide" description="Zahnseide verwendet" />
+
+	</section>
+
+	<section name="Allgemein">
+		<track icon="@drawable/glyphicons_152_check_white" name="Todo"
+			description="Sachen von der Todo-Liste abgehackt" />
+
+		<track icon="@drawable/glyphicons_343_thumbs_up_white" name="Guter Tag"
+			description="Insgesamt einen schönen Tag gehabt" />
+
+		<track icon="@drawable/glyphicons_282_cardio_white" name="Krankheitssymptome"
+			description="Symptom einer Krankheit bemerkt" />
+		
+		<track icon="@drawable/glyphicons_049_star_white" name="Eigener Track"
+			description="Benutzerdefinierter Track" />
+				
+	</section>
+
+</tracks>

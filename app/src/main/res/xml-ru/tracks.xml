@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tracks>
+
+	<section name="Диета/Питание/Лекарства">
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Веган"
+			description="Без употребления продуктов животного происхождения" />
+
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Вегетарианец"
+      description="Без употребления мяса и рыбы" />
+
+		<track icon="@drawable/glyphicons_291_celebration_white" name="Алкоголь"
+			description="Употребление алкогольного напитка" />
+
+		<track icon="@drawable/glyphicons_294_coffe_cup_white" name="Кофе"
+			description="Употребление кофе" />
+
+		<track icon="@drawable/glyphicons_275_fast_food_white" name="Фастфуд"
+			description="Поход в ресторан фастфуда" />
+
+		<track icon="@drawable/glyphicons_273_drink_white" name="Soft drink"
+			description="Drank a soft drink" />
+
+		<track icon="@drawable/glyphicons_272_cake_white" name="Сладости"
+			description="Употребление сладостей или торта" />
+
+		<track icon="@drawable/glyphicons_362_smoking_white" name="Курение"
+			description="Получение ежедневной дозы никотина" />
+
+		<track icon="@drawable/glyphicons_298_hospital_white" name="Лекарство"
+			description="Принятие лекарства" />
+
+
+	</section>
+	<section name="Тренировка">
+		<track icon="@drawable/glyphicons_314_table_tennis_white" name="Спорт"
+			description="Занятие любимым видом спорта" />
+
+		<track icon="@drawable/glyphicons_326_piano_white" name="Музыкальный инструмент"
+			description="Игра на любимом музыкальном инструменте" />
+
+		<track icon="@drawable/glyphicons_175_stop_white" name="Йога"
+			description="Занятие йогой" />
+
+		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Физическая тренировка"
+			description="Выполнение упражнений" />
+
+		<track icon="@drawable/glyphicons_334_candle_white" name="Медитация"
+			description="Занятие медитацией" />
+
+	</section>
+    
+	
+    <section name="Дом">
+    	<track
+	        icon="@drawable/glyphicons_002_dog_white"
+        	name="Собака"
+        	description="Выгул собаки"/>
+		        
+    	<track
+	        icon="@drawable/glyphicons_310_flower_white"
+        	name="Растения"
+        	description="Полив растений"/>
+		
+		<track
+	        icon="@drawable/glyphicons_067_cleaning_white"
+        	name="Уборка"
+        	description="Дом прибран"/>
+			
+    </section>
+    
+    <section name="Перемещения">
+    	<track
+	        icon="@drawable/glyphicons_014_train_white"
+        	name="Общественный транспорт"
+        	description="Использование общественного транспорта"/>
+				
+    	<track
+	        icon="@drawable/glyphicons_005_car_white"
+        	name="Машина"
+        	description="Вождение машины"/>
+		
+    	<track
+	        icon="@drawable/glyphicons_306_bicycle_white"
+        	name="Велосипед"
+        	description="Использование велосипеда"/>
+		
+    </section>
+    
+        
+    <section name="Социальность, сексуальность">
+    	<track
+	        icon="@drawable/glyphicons_410_facebook_white"
+        	name="Социальная сеть"
+        	description="Использование любимой социальной сети"/>
+			
+    	<track
+	        icon="@drawable/myicons_smiley_white"
+        	name="Улыбка"
+        	description="Кто-то улыбнулся или рассмеялся благодаря мне"/>
+			
+    	<track
+	        icon="@drawable/glyphicons_273_drink_white"
+        	name="Clubbing"
+        	description="Поход в бар или клуб"/>
+				
+    	<track
+	        icon="@drawable/glyphicons_012_heart_white"
+        	name="Я тебя люблю"
+        	description="Сообщение кому-то, что любишь его"/>
+			
+    	<track
+	        icon="@drawable/glyphicons_022_fire_white"
+        	name="Секс"
+        	description="Занятие сексом"/>
+			
+    </section>
+    
+    <section name="Гигиена">
+    	<track
+	        icon="@drawable/glyphicons_097_vector_path_line_white"
+          name="Зубная нить"
+        	description="Чистка моих белоснежных зубов нитью"/>
+			
+    </section>
+    
+    <section name="Общее/Абстрактное">
+	    <track
+			icon="@drawable/glyphicons_152_check_white"
+	        name="Дела"
+        	description="Выполнение дела достойного заметки"/>
+		
+	    <track
+			icon="@drawable/glyphicons_343_thumbs_up_white"
+      name="Хороший день"
+        	description="В целом день удался"/>
+						
+		<track icon="@drawable/glyphicons_282_cardio_white" name="Симптом"
+			description="Случился симптом заболевания" />
+		
+		<track icon="@drawable/glyphicons_049_star_white" name="Пользовательский"
+			description="Отлеживание указанное пользователем" />
+			    	    
+    </section>
+    
+</tracks>
