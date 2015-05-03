@@ -38,17 +38,18 @@ public class TickAdapter extends BaseAdapter {
 	private TracksDataSource ds;
 	private List<Track> tracks;
 	private static final String TAG = "TickAdapter";
+	private static final int DEFAULT_COUNT_PAST = 14; // by default load 2 weeks of past ticks
+	private static final int DEFAULT_COUNT_AHEAD = 0; // by default show zero days ahead
 
 	public TickAdapter(Context context, Calendar startday) {
 		// super(context, R.layout.rowlayout, days);
 		this.context = context;
 		// this.values = days;
-		this.count = 14; // by default load 2 weeks
-		this.count_ahead = 0; // by default show zero days ahead
+		this.count = DEFAULT_COUNT_PAST;
+		this.count_ahead = DEFAULT_COUNT_AHEAD;
 
 		// Initialize data source
 		ds = new TracksDataSource(context);
-		tracks = ds.getActiveTracks();
 
 		today = Calendar.getInstance();
 		today.set(Calendar.HOUR, 0);
@@ -81,7 +82,12 @@ public class TickAdapter extends BaseAdapter {
 	}
 
 	public int getCount() {
-		return this.count; // values.size();
+		if (tracks.size() == 0) {
+			return 0; // return 0 here if we have no tracks so that the empty view will get displayed
+		}
+		else {
+			return this.count;
+		}
 	}
 
 	public Object getItem(int position) {
@@ -100,20 +106,6 @@ public class TickAdapter extends BaseAdapter {
 		Integer days = (Integer) getItem(position);
 		Calendar thisday = (Calendar) startday.clone();
 		thisday.add(Calendar.DATE, -days);
-		Button tv = new Button(this.context);
-		tv.setText("muahah " + getItem(position) + " ; "
-				+ dateFormat.format(thisday.getTime()));
-		// .getTime()) + " - " + dateFormat.format(endday.getTime()));
-
-		// TextView tv = new TextView(this.context);
-		// tv.setText("muahah" + Integer.toString(position));
-		/*
-		 * Log.d("TICKI", "REDRAW position=" + Integer.toString(position) +
-		 * " must_set="+ Boolean.toString(convertView==null)); return
-		 * buildGrid(position, values.get(position).getStartDay(),
-		 * values.get(position).getEndDay());
-		 */
-		// return tv;
 		return buildRow(thisday);
 		/*
 		 * if (convertView == null) { return buildGrid(position,

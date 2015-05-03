@@ -22,4 +22,8 @@
          android:drawSelectorOnTop="false"
          android:padding="0dp" />
 
+    <TextView android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_tracks_found" />
  </LinearLayout>

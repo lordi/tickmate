@@ -58,13 +58,12 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
         mHandler = new Handler();
         
         LinearLayout header_group = ((LinearLayout) findViewById(R.id.header));
-        header_group.addView(mAdapter.getOriginalAdapter().getHeader());
+		if (mAdapter.getOriginalAdapter().getCount() > 0) {
+			header_group.addView(mAdapter.getOriginalAdapter().getHeader());
+		}
         
-        //getListView().addHeaderView(mAdapter.getOriginalAdapter().getHeader());
-		getListView().setStackFromBottom(true);
-
+	   	getListView().setStackFromBottom(true);
         getListView().setAdapter(mAdapter);
-        //((ListView)this.findViewById(R.id.listView)).setAdapter(mAdapter);
 	}
 
 	@Override
