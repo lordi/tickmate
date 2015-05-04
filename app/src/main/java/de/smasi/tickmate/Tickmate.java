@@ -27,12 +27,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
 
-public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener {
+public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener, View.OnClickListener {
     static final int DATE_DIALOG_ID = 0;
 
     private InfiniteScrollAdapter<TickAdapter> mAdapter;
@@ -61,7 +62,11 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 		if (mAdapter.getOriginalAdapter().getCount() > 0) {
 			header_group.addView(mAdapter.getOriginalAdapter().getHeader());
 		}
-        
+
+		TextView emptyView = (TextView)findViewById(android.R.id.empty);
+
+		emptyView.setOnClickListener(this);
+
 	   	getListView().setStackFromBottom(true);
         getListView().setAdapter(mAdapter);
 	}
@@ -212,8 +217,12 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	public Calendar getDate() {
 		return mAdapter.getAdapter().getDate();
 	}
-	
-	
+
+	@Override
+	public void onClick(View v) {
+		this.editTracks(getCurrentFocus());
+	}
+
 	public static class DatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
 

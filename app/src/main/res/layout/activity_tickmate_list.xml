@@ -9,7 +9,7 @@
      <LinearLayout
          android:id="@+id/header"
          android:layout_width="match_parent"
-         android:layout_height="60dp"
+         android:layout_height="wrap_content"
          android:orientation="vertical" />
      
      <ListView
@@ -25,5 +25,6 @@
     <TextView android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="20dp"
         android:text="@string/no_tracks_found" />
  </LinearLayout>
