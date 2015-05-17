@@ -51,6 +51,10 @@ public class TickAdapter extends BaseAdapter {
 		// Initialize data source
 		ds = new TracksDataSource(context);
 
+		setDate(startday);
+	}
+
+	public void setDate(Calendar startday) {
 		today = Calendar.getInstance();
 		today.set(Calendar.HOUR, 0);
 		today.set(Calendar.MINUTE, 0);
@@ -60,20 +64,24 @@ public class TickAdapter extends BaseAdapter {
 		yday = (Calendar) today.clone();
 		yday.add(Calendar.DATE, -1);
 
-		setDate(startday);
-	}
+		if (startday != null) {
+			startday.set(Calendar.HOUR, 0);
+			startday.set(Calendar.MINUTE, 0);
+			startday.set(Calendar.SECOND, 0);
+			startday.set(Calendar.MILLISECOND, 0);
+			this.startday = startday;
+		}
 
-	public void setDate(Calendar startday) {
-		startday.set(Calendar.HOUR, 0);
-		startday.set(Calendar.MINUTE, 0);
-		startday.set(Calendar.SECOND, 0);
-		startday.set(Calendar.MILLISECOND, 0);
-		this.startday = startday;
 		notifyDataSetChanged();
 	}
 
 	public Calendar getDate() {
-		return this.startday;
+		if (this.startday == null) {
+			return this.today;
+		}
+		else {
+			return this.startday;
+		}
 	}
 
 	public void addCount(int num) {
@@ -265,7 +273,7 @@ public class TickAdapter extends BaseAdapter {
 		row.addView(l2);
 		row.setGravity(Gravity.CENTER);
 
-		if (cal.compareTo(this.startday) == 0) {
+		if (cal.compareTo(this.getDate()) == 0) {
 			row.setBackgroundResource(android.R.drawable.dark_header);
 			row.setPadding(0, 0, 0, 0);
 		}
@@ -284,7 +292,7 @@ public class TickAdapter extends BaseAdapter {
 		ds.open();
 		tracks = ds.getActiveTracks();
 
-		Calendar startday = (Calendar)this.startday.clone();
+		Calendar startday = (Calendar)this.getDate();
 		Calendar endday = (Calendar)startday.clone();
 		startday.add(Calendar.DATE, -this.count);
 		

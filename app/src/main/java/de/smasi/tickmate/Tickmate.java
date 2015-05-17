@@ -57,11 +57,8 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
                 new TickAdapter(this, today), progress);
         mAdapter.addListener(this);
         mHandler = new Handler();
-        
-        LinearLayout header_group = ((LinearLayout) findViewById(R.id.header));
-		if (mAdapter.getOriginalAdapter().getCount() > 0) {
-			header_group.addView(mAdapter.getOriginalAdapter().getHeader());
-		}
+
+		updateHeader();
 
 		TextView emptyView = (TextView)findViewById(android.R.id.empty);
 
@@ -69,6 +66,14 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
 	   	getListView().setStackFromBottom(true);
         getListView().setAdapter(mAdapter);
+	}
+
+	private void updateHeader() {
+		LinearLayout header_group = ((LinearLayout) findViewById(R.id.header));
+		if (mAdapter.getOriginalAdapter().getCount() > 0) {
+			header_group.removeAllViews();
+			header_group.addView(mAdapter.getOriginalAdapter().getHeader());
+		}
 	}
 
 	@Override
@@ -79,7 +84,10 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	            return true;
 			case R.id.action_about:
 				this.aboutActivity();
-	            return true;	            
+	            return true;
+			case R.id.action_settings:
+				this.settingsActivity();
+				return true;
 			case R.id.action_jump_to_date:
 				this.jumpToDate();
 	            return true;	            
@@ -105,8 +113,8 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
 	@Override
 	public void onResume() {
-		super.onResume();
 		refresh();
+		super.onResume();
 	}
 	
 	public void editTracks(View v) {
@@ -118,7 +126,12 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 		Intent intent = new Intent(this, AboutActivity.class);
 	    startActivity(intent);
 	}
-	
+
+	public void settingsActivity() {
+		Intent intent = new Intent(this, SettingsActivity.class);
+		startActivity(intent);
+	}
+
 	public void jumpToDate() {
 		DialogFragment newFragment = new DatePickerFragment();
 	    newFragment.show(getFragmentManager(), "datePicker");
@@ -198,7 +211,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	
 	public void jumpToToday() {
 		Calendar day = Calendar.getInstance();
-		mAdapter.getAdapter().setDate(day);
+		mAdapter.getAdapter().setDate(null);
 		refresh();
 	}
 	
@@ -212,6 +225,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	public void refresh() {
 		mAdapter.getAdapter().notifyDataSetChanged();
 		getListView().invalidateViews();
+		updateHeader();
 	}
 	
 	public Calendar getDate() {
