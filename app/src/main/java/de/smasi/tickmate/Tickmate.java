@@ -1,10 +1,5 @@
 package de.smasi.tickmate;
 
-import java.io.IOException;
-import java.util.Calendar;
-
-import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -19,19 +14,22 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.Calendar;
+
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
+import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
 
 public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener, View.OnClickListener {
     static final int DATE_DIALOG_ID = 0;
@@ -128,7 +126,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	}
 
 	public void settingsActivity() {
-		Intent intent = new Intent(this, SettingsActivity.class);
+		Intent intent = new Intent(this, SimpleSettingsActivity.class);
 		startActivity(intent);
 	}
 

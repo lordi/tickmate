@@ -78,11 +78,15 @@ public class TickAdapter extends BaseAdapter {
 	public Calendar getDate() {
 		if (this.startday == null) {
 			return this.today;
+            // Should this instead initialize startday? To 'count' days before today?
+//            this.startday = (Calendar) today.clone();
+//            this.startday.add(Calendar.DATE, -count);
 		}
-		else {
-			return this.startday;
-		}
-	}
+        else {
+            return this.startday;
+        }
+
+    }
 
 	public void addCount(int num) {
 		this.count += num;
@@ -99,7 +103,7 @@ public class TickAdapter extends BaseAdapter {
 	}
 
 	public Object getItem(int position) {
-		return getCount() - position;
+		return getCount() - position;  // TODO-JS change this to change the direction: old to new vs new to old
 	}
 
 	public long getItemId(int position) {
@@ -112,7 +116,8 @@ public class TickAdapter extends BaseAdapter {
 				.getDateFormat(context);
 
 		Integer days = (Integer) getItem(position);
-		Calendar thisday = (Calendar) startday.clone();
+//		Calendar thisday = (Calendar) startday.clone();  // Appears to cause a bug, using today.clone instead
+		Calendar thisday = (Calendar) today.clone();
 		thisday.add(Calendar.DATE, -days);
 		return buildRow(thisday);
 		/*
@@ -292,14 +297,19 @@ public class TickAdapter extends BaseAdapter {
 		ds.open();
 		tracks = ds.getActiveTracks();
 
-		Calendar startday = (Calendar)this.getDate();
-		Calendar endday = (Calendar)startday.clone();
-		startday.add(Calendar.DATE, -this.count);
-		
-		Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(endday.getTime()));
+//		Calendar startday = (Calendar)this.getDate();  // js is replacing these three lines, using this.startday and this.today instead
+//		Calendar endday = (Calendar)startday.clone();
+//		startday.add(Calendar.DATE, -this.count);
+
+        this.startday = (Calendar) today.clone();  // JS - May be redundant - resetting the start day to be this.count days previous to today
+        this.startday.add(Calendar.DATE, -this.count);
+
+//		Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(endday.getTime()));
+		Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(today.getTime()));
 
 		// Limit ticks to range [startday, endday]
-		ds.retrieveTicks(startday, endday);
+//		ds.retrieveTicks(startday, endday);  // Seems to be the wrong rang, replacing
+		ds.retrieveTicks(this.startday, this.today);  // Using today as the end day
 		ds.close();
 
 	}

@@ -63,4 +63,7 @@
     <!-- New in 1.2.3 -->
     <string name="title_section_years">Years</string>
 
+    <!-- Added by js, may be moved/changed -->
+    <string name="notify_user_ticking_disabled">Editing older ticks currently disabled.\nYou can change this in the settings.</string>
+    
 </resources>

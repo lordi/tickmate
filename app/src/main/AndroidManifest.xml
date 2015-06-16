@@ -28,6 +28,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".SimpleSettingsActivity"
+            android:label="@string/title_activity_simple_settings"
+            android:parentActivityName=".Tickmate"
+             >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.smasi.tickmate.Tickmate" />
+        </activity>
+
+        <activity
             android:name=".views.EditTracksActivity"
             android:label="@string/title_activity_edit_tracks"
             android:parentActivityName=".Tickmate" >
