@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.Gravity;
 import android.view.Menu;
@@ -256,12 +257,20 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	
     @Override
     public void onInfiniteScrolled() {
+        final int CHUNK_SIZE = 20; // Large chunk sizes (more than items on the screen) prevent problems when switching date order direction
+        // Matching the addCount() amount to the setSelection() amount keeps the screen in the right place when infiniteScrolling upwards
+
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mAdapter.getAdapter().addCount(5);
+                mAdapter.getAdapter().addCount(CHUNK_SIZE);  // was: mAdapter.getAdapter().addCount(5);
                 mAdapter.handledRefresh();
-                getListView().setSelection(2);
+
+                Boolean reverseDateOrdering = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).
+                        getBoolean("reverse-date-order-key", false);
+                if (!reverseDateOrdering) {
+                    getListView().setSelection(CHUNK_SIZE); // When infiniteScrolling upwards, prevents the infinite loop bug and keeps display from jumping
+                }
             }
         }, 500);
     }

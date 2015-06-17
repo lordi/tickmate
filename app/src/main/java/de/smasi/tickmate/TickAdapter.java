@@ -1,7 +1,9 @@
 package de.smasi.tickmate;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -29,10 +31,11 @@ public class TickAdapter extends BaseAdapter {
 	private Calendar startday, today, yday;
 	int count, count_ahead;
 	private TracksDataSource ds;
-	private List<Track> tracks;
-	private static final String TAG = "TickAdapter";
-	private static final int DEFAULT_COUNT_PAST = 14; // by default load 2 weeks of past ticks
-	private static final int DEFAULT_COUNT_AHEAD = 0; // by default show zero days ahead
+    private List<Track> tracks;
+    private boolean reverseDateOrdering = false;  // Reverses the date ordering - most recent dates at the top
+    private static final String TAG = "TickAdapter";
+    private static final int DEFAULT_COUNT_PAST = 14; // by default load 2 weeks of past ticks
+    private static final int DEFAULT_COUNT_AHEAD = 0; // by default show zero days ahead
 
 	public TickAdapter(Context context, Calendar startday) {
 		// super(context, R.layout.rowlayout, days);
@@ -44,7 +47,9 @@ public class TickAdapter extends BaseAdapter {
 		// Initialize data source
 		ds = new TracksDataSource(context);
 
-		setDate(startday);
+        setDate(startday);
+        reverseDateOrdering = PreferenceManager.getDefaultSharedPreferences(context).
+                getBoolean("reverse-date-order-key", false);
 	}
 
 	public void setDate(Calendar startday) {
@@ -96,8 +101,12 @@ public class TickAdapter extends BaseAdapter {
 	}
 
 	public Object getItem(int position) {
-		return getCount() - position;  // TODO-JS change this to change the direction: old to new vs new to old
-	}
+        if (reverseDateOrdering) {
+            return position;
+        } else {
+            return getCount() - position;
+        }
+    }
 
 	public long getItemId(int position) {
 		return position;
@@ -285,9 +294,15 @@ public class TickAdapter extends BaseAdapter {
 	public void notifyDataSetChanged() {
 		java.text.DateFormat dateFormat = android.text.format.DateFormat
 				.getDateFormat(context);
-
 		super.notifyDataSetChanged();
-		ds.open();
+
+        ;
+        reverseDateOrdering = PreferenceManager.getDefaultSharedPreferences(context).
+                getBoolean("reverse-date-order-key", false);
+            // Appears sufficient to update reverseDateOrdering on every data set change - not thoroughly tested.
+
+
+        ds.open();
 		tracks = ds.getActiveTracks();
 
 //		Calendar startday = (Calendar)this.getDate();  // js is replacing these three lines, using this.startday and this.today instead

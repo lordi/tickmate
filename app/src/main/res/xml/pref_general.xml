@@ -2,8 +2,8 @@
     <!-- After preferences have been more fully implemented, remove these commented lines -->
 
     <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="example_checkbox"
+        android:defaultValue="false"
+        android:key="reverse-date-order-key"
         android:summary="@string/pref_description_reverse_date_display_order"
         android:title="@string/pref_title_reverse_date_display_order" />
 
