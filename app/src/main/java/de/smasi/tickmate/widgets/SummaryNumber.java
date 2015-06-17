@@ -1,6 +1,5 @@
 package de.smasi.tickmate.widgets;
 
-import de.smasi.tickmate.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -9,6 +8,8 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
+
+import de.smasi.tickmate.R;
 
 public class SummaryNumber extends View {
 	Path path;

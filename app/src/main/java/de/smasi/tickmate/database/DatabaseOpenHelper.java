@@ -1,18 +1,16 @@
 package de.smasi.tickmate.database;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-
-import de.smasi.tickmate.models.Track;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	private static DatabaseOpenHelper sharedInstance;

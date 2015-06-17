@@ -1,23 +1,7 @@
 package de.smasi.tickmate.views;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.support.v4.app.NavUtils;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
-import de.smasi.tickmate.models.Track;
 
 public class TrackPreferenceActivity extends Activity {
 		

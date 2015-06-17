@@ -1,20 +1,15 @@
 package de.smasi.tickmate.views;
 
-import de.smasi.tickmate.R;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.res.Resources;
 import android.preference.EditTextPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+
+import de.smasi.tickmate.R;
 
 public class IconPreference extends EditTextPreference {
 

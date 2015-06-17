@@ -1,10 +1,5 @@
 package de.smasi.tickmate.views;
 
-import java.lang.reflect.Field;
-import java.util.LinkedList;
-import java.util.List;
-
-import de.smasi.tickmate.R;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.View;
@@ -12,6 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import java.lang.reflect.Field;
+import java.util.LinkedList;
+import java.util.List;
+
+import de.smasi.tickmate.R;
 
 public class IconListAdapter extends BaseAdapter {
     private Context context;

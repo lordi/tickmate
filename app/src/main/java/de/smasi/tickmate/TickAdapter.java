@@ -1,34 +1,27 @@
 package de.smasi.tickmate;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import de.smasi.tickmate.R;
-import de.smasi.tickmate.views.ShowTrackActivity;
-import de.smasi.tickmate.widgets.MultiTickButton;
-import de.smasi.tickmate.widgets.TickButton;
-import de.smasi.tickmate.widgets.TrackButton;
-import de.smasi.tickmate.database.TracksDataSource;
-import de.smasi.tickmate.models.Track;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CursorAdapter;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.models.Track;
+import de.smasi.tickmate.widgets.MultiTickButton;
+import de.smasi.tickmate.widgets.TickButton;
+import de.smasi.tickmate.widgets.TrackButton;
 
 public class TickAdapter extends BaseAdapter {
 
@@ -282,7 +275,7 @@ public class TickAdapter extends BaseAdapter {
 			row.setBackgroundResource(android.R.drawable.dark_header);
 			row.setPadding(0, 0, 0, 0);
 		}
-		
+
 		tickgrid.addView(row);
 		tickgrid.setPadding(10, 0, 10, 5);
 		return tickgrid;
@@ -292,7 +285,7 @@ public class TickAdapter extends BaseAdapter {
 	public void notifyDataSetChanged() {
 		java.text.DateFormat dateFormat = android.text.format.DateFormat
 				.getDateFormat(context);
-		
+
 		super.notifyDataSetChanged();
 		ds.open();
 		tracks = ds.getActiveTracks();
