@@ -57,6 +57,10 @@
     <string name="track_icon">Symbol</string>
     <string name="title_section_quarters">Quartale</string>
 
-    <!--  New or updated in master / might change until release -->
+    <!-- Neu in 1.2.2 -->
     <string name="alert_delete_track_message">Wollen Sie diesen Track wirklich löschen? Die Aktion kann nicht rückgängig gemacht werden und alle Ticks sind verloren, wenn kein Backup gemacht wurde.</string>
+
+    <!-- Neu in 1.2.3 -->
+    <string name="title_section_years">Jahre</string>
+
 </resources>

@@ -56,8 +56,11 @@
     <string name="track_enabled">Enabled</string>
     <string name="track_icon">Symbol</string>
     <string name="title_section_quarters">Quarters</string>
-    
-    <!--  New or updated in master / might change until release -->
+
+    <!-- New in 1.2.2 -->
     <string name="alert_delete_track_message">Are you sure you want to delete this track? This can not be undone and your ticks will be lost unless you made a backup.</string>
-    
+
+    <!-- New in 1.2.3 -->
+    <string name="title_section_years">Years</string>
+
 </resources>

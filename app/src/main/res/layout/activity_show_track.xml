@@ -141,6 +141,20 @@
                 android:id="@+id/summaryGraph_quarters"
                 android:layout_width="wrap_content"
                 android:layout_height="82dp" />
+
+            <TextView
+                android:id="@+id/TextView04"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/title_section_years"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <de.smasi.tickmate.widgets.SummaryGraph
+                android:id="@+id/summaryGraph_years"
+                android:layout_width="wrap_content"
+                android:layout_height="82dp" />
         </LinearLayout>
 
     </ScrollView>
