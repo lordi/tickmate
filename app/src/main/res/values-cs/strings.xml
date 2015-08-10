@@ -31,7 +31,7 @@
     <string name="title_activity_about">O aplikaci Tickmate</string>
     <string name="title_icon_chooser">Vybrat ikonu</string>
     <string name="about_description">Tickmate je v podstatě jednoduchý deník. Pro každý den můžete zaznamenat
-      jestli se něco stalo nebo ne. Tyto události mohou být jakkoliv triviální, jako použití
+      jestli se něco stalo nebo ne. Tyto události mohou být velmi triviální, jako použití
       zubní nitě při čištění zubů nebo vypití sklenice piva. Budete schopni vyčíslit své zvyky a nahromaděná data pak můžete
       zobrazit i za předešlé týdny nebo měsíce a sledovat změny v čase. Touto cestou si můžete ulehčit
       překonání starých zlozvyků nebo se naučit nové návyky.
@@ -56,5 +56,8 @@
     <string name="track_enabled">Povoleno</string>
     <string name="track_icon">Symbol</string>
     <string name="title_section_quarters">Čtvrtletí</string>
+   
+    <!--  New or updated in master / might change until release -->
+    <string name="alert_delete_track_message">Opravdu si přejete smazat tuto stopu? Toto nelze vrátit zpět a pokud nemáte vytvořenou zálohu, vaše značky budou navždy ztraceny.</string>
     
 </resources>
