@@ -27,7 +27,10 @@ public class TrackPreferenceActivity extends Activity {
  
 		int track_id = getIntent().getExtras().getInt("track_id");
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content,
-                      new TrackPreferenceFragment(track_id)).commit();
+        TrackPreferenceFragment fragment = new TrackPreferenceFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("track_id", track_id);
+        fragment.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
     }
 }

@@ -22,11 +22,11 @@ OnSharedPreferenceChangeListener  {
     private CheckBoxPreference enabled;
     private CheckBoxPreference multiple_entries_enabled;
 	private IconPreference icon;
-    
-    public TrackPreferenceFragment(int track_id) {
+
+    public TrackPreferenceFragment() {
         super();
-        this.track_id = track_id;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,7 @@ OnSharedPreferenceChangeListener  {
 
         TracksDataSource ds = new TracksDataSource(this.getActivity());
 
+        track_id = getArguments().getInt("track_id");
 		ds.open();
 		track = ds.getTrack(track_id);
 		loadTrack();
