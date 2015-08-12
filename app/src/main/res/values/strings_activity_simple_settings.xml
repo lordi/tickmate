@@ -2,11 +2,11 @@
 
     <string name="title_activity_simple_settings">Settings</string>
     <!-- Strings related to Settings -->
-    <string name="pref_title_reverse_date_display_order">Reverse the date display order</string>
-    <string name="pref_description_reverse_date_display_order">Display the most recent day at the top, instead of the bottom</string>
+    <string name="pref_title_reverse_date_display_order">Today at the top</string>
+    <string name="pref_description_reverse_date_display_order">Display today at the top, instead of the bottom</string>
 
-    <string name="pref_title_limit_active_date">Limit the active (editable) dates</string>
-    <string name="pref_description_limit_active_date">To prevent errors, limit the dates which can be edited with a simple click in the main screen.</string>
+    <string name="pref_title_limit_active_date">Editable days</string>
+    <string name="pref_description_limit_active_date">To prevent errors, limit the days which can be edited with a simple click in the main screen.</string>
 
     <string-array name="pref_titles_active_date">
         <item>Today only</item>
@@ -14,7 +14,7 @@
         <item>No limit - all dates can be edited</item>
     </string-array>
     <!-- Unsure if strings values would be best here, or numbers, or ...? -->
-    <string-array name="pref_values_active_date">
+    <string-array name="pref_values_active_date">:
         <item>today-only</item>
         <item>today-and-yesterday</item>
         <item>no-limit</item>
