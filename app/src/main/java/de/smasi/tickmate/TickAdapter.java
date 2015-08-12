@@ -1,7 +1,7 @@
 package de.smasi.tickmate;
 
+import android.app.ListActivity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -32,7 +32,7 @@ public class TickAdapter extends BaseAdapter {
 	int count, count_ahead;
 	private TracksDataSource ds;
     private List<Track> tracks;
-    private boolean reverseDateOrdering = false;  // Reverses the date ordering - most recent dates at the top
+    private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
     private static final int DEFAULT_COUNT_PAST = 14; // by default load 2 weeks of past ticks
     private static final int DEFAULT_COUNT_AHEAD = 0; // by default show zero days ahead
@@ -48,7 +48,7 @@ public class TickAdapter extends BaseAdapter {
 		ds = new TracksDataSource(context);
 
         setDate(startday);
-        reverseDateOrdering = PreferenceManager.getDefaultSharedPreferences(context).
+        isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
 	}
 
@@ -101,7 +101,7 @@ public class TickAdapter extends BaseAdapter {
 	}
 
 	public Object getItem(int position) {
-        if (reverseDateOrdering) {
+        if (isTodayAtTop) {
             return position;
         } else {
             return getCount() - position;
@@ -296,11 +296,17 @@ public class TickAdapter extends BaseAdapter {
 				.getDateFormat(context);
 		super.notifyDataSetChanged();
 
-        ;
-        reverseDateOrdering = PreferenceManager.getDefaultSharedPreferences(context).
+        boolean previousIsTodayAtTop = isTodayAtTop;  // Used to determine if this value has been toggled since last data set change
+        isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
-            // Appears sufficient to update reverseDateOrdering on every data set change - not thoroughly tested.
 
+
+        // If the user has toggled isTodayAtTop, then for convenience scroll the list so that today is visible
+        //  This currently works for scrolling to the top, but not for scrolling to the bottom
+        if (isTodayAtTop != previousIsTodayAtTop) {
+            int scrollposition = (isTodayAtTop) ? 0 : getCount() - 1;
+            ((ListActivity) context).getListView().smoothScrollToPosition(scrollposition);
+        }
 
         ds.open();
 		tracks = ds.getActiveTracks();
