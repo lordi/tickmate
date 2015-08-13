@@ -210,14 +210,14 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	
 	public void jumpToToday() {
 		Calendar day = Calendar.getInstance();
-		mAdapter.getAdapter().setDate(null);
+		mAdapter.getAdapter().setActiveDay(null);
 		refresh();
 	}
 	
 	public void setDate(int year, int month, int day) {
 		Calendar thatday = Calendar.getInstance();
 		thatday.set(year, month, day);
-		mAdapter.getAdapter().setDate(thatday);
+		mAdapter.getAdapter().setActiveDay(thatday);
 		refresh();
 	}
 	
@@ -228,7 +228,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	}
 	
 	public Calendar getDate() {
-		return mAdapter.getAdapter().getDate();
+		return mAdapter.getAdapter().getActiveDay();
 	}
 
 	@Override

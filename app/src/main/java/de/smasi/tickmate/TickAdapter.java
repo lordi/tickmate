@@ -28,7 +28,7 @@ import de.smasi.tickmate.widgets.TrackButton;
 public class TickAdapter extends BaseAdapter {
 
 	private final Context context;
-	private Calendar startday, today, yday;
+	private Calendar activeDay, today, yday;
 	int count, count_ahead;
 	private TracksDataSource ds;
     private List<Track> tracks;
@@ -37,22 +37,21 @@ public class TickAdapter extends BaseAdapter {
     private static final int DEFAULT_COUNT_PAST = 14; // by default load 2 weeks of past ticks
     private static final int DEFAULT_COUNT_AHEAD = 0; // by default show zero days ahead
 
-	public TickAdapter(Context context, Calendar startday) {
+	public TickAdapter(Context context, Calendar activeDay) {
 		// super(context, R.layout.rowlayout, days);
 		this.context = context;
-		// this.values = days;
 		this.count = DEFAULT_COUNT_PAST;
 		this.count_ahead = DEFAULT_COUNT_AHEAD;
 
 		// Initialize data source
 		ds = new TracksDataSource(context);
 
-        setDate(startday);
+        setActiveDay(activeDay);
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
 	}
 
-	public void setDate(Calendar startday) {
+	public void setActiveDay(Calendar activeDay) {
 		today = Calendar.getInstance();
 		today.set(Calendar.HOUR, 0);
 		today.set(Calendar.MINUTE, 0);
@@ -62,26 +61,26 @@ public class TickAdapter extends BaseAdapter {
 		yday = (Calendar) today.clone();
 		yday.add(Calendar.DATE, -1);
 
-		if (startday != null) {
-			startday.set(Calendar.HOUR, 0);
-			startday.set(Calendar.MINUTE, 0);
-			startday.set(Calendar.SECOND, 0);
-			startday.set(Calendar.MILLISECOND, 0);
-			this.startday = startday;
+		if (activeDay != null) {
+			java.text.DateFormat dateFormat = android.text.format.DateFormat
+					.getDateFormat(context);
+			Log.d(TAG, "Active day set to " + dateFormat.format(activeDay.getTime()));
+			activeDay.set(Calendar.HOUR, 0);
+			activeDay.set(Calendar.MINUTE, 0);
+			activeDay.set(Calendar.SECOND, 0);
+			activeDay.set(Calendar.MILLISECOND, 0);
+			this.activeDay = activeDay;
 		}
 
 		notifyDataSetChanged();
 	}
 
-	public Calendar getDate() {
-		if (this.startday == null) {
+	public Calendar getActiveDay() {
+		if (this.activeDay == null) {
 			return this.today;
-            // Should this instead initialize startday? To 'count' days before today?
-//            this.startday = (Calendar) today.clone();
-//            this.startday.add(Calendar.DATE, -count);
 		}
         else {
-            return this.startday;
+            return this.activeDay;
         }
 
     }
@@ -118,15 +117,9 @@ public class TickAdapter extends BaseAdapter {
 				.getDateFormat(context);
 
 		Integer days = (Integer) getItem(position);
-//		Calendar thisday = (Calendar) startday.clone();  // Appears to cause a bug, using today.clone instead
-		Calendar thisday = (Calendar) today.clone();
-		thisday.add(Calendar.DATE, -days);
-		return buildRow(thisday);
-		/*
-		 * if (convertView == null) { return buildGrid(position,
-		 * values.get(position).getStartDay(),
-		 * values.get(position).getEndDay()); } else { return convertView; }
-		 */
+		Calendar rowDay = (Calendar) getActiveDay().clone();
+		rowDay.add(Calendar.DATE, -days);
+		return buildRow(rowDay);
 	}
 
 	public View getHeader() {
@@ -280,7 +273,7 @@ public class TickAdapter extends BaseAdapter {
 		row.addView(l2);
 		row.setGravity(Gravity.CENTER);
 
-		if (cal.compareTo(this.getDate()) == 0) {
+		if (cal.compareTo(this.getActiveDay()) == 0) {
 			row.setBackgroundResource(android.R.drawable.dark_header);
 			row.setPadding(0, 0, 0, 0);
 		}
@@ -311,21 +304,15 @@ public class TickAdapter extends BaseAdapter {
         ds.open();
 		tracks = ds.getActiveTracks();
 
-//		Calendar startday = (Calendar)this.getDate();  // js is replacing these three lines, using this.startday and this.today instead
-//		Calendar endday = (Calendar)startday.clone();
-//		startday.add(Calendar.DATE, -this.count);
+		Calendar startday = (Calendar)this.getActiveDay().clone();
+		Calendar endday = (Calendar)startday.clone();
+		startday.add(Calendar.DATE, -this.count);
 
-        this.startday = (Calendar) today.clone();  // JS - May be redundant - resetting the start day to be this.count days previous to today
-        this.startday.add(Calendar.DATE, -this.count);
+		Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(endday.getTime()));
 
-//		Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(endday.getTime()));
-		Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(today.getTime()));
-
-		// Limit ticks to range [startday, endday]
-//		ds.retrieveTicks(startday, endday);  // Seems to be the wrong rang, replacing
-		ds.retrieveTicks(this.startday, this.today);  // Using today as the end day
+		// Limit ticks to range [activeDay, endday]
+		ds.retrieveTicks(startday, endday);
 		ds.close();
-
 	}
 
 }
