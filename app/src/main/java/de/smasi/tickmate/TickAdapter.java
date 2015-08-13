@@ -69,8 +69,9 @@ public class TickAdapter extends BaseAdapter {
 			activeDay.set(Calendar.MINUTE, 0);
 			activeDay.set(Calendar.SECOND, 0);
 			activeDay.set(Calendar.MILLISECOND, 0);
-			this.activeDay = activeDay;
 		}
+		
+		this.activeDay = activeDay;
 
 		notifyDataSetChanged();
 	}
