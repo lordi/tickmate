@@ -207,10 +207,10 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 		    builder.show();
 	    }
 	}	
-	
+
 	public void jumpToToday() {
 		Calendar day = Calendar.getInstance();
-		mAdapter.getAdapter().setActiveDay(null);
+		mAdapter.getAdapter().unsetActiveDay();
 		refresh();
 	}
 	

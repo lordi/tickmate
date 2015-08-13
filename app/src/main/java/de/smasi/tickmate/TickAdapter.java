@@ -28,7 +28,9 @@ import de.smasi.tickmate.widgets.TrackButton;
 public class TickAdapter extends BaseAdapter {
 
 	private final Context context;
-	private Calendar activeDay, today, yday;
+	private Calendar activeDay;  // When set, the display will be fixed to this day.
+	    // Null value is intentionally used to indicate display should follow the actual current day.
+    private Calendar today, yday;
 	int count, count_ahead;
 	private TracksDataSource ds;
     private List<Track> tracks;
@@ -51,16 +53,25 @@ public class TickAdapter extends BaseAdapter {
                 getBoolean("reverse-date-order-key", false);
 	}
 
+    public void unsetActiveDay() {
+        setActiveDay(null);
+    }
+
+    private void updateToday() {
+        today = Calendar.getInstance();
+        today.set(Calendar.HOUR, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+    }
+
 	public void setActiveDay(Calendar activeDay) {
-		today = Calendar.getInstance();
-		today.set(Calendar.HOUR, 0);
-		today.set(Calendar.MINUTE, 0);
-		today.set(Calendar.SECOND, 0);
-		today.set(Calendar.MILLISECOND, 0);
+        updateToday();
 
 		yday = (Calendar) today.clone();
 		yday.add(Calendar.DATE, -1);
 
+        // null is used to indicate 'not set'
 		if (activeDay != null) {
 			java.text.DateFormat dateFormat = android.text.format.DateFormat
 					.getDateFormat(context);
@@ -72,19 +83,22 @@ public class TickAdapter extends BaseAdapter {
 		}
 		
 		this.activeDay = activeDay;
+        Log.d(TAG, "Active day set to " + activeDay);
 
-		notifyDataSetChanged();
+        notifyDataSetChanged();
 	}
 
-	public Calendar getActiveDay() {
+
+    public Calendar getActiveDay() {
 		if (this.activeDay == null) {
-			return this.today;
+            updateToday();
+			return (Calendar) this.today.clone();  // TODO remove redudant cloning elsewhere, when this method is called
 		}
         else {
             return this.activeDay;
         }
-
     }
+
 
 	public void addCount(int num) {
 		this.count += num;
@@ -296,7 +310,6 @@ public class TickAdapter extends BaseAdapter {
 
 
         // If the user has toggled isTodayAtTop, then for convenience scroll the list so that today is visible
-        //  This currently works for scrolling to the top, but not for scrolling to the bottom
         if (isTodayAtTop != previousIsTodayAtTop) {
             int scrollposition = (isTodayAtTop) ? 0 : getCount() - 1;
             ((ListActivity) context).getListView().smoothScrollToPosition(scrollposition);
