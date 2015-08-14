@@ -92,7 +92,7 @@ public class TickAdapter extends BaseAdapter {
     public Calendar getActiveDay() {
 		if (this.activeDay == null) {
             updateToday();
-			return (Calendar) this.today.clone();  // TODO remove redudant cloning elsewhere, when this method is called
+			return (Calendar) this.today.clone();  // TODO remove redundant cloning elsewhere, when this method is called
 		}
         else {
             return this.activeDay;
@@ -304,16 +304,21 @@ public class TickAdapter extends BaseAdapter {
 				.getDateFormat(context);
 		super.notifyDataSetChanged();
 
-        boolean previousIsTodayAtTop = isTodayAtTop;  // Used to determine if this value has been toggled since last data set change
+//        boolean previousIsTodayAtTop = isTodayAtTop;  // Used to determine if this value has been toggled since last data set change
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
 
+        // js Hack:  trying to fix problem of not bringing active day into view on Jump To menu items
+        int scrollposition = (isTodayAtTop) ? 0 : this.count - 1;
+        ((ListActivity) context).getListView().smoothScrollToPosition(scrollposition);
 
+
+        // With the above hack, we scroll on every dataSetChange - so the following would be redundant:
         // If the user has toggled isTodayAtTop, then for convenience scroll the list so that today is visible
-        if (isTodayAtTop != previousIsTodayAtTop) {
+     /*   if (isTodayAtTop != previousIsTodayAtTop) {
             int scrollposition = (isTodayAtTop) ? 0 : getCount() - 1;
             ((ListActivity) context).getListView().smoothScrollToPosition(scrollposition);
-        }
+        }*/
 
         ds.open();
 		tracks = ds.getActiveTracks();
