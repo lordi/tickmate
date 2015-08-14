@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -210,7 +211,8 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
 	public void jumpToToday() {
 		Calendar day = Calendar.getInstance();
-		mAdapter.getAdapter().unsetActiveDay();
+        ((TickAdapter)getListAdapter()).scrollToLatest();  // TODO js - is this correct place for this?
+        mAdapter.getAdapter().unsetActiveDay();
 		refresh();
 	}
 	
@@ -252,9 +254,16 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 			((Tickmate)getActivity()).setDate(year, month, day);
-		}
+            ((TickAdapter)((Tickmate)getActivity()).getListAdapter()).scrollToLatest();
+        }
 	}
-	
+
+
+    @Override
+    public ListAdapter getListAdapter() {
+        return mAdapter.getAdapter();
+    }
+
     @Override
     public void onInfiniteScrolled() {
         final int CHUNK_SIZE = 20; // Large chunk sizes (more than items on the screen) prevent problems when switching date order direction

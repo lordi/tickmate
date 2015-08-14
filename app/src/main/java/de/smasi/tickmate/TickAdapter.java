@@ -298,27 +298,25 @@ public class TickAdapter extends BaseAdapter {
 		return tickgrid;
 	}
 
+    // Used for Jump To [Date|Today], and used when the toggling isTodayAtTop
+    public void scrollToLatest() {
+        int scrollposition = (isTodayAtTop) ? 0 : this.count - 1;
+        ((ListActivity) context).getListView().smoothScrollToPositionFromTop(scrollposition, 1, 0);
+    }
+
 	@Override
 	public void notifyDataSetChanged() {
 		java.text.DateFormat dateFormat = android.text.format.DateFormat
 				.getDateFormat(context);
 		super.notifyDataSetChanged();
 
-//        boolean previousIsTodayAtTop = isTodayAtTop;  // Used to determine if this value has been toggled since last data set change
+        boolean previousIsTodayAtTop = isTodayAtTop;  // Used to determine if this value has been toggled since last data set change
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
 
-        // js Hack:  trying to fix problem of not bringing active day into view on Jump To menu items
-        int scrollposition = (isTodayAtTop) ? 0 : this.count - 1;
-        ((ListActivity) context).getListView().smoothScrollToPosition(scrollposition);
-
-
-        // With the above hack, we scroll on every dataSetChange - so the following would be redundant:
-        // If the user has toggled isTodayAtTop, then for convenience scroll the list so that today is visible
-     /*   if (isTodayAtTop != previousIsTodayAtTop) {
-            int scrollposition = (isTodayAtTop) ? 0 : getCount() - 1;
-            ((ListActivity) context).getListView().smoothScrollToPosition(scrollposition);
-        }*/
+        if (isTodayAtTop != previousIsTodayAtTop) {
+            scrollToLatest();
+        }
 
         ds.open();
 		tracks = ds.getActiveTracks();
