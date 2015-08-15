@@ -1,6 +1,15 @@
 master
 ------
 
+v1.2.3
+------
+
+ * Add settings activity (thanks @js)
+ * Possibility to reverse date order (thanks @js)
+ * Possibility to protect ticks from accidental taps (thanks @js)
+ * Add yearly history graphs
+ * Bugfixes
+
 v1.2.2
 ------
 
