@@ -28,7 +28,6 @@
         android:id="@+id/action_settings"
         android:orderInCategory="180"
         android:showAsAction="never"
-        android:visible="false"
         android:title="@string/action_settings"/>
      
     <item

@@ -1,13 +1,14 @@
 package de.smasi.tickmate.widgets;
 
-import java.util.Calendar;
-
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.util.Calendar;
+
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Track;

@@ -1,12 +1,13 @@
 package de.smasi.tickmate.views;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import java.io.IOException;
+
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 

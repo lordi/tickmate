@@ -1,12 +1,5 @@
 package de.smasi.tickmate.views;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.XmlResourceParser;
@@ -15,6 +8,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Track;

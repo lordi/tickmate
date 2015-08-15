@@ -1,8 +1,5 @@
 package de.smasi.tickmate.views;
 
-import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
-import de.smasi.tickmate.models.Track;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -10,7 +7,10 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.text.TextPaint;
+
+import de.smasi.tickmate.R;
+import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.models.Track;
 
 public class TrackPreferenceFragment extends PreferenceFragment implements
 OnSharedPreferenceChangeListener  {

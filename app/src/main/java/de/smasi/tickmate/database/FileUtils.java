@@ -1,5 +1,8 @@
 package de.smasi.tickmate.database;
 
+import android.os.Environment;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,9 +16,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import android.os.Environment;
-import android.util.Log;
 
 public class FileUtils {
     private static final String TAG = "FileUtils";

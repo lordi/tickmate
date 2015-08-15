@@ -1,22 +1,19 @@
 package de.smasi.tickmate.widgets;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
-import de.smasi.tickmate.R;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import de.smasi.tickmate.R;
 
 public class SummaryGraph extends View {
 	Path path;

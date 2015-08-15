@@ -3,6 +3,7 @@ package lab.prada.android.ui.infinitescroll;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class InfiniteScrollAdapter<T extends BaseAdapter> extends BaseAdapter {
 
+    private boolean shouldInfiniteScrollAtTop = true; // If false, then scroll at the bottom
     private final T mAdapter;
     private final View mProgressView;
     private Vector<InfiniteScrollListener> mListeners = new Vector<InfiniteScrollListener>();
@@ -26,6 +28,13 @@ public class InfiniteScrollAdapter<T extends BaseAdapter> extends BaseAdapter {
     private AtomicInteger state = new AtomicInteger(NONE_STATE);
     private boolean mCanReadMore = true;
 
+    private final static int SCROLL_DOWN_THRESHOLD = 30;  // When the date order is reversed, this
+        // value determines how close 'position' must be to the bottom of the current data set before
+        // triggering the addition of new items. This number should be large enough to ensure position
+        // will actually reach the threshold, even on high res screens (which may have a large number of items).
+        // Alternatively, one could calculate or query for the items displayed on this particular device at this time.
+    private Context context;
+
     public interface InfiniteScrollListener {
         public void onInfiniteScrolled();
     }
@@ -33,6 +42,7 @@ public class InfiniteScrollAdapter<T extends BaseAdapter> extends BaseAdapter {
     public InfiniteScrollAdapter(Context context, T adapter, View progressView) {
         mAdapter = adapter;
         mProgressView = progressView;
+        this.context = context;
     }
 
     public InfiniteScrollAdapter(Context context, T adapter, int itemWidth,
@@ -165,7 +175,14 @@ public class InfiniteScrollAdapter<T extends BaseAdapter> extends BaseAdapter {
     }
 
     public boolean isProgressViewPosition(int position) {
-        return shouldShowProgressView() && position == 0; //getCount() - 1;
+        shouldInfiniteScrollAtTop = ! PreferenceManager.getDefaultSharedPreferences(context).
+                getBoolean("reverse-date-order-key", false);  // Where is the best (efficient) place to update this value?
+
+        if (shouldInfiniteScrollAtTop) {
+            return shouldShowProgressView() && position == 0; //getCount() - 1;
+        } else {  // scroll at bottom
+            return shouldShowProgressView() && position > (getCount() - SCROLL_DOWN_THRESHOLD);  // TODO wrong.  getCount - lines on screen?
+        }
     }
 
     private boolean shouldShowProgressView() {

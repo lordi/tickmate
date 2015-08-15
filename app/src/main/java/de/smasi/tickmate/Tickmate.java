@@ -1,10 +1,5 @@
 package de.smasi.tickmate;
 
-import java.io.IOException;
-import java.util.Calendar;
-
-import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -14,24 +9,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.Calendar;
+
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
+import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
 
 public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener, View.OnClickListener {
     static final int DATE_DIALOG_ID = 0;
@@ -128,7 +128,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	}
 
 	public void settingsActivity() {
-		Intent intent = new Intent(this, SettingsActivity.class);
+		Intent intent = new Intent(this, SimpleSettingsActivity.class);
 		startActivity(intent);
 	}
 
@@ -208,17 +208,18 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 		    builder.show();
 	    }
 	}	
-	
+
 	public void jumpToToday() {
 		Calendar day = Calendar.getInstance();
-		mAdapter.getAdapter().setDate(null);
+        ((TickAdapter)getListAdapter()).scrollToLatest();  // TODO js - is this correct place for this?
+        mAdapter.getAdapter().unsetActiveDay();
 		refresh();
 	}
 	
 	public void setDate(int year, int month, int day) {
 		Calendar thatday = Calendar.getInstance();
 		thatday.set(year, month, day);
-		mAdapter.getAdapter().setDate(thatday);
+		mAdapter.getAdapter().setActiveDay(thatday);
 		refresh();
 	}
 	
@@ -229,7 +230,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	}
 	
 	public Calendar getDate() {
-		return mAdapter.getAdapter().getDate();
+		return mAdapter.getAdapter().getActiveDay();
 	}
 
 	@Override
@@ -253,17 +254,32 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
 		public void onDateSet(DatePicker view, int year, int month, int day) {
 			((Tickmate)getActivity()).setDate(year, month, day);
-		}
+            ((TickAdapter)((Tickmate)getActivity()).getListAdapter()).scrollToLatest();
+        }
 	}
-	
+
+
+    @Override
+    public ListAdapter getListAdapter() {
+        return mAdapter.getAdapter();
+    }
+
     @Override
     public void onInfiniteScrolled() {
+        final int CHUNK_SIZE = 20; // Large chunk sizes (more than items on the screen) prevent problems when switching date order direction
+        // Matching the addCount() amount to the setSelection() amount keeps the screen in the right place when infiniteScrolling upwards
+
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mAdapter.getAdapter().addCount(5);
+                mAdapter.getAdapter().addCount(CHUNK_SIZE);  // was: mAdapter.getAdapter().addCount(5);
                 mAdapter.handledRefresh();
-                getListView().setSelection(2);
+
+                Boolean reverseDateOrdering = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).
+                        getBoolean("reverse-date-order-key", false);
+                if (!reverseDateOrdering) {
+                    getListView().setSelection(CHUNK_SIZE); // When infiniteScrolling upwards, prevents the infinite loop bug and keeps display from jumping
+                }
             }
         }, 500);
     }
