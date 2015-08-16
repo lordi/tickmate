@@ -7,7 +7,7 @@
         android:title="@string/pref_title_reverse_date_display_order" />
 
     <ListPreference
-        android:defaultValue="no-limit"
+        android:defaultValue="ALLOW_ALL"
         android:entries="@array/pref_titles_active_date"
         android:entryValues="@array/pref_values_active_date"
         android:key="active-date-key"

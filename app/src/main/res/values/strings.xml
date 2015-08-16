@@ -62,8 +62,16 @@
 
     <!-- New in 1.2.3 -->
     <string name="title_section_years">Years</string>
-
-    <!-- Added by js, may be moved/changed -->
+    <string name="title_activity_simple_settings">Settings</string>
+    <string name="pref_title_reverse_date_display_order">Today at the top</string>
+    <string name="pref_description_reverse_date_display_order">Display today at the top, instead of the bottom</string>
+    <string name="pref_title_limit_active_date">Editable days</string>
+    <string name="pref_description_limit_active_date">To prevent errors, limit the days which can be edited with a simple click in the main screen.</string>
     <string name="notify_user_ticking_disabled">Editing older ticks currently disabled.\nYou can change this in the settings.</string>
-    
+    <string-array name="pref_titles_active_date">
+        <item>Today only</item>
+        <item>Today and yesterday only</item>
+        <item>No limit - all dates can be edited</item>
+    </string-array>
+
 </resources>

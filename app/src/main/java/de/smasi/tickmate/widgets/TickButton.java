@@ -1,6 +1,5 @@
 package de.smasi.tickmate.widgets;
 
-import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -18,7 +17,6 @@ import de.smasi.tickmate.models.Track;
 
 public class TickButton extends ToggleButton implements OnCheckedChangeListener {
 
-    AnimatorSet highlight;
     Track track;
     TracksDataSource ds;
     Calendar date;
@@ -62,7 +60,7 @@ public class TickButton extends ToggleButton implements OnCheckedChangeListener 
     private boolean isCheckChangePermitted() {
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String limitActivePref = sharedPrefs.getString("active-date-key", "default-string");
+        String limitActivePref = sharedPrefs.getString("active-date-key", "ALLOW_ALL");
 
         Calendar today = Calendar.getInstance();
 		today.set(Calendar.HOUR, 0);
@@ -70,15 +68,14 @@ public class TickButton extends ToggleButton implements OnCheckedChangeListener 
 		today.set(Calendar.SECOND, 0);
 		today.set(Calendar.MILLISECOND, 0);
 
-        switch(limitActivePref) {
-            case ("today-only"):
+        switch (limitActivePref) {
+            case "ALLOW_CURRENT":
                 return (date.compareTo(today) == 0);
-            case ("today-and-yesterday"):
+            case "ALLOW_CURRENT_AND_NEXT_DAY":
                 Calendar yesterday = (Calendar) today.clone();
                 yesterday.add(Calendar.DATE, -1);
                 return (date.compareTo(yesterday) >= 0);
-            case ("no-limit"):
-            case ("defaul-string") :
+            case "ALLOW_ALL":
             default:
                 return true;
         }
