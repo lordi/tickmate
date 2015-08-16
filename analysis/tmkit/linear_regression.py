@@ -1,6 +1,7 @@
 import sqlite3
 from sklearn import linear_model
 import numpy as np
+import pandas as pd
 import datetime
 import sys
 
@@ -11,7 +12,7 @@ c = conn.cursor();
 c.execute("select _id, name from tracks")
 
 rows = c.fetchall()
-track_names = [row[1] for row in rows]
+track_names = pd.DataFrame([{'track_name': row[1]} for row in rows])
 track_ids = [int(row[0]) for row in rows]
 track_cnt = len(track_ids)
 
@@ -34,14 +35,18 @@ def window(day, n=20):
     # ticktrix is the matrix containing the ticks
     ticktrix = np.zeros((n, track_cnt))
     for row in c.fetchall():
-        row_date = datetime.date(row[2], row[3], row[4])
+        print row
+        try:
+            row_date = datetime.date(row[2], row[3], row[4])
+        except ValueError:
+            print "Error constructing date from", row
         x = -(row_date - day).days
         y = track_ids.index(int(row[1]))
         if x < n:
             ticktrix[x, y] = 1
     return ticktrix
 
-last_day -= datetime.timedelta(10)
+last_day -= datetime.timedelta(1)
 print "Fitting for day:", last_day
 
 my_window = window(last_day)
@@ -61,6 +66,11 @@ print reg.coef_
 
 print "Applied to training data:"
 print np.dot(training_data, reg.coef_)
-print "Forecast:"
-print np.dot(my_window[:19,:].T, reg.coef_)
+print "Forecast"
+#print np.dot(my_window[:19,:].T, reg.coef_)
+#print track_names
 
+df = pd.DataFrame()
+df['track'] = track_names
+df['prob'] = pd.Series(np.dot(my_window[:19,:].T, reg.coef_) * 100.0)
+print df
