@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SimpleSettingsActivity"
+            android:name=".views.SettingsActivity"
             android:label="@string/title_activity_simple_settings"
             android:parentActivityName=".Tickmate"
              >

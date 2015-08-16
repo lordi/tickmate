@@ -31,6 +31,7 @@ import java.util.Calendar;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
+import de.smasi.tickmate.views.SettingsActivity;
 import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
 
 public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener, View.OnClickListener {
@@ -128,7 +129,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	}
 
 	public void settingsActivity() {
-		Intent intent = new Intent(this, SimpleSettingsActivity.class);
+		Intent intent = new Intent(this, SettingsActivity.class);
 		startActivity(intent);
 	}
 

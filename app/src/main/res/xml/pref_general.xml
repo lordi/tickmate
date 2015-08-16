@@ -1,5 +1,4 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <!-- After preferences have been more fully implemented, remove these commented lines -->
 
     <CheckBoxPreference
         android:defaultValue="false"
@@ -7,25 +6,8 @@
         android:summary="@string/pref_description_reverse_date_display_order"
         android:title="@string/pref_title_reverse_date_display_order" />
 
-    <!--&lt;!&ndash; NOTE: EditTextPreference accepts EditText attributes. &ndash;&gt;-->
-    <!--&lt;!&ndash; NOTE: EditTextPreference's summary should be set to its value by the activity code. &ndash;&gt;-->
-    <!--<EditTextPreference-->
-        <!--android:capitalize="words"-->
-        <!--android:defaultValue="@string/pref_default_display_name"-->
-        <!--android:inputType="textCapWords"-->
-        <!--android:key="example_text"-->
-        <!--android:maxLines="1"-->
-        <!--android:selectAllOnFocus="true"-->
-        <!--android:singleLine="true"-->
-        <!--android:title="@string/pref_title_display_name" />-->
-
-    <!--
-         NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it.
-    -->
-    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
     <ListPreference
-        android:defaultValue="-1"
+        android:defaultValue="no-limit"
         android:entries="@array/pref_titles_active_date"
         android:entryValues="@array/pref_values_active_date"
         android:key="active-date-key"
