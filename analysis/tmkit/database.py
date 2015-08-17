@@ -20,14 +20,18 @@ def cached_property(f):
     return property(get)
 
 class TickmateDatabase(object):
-    def __init__(self, filename):
+    def __init__(self, filename, hide_names=False):
         self.conn = sqlite3.connect(filename)
+        self.hide_names = hide_names
 
     @cached_property
     def tracks(self):
-        return pd.read_sql("select _id as id, name " +
+        _tracks = pd.read_sql("select _id as id, name " +
                 "from tracks order by \"order\"",
                 self.conn, index_col='id')
+        if self.hide_names:
+            _tracks.name = pd.Series(["Track {0}".format(n) for n in range(1, _tracks.shape[0] + 1)], index=_tracks.index)
+        return _tracks
 
     @cached_property
     def ticks(self):
@@ -41,6 +45,13 @@ class TickmateDatabase(object):
         _ticks['count'] = 1
         _ticks = _ticks.groupby(('track_id', 'date'))['count'].count()
         return _ticks
+
+    @cached_property
+    def timeseries(self):
+        _timeseries = pd.DataFrame()
+        for track_id, track in self.tracks.iterrows():
+            _timeseries[track_id] = self.ticks[track_id].resample('D').fillna(0)
+        return _timeseries
 
     @cached_property
     def date_range(self):
