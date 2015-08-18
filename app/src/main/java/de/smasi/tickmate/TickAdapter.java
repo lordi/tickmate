@@ -36,7 +36,8 @@ public class TickAdapter extends BaseAdapter {
     private List<Track> tracks;
     private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
-    private static final int DEFAULT_COUNT_PAST = 14; // by default load 2 weeks of past ticks
+    private static final int DEFAULT_COUNT_PAST = 21; // by default load 3 weeks of past ticks
+    // (see comment by InfiniteScrollAdapter.SCROLL_DOWN_THRESHOLD)
     private static final int DEFAULT_COUNT_AHEAD = 0; // by default show zero days ahead
 
 	public TickAdapter(Context context, Calendar activeDay) {

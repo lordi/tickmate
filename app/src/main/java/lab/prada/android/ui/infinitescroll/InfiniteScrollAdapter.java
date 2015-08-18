@@ -28,7 +28,9 @@ public class InfiniteScrollAdapter<T extends BaseAdapter> extends BaseAdapter {
     private AtomicInteger state = new AtomicInteger(NONE_STATE);
     private boolean mCanReadMore = true;
 
-    private final static int SCROLL_DOWN_THRESHOLD = 30;  // When the date order is reversed, this
+
+    // SCROLL_DOWN_THRESHOLD should be less than TickAdapter.DEFAULT_COUNT_PAST, otherwise the first load happens in two (or more) chunks
+    private final static int SCROLL_DOWN_THRESHOLD = 15;  // When the date order is reversed, this
         // value determines how close 'position' must be to the bottom of the current data set before
         // triggering the addition of new items. This number should be large enough to ensure position
         // will actually reach the threshold, even on high res screens (which may have a large number of items).
