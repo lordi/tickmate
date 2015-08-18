@@ -28,7 +28,7 @@
         android:id="@+id/action_settings"
         android:orderInCategory="180"
         android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:title="@string/title_activity_settings"/>
      
     <item
         android:id="@+id/action_about"

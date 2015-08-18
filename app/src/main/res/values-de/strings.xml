@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Tickmate</string>
-    <string name="action_settings">Settings</string>
     <string name="title_section_ticks">Ticks</string>
     <string name="title_section_weeks">Wochen</string>
     <string name="title_section_months">Monate</string>
@@ -62,5 +61,15 @@
 
     <!-- Neu in 1.2.3 -->
     <string name="title_section_years">Jahre</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="pref_title_reverse_date_display_order">Absteigende Sortierung</string>
+    <string name="pref_description_reverse_date_display_order">Spätere Tage oben anzeigen</string>
+    <string name="pref_title_limit_active_date">Editierbare Tage</string>
+    <string-array name="pref_titles_active_date">
+        <item>Nur aktiver Tag</item>
+        <item>Aktiver Tag und Tag davor</item>
+        <item>Alle Tage</item>
+    </string-array>
+    <string name="notify_user_ticking_disabled">Dieser Tick kann nicht editiert werden. Welche Tage editiert werden können, kann in den Einstellungen geändert werden.</string>
 
 </resources>
