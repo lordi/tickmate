@@ -174,19 +174,6 @@ public class TickAdapter extends BaseAdapter {
 		return headertop;
 	}
 
-	private View buildGrid(int position, Calendar startday, Calendar endday) {
-
-		java.text.DateFormat dateFormat = android.text.format.DateFormat
-				.getDateFormat(context);
-
-		Button tv = new Button(this.context);
-		tv.setText("muahah " + Integer.toString(position) + " ; "
-				+ dateFormat.format(startday.getTime()) + " - "
-				+ dateFormat.format(endday.getTime()));
-
-		return tv;
-	}
-
 	public View buildRow(Calendar cal) {
 		Locale locale = Locale.getDefault();
 		Date date = cal.getTime();
