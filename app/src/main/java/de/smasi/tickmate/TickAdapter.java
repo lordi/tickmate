@@ -16,8 +16,10 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Track;
@@ -34,6 +36,8 @@ public class TickAdapter extends BaseAdapter {
 	int count, count_ahead;
 	private TracksDataSource ds;
     private List<Track> tracks;
+    private Map<Calendar, View> mRowCache = new HashMap<>();
+
     private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
     private static final int DEFAULT_COUNT_PAST = 21; // by default load 3 weeks of past ticks
@@ -129,13 +133,20 @@ public class TickAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		java.text.DateFormat dateFormat = android.text.format.DateFormat
-				.getDateFormat(context);
-
 		Integer days = (Integer) getItem(position);
 		Calendar rowDay = (Calendar) getActiveDay().clone();
 		rowDay.add(Calendar.DATE, -days);
-		return buildRow(rowDay);
+
+		View v;
+		if (mRowCache.containsKey(rowDay)) {
+			v = mRowCache.get(rowDay);
+		}
+		else {
+			v = buildRow(rowDay);
+			mRowCache.put(rowDay, v);
+		}
+
+		return v;
 	}
 
 	public View getHeader() {
@@ -297,6 +308,8 @@ public class TickAdapter extends BaseAdapter {
 		java.text.DateFormat dateFormat = android.text.format.DateFormat
 				.getDateFormat(context);
 		super.notifyDataSetChanged();
+
+        mRowCache.clear();
 
         boolean previousIsTodayAtTop = isTodayAtTop;  // Used to determine if this value has been toggled since last data set change
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
