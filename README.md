@@ -10,7 +10,7 @@ Tickmate is an Android App and is available from the [Play Store](https://play.g
 
 ## Analysis
 
-These sections contains development ideas for the analysis of Tickmate data. In
+These section contains development ideas for the analysis of Tickmate data. In
 future, those ideas might be integrated into the app or available as a Web
 service.
 
