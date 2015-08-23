@@ -1,8 +1,6 @@
-Tickmate
-========
+# Tickmate
 
-About
------
+## About
 
 Tickmate is basically a one bit journal. For each day, you can specify whether something has occurred or not. The occurrences can be arbitrary things, like flossing your teeth or having a drink. You are able to quantify your habits and the accumulated data can be displayed for the past weeks or months to track changes over time. This way, it may help you to get over your old habits or embody new ones.
 
@@ -10,8 +8,7 @@ Tickmate is an Android App and is available from the [Play Store](https://play.g
 
 ![Screenshot](artwork/screenshot.png)
 
-Analysis
---------
+## Analysis
 
 These sections contains development ideas for the analysis of Tickmate data. In
 future, those ideas might be integrated into the app or available as a Web
@@ -25,8 +22,7 @@ Find correlations between your tracks:
 
 ![Analysis: Correlation](analysis/corr_example.png)
 
-Notes
------
+## Notes
 
 Contains icons from the [Glyphicons FREE icon set](http://glyphicons.com/) (CC-BY-3.0)
 
