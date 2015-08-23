@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Tickmate</string>
+    <string name="action_settings">Settings</string>
     <string name="title_section_ticks">My ticks</string>
     <string name="title_section_weeks">Weeks</string>
     <string name="title_section_months">Months</string>
@@ -61,7 +62,6 @@
 
     <!-- New in 1.2.3 -->
     <string name="title_section_years">Years</string>
-    <string name="title_activity_settings">Settings</string>
     <string name="pref_title_reverse_date_display_order">Descending date order</string>
     <string name="pref_description_reverse_date_display_order">Display later days at the top</string>
     <string name="pref_title_limit_active_date">Editable days</string>

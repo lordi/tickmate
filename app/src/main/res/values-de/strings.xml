@@ -5,6 +5,7 @@
     <string name="title_section_ticks">Ticks</string>
     <string name="title_section_weeks">Wochen</string>
     <string name="title_section_months">Monate</string>
+    <string name="action_settings">Einstellungen</string>
     <string name="title_activity_edit_tracks">Meine Tracks</string>
     <string name="my_tracks">Meine Tracks</string>
     <string name="title_activity_choose_track">Neuer Track</string>
@@ -61,7 +62,6 @@
 
     <!-- Neu in 1.2.3 -->
     <string name="title_section_years">Jahre</string>
-    <string name="title_activity_settings">Einstellungen</string>
     <string name="pref_title_reverse_date_display_order">Absteigende Sortierung</string>
     <string name="pref_description_reverse_date_display_order">Spätere Tage oben anzeigen</string>
     <string name="pref_title_limit_active_date">Editierbare Tage</string>
