@@ -9,7 +9,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -185,6 +184,23 @@ public class TickAdapter extends BaseAdapter {
 		return headertop;
 	}
 
+	/**
+	 * Used to create and insert the week separator
+	 *  @param tickGrid the ViewGroup into which the week separator will be inserted
+	 */
+	private void addStartWeekSeparator(ViewGroup tickGrid) {
+		TextView splitter2 = new TextView(this.context);
+		splitter2.setText("");
+		splitter2.setHeight(5);
+		tickGrid.addView(splitter2);
+		TextView splitter = new TextView(this.context);
+		splitter.setText("");
+		splitter.setHeight(11);
+		splitter.setBackgroundResource(R.drawable.center_line);
+		splitter.setPadding(0, 20, 0, 0);
+		tickGrid.addView(splitter);
+	}
+
 	public View buildRow(Calendar cal) {
 		Locale locale = Locale.getDefault();
 		Date date = cal.getTime();
@@ -208,18 +224,10 @@ public class TickAdapter extends BaseAdapter {
 		else
 			t_date.setText(s);
 
-		// add splitter for first weekday depending on current locale
-		if (cal.get(Calendar.DAY_OF_WEEK) == cal.getFirstDayOfWeek()) {
-			TextView splitter2 = new TextView(this.context);
-			splitter2.setText("");
-			splitter2.setHeight(5);
-			tickgrid.addView(splitter2);
-			TextView splitter = new TextView(this.context);
-			splitter.setText("");
-			splitter.setHeight(11);
-			splitter.setBackgroundResource(R.drawable.center_line);
-			splitter.setPadding(0, 20, 0, 0);
-			tickgrid.addView(splitter);
+		// If the date order has not been reversed, then add the splitter above the first day of the week
+		//  splitter for first weekday depends on current locale
+		if (!isTodayAtTop &&  ( cal.get(Calendar.DAY_OF_WEEK) == cal.getFirstDayOfWeek())) {
+			addStartWeekSeparator(tickgrid);
 		}
 
 		String day_name = cal.getDisplayName(Calendar.DAY_OF_WEEK,
@@ -294,6 +302,13 @@ public class TickAdapter extends BaseAdapter {
 
 		tickgrid.addView(row);
 		tickgrid.setPadding(10, 0, 10, 5);
+
+		// With the date order reversed, add the splitter below the first day of the week
+		//  splitter for first weekday depends on current locale
+		if (isTodayAtTop &&  ( cal.get(Calendar.DAY_OF_WEEK) == cal.getFirstDayOfWeek())) {
+			addStartWeekSeparator(tickgrid);
+		}
+
 		return tickgrid;
 	}
 
