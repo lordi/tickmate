@@ -35,15 +35,15 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 		this.ds = ds;
 		setTickCount(ds.getTickCountForDay(track, date));
 	}
-	
+
 	Track getTrack () {
 		return track;
 	}
-	
+
 	Calendar getDate () {
-		return date;		
+		return date;
 	}
-	
+
 	public void setTickCount(int count) {
 		this.count = count;
 		updateText();
@@ -67,6 +67,10 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 	
 	@Override
 	public void onClick(View v) {
+		if (!ButtonHelpers.isCheckChangePermitted(getContext(), date)) {
+			Toast.makeText(getContext(), R.string.notify_user_ticking_disabled, Toast.LENGTH_LONG).show();
+			return;
+		}
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.MILLISECOND, 0);
 
@@ -81,6 +85,11 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 	
 	@Override
 	public boolean onLongClick(View v) {
+		if (!ButtonHelpers.isCheckChangePermitted(getContext(), date)) {
+			Toast.makeText(getContext(), R.string.notify_user_ticking_disabled, Toast.LENGTH_LONG).show();
+			return false;
+		}
+
 		TracksDataSource ds = new TracksDataSource(this.getContext());
 		boolean success = ds.removeLastTickOfDay(this.getTrack(), this.getDate());
 		

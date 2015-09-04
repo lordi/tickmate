@@ -54,36 +54,9 @@ public class TickButton extends ToggleButton implements OnCheckedChangeListener 
         return date;
     }
 
-    // Evaluates whether this TickButton should be check-able.
-    // This depends on the preferences (have ticks been disable outside of today?)
-    //  the current date, and the date of this TickButton
-    private boolean isCheckChangePermitted() {
-
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String limitActivePref = sharedPrefs.getString("active-date-key", "ALLOW_ALL");
-
-        Calendar today = Calendar.getInstance();
-		today.set(Calendar.HOUR, 0);
-		today.set(Calendar.MINUTE, 0);
-		today.set(Calendar.SECOND, 0);
-		today.set(Calendar.MILLISECOND, 0);
-
-        switch (limitActivePref) {
-            case "ALLOW_CURRENT":
-                return (date.compareTo(today) == 0);
-            case "ALLOW_CURRENT_AND_NEXT_DAY":
-                Calendar yesterday = (Calendar) today.clone();
-                yesterday.add(Calendar.DATE, -1);
-                return (date.compareTo(yesterday) >= 0);
-            case "ALLOW_ALL":
-            default:
-                return true;
-        }
-    }
-
     @Override
     public void onCheckedChanged(CompoundButton arg0, boolean ticked) {
-        if (! isCheckChangePermitted()) {
+        if (!ButtonHelpers.isCheckChangePermitted(getContext(), date)) {
             arg0.setChecked(!arg0.isChecked());
             Toast.makeText(getContext(), R.string.notify_user_ticking_disabled, Toast.LENGTH_LONG).show();
             return;
