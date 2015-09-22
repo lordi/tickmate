@@ -85,11 +85,9 @@ public class ChooseTrackActivity extends ListActivity {
 		
 		Track t = (Track) getListView().getAdapter().getItem(position);
 		
-		if (!t.isGroupHeader()) {
-			TracksDataSource ds = new TracksDataSource(this);
-			ds.open();
+		if (!t.isSectionHeader()) {
+			TracksDataSource ds = TracksDataSource.getInstance();
 			ds.storeTrack(t);
-			ds.close();
 			Intent data = new Intent();
 			data.putExtra("insert_id", t.getId());
 			setResult(RESULT_OK, data);     

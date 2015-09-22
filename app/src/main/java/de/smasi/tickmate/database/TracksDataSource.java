@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -13,19 +14,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.smasi.tickmate.Globals;
+import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
 
+@SuppressWarnings("unused")
 public class TracksDataSource {
-	
+    private static final String TAG = "TracksDataSource";
+    private static TracksDataSource mInstance;
+
 	public static final int DIRECTION_UP = -1;
 	public static final int DIRECTION_DOWN = 1;
 
-	// Database fields
 	private SQLiteDatabase database;
-	private DatabaseOpenHelper dbHelper;
-	
-	private String[] allColumns = {
+    private DatabaseOpenHelper dbHelper = DatabaseOpenHelper.getInstance(Globals.getInstance());
+
+    private static final String[] allColumns = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_NAME,
 			DatabaseOpenHelper.COLUMN_ENABLED,
@@ -34,7 +39,7 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY,
 			"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\""
 	};
-	private String[] allColumnsTicks = {
+	private static final String[] allColumnsTicks = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_TRACK_ID,
 			DatabaseOpenHelper.COLUMN_YEAR,
@@ -44,21 +49,47 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_MINUTE,
 			DatabaseOpenHelper.COLUMN_SECOND
 	};
-	
-	List<Tick> ticks;
+	private static final String[] allColumnsGroups = {
+			DatabaseOpenHelper.COLUMN_ID,
+			DatabaseOpenHelper.COLUMN_NAME,
+			DatabaseOpenHelper.COLUMN_DESCRIPTION
+	};
 
-	public TracksDataSource(Context context) {
-		dbHelper = DatabaseOpenHelper.getInstance(context.getApplicationContext());
-	}
+    // Used by the cursor to refer to the columns
+    private final static int T2G_COLUMN_INDEX_TRACK_ID = 1;
+    private final static int T2G_COLUMN_INDEX_GROUP_ID = 2;
 
-	public void open() throws SQLException {
+	private final static String[] allColumnsTracks2Groups = {
+			DatabaseOpenHelper.COLUMN_ID,
+			DatabaseOpenHelper.COLUMN_TRACK_ID,
+			DatabaseOpenHelper.COLUMN_GROUP_ID
+	};
+	private List<Tick> ticks;
+
+
+    private TracksDataSource(Context context) {
+        dbHelper = DatabaseOpenHelper.getInstance(context.getApplicationContext());
+    }
+
+    public static TracksDataSource getInstance() {
+        if (mInstance == null) {
+            mInstance = new TracksDataSource(Globals.getInstance());
+        }
+        return mInstance;
+    }
+
+    public boolean isOpen() {
+        return database != null && database.isOpen();
+    }
+
+	private void open() throws SQLException {
 		if (database == null || !database.isOpen()) {
   			Log.d("tickmate", "Opening database");
 			database = dbHelper.getWritableDatabase();
 		}
 	}
 
-	public void close() {
+	private void close() {
 		Log.d("tickmate", "Closing database");
 		dbHelper.close();
 	}
@@ -66,7 +97,7 @@ public class TracksDataSource {
 	public void deleteTrack(Track track) {
 		long id = track.getId();
 		
-		this.open();
+		open();
 		
 		try {
 			int rows = database.delete(DatabaseOpenHelper.TABLE_TRACKS,
@@ -74,31 +105,44 @@ public class TracksDataSource {
 			if (rows > 0)
 				System.out.println("Track deleted with id: " + id);
 		} finally {
-			if (this.database != null) {
-				this.close();
+			if (database != null) {
+				close();
 			}
 		}
 	}
 
-	public Track getTrack(int id) {		
-		this.open();
+	public Track getTrack(int id) {
+		open();
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
 				null, null, null, null);
 		cursor.moveToFirst();
-		Track newTrack = cursorToTrack(cursor);
+        Log.d(TAG, "getTrack called with id = " + id);
+        Track newTrack = cursorToTrack(cursor);
 		cursor.close();
 		return newTrack;
 	}
 
-	public List<Track> getTracks() {
-		List<Track> tracks = new ArrayList<Track>();
+    public Group getGroup(int id) {
+        open();
+        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_GROUPS,
+                allColumnsGroups, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
+                null, null, null, null);
+        cursor.moveToFirst();
 
-		this.open();
+        Group newGroup = cursorToGroup(cursor);
+        cursor.close();
+        return newGroup;
+    }
+
+    public List<Track> getTracks() {
+		List<Track> tracks = new ArrayList<>();
+
+		open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, null, null, null, null,
-				"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
+                allColumns, null, null, null, null,
+                "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -108,13 +152,174 @@ public class TracksDataSource {
 		}
 		// Make sure to close the cursor
 		cursor.close();
-		
 		return tracks;
 	}
-	
-	public List<Track> getActiveTracks() {
-		List<Track> tracks = new ArrayList<Track>();
-		this.open();
+
+    public void deleteGroup(Group group) {
+        open();
+
+        long id = group.getId();
+        try {
+            int rows = database.delete(DatabaseOpenHelper.TABLE_GROUPS,
+                    DatabaseOpenHelper.COLUMN_ID + " = " + id, null);
+            if (rows > 0)
+                Log.d(TAG, "deleteGroup deleted: " + id);
+        } finally {
+            if (database != null) {
+                close();
+            }
+        }
+    }
+
+    public List<Group> getGroups() {
+		List<Group> groups = new ArrayList<>();
+
+		open();
+
+		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_GROUPS,
+                allColumnsGroups, null, null, null, null,
+                "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+            Group g = cursorToGroup(cursor);
+            Log.d(TAG, "in getGroups, adding group: "+g);
+            groups.add(g);
+			cursor.moveToNext();
+		}
+		// Make sure to close the cursor
+		cursor.close();
+
+		return groups;
+	}
+
+    public List<Group> getGroupsForTrack(int id) {
+        // Get the groups linked to a particular track ID
+		List<Group> groups = new ArrayList<>();
+		open();
+
+		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
+				allColumnsTracks2Groups, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + id, null, null, null, null, null);
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+            List<Integer> pair = cursorToTrackGroupAssociation(cursor);
+            Log.d(TAG, "\tFound pair: " + TextUtils.join(",", pair));
+            int groupId = pair.get(1);
+            Group g = getGroup(groupId);
+            Log.d(TAG, "in getGroupsForTrack("+id+"), adding group: "+g);
+            // instead of opening and closing within each call to getGroup, can we speed this up, since we know this will be called while already open?
+			groups.add(g);
+			cursor.moveToNext();
+		}
+
+		// Make sure to close the cursor
+		cursor.close();
+
+		return groups;
+    }
+    // Returns a pair of integers (track, group) for this association of track and group
+    private List<Integer> cursorToTrackGroupAssociation(Cursor cursor) {
+        List<Integer> pair = new ArrayList<>();
+        pair.add(cursor.getInt(T2G_COLUMN_INDEX_TRACK_ID));
+        pair.add(cursor.getInt(T2G_COLUMN_INDEX_GROUP_ID));
+        return pair;
+    }
+
+    private List<Integer> getGroupIdsForTrack(long id) {
+        // get groupIds for track
+        List<Integer> groupIds = new ArrayList<>();
+        open();
+
+        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
+                allColumnsTracks2Groups, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + id, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            int groupId = cursor.getInt(2);
+            cursor.moveToNext();
+            groupIds.add(groupId);
+        }
+
+        // Make sure to close the cursor
+        cursor.close();
+        return groupIds;
+    }
+
+
+    private List<Integer> getTrackIdsForGroup(int groupId) {
+        open();
+        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
+                allColumnsTracks2Groups, DatabaseOpenHelper.COLUMN_GROUP_ID + " = " + groupId, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        List<Integer> ids = new ArrayList<>();
+        while (!cursor.isAfterLast()) {
+            int trackId = cursor.getInt(1);
+            Log.e(TAG, "Getting track #" + trackId);
+            ids.add(Integer.valueOf(trackId));
+            cursor.moveToNext();
+        }
+
+        // Make sure to close the cursor
+        cursor.close();
+
+        return ids;
+    }
+
+    public List<Track> getTracksForGroup(int groupId) {
+        // get tracks for group
+        Log.e(TAG, "getTracksForGroup(" + groupId+")");
+        List<Integer> ids = getTrackIdsForGroup(groupId);
+        Log.e(TAG, "   Found tracks IDs: " + ids);
+
+
+        List<Track> tracks = new ArrayList<>();
+//        for (Integer trackId: ids) {
+//            tracks.add(getTrack(trackId));
+//        }
+        for (int i = 0, n = ids.size(); i < n; i++) {
+            tracks.add(getTrack(ids.get(i)));
+        }
+        Log.e(TAG, "   Found tracks: " + tracks);
+        return tracks;
+    }
+
+    public List<Group> getGroupsForTrack(Track track) {
+        return getGroupsForTrack(track.getId());
+    }
+
+    public void storeGroup(Group group) { // Note: renamed to storeGroup to be consistent with other storeX calls.  We could also change them all to saveX
+        open();
+
+        ContentValues values = new ContentValues();
+
+        values.put(DatabaseOpenHelper.COLUMN_NAME, group.getName());
+        values.put(DatabaseOpenHelper.COLUMN_DESCRIPTION, group.getDescription());
+
+        if (group.getId() > 0) {
+            database.update(DatabaseOpenHelper.TABLE_GROUPS, values,
+                    DatabaseOpenHelper.COLUMN_ID + "=?",
+                    new String[]{Integer.toString(group.getId())});
+//            Log.d("Tickmate", "saving group id=" + group.getId());
+        } else {
+            long t_id = database.insert(DatabaseOpenHelper.TABLE_GROUPS, null, values);
+            group.setId((int) t_id);
+//            Log.d("Tickmate", "inserted group id=" + group.getId());
+        }
+
+        close();
+    }
+
+
+//    public List<Track> getActiveTracks(Context context) {
+//        TracksDataSource ds = TracksDataSource.getInstance();
+//        return ds.getActiveTracks();
+//    }
+
+    public List<Track> getActiveTracks() {
+		List<Track> tracks = new ArrayList<>();
+		open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
 				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null,
@@ -136,7 +341,7 @@ public class TracksDataSource {
 	public void retrieveTicks(Calendar startday, Calendar endday) {
 		ticks = new ArrayList<Tick>();
 
-		this.open();
+		open();
 		String[] args = { 
 				Integer.toString(startday.get(Calendar.YEAR)),
 				Integer.toString(startday.get(Calendar.YEAR)),
@@ -194,7 +399,7 @@ public class TracksDataSource {
 	public List<Tick> getTicks(int track_id) {
 		List<Tick> ticks = new ArrayList<Tick>();
 		
-		this.open();
+		open();
 		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + Integer.toString(track_id),
@@ -232,7 +437,7 @@ public class TracksDataSource {
 	public List<Tick> getTicksForDay(Track track, Calendar date) {
 		List<Tick> ticks = new ArrayList<Tick>();
 		
-		this.open();
+		open();
 		
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
@@ -278,6 +483,12 @@ public class TracksDataSource {
 		track.setOrder(cursor.getInt(6));
 		return track;
 	}
+
+    private Group cursorToGroup(Cursor cursor) {
+        Group group = new Group(cursor.getString(1), cursor.getString(2));
+        group.setId(cursor.getInt(0));
+        return group;
+    }
 	
 	private Tick cursorToTick(Cursor cursor) {
 		Calendar c = Calendar.getInstance();
@@ -293,7 +504,7 @@ public class TracksDataSource {
 	}
 
 	public void storeTrack(Track t) {
-		this.open();
+		open();
 		
 		ContentValues values = new ContentValues();
 
@@ -315,12 +526,12 @@ public class TracksDataSource {
 			Log.d("Tickmate", "inserted track id=" + t.getId());
 		}
 		
-		this.close();
+		close();
 	}
 
 	public void setTick(Track track, Calendar date, boolean hasTimeInfo) {
-		this.open();
-		
+		open();
+
 		ContentValues values = new ContentValues();
 		values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, track.getId());
 		values.put(DatabaseOpenHelper.COLUMN_YEAR,date.get(Calendar.YEAR));
@@ -334,11 +545,11 @@ public class TracksDataSource {
 				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
 		database.insert(DatabaseOpenHelper.TABLE_TICKS, null, values);
 
-		this.close();
+		close();
 	}
 
 	public void removeTick(Track track, Calendar date) {
-		this.open();
+		open();
 		
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
@@ -352,12 +563,12 @@ public class TracksDataSource {
 				DatabaseOpenHelper.COLUMN_DAY+"=?", args);
 		Log.d("Tickmate", "delete " + affectedRows + "rows at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH));
 
-		this.close();
+		close();
 	}
 	
 	public boolean removeLastTickOfDay(Track track, Calendar date) {
-		this.open();
-		List<Tick> ticks = this.getTicksForDay(track, date);
+		open();
+		List<Tick> ticks = getTicksForDay(track, date);
 		
 		if (ticks.size() == 0)
 			return false;
@@ -377,7 +588,7 @@ public class TracksDataSource {
 				tick.date.get(Calendar.MINUTE) + ":" +
 				tick.date.get(Calendar.SECOND));
 		
-		this.close();
+		close();
 		
 		if (affectedRows > 0)
 			return true;
@@ -386,7 +597,7 @@ public class TracksDataSource {
 	}
 
 	public int getTickCount(int track_id) {
-		this.open();
+		open();
 		
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				new String[] {
@@ -403,15 +614,14 @@ public class TracksDataSource {
 	}
 	
 	public void orderTracks() {
-		this.open();
+		open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, null, null, null, null,
-				"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
+                allColumns, null, null, null, null,
+                "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 		
-		int trackOrder = 0;
 		cursor.moveToFirst();
-		for (trackOrder = 0; !cursor.isAfterLast(); trackOrder += 10) {
+		for (int trackOrder = 0; !cursor.isAfterLast(); trackOrder += 10) {
 			Track track = cursorToTrack(cursor);
 			//Log.d("Tickmate", track.getName() + " is " + track.getOrder() + ", gets " + trackOrder);
 			track.setOrder(trackOrder);
@@ -423,7 +633,7 @@ public class TracksDataSource {
 	}
 
 	public void moveTrack(Track t, int dir) {
-		this.open();
+		open();
 		orderTracks();
 		
 		Track t_updated = getTrack(t.getId());
@@ -434,4 +644,72 @@ public class TracksDataSource {
 
 		orderTracks();
 	}
+
+    public void linkOneTrackManyGroups(int trackId, List<Integer> newGroupIds) {
+        List<Integer> currentGroupIds = getGroupIdsForTrack(trackId);
+                Log.d(TAG, "Updating track (" + trackId + ") with new group IDS(" + newGroupIds + "), previously were: " + printGroupIdsForTrack(trackId));
+
+        // If the ID is currently in the table, but not in newGroupIds, then delete it
+        for (Integer gId : currentGroupIds) {
+            if (!newGroupIds.contains(gId)) {
+                unlinkOneTrackOneGroup(trackId, gId);
+            }
+        }
+
+        // If the ID is in newGroupIds, but not currently in the table, then add it
+        for (Integer gId : newGroupIds) {
+            if (!currentGroupIds.contains(gId)) {
+                linkOneTrackOneGroup(trackId, gId);
+            }
+        }
+                Log.d(TAG, "Check that new group ids were set correctly for (" + trackId + "), using (" + newGroupIds + ").  After update, they are: " + printGroupIdsForTrack(trackId));
+    }
+
+    private void unlinkOneTrackOneGroup(int trackId, Integer groupId) {
+        open();
+        database.delete(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
+                DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + trackId
+                        + " AND " + DatabaseOpenHelper.COLUMN_GROUP_ID + " = " + groupId, null);
+        close();
+        //        Log.d(TAG, "called unlinkOneTrackOneGroup(" + trackId + ", " + groupId + "). ");
+    }
+
+    public void linkManyTracksOneGroup(List<Integer> trackIds, int groupId) {
+        // Consider checking whether the link already exists, and only requesting the link creation if it doesn't already
+        for (Integer trackId : trackIds) {
+            linkOneTrackOneGroup(trackId, groupId);
+        }
+    }
+
+
+
+    // Store the fact that this track and group are associated with each other
+    public void linkOneTrackOneGroup(long trackId, long groupId) {
+        open();
+
+//        Log.d(TAG, "Before deleting duplicates (of <" + trackId + "," + groupId + ">), the group ids for track (" + trackId + ") are: " + printGroupIdsForTrack(trackId));
+
+        // AVP:See-linkOneTrackManyGroups TODO Instead of deleting any possibly pre-existing duplicate entry, instead see if the association already exists - if so, do nothing
+        database.delete(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
+                DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + trackId
+                        + " AND " + DatabaseOpenHelper.COLUMN_GROUP_ID + " = " + groupId, null);
+
+//        Log.d(TAG, "After deleting duplicates (of <" + trackId + "," + groupId + ">), the group ids for track (" + trackId + ") are: " + printGroupIdsForTrack(trackId));
+
+        ContentValues values = new ContentValues();
+        values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, trackId);
+        values.put(DatabaseOpenHelper.COLUMN_GROUP_ID, groupId);
+        long t2g_id = database.insert(DatabaseOpenHelper.TABLE_TRACK2GROUPS, null, values);
+//        Log.d("Tickmate", "inserted t2g id=" + t2g_id + ", to associate track (" + trackId + ") and group (" + groupId + ")");
+
+        close();
+    }
+
+    // Temporary method for debug only
+    private String printGroupIdsForTrack(long trackId) {
+        List<Integer> groupIds = getGroupIdsForTrack(trackId);
+//        Log.d(TAG, "in printGroupIdsForTrack - groupIds = " + groupIds + ", " + TextUtils.join("\n", groupIds));
+        return TextUtils.join(",", groupIds);
+    }
+
 }

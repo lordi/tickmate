@@ -21,7 +21,7 @@
     <string name="title_activity_show_track">Track details</string>
     <string name="title_section_weekdays">Days of week</string>
     <string name="numer_of_occurances">Number of occurrences:</string>
-    <string name="no_tracks_found">No tracks have been added. Tap here to open the track list editor.</string>
+    <string name="no_tracks_found">No tracks have been added for this group. Tap here to open the track list editor.</string>
     <string name="multiple_entries">Multiple entries per day</string>
     <string name="tick_deleted">Removed last tick.</string>
     <string name="alert_delete_track_title">Delete track</string>
@@ -71,5 +71,15 @@
         <item>All days</item>
     </string-array>
     <string name="notify_user_ticking_disabled">Changing this tick is disabled. You can specify which days are editable in the settings.</string>
+
+    <string name="pref_title_groups">Groups (In progress)</string>
+    <string name="menu_edit_groups">Edit Groups</string>
+    <string name="title_activity_edit_groups">My Groups</string>
+    <string name="menu_add_group">Add Group</string>
+    <string name="alert_delete_group_title">Delete group</string>
+    <string name="alert_delete_group_message">Are you sure you want to delete this group? This can not be undone.  (TODO What else to say here?) </string>
+    <string name="title_activity_choose_group">Add group</string>
+    <string name="group_name">Name</string>
+    <string name="title_activity_edit_group">Edit group</string>
 
 </resources>

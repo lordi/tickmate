@@ -17,6 +17,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:name=".Globals"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Tickmate"
@@ -46,6 +47,15 @@
                 android:value="de.smasi.tickmate.Tickmate" />
         </activity>
         <activity
+            android:name=".views.EditGroupsActivity"
+            android:label="@string/title_activity_edit_groups"
+            android:parentActivityName=".Tickmate" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.smasi.tickmate.Tickmate" />
+        </activity>
+
+        <activity
             android:name=".views.ChooseTrackActivity"
             android:label="@string/title_activity_choose_track"
             android:parentActivityName=".views.EditTracksActivity"
@@ -54,6 +64,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.views.EditTracksActivity" />
         </activity>
+        <activity
+            android:name=".views.ChooseGroupActivity"
+            android:label="@string/title_activity_choose_group"
+            android:parentActivityName=".views.EditGroupsActivity"
+            android:theme="@android:style/Theme.Dialog" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.smasi.tickmate.views.EditGroupsActivity" />
+        </activity>
+
         <activity
             android:name=".views.ShowTrackActivity"
             android:label="@string/title_activity_show_track"
@@ -74,6 +94,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.smasi.tickmate.views.EditTracksActivity" />
         </activity>
+        <activity
+            android:name=".views.GroupPreferenceActivity"
+            android:label="@string/title_activity_edit_group"
+            android:parentActivityName=".views.EditGroupsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.smasi.tickmate.views.EditGroupsActivity" />
+        </activity>
+
     </application>
 
 </manifest>

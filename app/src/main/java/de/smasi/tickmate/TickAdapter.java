@@ -3,16 +3,22 @@ package de.smasi.tickmate;
 import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,21 +27,27 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.widgets.MultiTickButton;
 import de.smasi.tickmate.widgets.TickButton;
 import de.smasi.tickmate.widgets.TrackButton;
 
-public class TickAdapter extends BaseAdapter {
+public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelectedListener {
 
 	private final Context context;
 	private Calendar activeDay;  // When set, the display will be fixed to this day.
 	    // Null value is intentionally used to indicate display should follow the actual current day.
     private Calendar today, yday;
-	int count, count_ahead;
-	private TracksDataSource ds;
-    private List<Track> tracks;
+    int count, count_ahead;
     private Map<Calendar, View> mRowCache = new HashMap<>();
+
+
+    private List<Track> mTracksCurrentlyDisplayed; // All of the active tracks which should be currently visible (determined by group selector)
+    private Spinner mGroupSpinner;
+    private ArrayList<Group> mSpinnerArrayGroups = new ArrayList<>();
+    private int mSpinnerPosition = -1;
+    private Group mDisplayGroup = Group.ALL_GROUP; // Group.ALL_GROUP indicates 'all active tracks' Consider: Is there a better way to indicate that all tracks have been selected for display? Possibly using only spinner position == 0 ?
 
     private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
@@ -48,9 +60,6 @@ public class TickAdapter extends BaseAdapter {
 		this.context = context;
 		this.count = DEFAULT_COUNT_PAST;
 		this.count_ahead = DEFAULT_COUNT_AHEAD;
-
-		// Initialize data source
-		ds = new TracksDataSource(context);
 
         setActiveDay(activeDay);
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
@@ -96,27 +105,31 @@ public class TickAdapter extends BaseAdapter {
     public Calendar getActiveDay() {
 		if (this.activeDay == null) {
             updateToday();
-			return (Calendar) this.today.clone();  // TODO remove redundant cloning elsewhere, when this method is called
-		}
-        else {
-            return this.activeDay;
+            return (Calendar) this.today.clone();  // Prevents need to clone the returned value
+        } else {
+            return (Calendar) this.activeDay.clone();
         }
     }
 
+    public void addCount(int num) {
+        this.count += num;
+        notifyDataSetChanged();
+    }
 
-	public void addCount(int num) {
-		this.count += num;
-		notifyDataSetChanged();
-	}
+    public int getCount() {
+        if (mTracksCurrentlyDisplayed == null) {
+            Log.e(TAG, "ERROR, mTracksCurrentlyDisplayed should not be null");
+            return 0;
+        }
 
-	public int getCount() {
-		if (tracks.size() == 0) {
-			return 0; // return 0 here if we have no tracks so that the empty view will get displayed
-		}
-		else {
-			return this.count;
-		}
-	}
+        if (mTracksCurrentlyDisplayed.size() == 0) {
+            return 0; // return 0 here if we have no tracks to display so that the empty view will get displayed
+            // TODO Question for Hannes and/or AVP - Should we make further changes to the empty view text?
+            // (todo)  (It has been updated to include "No tracks have been added for this group".)
+        } else {
+            return this.count;
+        }
+    }
 
 	public Object getItem(int position) {
         if (isTodayAtTop) {
@@ -126,191 +139,221 @@ public class TickAdapter extends BaseAdapter {
         }
     }
 
-	public long getItemId(int position) {
-		return position;
-	}
+    public long getItemId(int position) {
+        return position;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		Integer days = (Integer) getItem(position);
-		Calendar rowDay = (Calendar) getActiveDay().clone();
-		rowDay.add(Calendar.DATE, -days);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Integer days = (Integer) getItem(position);
+        Calendar rowDay = getActiveDay();
+        rowDay.add(Calendar.DATE, -days);
 
-		View v;
-		if (mRowCache.containsKey(rowDay)) {
-			v = mRowCache.get(rowDay);
-		}
-		else {
-			v = buildRow(rowDay);
-			mRowCache.put(rowDay, v);
-		}
+        View v;
+        if (mRowCache.containsKey(rowDay)) {
+            v = mRowCache.get(rowDay);
+        } else {
+            v = buildRow(rowDay);
+            mRowCache.put(rowDay, v);
+        }
 
-		return v;
-	}
+        return v;
+    }
 
-	public View getHeader() {
 
-		int rowHeight = -1;
+    // Also initializes the array lists associated with the group spinner
+    // Called only by getHeader - extracted to a separate method to improve readability
+    private void initializeGroupSpinner(int rowHeight) {
+        mGroupSpinner = new Spinner(context);
+        mGroupSpinner.setPadding(0, 0, 0, 0);
 
-		LinearLayout headertop = new LinearLayout(this.context);
-		headertop.setOrientation(LinearLayout.HORIZONTAL);
+        mGroupSpinner.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                rowHeight, 0.8f));
 
-		LinearLayout headerrow = new LinearLayout(this.context);
-		headerrow.setOrientation(LinearLayout.HORIZONTAL);
-		TextView b2 = new TextView(context);
-		b2.setText("");
+        List<Group> allGroups = TracksDataSource.getInstance().getGroups();
 
-		b2.setPadding(0, 0, 0, 0);
-		b2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				rowHeight, 0.8f));
+        ArrayList<String> mSpinnerArrayNames = new ArrayList<>();
+        mSpinnerArrayGroups.clear();
+        mSpinnerArrayNames.add(Group.ALL_GROUP.getName());
+        mSpinnerArrayGroups.add(Group.ALL_GROUP);
+        for (Group group : allGroups) {
+            mSpinnerArrayNames.add(group.getName());
+            mSpinnerArrayGroups.add(group);
+        }
 
-		for (Track track : tracks) {
-			TrackButton b = new TrackButton(context, track);
+        ArrayAdapter<String> spinnerArrayAdapter =
+                new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, mSpinnerArrayNames);
+        mGroupSpinner.setAdapter(spinnerArrayAdapter);
+        mGroupSpinner.setOnItemSelectedListener(this);
+        mGroupSpinner.setSelection((mSpinnerPosition == -1) ? 0 : mSpinnerPosition); // AVP:Monday TODO Test for the permanence of this selector state.
+    }
 
-			b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-					LayoutParams.MATCH_PARENT, (1.0f) / tracks.size()));
-			headerrow.addView(b);
-		}
-		headerrow.setWeightSum(1.0f);
-		headerrow.setPadding(5, 5, 10, 5);
-		headerrow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				rowHeight, 0.2f));
 
-		headertop.addView(b2);
-		headertop.addView(headerrow);
-		headertop.setWeightSum(1.0f);
-		headertop.setPadding(10, 0, 10, 0);
-		headertop.setBackgroundResource(R.drawable.bottom_line);
-		return headertop;
-	}
+    public View getHeader() {
+//        Log.d(TAG, "calling getHeader");
+        int rowHeight = -1;
 
-	/**
-	 * Used to create and insert the week separator
-	 *  @param tickGrid the ViewGroup into which the week separator will be inserted
-	 */
-	private void addStartWeekSeparator(ViewGroup tickGrid) {
-		TextView splitter2 = new TextView(this.context);
-		splitter2.setText("");
-		splitter2.setHeight(5);
-		tickGrid.addView(splitter2);
-		TextView splitter = new TextView(this.context);
-		splitter.setText("");
-		splitter.setHeight(11);
-		splitter.setBackgroundResource(R.drawable.center_line);
-		splitter.setPadding(0, 20, 0, 0);
-		tickGrid.addView(splitter);
-	}
+        LinearLayout headertop = new LinearLayout(this.context);
+        headertop.setOrientation(LinearLayout.HORIZONTAL);
 
-	public View buildRow(Calendar cal) {
-		Locale locale = Locale.getDefault();
-		Date date = cal.getTime();
-		java.text.DateFormat dateFormat = android.text.format.DateFormat
-				.getDateFormat(context);
+        LinearLayout headerrow = new LinearLayout(this.context);
+        headerrow.setOrientation(LinearLayout.HORIZONTAL);
 
-		Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
+        // If this group spinner is removed from this location, re-introduce TextView b2 (git grep for it) to handle spacing
+        initializeGroupSpinner(rowHeight);
 
-		LinearLayout tickgrid = new LinearLayout(this.context);
-		tickgrid.setOrientation(LinearLayout.VERTICAL);
+        for (Track track : mTracksCurrentlyDisplayed) {
+            TrackButton b = new TrackButton(context, track);
+            b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                    LayoutParams.MATCH_PARENT, (1.0f) / mTracksCurrentlyDisplayed.size()));
+            headerrow.addView(b);
+        }
 
-		String s = dateFormat.format(date);
+        headerrow.setWeightSum(1.0f);
+        headerrow.setPadding(0, 5, 10, 5); // Left padding changed from 5 to 0 to accommodate spinner
+        headerrow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                rowHeight, 0.2f));
 
-		TextView t_weekday = new TextView(this.context);
-		TextView t_date = new TextView(this.context);
+        // Consider whether removing the view only to add it again is truly necessary, or if this should be redesigned.
+        ViewGroup parent = (ViewGroup) mGroupSpinner.getParent();
+        if (parent != null) {
+            parent.removeView(mGroupSpinner);
+        }
 
-		if (cal.compareTo(today) == 0)
-			t_date.setText(context.getString(R.string.today));
-		else if (cal.compareTo(yday) == 0)
-			t_date.setText(context.getString(R.string.yesterday));
-		else
-			t_date.setText(s);
+        headertop.addView(mGroupSpinner);
+        headertop.addView(headerrow);
+        headertop.setWeightSum(1.0f);
+        headertop.setPadding(0, 0, 0, 0); // Was previously headertop.setPadding(10, 0, 10, 0) - changed to 0 for spinner.  Revert if spinner is [re]moved
+        headertop.setBackgroundResource(R.drawable.bottom_line);
+        return headertop;
+    }
 
-		// If the date order has not been reversed, then add the splitter above the first day of the week
-		//  splitter for first weekday depends on current locale
-		if (!isTodayAtTop &&  ( cal.get(Calendar.DAY_OF_WEEK) == cal.getFirstDayOfWeek())) {
-			addStartWeekSeparator(tickgrid);
-		}
+    /**
+     * Used to create and insert the week separator
+     *  @param tickGrid the ViewGroup into which the week separator will be inserted
+     */
+    private void addStartWeekSeparator(ViewGroup tickGrid) {
+        TextView splitter2 = new TextView(this.context);
+        splitter2.setText("");
+        splitter2.setHeight(5);
+        tickGrid.addView(splitter2);
+        TextView splitter = new TextView(this.context);
+        splitter.setText("");
+        splitter.setHeight(11);
+        splitter.setBackgroundResource(R.drawable.center_line);
+        splitter.setPadding(0, 20, 0, 0);
+        tickGrid.addView(splitter);
+    }
 
-		String day_name = cal.getDisplayName(Calendar.DAY_OF_WEEK,
-				Calendar.SHORT, locale);
-		t_weekday.setText(day_name.toUpperCase(locale));
+    public View buildRow(Calendar cal) {
+        Locale locale = Locale.getDefault();
+        Date date = cal.getTime();
+        java.text.DateFormat dateFormat = android.text.format.DateFormat
+                .getDateFormat(context);
 
-		t_weekday.setTextAppearance(this.context,
-				android.R.style.TextAppearance_Medium);
-		t_date.setWidth(120);
-		t_date.setTextAppearance(this.context,
-				android.R.style.TextAppearance_Small);
-		t_date.setTextSize((float) 11.0);
-		t_date.setTextColor(Color.GRAY);
-		t_weekday.setWidth(120);
-		LinearLayout row = new LinearLayout(this.context);
-		row.setOrientation(LinearLayout.HORIZONTAL);
-		LinearLayout l = new LinearLayout(this.context);
-		l.setOrientation(LinearLayout.VERTICAL);
-		l.addView(t_weekday);
-		l.addView(t_date);
-		t_date.setEllipsize(null);
-		t_weekday.setEllipsize(null);
+//		Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 
-		// Some screen characteristics:
-		// float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
-		// int densityDpi = context.getResources().getDisplayMetrics().densityDpi;
-		// Log.d("tickmate", t_weekday.getTextSize() + "|" +
-		// t_date.getTextSize() + "|" + scaledDensity + "|" + densityDpi);
-		// Small screen, normal font 27.0|16.5|1.5|240
-		// Small screen, huge font 35.0|21.449999|1.9499999|240
-		// Huge screen, normal font 24.0|14.643751|1.3312501|213
-		// Huge screen, huge font 31.0|19.036875|1.730625|213
+        LinearLayout tickgrid = new LinearLayout(this.context);
+        tickgrid.setOrientation(LinearLayout.VERTICAL);
 
-		int rowHeight = (int) (t_weekday.getTextSize() + t_date.getTextSize()) + 40;
+        String s = dateFormat.format(date);
 
-		l.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				rowHeight, 0.8f));
-		l.setGravity(Gravity.CENTER_VERTICAL);
+        TextView t_weekday = new TextView(this.context);
+        TextView t_date = new TextView(this.context);
 
-		LinearLayout l2 = new LinearLayout(this.context);
-		l2.setOrientation(LinearLayout.HORIZONTAL);
-		for (Track track : tracks) {
+        if (cal.compareTo(today) == 0)
+            t_date.setText(context.getString(R.string.today));
+        else if (cal.compareTo(yday) == 0)
+            t_date.setText(context.getString(R.string.yesterday));
+        else
+            t_date.setText(s);
 
-			if (track.multipleEntriesEnabled()) {
-				MultiTickButton counter = new MultiTickButton(this.context,
-						track, (Calendar) cal.clone(), ds);
-				counter.setLayoutParams(new LayoutParams(
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-						(1.0f) / tracks.size()));
-				l2.addView(counter);
-			} else {
-				TickButton checker = new TickButton(this.context, track, cal, ds);
-				checker.setLayoutParams(new LayoutParams(
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-						(1.0f) / tracks.size()));
-				l2.addView(checker);
-			}
+        // If the date order has not been reversed, then add the splitter above the first day of the week
+        //  splitter for first weekday depends on current locale
+        if (!isTodayAtTop &&  ( cal.get(Calendar.DAY_OF_WEEK) == cal.getFirstDayOfWeek())) {
+            addStartWeekSeparator(tickgrid);
+        }
 
-		}
-		l2.setWeightSum(1.0f);
-		l2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				rowHeight, 0.2f));
+        String day_name = cal.getDisplayName(Calendar.DAY_OF_WEEK,
+                Calendar.SHORT, locale);
+        t_weekday.setText(day_name.toUpperCase(locale));
 
-		row.addView(l);
-		row.addView(l2);
-		row.setGravity(Gravity.CENTER);
+        t_weekday.setTextAppearance(this.context,
+                android.R.style.TextAppearance_Medium);
+        t_date.setWidth(120);
+        t_date.setTextAppearance(this.context,
+                android.R.style.TextAppearance_Small);
+        t_date.setTextSize((float) 11.0);
+        t_date.setTextColor(Color.GRAY);
+        t_weekday.setWidth(120);
+        LinearLayout row = new LinearLayout(this.context);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout l = new LinearLayout(this.context);
+        l.setOrientation(LinearLayout.VERTICAL);
+        l.addView(t_weekday);
+        l.addView(t_date);
+        t_date.setEllipsize(null);
+        t_weekday.setEllipsize(null);
 
-		if (cal.compareTo(this.getActiveDay()) == 0) {
-			row.setBackgroundResource(android.R.drawable.dark_header);
-			row.setPadding(0, 0, 0, 0);
-		}
+        // Some screen characteristics:
+        // float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        // int densityDpi = context.getResources().getDisplayMetrics().densityDpi;
+        // Log.d("tickmate", t_weekday.getTextSize() + "|" +
+        // t_date.getTextSize() + "|" + scaledDensity + "|" + densityDpi);
+        // Small screen, normal font 27.0|16.5|1.5|240
+        // Small screen, huge font 35.0|21.449999|1.9499999|240
+        // Huge screen, normal font 24.0|14.643751|1.3312501|213
+        // Huge screen, huge font 31.0|19.036875|1.730625|213
 
-		tickgrid.addView(row);
-		tickgrid.setPadding(10, 0, 10, 5);
+        int rowHeight = (int) (t_weekday.getTextSize() + t_date.getTextSize()) + 40;
 
-		// With the date order reversed, add the splitter below the first day of the week
-		//  splitter for first weekday depends on current locale
-		if (isTodayAtTop &&  ( cal.get(Calendar.DAY_OF_WEEK) == cal.getFirstDayOfWeek())) {
-			addStartWeekSeparator(tickgrid);
-		}
+        l.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                rowHeight, 0.8f));
+        l.setGravity(Gravity.CENTER_VERTICAL);
 
-		return tickgrid;
-	}
+        LinearLayout l2 = new LinearLayout(this.context);
+        l2.setOrientation(LinearLayout.HORIZONTAL);
+        for (Track track : mTracksCurrentlyDisplayed) {
+
+            if (track.multipleEntriesEnabled()) {
+                MultiTickButton counter = new MultiTickButton(this.context,
+                        track, (Calendar) cal.clone());
+                counter.setLayoutParams(new LayoutParams(
+                        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+                        (1.0f) / mTracksCurrentlyDisplayed.size()));
+                l2.addView(counter);
+            } else {
+                TickButton checker = new TickButton(this.context, track, cal);
+                checker.setLayoutParams(new LayoutParams(
+                        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+                        (1.0f) / mTracksCurrentlyDisplayed.size()));
+                l2.addView(checker);
+            }
+        }
+        l2.setWeightSum(1.0f);
+        l2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                rowHeight, 0.2f));
+
+        row.addView(l);
+        row.addView(l2);
+        row.setGravity(Gravity.CENTER);
+
+        if (cal.compareTo(this.getActiveDay()) == 0) {
+            row.setBackgroundResource(android.R.drawable.dark_header);
+            row.setPadding(0, 0, 0, 0);
+        }
+
+        tickgrid.addView(row);
+        tickgrid.setPadding(10, 0, 10, 5);
+
+        // With the date order reversed, add the splitter below the first day of the week
+        //  splitter for first weekday depends on current locale
+        if (isTodayAtTop &&  ( cal.get(Calendar.DAY_OF_WEEK) == cal.getFirstDayOfWeek())) {
+            addStartWeekSeparator(tickgrid);
+        }
+
+        return tickgrid;
+    }
 
     // Used for Jump To [Date|Today], and used when the toggling isTodayAtTop
     public void scrollToLatest() {
@@ -327,6 +370,8 @@ public class TickAdapter extends BaseAdapter {
         mRowCache.clear();
 
         boolean previousIsTodayAtTop = isTodayAtTop;  // Used to determine if this value has been toggled since last data set change
+
+        // Appears sufficient to update isTodayAtTop on every data set change - not thoroughly tested.
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
 
@@ -334,18 +379,73 @@ public class TickAdapter extends BaseAdapter {
             scrollToLatest();
         }
 
-        ds.open();
-		tracks = ds.getActiveTracks();
+        TracksDataSource ds = TracksDataSource.getInstance();
+        List<Track> mActiveTracks = ds.getActiveTracks();  // Consider eliminating the mActiveTracks field, and simply using Group.ALL's track list.
+//        Group.ALL_GROUP.setTrackIdsUsingTracks(mActiveTracks); // May become redundant, since we can directly query TracksDataSource
 
-		Calendar startday = (Calendar)this.getActiveDay().clone();
-		Calendar endday = (Calendar)startday.clone();
-		startday.add(Calendar.DATE, -this.count);
+        Calendar startday = this.getActiveDay();
+        Calendar endday = (Calendar) startday.clone();
+        startday.add(Calendar.DATE, -this.count);
 
-		Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(endday.getTime()));
+        // mTracksCurrentlyDisplayed is updated when the spinner is selected
+        if (mTracksCurrentlyDisplayed == null) {
+            mTracksCurrentlyDisplayed = ds.getTracksForGroup(mDisplayGroup.getId());  // More efficient to cache this data somewhere?
+            Log.d(TAG, "Tracks associated with group(" + mDisplayGroup.getId() + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
+        }
 
-		// Limit ticks to range [activeDay, endday]
-		ds.retrieveTicks(startday, endday);
-		ds.close();
-	}
+        Log.v(TAG, "Data range has been updated: " + dateFormat.format(activeDay.getTime()) + " - " + dateFormat.format(today.getTime()));
+        ds.retrieveTicks(startday, endday);
 
+        // Keep around for easier debug
+//        Log.d(TAG, "Tracks currently displayed: " + TextUtils.join("\n ", mTracksCurrentlyDisplayed));
+//        for (Track t : mTracksCurrentlyDisplayed) { Log.d(TAG, t.getName()); }
+
+    }
+
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+
+        // Unless a new item was selected in the spinner, do nothing.
+        if (pos == mSpinnerPosition) {
+            Log.d(TAG, "Spinner selection matches previous selection, nothing to do.");
+            return;
+        }
+        mSpinnerPosition = pos;
+
+        // TODO Consider removing mDisplayGroup altogether, as its purpose was primarily to give quick, readable access to the list of tracks to display.  It might be more straightforward to get the ID from mSpinnerArrayGroups.get(pos).getId
+        if (pos == 0) {
+            mDisplayGroup = Group.ALL_GROUP; // Consider collapsing this if/else, and instead have getGroupFromId recognize the id of the ALL_GROUP
+        } else {
+            Log.d(TAG, "mSpinnerArrayGroups.get(pos) - " + pos + "; " + mSpinnerArrayGroups.get(pos) + " - " + TextUtils.join(", ", mSpinnerArrayGroups));
+            mDisplayGroup = mSpinnerArrayGroups.get(pos);
+        }
+
+        if (mDisplayGroup == Group.ALL_GROUP) {
+            mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getActiveTracks();
+        } else {
+            mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getTracksForGroup(mDisplayGroup.getId());
+            Log.d(TAG, "Tracks associated with group(" + mDisplayGroup.getId() + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
+        }
+//        Log.d(TAG, "Number of tracks to display: " + mTracksCurrentlyDisplayed.size());
+
+        Tickmate tm = (Tickmate) context;
+
+        tm.refresh();
+        Log.d(TAG, " item selected " + mDisplayGroup.getId() + ", " + mDisplayGroup.getName());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Consider: Confirm that doing nothing is truly the best choice here. Leaves previous mDisplayGroupName the same.
+    }
+
+
+    // Preserve the spinner state
+    public void restoreState(Bundle state) {
+        mSpinnerPosition = state.getInt("SpinnerPosition", 0);
+    }
+    public void saveState(Bundle outState) {
+        outState.putInt("SpinnerPosition", mSpinnerPosition);
+    }
 }

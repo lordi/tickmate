@@ -33,7 +33,7 @@ public class DatabaseTest {
 	@Test
 	public void databaseCreateExportImport() throws Exception {
 		Tickmate tm = new Tickmate();
-		TracksDataSource ds = new TracksDataSource(tm);
+		TracksDataSource ds = TracksDataSource.getInstance();
 		ds.open();
 		assertThat(ds.getTracks().size(), is(0));
 		ds.close();
@@ -101,7 +101,7 @@ public class DatabaseTest {
 		db.importDatabase("smiley.db");
 
 		// the legacy db should have 8 tracks (6 active)
-		TracksDataSource ds = new TracksDataSource(tm);
+		TracksDataSource ds = TracksDataSource.getInstance();
 		ds.open();
 		assertThat(ds.getTracks().size(), is(8));
 		assertThat(ds.getActiveTracks().size(), is(6));

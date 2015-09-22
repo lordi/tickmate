@@ -40,7 +40,7 @@ public class ActivitiesTest {
 	@Test
 	public void showTrackActivityShouldNotCrashWhenNoTicks() throws Exception {
 		Tickmate tm = new Tickmate();
-		TracksDataSource ds = new TracksDataSource(tm);
+		TracksDataSource ds = TracksDataSource.getInstance();
 		
 		ds.open();
 		Track t = new Track("Testing", "Run my tests");
