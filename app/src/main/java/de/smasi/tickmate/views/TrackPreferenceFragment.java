@@ -129,11 +129,17 @@ OnSharedPreferenceChangeListener  {
 
         mGroupsPref.setEntries(getAllGroupNamesAsCharSeq());
         mGroupsPref.setEntryValues(getAllGroupIdsAsCharSeq());
-        mGroupsPref.setSummary(TextUtils.join(", ", getGroupNamesForTrackAsCharSeq(track)));
+        mGroupsPref.setSummary(getGroupNamesForSummary());
 //        Log.d(TAG, "setValues (0) track.getGroupIdsAsSet() - " + TextUtils.join("; ", track.getGroupIdsAsSet()));
 //        Log.d(TAG, "setEntries (1) getAllGroupNamesAsCharSeq()- " + getAllGroupNamesAsCharSeq() + " -- " + TextUtils.join("; ", getAllGroupNamesAsCharSeq()));
 //        Log.d(TAG, "setEntryValues (2) getAllGroupIdsAsCharSeq()- " + getAllGroupIdsAsCharSeq() + " -- " + TextUtils.join("; ", getAllGroupIdsAsCharSeq()));
 //        Log.d(TAG, "setSummary (3)with " + track.getGroupNamesAsCharSeq() + " -- " + TextUtils.join("; ", track.getGroupNamesAsCharSeq()));
+    }
+
+    // Concatenates the names of the groups associated with this track into a readable comma separated list.
+    // Consider internationalizing this better - how are lists done in other languages? Joined with other characters?
+    private String getGroupNamesForSummary() {
+        return TextUtils.join(", ", getGroupNamesForTrackAsCharSeq(track));
     }
 
 
@@ -191,8 +197,8 @@ OnSharedPreferenceChangeListener  {
             mDataSource.linkOneTrackManyGroups(track.getId(), groupIds);
 //            Log.d(TAG, "\tUser selected: " + TextUtils.join(",", groupIds));
 
-            mGroupsPref.setSummary(TextUtils.join(", ", getGroupNamesForTrackAsCharSeq(track))
-                    + "  \n" + TextUtils.join("\n", mDataSource.getGroups())); // TODO Before release, remove the 2nd half of the setSummary string.  The user doesn't need the group details
+            mGroupsPref.setSummary(getGroupNamesForSummary());
+//                    + "  \n" + TextUtils.join("\n", mDataSource.getGroups())); // Leaving here for future debugging, until tests are written
 //            Log.d(TAG, "Confirm that the group IDs are correct: " + TextUtils.join(",", track.getGroupIdsAsSet()));
 //            Log.d(TAG, "Confirm that the group NAMES are correct: " + TextUtils.join(",", track.getGroupNamesAsSet()));
 
