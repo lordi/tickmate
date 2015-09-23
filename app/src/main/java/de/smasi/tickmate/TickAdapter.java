@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,7 +36,7 @@ import de.smasi.tickmate.widgets.MultiTickButton;
 import de.smasi.tickmate.widgets.TickButton;
 import de.smasi.tickmate.widgets.TrackButton;
 
-public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelectedListener {
+public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
 	private final Context context;
 	private Calendar activeDay;  // When set, the display will be fixed to this day.
@@ -54,6 +57,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     private static final int DEFAULT_COUNT_PAST = 21; // by default load 3 weeks of past ticks
     // (see comment by InfiniteScrollAdapter.SCROLL_DOWN_THRESHOLD)
     private static final int DEFAULT_COUNT_AHEAD = 0; // by default show zero days ahead
+    private GestureDetector mGestureDetector;
 
 	public TickAdapter(Context context, Calendar activeDay) {
 		// super(context, R.layout.rowlayout, days);
@@ -64,7 +68,9 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         setActiveDay(activeDay);
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
-	}
+        mGestureDetector = new GestureDetector(context, new GestureListener());
+
+    }
 
     public void unsetActiveDay() {
         setActiveDay(null);
@@ -459,5 +465,54 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     }
     public void saveState(Bundle outState) {
         outState.putInt("SpinnerPosition", mSpinnerPosition);
+    }
+
+
+
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return mGestureDetector.onTouchEvent(event);
+    }
+
+    public void onSwipeRight() {
+//        Toast.makeText(context, "Swiped right.", Toast.LENGTH_SHORT).show();  // remove before publishing
+        int position = mGroupSpinner.getSelectedItemPosition() - 1;
+        if (position < 0) {
+            position = mGroupSpinner.getCount() - 1;
+        }
+        mGroupSpinner.setSelection(position);
+    }
+
+    public void onSwipeLeft() {
+//        Toast.makeText(context, "Swiped left.", Toast.LENGTH_SHORT).show();  // remove before publishing
+        int position = mGroupSpinner.getSelectedItemPosition() + 1;
+        if (position == mGroupSpinner.getCount()) {
+            position = 0;
+        }
+        mGroupSpinner.setSelection(position);
+     }
+
+
+    private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        private static final int SWIPE_THRESHOLD = 40;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 40;
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if ( (e1 == null) || (e2 == null) ) return false;
+
+            float distanceX = e2.getX() - e1.getX();
+            float distanceY = e2.getY() - e1.getY();
+            if (Math.abs(distanceX) > Math.abs(distanceY) && Math.abs(distanceX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                if (distanceX > 0)
+                    onSwipeRight();
+                else
+                    onSwipeLeft();
+                return true;
+            }
+            return false;
+        }
     }
 }

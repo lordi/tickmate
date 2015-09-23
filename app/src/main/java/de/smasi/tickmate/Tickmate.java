@@ -68,6 +68,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
 	   	getListView().setStackFromBottom(true);
         getListView().setAdapter(mAdapter);
+        getListView().setOnTouchListener(mAdapter.getAdapter());
 
 
         if (savedInstanceState != null) {
