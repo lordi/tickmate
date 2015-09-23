@@ -31,7 +31,7 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
         if (this.values[position].isSectionHeader()) {
             rowView = inflater.inflate(R.layout.rowlayout_header, parent, false);
             TextView textView = (TextView) rowView.findViewById(R.id.section_header);
-            textView.setText(values[position].getName().substring(4).toUpperCase(Locale.getDefault()));
+            textView.setText(values[position].getName().toUpperCase(Locale.getDefault()));
         } else {
             rowView = inflater.inflate(R.layout.group_row, parent, false);
             Group g = values[position];
