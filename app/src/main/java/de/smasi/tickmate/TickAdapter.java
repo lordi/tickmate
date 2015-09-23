@@ -193,13 +193,23 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 //        Log.d(TAG, "calling getHeader");
         int rowHeight = -1;
 
-        LinearLayout headertop = new LinearLayout(this.context);
-        headertop.setOrientation(LinearLayout.HORIZONTAL);
+        // trackHeader will contain the track icons, while header will contain both the spinner and trackHeader
+        LinearLayout header = new LinearLayout(this.context);
+        header.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout trackHeader = new LinearLayout(this.context);
+        trackHeader.setOrientation(LinearLayout.HORIZONTAL);
 
         LinearLayout headerrow = new LinearLayout(this.context);
         headerrow.setOrientation(LinearLayout.HORIZONTAL);
 
-        // If this group spinner is removed from this location, re-introduce TextView b2 (git grep for it) to handle spacing
+        TextView b2 = new TextView(context);
+        b2.setText("");
+
+        b2.setPadding(0, 0, 0, 0);
+        b2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                rowHeight, 0.8f));
+
         initializeGroupSpinner(rowHeight);
 
         for (Track track : mTracksCurrentlyDisplayed) {
@@ -210,7 +220,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         }
 
         headerrow.setWeightSum(1.0f);
-        headerrow.setPadding(0, 5, 10, 5); // Left padding changed from 5 to 0 to accommodate spinner
+        headerrow.setPadding(5, 5, 10, 5);
         headerrow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 rowHeight, 0.2f));
 
@@ -220,12 +230,14 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
             parent.removeView(mGroupSpinner);
         }
 
-        headertop.addView(mGroupSpinner);
-        headertop.addView(headerrow);
-        headertop.setWeightSum(1.0f);
-        headertop.setPadding(0, 0, 0, 0); // Was previously headertop.setPadding(10, 0, 10, 0) - changed to 0 for spinner.  Revert if spinner is [re]moved
-        headertop.setBackgroundResource(R.drawable.bottom_line);
-        return headertop;
+        trackHeader.addView(b2);
+        trackHeader.addView(headerrow);
+        trackHeader.setWeightSum(1.0f);
+        trackHeader.setPadding(10, 0, 10, 0);
+        trackHeader.setBackgroundResource(R.drawable.bottom_line);
+        header.addView(mGroupSpinner);
+        header.addView(trackHeader);
+        return header;
     }
 
     /**
