@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,9 +47,9 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     private List<Track> mTracksCurrentlyDisplayed; // All of the active tracks which should be currently visible (determined by group selector)
     private Spinner mGroupSpinner;
-    private ArrayList<Group> mSpinnerArrayGroups = new ArrayList<>();
-    private int mSpinnerPosition = -1;
-    private Group mDisplayGroup = Group.ALL_GROUP; // Group.ALL_GROUP indicates 'all active tracks' Consider: Is there a better way to indicate that all tracks have been selected for display? Possibly using only spinner position == 0 ?
+    private ArrayList<Integer> mSpinnerArrayGroupIds = new ArrayList<>();
+    private int mSpinnerPosition = 0;  // Can we get rid of this, and simply update the value within the spinner itself?
+//    private Group mDisplayGroup = Group.ALL_GROUP; // Group.ALL_GROUP indicates 'all active tracks' Consider: Is there a better way to indicate that all tracks have been selected for display? Possibly using only spinner position == 0 ?
 
     private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
@@ -69,7 +68,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
         mGestureDetector = new GestureDetector(context, new GestureListener());
-
     }
 
     public void unsetActiveDay() {
@@ -179,12 +177,12 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         List<Group> allGroups = TracksDataSource.getInstance().getGroups();
 
         ArrayList<String> mSpinnerArrayNames = new ArrayList<>();
-        mSpinnerArrayGroups.clear();
+        mSpinnerArrayGroupIds.clear();
         mSpinnerArrayNames.add(Group.ALL_GROUP.getName());
-        mSpinnerArrayGroups.add(Group.ALL_GROUP);
+        mSpinnerArrayGroupIds.add(Group.ALL_GROUP.getId()); // The first entry in this array refers to the 'All Group', which does not occur in the database.
         for (Group group : allGroups) {
             mSpinnerArrayNames.add(group.getName());
-            mSpinnerArrayGroups.add(group);
+            mSpinnerArrayGroupIds.add(group.getId());
         }
 
         ArrayAdapter<String> spinnerArrayAdapter =
@@ -398,8 +396,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         }
 
         TracksDataSource ds = TracksDataSource.getInstance();
-        List<Track> mActiveTracks = ds.getActiveTracks();  // Consider eliminating the mActiveTracks field, and simply using Group.ALL's track list.
-//        Group.ALL_GROUP.setTrackIdsUsingTracks(mActiveTracks); // May become redundant, since we can directly query TracksDataSource
 
         Calendar startday = this.getActiveDay();
         Calendar endday = (Calendar) startday.clone();
@@ -407,8 +403,10 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         // mTracksCurrentlyDisplayed is updated when the spinner is selected
         if (mTracksCurrentlyDisplayed == null) {
-            mTracksCurrentlyDisplayed = ds.getTracksForGroup(mDisplayGroup.getId());  // More efficient to cache this data somewhere?
-            Log.d(TAG, "Tracks associated with group(" + mDisplayGroup.getId() + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
+            mTracksCurrentlyDisplayed = getTracksForCurrentGroup();
+
+            Log.d(TAG, "Tracks associated with current group (" + getCurrentGroupId() +
+                    ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
         }
 
         Log.v(TAG, "Data range has been updated: " + dateFormat.format(activeDay.getTime()) + " - " + dateFormat.format(today.getTime()));
@@ -418,6 +416,17 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 //        Log.d(TAG, "Tracks currently displayed: " + TextUtils.join("\n ", mTracksCurrentlyDisplayed));
 //        for (Track t : mTracksCurrentlyDisplayed) { Log.d(TAG, t.getName()); }
 
+    }
+
+    private List<Track> getTracksForCurrentGroup() {
+        return TracksDataSource.getInstance().getTracksForGroup(getCurrentGroupId());
+    }
+
+    private int getCurrentGroupId() {
+        if (mGroupSpinner == null) {
+            return Group.ALL_GROUP.getId();
+        }
+        return mSpinnerArrayGroupIds.get(mGroupSpinner.getSelectedItemPosition());
     }
 
 
@@ -431,26 +440,19 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         }
         mSpinnerPosition = pos;
 
-        // TODO Consider removing mDisplayGroup altogether, as its purpose was primarily to give quick, readable access to the list of tracks to display.  It might be more straightforward to get the ID from mSpinnerArrayGroups.get(pos).getId
-        if (pos == 0) {
-            mDisplayGroup = Group.ALL_GROUP; // Consider collapsing this if/else, and instead have getGroupFromId recognize the id of the ALL_GROUP
-        } else {
-            Log.d(TAG, "mSpinnerArrayGroups.get(pos) - " + pos + "; " + mSpinnerArrayGroups.get(pos) + " - " + TextUtils.join(", ", mSpinnerArrayGroups));
-            mDisplayGroup = mSpinnerArrayGroups.get(pos);
-        }
-
-        if (mDisplayGroup == Group.ALL_GROUP) {
+        int currentGroupId = getCurrentGroupId();
+        if (currentGroupId == Group.ALL_GROUP.getId()) {
             mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getActiveTracks();
         } else {
-            mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getTracksForGroup(mDisplayGroup.getId());
-            Log.d(TAG, "Tracks associated with group(" + mDisplayGroup.getId() + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
+            mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getTracksForGroup(currentGroupId);
+            Log.d(TAG, "Tracks associated with group(" + currentGroupId + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
         }
 //        Log.d(TAG, "Number of tracks to display: " + mTracksCurrentlyDisplayed.size());
 
         Tickmate tm = (Tickmate) context;
 
         tm.refresh();
-        Log.d(TAG, " item selected " + mDisplayGroup.getId() + ", " + mDisplayGroup.getName());
+        Log.d(TAG, " item selected:  pos(" + mSpinnerPosition + "), groupID(" + currentGroupId + ")");
     }
 
     @Override
@@ -466,8 +468,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     public void saveState(Bundle outState) {
         outState.putInt("SpinnerPosition", mSpinnerPosition);
     }
-
-
 
 
     @Override
