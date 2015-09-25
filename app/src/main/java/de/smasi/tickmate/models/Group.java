@@ -19,7 +19,7 @@ package de.smasi.tickmate.models;
 //      not in the centralized master list and whose data is therefore not updated
 
 /**
- * Created by js on 8/20/15
+ * Groups are a way to organize and categorize Tracks. Groups can be predefined or user-defined.
  */
 public class Group {
 
@@ -30,7 +30,6 @@ public class Group {
     private String mName = "";
     private String mDescription = "(No description given)";
     private boolean mIsSectionHeader = false; // For entries derived from groups.xml to be section headers
-
 
     /**
      * @param name group name

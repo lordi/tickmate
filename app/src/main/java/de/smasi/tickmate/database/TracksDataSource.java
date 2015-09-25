@@ -123,6 +123,13 @@ public class TracksDataSource {
 		return newTrack;
 	}
 
+	/**
+	 * Find and return a {@link Group}
+	 * from the {@link DatabaseOpenHelper.TABLE_GROUPS} database table.
+	 *
+	 * @param id group id
+	 * @return group
+	 */
     public Group getGroup(int id) {
         open();
         Cursor cursor = database.query(DatabaseOpenHelper.TABLE_GROUPS,
@@ -155,6 +162,12 @@ public class TracksDataSource {
 		return tracks;
 	}
 
+	/**
+	 * Delete a given {@link Group}
+	 * from the {@link DatabaseOpenHelper.TABLE_GROUPS} database table.
+	 *
+	 * @param group group to delete
+	 */
     public void deleteGroup(Group group) {
         open();
 
@@ -171,6 +184,12 @@ public class TracksDataSource {
         }
     }
 
+	/**
+	 * Retrieve all {@link Group}
+	 * from the {@link DatabaseOpenHelper.TABLE_GROUPS} database table.
+	 *
+	 * @return a list of all Groups for this user
+	 */
     public List<Group> getGroups() {
 		List<Group> groups = new ArrayList<>();
 
@@ -193,6 +212,13 @@ public class TracksDataSource {
 		return groups;
 	}
 
+	/**
+	 * Retrieve all {@link Group} associated with track ID
+	 * from the {@link DatabaseOpenHelper.TABLE_TRACK2GROUPS} database table.
+	 *
+	 * @param id track id
+	 * @return a list of all Groups for this track id
+	 */
     public List<Group> getGroupsForTrack(int id) {
         // Get the groups linked to a particular track ID
 		List<Group> groups = new ArrayList<>();
@@ -218,7 +244,13 @@ public class TracksDataSource {
 
 		return groups;
     }
-    // Returns a pair of integers (track, group) for this association of track and group
+
+	/**
+	 * TODO i don't know what this method is doing
+	 *
+	 * @param cursor {@link DatabaseOpenHelper.TABLE_TRACK2GROUPS} table cursor
+	 * @return a pair of integers (track, group) for this association of track and group
+	 */
     private List<Integer> cursorToTrackGroupAssociation(Cursor cursor) {
         List<Integer> pair = new ArrayList<>();
         pair.add(cursor.getInt(T2G_COLUMN_INDEX_TRACK_ID));
@@ -226,6 +258,12 @@ public class TracksDataSource {
         return pair;
     }
 
+	/**
+	 * Retrieve all {@link Group} ids associated with track id
+	 *
+	 * @param id Track id
+	 * @return a list of Group ids
+	 */
     private List<Integer> getGroupIdsForTrack(long id) {
         // get groupIds for track
         List<Integer> groupIds = new ArrayList<>();
@@ -246,7 +284,12 @@ public class TracksDataSource {
         return groupIds;
     }
 
-
+	/**
+	 * Retrieve all {@link Track} ids associated with Group id
+	 *
+	 * @param groupId Group id
+	 * @return a list of Track ids
+	 */
     private List<Integer> getTrackIdsForGroup(int groupId) {
         open();
         Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
@@ -267,6 +310,12 @@ public class TracksDataSource {
         return ids;
     }
 
+	/**
+	 * Retrieve all {@link Track} objects associated with group id
+	 *
+	 * @param groupId group id
+	 * @return a list of Track objects
+	 */
     public List<Track> getTracksForGroup(int groupId) {
         // get tracks for group
         Log.e(TAG, "getTracksForGroup(" + groupId+")");
@@ -285,10 +334,22 @@ public class TracksDataSource {
         return tracks;
     }
 
+	/**
+	 * Retrieve all {@link Group} objects associated with track id
+	 *
+	 * @param track Track object
+	 * @return a list of Group objects
+	 */
     public List<Group> getGroupsForTrack(Track track) {
         return getGroupsForTrack(track.getId());
     }
 
+	/**
+	 * Store this {@link Group} object
+	 * to the {@link DatabaseOpenHelper.TABLE_GROUPS} database table.
+	 *
+	 * @param group Group object
+	 */
     public void storeGroup(Group group) { // Note: renamed to storeGroup to be consistent with other storeX calls.  We could also change them all to saveX
         open();
 
@@ -473,7 +534,13 @@ public class TracksDataSource {
 		//Log.v("Tickmate", "checking for " + t.getId() + " and " + date.toString());
 		return ticks.contains(new Tick(t.getId(), date));
 	}
-	
+
+	/**
+	 * Resolve the Cursor into a {@link Track} object.
+	 *
+	 * @param cursor Track cursor
+	 * @return Track
+	 */
 	private Track cursorToTrack(Cursor cursor) {
 		Track track = new Track(cursor.getString(1), cursor.getString(3));
 		track.setId(cursor.getInt(0));
@@ -484,6 +551,12 @@ public class TracksDataSource {
 		return track;
 	}
 
+	/**
+	 * Resolve the Cursor into a {@link Group} object.
+	 *
+	 * @param cursor Group cursor
+	 * @return Group
+	 */
     private Group cursorToGroup(Cursor cursor) {
         Group group = new Group(cursor.getString(1), cursor.getString(2));
         group.setId(cursor.getInt(0));
@@ -645,6 +718,12 @@ public class TracksDataSource {
 		orderTracks();
 	}
 
+	/**
+	 * Store the fact that this one Track and set of Groups are associated with each other
+	 *
+	 * @param trackId track ids
+	 * @param newGroupIds group id
+	 */
     public void linkOneTrackManyGroups(int trackId, List<Integer> newGroupIds) {
         List<Integer> currentGroupIds = getGroupIdsForTrack(trackId);
                 Log.d(TAG, "Updating track (" + trackId + ") with new group IDS(" + newGroupIds + "), previously were: " + printGroupIdsForTrack(trackId));
@@ -665,6 +744,13 @@ public class TracksDataSource {
                 Log.d(TAG, "Check that new group ids were set correctly for (" + trackId + "), using (" + newGroupIds + ").  After update, they are: " + printGroupIdsForTrack(trackId));
     }
 
+
+	/**
+	 * Remove the fact that this Track and Group were associated with each other
+	 *
+	 * @param trackId track ids
+	 * @param groupId group id
+	 */
     private void unlinkOneTrackOneGroup(int trackId, Integer groupId) {
         open();
         database.delete(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
@@ -674,6 +760,12 @@ public class TracksDataSource {
         //        Log.d(TAG, "called unlinkOneTrackOneGroup(" + trackId + ", " + groupId + "). ");
     }
 
+	/**
+	 * Store the fact that this set of Tracks and one Group are associated with each other
+	 *
+	 * @param trackIds track ids
+	 * @param groupId group id
+	 */
     public void linkManyTracksOneGroup(List<Integer> trackIds, int groupId) {
         // Consider checking whether the link already exists, and only requesting the link creation if it doesn't already
         for (Integer trackId : trackIds) {
@@ -681,9 +773,12 @@ public class TracksDataSource {
         }
     }
 
-
-
-    // Store the fact that this track and group are associated with each other
+	/**
+	 * Store the fact that this Track and Group are associated with each other
+	 *
+	 * @param trackId track id
+	 * @param groupId group id
+	 */
     public void linkOneTrackOneGroup(long trackId, long groupId) {
         open();
 
