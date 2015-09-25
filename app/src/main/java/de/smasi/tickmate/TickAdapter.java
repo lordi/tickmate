@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -476,28 +477,28 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     }
 
     public void onSwipeRight() {
-//        Toast.makeText(context, "Swiped right.", Toast.LENGTH_SHORT).show();  // remove before publishing
         int position = mGroupSpinner.getSelectedItemPosition() - 1;
         if (position < 0) {
             position = mGroupSpinner.getCount() - 1;
         }
+        Toast.makeText(context, "Swiped right, was ("+mGroupSpinner.getSelectedItemPosition()+"), now ("+position+")", Toast.LENGTH_SHORT).show();  // remove before publishing
         mGroupSpinner.setSelection(position);
     }
 
     public void onSwipeLeft() {
-//        Toast.makeText(context, "Swiped left.", Toast.LENGTH_SHORT).show();  // remove before publishing
         int position = mGroupSpinner.getSelectedItemPosition() + 1;
         if (position == mGroupSpinner.getCount()) {
             position = 0;
         }
+        Toast.makeText(context, "Swiped left, was ("+mGroupSpinner.getSelectedItemPosition()+"), now ("+position+")", Toast.LENGTH_SHORT).show();  // remove before publishing
         mGroupSpinner.setSelection(position);
      }
 
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
-        private static final int SWIPE_THRESHOLD = 40;
-        private static final int SWIPE_VELOCITY_THRESHOLD = 40;
+        private static final int SWIPE_THRESHOLD = 20;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 20;
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
