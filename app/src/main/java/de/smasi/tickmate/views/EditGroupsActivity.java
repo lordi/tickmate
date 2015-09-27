@@ -36,6 +36,11 @@ public class EditGroupsActivity extends ListActivity {
         registerForContextMenu(this.getListView());
     }
 
+    /**
+     * Retrieve Groups from database via {@link de.smasi.tickmate.database.TracksDataSource},
+     * create a new {@link de.smasi.tickmate.views.GroupListAdapter} with retrieved Groups,
+     * and assign adapter to ListView
+     */
     protected void loadGroups() {
 
         Group[] groupArray = new Group[0];
