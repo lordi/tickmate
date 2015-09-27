@@ -131,6 +131,11 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
             return 0; // return 0 here if we have no tracks to display so that the empty view will get displayed
             // TODO Question for Hannes and/or AVP - Should we make further changes to the empty view text?
             // (todo)  (It has been updated to include "No tracks have been added for this group".)
+            // js: Now I think the 'empty view' should depend on whether we are viewing the 'all
+            // tracks' selection or a group, and maybe whether or not there are existing tracks.
+            // If there are tracks, and we are viewing a group, then the user should get a 'select
+            // tracks for this group' selector (to be created, modelled on 'groups for this track'
+            //  preference in TrackPreferenceFragment)
         } else {
             return this.count;
         }
