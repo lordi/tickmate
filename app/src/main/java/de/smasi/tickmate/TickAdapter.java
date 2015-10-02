@@ -206,14 +206,18 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         // trackHeader will contain the track icons, while header will contain both the spinner and trackHeader
         LinearLayout header = new LinearLayout(this.context);
         header.setOrientation(LinearLayout.VERTICAL);
+        header.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
 
         LinearLayout trackHeader = new LinearLayout(this.context);
         trackHeader.setOrientation(LinearLayout.HORIZONTAL);
+        trackHeader.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
 
         LinearLayout headerrow = new LinearLayout(this.context);
         headerrow.setOrientation(LinearLayout.HORIZONTAL);
+        headerrow.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
 
         TextView b2 = new TextView(context);
+        b2.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
         b2.setText("");
 
         b2.setPadding(0, 0, 0, 0);
@@ -224,6 +228,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         for (Track track : mTracksCurrentlyDisplayed) {
             TrackButton b = new TrackButton(context, track);
+            b.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
             b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                     LayoutParams.MATCH_PARENT, (1.0f) / mTracksCurrentlyDisplayed.size()));
             headerrow.addView(b);
@@ -252,14 +257,17 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     /**
      * Used to create and insert the week separator
-     *  @param tickGrid the ViewGroup into which the week separator will be inserted
+     *
+     * @param tickGrid the ViewGroup into which the week separator will be inserted
      */
     private void addStartWeekSeparator(ViewGroup tickGrid) {
         TextView splitter2 = new TextView(this.context);
+        splitter2.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
         splitter2.setText("");
         splitter2.setHeight(5);
         tickGrid.addView(splitter2);
         TextView splitter = new TextView(this.context);
+        splitter.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
         splitter.setText("");
         splitter.setHeight(11);
         splitter.setBackgroundResource(R.drawable.center_line);
@@ -276,12 +284,18 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 //		Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 
         LinearLayout tickgrid = new LinearLayout(this.context);
+//        LinearLayout tickgrid = new TestCustomEventControlLinearLayout(this.context);
+//        getListView().getRootView().setOnTouchListener(mAdapter.getAdapter());
+        tickgrid.setOnTouchListener(this);  // Hack to ensure swipes are intercepted; improve & remove
+
         tickgrid.setOrientation(LinearLayout.VERTICAL);
 
         String s = dateFormat.format(date);
 
         TextView t_weekday = new TextView(this.context);
+        t_weekday.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
         TextView t_date = new TextView(this.context);
+        t_date.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
 
         if (cal.compareTo(today) == 0)
             t_date.setText(context.getString(R.string.today));
@@ -309,8 +323,10 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         t_date.setTextColor(Color.GRAY);
         t_weekday.setWidth(120);
         LinearLayout row = new LinearLayout(this.context);
+        row.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
         row.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout l = new LinearLayout(this.context);
+        l.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
         l.setOrientation(LinearLayout.VERTICAL);
         l.addView(t_weekday);
         l.addView(t_date);
@@ -463,6 +479,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
         // Consider: Confirm that doing nothing is truly the best choice here. Leaves previous mDisplayGroupName the same.
     }
 
@@ -471,6 +488,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     public void restoreState(Bundle state) {
         mSpinnerPosition = state.getInt("SpinnerPosition", 0);
     }
+
     public void saveState(Bundle outState) {
         outState.putInt("SpinnerPosition", mSpinnerPosition);
     }
@@ -478,26 +496,32 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        Log.d(TAG, ">>> onTouch - in TA");
+
         return mGestureDetector.onTouchEvent(event);
     }
 
     public void onSwipeRight() {
+        Log.d(TAG, ">>> onSwipeRight - in TA");
+
         int position = mGroupSpinner.getSelectedItemPosition() - 1;
         if (position < 0) {
             position = mGroupSpinner.getCount() - 1;
         }
-        Toast.makeText(context, "Swiped right, was ("+mGroupSpinner.getSelectedItemPosition()+"), now ("+position+")", Toast.LENGTH_SHORT).show();  // remove before publishing
+        Toast.makeText(context, "Swiped right, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // remove before publishing
         mGroupSpinner.setSelection(position);
     }
 
     public void onSwipeLeft() {
+        Log.d(TAG, ">>> onSwipeLeft - in TA");
+
         int position = mGroupSpinner.getSelectedItemPosition() + 1;
         if (position == mGroupSpinner.getCount()) {
             position = 0;
         }
-        Toast.makeText(context, "Swiped left, was ("+mGroupSpinner.getSelectedItemPosition()+"), now ("+position+")", Toast.LENGTH_SHORT).show();  // remove before publishing
+        Toast.makeText(context, "Swiped left, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // remove before publishing
         mGroupSpinner.setSelection(position);
-     }
+    }
 
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -507,7 +531,8 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if ( (e1 == null) || (e2 == null) ) return false;
+            Log.d(TAG, ">>> onFling");
+            if ((e1 == null) || (e2 == null)) return false;
 
             float distanceX = e2.getX() - e1.getX();
             float distanceY = e2.getY() - e1.getY();
@@ -521,4 +546,5 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
             return false;
         }
     }
+
 }

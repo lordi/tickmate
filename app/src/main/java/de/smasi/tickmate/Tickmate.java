@@ -68,8 +68,9 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
 	   	getListView().setStackFromBottom(true);
         getListView().setAdapter(mAdapter);
-//        getListView().setOnTouchListener(mAdapter.getAdapter());
-        getListView().getRootView().setOnTouchListener(mAdapter.getAdapter());
+//        getListView().getRootView().setOnTouchListener(mAdapter.getAdapter());
+        getListView().setOnTouchListener(mAdapter.getAdapter());
+        getListView().getEmptyView().setOnTouchListener(mAdapter.getAdapter());
 
 
         if (savedInstanceState != null) {
@@ -312,9 +313,12 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
                 Boolean reverseDateOrdering = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).
                         getBoolean("reverse-date-order-key", false);
                 if (!reverseDateOrdering) {
-                    getListView().setSelection(CHUNK_SIZE); // When infiniteScrolling upwards, prevents the infinite loop bug and keeps display from jumping
+                    getListView().setSelection(CHUNK_SIZE); // When infiniteScrolling upwards,
+                    // prevents the infinite loop bug and keeps display from jumping
                 }
             }
         }, 500);
     }
+
+
 }
