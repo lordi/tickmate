@@ -27,8 +27,7 @@ public class TracksDataSource {
 	public static final int DIRECTION_UP = -1;
 	public static final int DIRECTION_DOWN = 1;
 
-    // TODO Change allColumnsGroups to an enum; remove these GROUP_XX_COLLUMN values and ref
-    //  the ordinal of the enum values
+    // Indices of columns in the database, used by cursor.getValue(columnIndex)
     private static final int GROUP_ID_COLUMN = 0;
     private static final int GROUP_NAME_COLUMN = 1;
     private static final int GROUP_DESCRIPTION_COLUMN = 2;
@@ -57,7 +56,6 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_SECOND
 	};
 
-    // TODO Change allColumndsGroups to an enum
 	private static final String[] allColumnsGroups = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_NAME,
@@ -236,7 +234,7 @@ public class TracksDataSource {
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-            List<Integer> pair = cursorToTrackGroupAssociation(cursor);
+            List<Integer> pair = cursorToTrackGroupPair(cursor);
             Log.d(TAG, "\tFound pair: " + TextUtils.join(",", pair));
             int groupId = pair.get(1);
             Group g = getGroup(groupId);
@@ -254,11 +252,14 @@ public class TracksDataSource {
 
 	/**
 	 * TODO i don't know what this method is doing
+     *  ^^ After querying the DB for pairs of tracks + groups which are linked, this method can be
+     *  used to read the next pair of linked track+group from the cursor and return them as a
+     *  pair of IDs.
 	 *
 	 * @param cursor {@link DatabaseOpenHelper#TABLE_TRACK2GROUPS} table cursor
-	 * @return a pair of integers (track, group) for this association of track and group
+	 * @return a pair of integers (track, group) for this linkage of track and group
 	 */
-    private List<Integer> cursorToTrackGroupAssociation(Cursor cursor) {
+    private List<Integer> cursorToTrackGroupPair(Cursor cursor) {
         List<Integer> pair = new ArrayList<>();
         pair.add(cursor.getInt(T2G_COLUMN_INDEX_TRACK_ID));
         pair.add(cursor.getInt(T2G_COLUMN_INDEX_GROUP_ID));
@@ -816,15 +817,27 @@ public class TracksDataSource {
     public void linkOneTrackOneGroup(long trackId, long groupId) {
         open();
 
-//        Log.d(TAG, "Before deleting duplicates (of <" + trackId + "," + groupId + ">), the group ids for track (" + trackId + ") are: " + printGroupIdsForTrack(trackId));
+        // Check whether the linkage already exists.  Query the database for it:
+        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACK2GROUPS, allColumnsTracks2Groups,
+                DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + trackId + " AND "
+                        + DatabaseOpenHelper.COLUMN_GROUP_ID + " = " + groupId,
+                null, null, null, null, null);
 
+        // If moveToFirst returns true, then the link already exists and there is nothing to do.
+        if (cursor.moveToFirst()) {
+           return;  // Link already exists, so exit this method
+        }
+
+//        Log.d(TAG, "Before deleting duplicates (of <" + trackId + "," + groupId + ">), the group ids for track (" + trackId + ") are: " + printGroupIdsForTrack(trackId));
         // AVP:See-linkOneTrackManyGroups TODO Instead of deleting any possibly pre-existing duplicate entry, instead see if the association already exists - if so, do nothing
-        database.delete(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
-                DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + trackId
-                        + " AND " + DatabaseOpenHelper.COLUMN_GROUP_ID + " = " + groupId, null);
+        // ^^ Done but not tested
+//        database.delete(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
+//                DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + trackId
+//                        + " AND " + DatabaseOpenHelper.COLUMN_GROUP_ID + " = " + groupId, null);
 
 //        Log.d(TAG, "After deleting duplicates (of <" + trackId + "," + groupId + ">), the group ids for track (" + trackId + ") are: " + printGroupIdsForTrack(trackId));
 
+        // The link doesn't already exist, so create it:
         ContentValues values = new ContentValues();
         values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, trackId);
         values.put(DatabaseOpenHelper.COLUMN_GROUP_ID, groupId);
