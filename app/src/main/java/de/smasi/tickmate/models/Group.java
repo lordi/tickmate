@@ -18,6 +18,10 @@ package de.smasi.tickmate.models;
 //      everywhere in the code (otherwise someone may hold a reference to a stale object, which is
 //      not in the centralized master list and whose data is therefore not updated
 
+// TODO NOW js - currently trying to allow group order to be changed, in preparation for using a TabView (so users won't be forced to swipe across too many tabs)
+
+import android.util.Log;
+
 /**
  * Groups are a way to organize and categorize Tracks. Groups can be predefined or user-defined.
  */
@@ -27,9 +31,10 @@ public class Group {
     private static final String TAG = "Group";
 
     private int mId = -1;         // Unique identifier will be assigned by database
-    private String mName = "";
-    private String mDescription = "(No description given)";
+    private String mName = "(Name not initialized)";
+    private String mDescription = "(Description not initialized)";
     private boolean mIsSectionHeader = false; // For entries derived from groups.xml to be section headers
+    private int mOrder = 0;
 
     /**
      * @param name group name
@@ -112,4 +117,14 @@ public class Group {
     public void setSectionHeader(boolean sectionHeader) {
         mIsSectionHeader = sectionHeader;
     }
+
+    public void setOrder(int groupOrder) {
+        Log.e(TAG, "Group.setOrder(" + groupOrder + ")");
+        mOrder = groupOrder;
+    }
+
+    public int getOrder() {
+        return mOrder;
+    }
 }
+

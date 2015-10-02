@@ -27,10 +27,17 @@ public class TracksDataSource {
 	public static final int DIRECTION_UP = -1;
 	public static final int DIRECTION_DOWN = 1;
 
+    // TODO Change allColumnsGroups to an enum; remove these GROUP_XX_COLLUMN values and ref
+    //  the ordinal of the enum values
+    private static final int GROUP_ID_COLUMN = 0;
+    private static final int GROUP_NAME_COLUMN = 1;
+    private static final int GROUP_DESCRIPTION_COLUMN = 2;
+    private static final int GROUP_ORDER_COLUMN = 3;
+
 	private SQLiteDatabase database;
     private DatabaseOpenHelper dbHelper = DatabaseOpenHelper.getInstance(Globals.getInstance());
 
-    private static final String[] allColumns = {
+    private static final String[] allColumnsTracks = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_NAME,
 			DatabaseOpenHelper.COLUMN_ENABLED,
@@ -49,11 +56,14 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_MINUTE,
 			DatabaseOpenHelper.COLUMN_SECOND
 	};
+
+    // TODO Change allColumndsGroups to an enum
 	private static final String[] allColumnsGroups = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_NAME,
-			DatabaseOpenHelper.COLUMN_DESCRIPTION
-	};
+			DatabaseOpenHelper.COLUMN_DESCRIPTION,
+            "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\""
+    };
 
     // Used by the cursor to refer to the columns
     private final static int T2G_COLUMN_INDEX_TRACK_ID = 1;
@@ -114,7 +124,7 @@ public class TracksDataSource {
 	public Track getTrack(int id) {
 		open();
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
+                allColumnsTracks, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
 				null, null, null, null);
 		cursor.moveToFirst();
         Log.d(TAG, "getTrack called with id = " + id);
@@ -125,7 +135,7 @@ public class TracksDataSource {
 
 	/**
 	 * Find and return a {@link Group}
-	 * from the {@link DatabaseOpenHelper.TABLE_GROUPS} database table.
+	 * from the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
 	 *
 	 * @param id group id
 	 * @return group
@@ -148,7 +158,7 @@ public class TracksDataSource {
 		open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-                allColumns, null, null, null, null,
+                allColumnsTracks, null, null, null, null,
                 "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 
 		cursor.moveToFirst();
@@ -164,7 +174,7 @@ public class TracksDataSource {
 
 	/**
 	 * Delete a given {@link Group}
-	 * from the {@link DatabaseOpenHelper.TABLE_GROUPS} database table.
+	 * from the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
 	 *
 	 * @param group group to delete
 	 */
@@ -186,35 +196,32 @@ public class TracksDataSource {
 
 	/**
 	 * Retrieve all {@link Group}
-	 * from the {@link DatabaseOpenHelper.TABLE_GROUPS} database table.
+	 * from the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
 	 *
 	 * @return a list of all Groups for this user
 	 */
     public List<Group> getGroups() {
 		List<Group> groups = new ArrayList<>();
-
 		open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_GROUPS,
                 allColumnsGroups, null, null, null, null,
                 "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 
-		cursor.moveToFirst();
+        cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
             Group g = cursorToGroup(cursor);
             Log.d(TAG, "in getGroups, adding group: "+g);
             groups.add(g);
 			cursor.moveToNext();
 		}
-		// Make sure to close the cursor
-		cursor.close();
-
-		return groups;
+		cursor.close(); // Make sure to close the cursor
+        return groups;
 	}
 
 	/**
 	 * Retrieve all {@link Group} associated with track ID
-	 * from the {@link DatabaseOpenHelper.TABLE_TRACK2GROUPS} database table.
+	 * from the {@link DatabaseOpenHelper#TABLE_TRACK2GROUPS} database table.
 	 *
 	 * @param id track id
 	 * @return a list of all Groups for this track id
@@ -248,7 +255,7 @@ public class TracksDataSource {
 	/**
 	 * TODO i don't know what this method is doing
 	 *
-	 * @param cursor {@link DatabaseOpenHelper.TABLE_TRACK2GROUPS} table cursor
+	 * @param cursor {@link DatabaseOpenHelper#TABLE_TRACK2GROUPS} table cursor
 	 * @return a pair of integers (track, group) for this association of track and group
 	 */
     private List<Integer> cursorToTrackGroupAssociation(Cursor cursor) {
@@ -346,7 +353,7 @@ public class TracksDataSource {
 
 	/**
 	 * Store this {@link Group} object
-	 * to the {@link DatabaseOpenHelper.TABLE_GROUPS} database table.
+	 * to the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
 	 *
 	 * @param group Group object
 	 */
@@ -357,16 +364,17 @@ public class TracksDataSource {
 
         values.put(DatabaseOpenHelper.COLUMN_NAME, group.getName());
         values.put(DatabaseOpenHelper.COLUMN_DESCRIPTION, group.getDescription());
+        values.put("\"" + DatabaseOpenHelper.COLUMN_ORDER +"\"", group.getOrder());
 
         if (group.getId() > 0) {
             database.update(DatabaseOpenHelper.TABLE_GROUPS, values,
                     DatabaseOpenHelper.COLUMN_ID + "=?",
                     new String[]{Integer.toString(group.getId())});
-//            Log.d("Tickmate", "saving group id=" + group.getId());
+            Log.d(TAG, "saving group id=" + group.getId());
         } else {
             long t_id = database.insert(DatabaseOpenHelper.TABLE_GROUPS, null, values);
             group.setId((int) t_id);
-//            Log.d("Tickmate", "inserted group id=" + group.getId());
+            Log.d("Tickmate", "inserted group id=" + group.getId());
         }
 
         close();
@@ -383,7 +391,7 @@ public class TracksDataSource {
 		open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-				allColumns, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null,
+                allColumnsTracks, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null,
 				"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 
 		cursor.moveToFirst();
@@ -558,8 +566,10 @@ public class TracksDataSource {
 	 * @return Group
 	 */
     private Group cursorToGroup(Cursor cursor) {
-        Group group = new Group(cursor.getString(1), cursor.getString(2));
-        group.setId(cursor.getInt(0));
+        Group group = new Group(cursor.getString(GROUP_NAME_COLUMN),
+                cursor.getString(GROUP_DESCRIPTION_COLUMN));
+        group.setId(cursor.getInt(GROUP_ID_COLUMN));
+        group.setOrder(cursor.getInt(GROUP_ORDER_COLUMN));
         return group;
     }
 	
@@ -609,13 +619,13 @@ public class TracksDataSource {
 		values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, track.getId());
 		values.put(DatabaseOpenHelper.COLUMN_YEAR,date.get(Calendar.YEAR));
 		values.put(DatabaseOpenHelper.COLUMN_MONTH,date.get(Calendar.MONTH));
-		values.put(DatabaseOpenHelper.COLUMN_DAY,date.get(Calendar.DAY_OF_MONTH));
+		values.put(DatabaseOpenHelper.COLUMN_DAY, date.get(Calendar.DAY_OF_MONTH));
 		values.put(DatabaseOpenHelper.COLUMN_HOUR, date.get(Calendar.HOUR_OF_DAY));
 		values.put(DatabaseOpenHelper.COLUMN_MINUTE, date.get(Calendar.MINUTE));
 		values.put(DatabaseOpenHelper.COLUMN_SECOND, date.get(Calendar.SECOND));
 		values.put(DatabaseOpenHelper.COLUMN_HAS_TIME_INFO, hasTimeInfo ? 1 : 0);
 		Log.d("Tickmate", "Inserting tick at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH)
-				+ " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
+                + " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
 		database.insert(DatabaseOpenHelper.TABLE_TICKS, null, values);
 
 		close();
@@ -685,12 +695,35 @@ public class TracksDataSource {
 		cursor.close();		
 		return c;
 	}
-	
+
+
+    public void orderGroups() {
+        open();
+
+        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_GROUPS,
+                allColumnsGroups, null, null, null, null,
+                "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
+
+//        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_GROUPS,
+//                allColumnsGroups, null, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        for (int groupOrder = 0; !cursor.isAfterLast(); groupOrder += 10) {
+            Group group = cursorToGroup(cursor);
+            //Log.d("Tickmate", group.getName() + " is " + group.getOrder() + ", gets " + trackOrder);
+            group.setOrder(groupOrder);
+            storeGroup(group);
+            cursor.moveToNext();
+        }
+        // Make sure to close the cursor
+        cursor.close();
+    }
+
 	public void orderTracks() {
 		open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
-                allColumns, null, null, null, null,
+                allColumnsTracks, null, null, null, null,
                 "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 		
 		cursor.moveToFirst();
@@ -711,6 +744,7 @@ public class TracksDataSource {
 		
 		Track t_updated = getTrack(t.getId());
 		t_updated.setOrder(t_updated.getOrder() + dir * 15);
+        // js: Why multiply by 15?
 		//Log.d("Tickmate", t_updated.getName() + " got " + t_updated.getOrder());
 
 		storeTrack(t_updated);
@@ -807,4 +841,18 @@ public class TracksDataSource {
         return TextUtils.join(",", groupIds);
     }
 
+    public void moveGroup(Group g, int direction) {
+        open();
+        orderGroups();
+
+        Group updatedGroup = getGroup(g.getId());
+        updatedGroup.setOrder(updatedGroup.getOrder() + direction * 15); // Mimicking moveTrack,
+        // Though I don't know why we do: * 15
+        //Log.d("Tickmate", t_updated.getName() + " got " + t_updated.getOrder());
+
+        storeGroup(updatedGroup);
+
+        orderGroups();
+
+    }
 }

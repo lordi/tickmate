@@ -116,6 +116,22 @@ public class EditGroupsActivity extends ListActivity {
                 return true;
             }
 
+            case R.id.edit_groups_moveup: {
+                Group g  = groupsAdapter.getItem((int)info.id);
+                TracksDataSource ds = TracksDataSource.getInstance();
+                ds.moveGroup(g, TracksDataSource.DIRECTION_UP);
+                loadGroups();
+                return true;
+            }
+
+            case R.id.edit_groups_movedown: {
+                Group g = (Group)groupsAdapter.getItem((int)info.id);
+                TracksDataSource ds = TracksDataSource.getInstance();
+                ds.moveGroup(g, TracksDataSource.DIRECTION_DOWN);
+                loadGroups();
+                return true;
+            }
+
             // Consider whether we may want to let the user re-order the groups, in which case ...
             // ... model the code in EditTracksActivity, after "case R.id.edit_tracks_moveup"
             // Consider also whether the user will be able to enable/disable groups.

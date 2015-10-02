@@ -526,8 +526,8 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
-        private static final int SWIPE_THRESHOLD = 20;
-        private static final int SWIPE_VELOCITY_THRESHOLD = 20;
+        private static final int SWIPE_THRESHOLD = 50;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 50;
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {

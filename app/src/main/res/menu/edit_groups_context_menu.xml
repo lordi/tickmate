@@ -1,26 +1,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!--<item-->
-        <!--android:id="@+id/edit_tracks_moveup"-->
-        <!--android:orderInCategory="100"-->
-        <!--android:showAsAction="never"-->
-        <!--android:title="@string/move_up">-->
-    <!--</item>-->
-    <!-- -->
-       <!--<item-->
-        <!--android:id="@+id/edit_tracks_movedown"-->
-        <!--android:orderInCategory="100"-->
-        <!--android:showAsAction="never"-->
-        <!--android:title="@string/move_down">-->
-    <!--</item>-->
-    
+    <item
+        android:id="@+id/edit_groups_moveup"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/move_up">
+    </item>
+
+    <item
+        android:id="@+id/edit_groups_movedown"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/move_down">
+    </item>
+
     <item
         android:id="@+id/edit_groups_edit"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/edit">
     </item>
-   
+
     <!--<item-->
         <!--android:id="@+id/edit_tracks_deactivate"-->
         <!--android:orderInCategory="100"-->
@@ -34,12 +34,12 @@
         <!--android:showAsAction="never"-->
         <!--android:title="@string/activate">-->
     <!--</item>-->
-    
-    
+
+
     <item
         android:id="@+id/edit_groups_delete"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/delete">
-    </item>    
+    </item>
 </menu>

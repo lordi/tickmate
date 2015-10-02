@@ -83,7 +83,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             "create table " + TABLE_GROUPS + "("
                     + COLUMN_ID + " integer primary key autoincrement, "
                     + COLUMN_NAME + " text not null, "
-                    + COLUMN_DESCRIPTION + " text not null"
+                    + COLUMN_DESCRIPTION + " text not null, "
+                    + "\"" + COLUMN_ORDER + "\" integer DEFAULT -1"
                     + ");";
     private static final String DATABASE_CREATE_TRACK2GROUPS =
 			"create table " + TABLE_TRACK2GROUPS + "("
