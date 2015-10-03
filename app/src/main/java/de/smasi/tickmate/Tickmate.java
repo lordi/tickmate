@@ -29,9 +29,11 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import de.smasi.tickmate.database.DatabaseOpenHelper;
+import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditGroupsActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
+import de.smasi.tickmate.views.GroupPreferenceActivity;
 import de.smasi.tickmate.views.SettingsActivity;
 import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
 
@@ -270,7 +272,17 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
     @Override
     public void onClick(View v) {
-        this.editTracks(getCurrentFocus());
+        Group displayedGroup = mAdapter.getAdapter().getGroupCurrentlyDisplayed();
+
+        if ( displayedGroup == Group.ALL_GROUP ) {
+            this.editTracks(getCurrentFocus());
+        } else {
+            Intent intent = new Intent(this, GroupPreferenceActivity.class);
+            intent.putExtra("group_id", displayedGroup.getId());
+            intent.putExtra("openTrackList", true);
+//            startActivityForResult(intent, 1);
+            startActivity(intent);
+        }
     }
 
     public static class DatePickerFragment extends DialogFragment implements

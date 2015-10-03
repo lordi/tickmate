@@ -523,6 +523,15 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         mGroupSpinner.setSelection(position);
     }
 
+    public Group getGroupCurrentlyDisplayed() {
+        int spinnerPosition = mGroupSpinner.getSelectedItemPosition();
+        if (spinnerPosition  == 0) {
+            return Group.ALL_GROUP;
+        } else {
+            return TracksDataSource.getInstance().getGroup(mSpinnerArrayGroupIds.get(spinnerPosition));
+        }
+    }
+
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
 

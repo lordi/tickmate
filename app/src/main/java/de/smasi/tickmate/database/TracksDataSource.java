@@ -755,8 +755,10 @@ public class TracksDataSource {
 
 	/**
 	 * Store the fact that this one Track and set of Groups are associated with each other
+     *   Assumes that all groups IDs that are *not* included in newGroupIds should be unlinked
+     *   from the track trackId
 	 *
-	 * @param trackId track ids
+	 * @param trackId a complete list of the track IDs to link to the given group ID
 	 * @param newGroupIds group id
 	 */
     public void linkOneTrackManyGroups(int trackId, List<Integer> newGroupIds) {
@@ -801,14 +803,46 @@ public class TracksDataSource {
 	 * @param trackIds track ids
 	 * @param groupId group id
 	 */
-    public void linkManyTracksOneGroup(List<Integer> trackIds, int groupId) {
-        // Consider checking whether the link already exists, and only requesting the link creation if it doesn't already
-        for (Integer trackId : trackIds) {
-            linkOneTrackOneGroup(trackId, groupId);
+//    public void linkManyTracksOneGroup(List<Integer> trackIds, int groupId) {
+//         Consider checking whether the link already exists, and only requesting the link creation if it doesn't already
+//        for (Integer trackId : trackIds) {
+//            linkOneTrackOneGroup(trackId, groupId);
+//        }
+//    }
+
+    /**
+     * Store the fact that this one Group and set of Tracks are associated with each other
+     *   Assumes that all track IDs that are *not* included in newTrackIds should be unlinked
+     *   from the group groupId
+     *
+     * @param groupId a complete list of the track IDs to link to the given group ID
+     * @param newTrackIds a complete list of the
+     */
+        public void linkManyTracksOneGroup(List<Integer> newTrackIds, int groupId) {
+//    public void linkOneTrackManyGroups(int trackId, List<Integer> newGroupIds) {
+        List<Integer> currentTrackIds = getTrackIdsForGroup(groupId);
+//        Log.d(TAG, "Updating group (" + groupId + ") with new track IDS(" + newTrackIds + "), previously were: " + printTrackIdsForGroup(groupId));
+
+        // If the ID is currently in the table, but not in newTrackIds, then delete it
+        for (Integer tId : currentTrackIds) {
+            if (!newTrackIds.contains(tId)) {
+                unlinkOneTrackOneGroup(tId, groupId);
+            }
         }
+
+        // If the ID is in newTrackIds, but not currently in the table, then add it
+        for (Integer tId : newTrackIds) {
+            if (!currentTrackIds.contains(tId)) {
+                linkOneTrackOneGroup(tId, groupId);
+            }
+        }
+//        Log.d(TAG, "Check that new track ids were set correctly for (" + groupId + "), using (" + newTrackIds + ").  After update, they are: " + printTrackIdsForGroup(groupId));
     }
 
-	/**
+
+
+
+    /**
 	 * Store the fact that this Track and Group are associated with each other
 	 *
 	 * @param trackId track id
