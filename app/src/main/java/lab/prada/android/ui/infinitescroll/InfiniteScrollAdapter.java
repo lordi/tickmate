@@ -183,7 +183,8 @@ public class InfiniteScrollAdapter<T extends BaseAdapter> extends BaseAdapter {
         if (shouldInfiniteScrollAtTop) {
             return shouldShowProgressView() && position == 0; //getCount() - 1;
         } else {  // scroll at bottom
-            return shouldShowProgressView() && position > (getCount() - SCROLL_DOWN_THRESHOLD);  // TODO wrong.  getCount - lines on screen?
+            return shouldShowProgressView() && position > (getCount() - SCROLL_DOWN_THRESHOLD);
+            // TODO Revisit this.  Should the threshold adjust to the # of lines visible on screen?
         }
     }
 

@@ -29,7 +29,15 @@
         android:orderInCategory="180"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-     
+
+    <!-- Placing this here temporarily, for easy accessing during dev -->
+    <item
+        android:id="@+id/action_edit_groups"
+        android:orderInCategory="180"
+        android:showAsAction="never"
+        android:title="@string/menu_edit_groups"/>
+
+
     <item
         android:id="@+id/action_about"
         android:orderInCategory="200"

@@ -27,8 +27,8 @@ import de.smasi.tickmate.widgets.SummaryNumber;
 
 public class ShowTrackActivity extends Activity {
 
-	private TracksDataSource ds;
 	private Track track;
+    TracksDataSource ds;
 	
 	/* Statistics */
 	private int tickCount;
@@ -73,7 +73,7 @@ public class ShowTrackActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_track);
 		
-		this.ds = new TracksDataSource(this);
+		this.ds = TracksDataSource.getInstance();
 		Bundle extras = getIntent().getExtras();
 		if (extras == null) {
 			finish();
@@ -237,7 +237,6 @@ public class ShowTrackActivity extends Activity {
 	}
 	
 	private void loadTrack(int track_id) {
-		ds.open();
 		track = ds.getTrack(track_id);
 		tickCount = ds.getTickCount(track_id);
 		ticks = ds.getTicks(track_id);
@@ -252,7 +251,6 @@ public class ShowTrackActivity extends Activity {
 		}
 		today = Calendar.getInstance();
 	
-		ds.close();
 		fillTrackUI();
 		
 	}

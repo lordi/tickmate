@@ -1,0 +1,26 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="group_preference_screen">
+
+    <EditTextPreference
+        android:key="name"
+        android:title="@string/group_name"
+        />
+
+    <!--<de.smasi.tickmate.views.IconPreference-->
+    <!--android:icon="@drawable/glyphicons_334_candle_white"-->
+    <!--android:key="icon"-->
+    <!--android:title="@string/group_icon"-->
+    <!--/>-->
+
+    <EditTextPreference
+        android:key="description"
+        android:title="@string/edit_description_hint"
+        />
+
+    <MultiSelectListPreference
+        android:key="tracks"
+        android:title="@string/pref_title_tracks"
+        />
+
+</PreferenceScreen>
