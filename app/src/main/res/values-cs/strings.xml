@@ -34,8 +34,9 @@
       zubní nitě při čištění zubů nebo vypití sklenice piva. Budete schopni vyčíslit své zvyky a nahromaděná data pak můžete
       zobrazit i za předešlé týdny nebo měsíce a sledovat změny v čase. Touto cestou si můžete ulehčit
       překonání starých zlozvyků nebo se naučit nové návyky.
-      \n\nTickmate je open source software, zveřejněný pod GPLv3 licencí.
-      \n\nObsahuje ikony z balíku Glyphicons FREE (CC-BY-3.0)</string>
+\n\nTickmate je open source software, zveřejněný pod GPLv3 licencí.
+\n\nObsahuje ikony z balíku Glyphicons FREE (CC-BY-3.0)
+    </string>
     <string name="import_db">Importovat databázi</string>
     <string name="export_db">Zálohovat databázi</string>
     <string name="import_db_success">Databáze úspěšně importována.</string>
@@ -58,5 +59,17 @@
 
     <!-- New in 1.2.2 -->
     <string name="alert_delete_track_message">Opravdu si přejete smazat tuto stopu? Toto nelze vrátit zpět a pokud nemáte vytvořenou zálohu, vaše značky budou navždy ztraceny.</string>
-    
+
+    <!-- New in 1.2.3 -->
+    <string name="title_section_years">Roky</string>
+    <string name="pref_title_reverse_date_display_order">Sestupné pořadí data</string>
+    <string name="pref_description_reverse_date_display_order">Zobrazit aktuální datum nahoře</string>
+    <string name="pref_title_limit_active_date">Upravitelné dny</string>
+    <string-array name="pref_titles_active_date">
+        <item>Pouze den aktivity</item>
+        <item>Den aktivity a předcházející den</item>
+        <item>Všechny dny</item>
+    </string-array>
+    <string name="notify_user_ticking_disabled">Měnit tuto značku je vypnuto. Můžete určit možnosti úprav dnů v nastavení aplikace.</string>
+
 </resources>

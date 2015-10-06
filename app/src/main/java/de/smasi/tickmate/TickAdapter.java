@@ -250,7 +250,9 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         trackHeader.setWeightSum(1.0f);
         trackHeader.setPadding(10, 0, 10, 0);
         trackHeader.setBackgroundResource(R.drawable.bottom_line);
-        header.addView(mGroupSpinner);
+        if (mGroupSpinner.getCount() > 1) {
+            header.addView(mGroupSpinner);
+        }
         header.addView(trackHeader);
         return header;
     }

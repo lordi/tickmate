@@ -11,6 +11,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -185,6 +186,10 @@ public class TracksDataSource {
                     DatabaseOpenHelper.COLUMN_ID + " = " + id, null);
             if (rows > 0)
                 Log.d(TAG, "deleteGroup deleted: " + id);
+            rows = database.delete(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
+                    DatabaseOpenHelper.COLUMN_GROUP_ID + " = " + id, null);
+            if (rows > 0)
+                Log.d(TAG, String.format("number of track2group relations deleted: %d", rows));
         } finally {
             if (database != null) {
                 close();
@@ -217,53 +222,46 @@ public class TracksDataSource {
         return groups;
 	}
 
-	/**
-	 * Retrieve all {@link Group} associated with track ID
-	 * from the {@link DatabaseOpenHelper#TABLE_TRACK2GROUPS} database table.
-	 *
-	 * @param id track id
-	 * @return a list of all Groups for this track id
-	 */
+    /**
+     * Retrieve all {@link Group} associated with track ID
+     * from the {@link DatabaseOpenHelper#TABLE_TRACK2GROUPS} database table.
+     *
+     * @param id track id
+     * @return a list of all Groups for this track id
+     */
     public List<Group> getGroupsForTrack(int id) {
         // Get the groups linked to a particular track ID
-		List<Group> groups = new ArrayList<>();
-		open();
+        List<Group> groups = new ArrayList<>();
+        open();
 
-		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
-				allColumnsTracks2Groups, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + id, null, null, null, null, null);
+        List<String> columns = new LinkedList<>();
+        for (String col : allColumnsGroups) {
+            columns.add(String.format("%s.%s AS %s", DatabaseOpenHelper.TABLE_GROUPS, col, col));
+        }
 
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-            List<Integer> pair = cursorToTrackGroupPair(cursor);
-            Log.d(TAG, "\tFound pair: " + TextUtils.join(",", pair));
-            int groupId = pair.get(1);
-            Group g = getGroup(groupId);
-            Log.d(TAG, "in getGroupsForTrack("+id+"), adding group: "+g);
-            // instead of opening and closing within each call to getGroup, can we speed this up, since we know this will be called while already open?
-			groups.add(g);
-			cursor.moveToNext();
-		}
+        StringBuilder query = new StringBuilder();
+        query.append(String.format("SELECT %s FROM %s AS t2g ",
+                TextUtils.join(", ", columns), DatabaseOpenHelper.TABLE_TRACK2GROUPS));
+        query.append(String.format("JOIN %s ON %s.%s = t2g.%s ",
+                DatabaseOpenHelper.TABLE_GROUPS, DatabaseOpenHelper.TABLE_GROUPS,
+                DatabaseOpenHelper.COLUMN_ID, DatabaseOpenHelper.COLUMN_GROUP_ID));
+        query.append(String.format("AND %s.%s IS NOT NULL AND t2g.%s = ? ",
+                DatabaseOpenHelper.TABLE_GROUPS, DatabaseOpenHelper.COLUMN_ID,
+                DatabaseOpenHelper.COLUMN_TRACK_ID));
 
-		// Make sure to close the cursor
-		cursor.close();
+        //Log.d("tickmate", query.toString());
+        Cursor cursor = database.rawQuery(query.toString(), new String[]{String.valueOf(id)});
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Group g = cursorToGroup(cursor);
+            groups.add(g);
+            cursor.moveToNext();
+        }
 
-		return groups;
-    }
+        // Make sure to close the cursor
+        cursor.close();
 
-	/**
-	 * TODO i don't know what this method is doing
-     *  ^^ After querying the DB for pairs of tracks + groups which are linked, this method can be
-     *  used to read the next pair of linked track+group from the cursor and return them as a
-     *  pair of IDs.
-	 *
-	 * @param cursor {@link DatabaseOpenHelper#TABLE_TRACK2GROUPS} table cursor
-	 * @return a pair of integers (track, group) for this linkage of track and group
-	 */
-    private List<Integer> cursorToTrackGroupPair(Cursor cursor) {
-        List<Integer> pair = new ArrayList<>();
-        pair.add(cursor.getInt(T2G_COLUMN_INDEX_TRACK_ID));
-        pair.add(cursor.getInt(T2G_COLUMN_INDEX_GROUP_ID));
-        return pair;
+        return groups;
     }
 
 	/**
