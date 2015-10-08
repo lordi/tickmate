@@ -20,6 +20,7 @@ import de.smasi.tickmate.R;
 import de.smasi.tickmate.database.TracksDataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
+import de.smasi.tickmate.widgets.GroupListPreference;
 
 public class TrackPreferenceFragment extends PreferenceFragment implements
 OnSharedPreferenceChangeListener  {
@@ -28,59 +29,18 @@ OnSharedPreferenceChangeListener  {
 	private int track_id;
     private Track track;
     private EditTextPreference name;
+    private static TracksDataSource mDataSource = TracksDataSource.getInstance();
+
     private EditTextPreference description;
     private CheckBoxPreference enabled;
     private CheckBoxPreference multiple_entries_enabled;
 	private IconPreference icon;
-    private MultiSelectListPreference mGroupsPref;
-    private static TracksDataSource mDataSource = TracksDataSource.getInstance();
+    private GroupListPreference mGroupsPref;
 
     public TrackPreferenceFragment() {
         super();
     }
 
-    // used by Preference.setSummary
-	// Get the name of the Groups that this track belongs to
-	private static CharSequence[] getGroupNamesForTrackAsCharSeq(Track track) {
-		List<String> names = new ArrayList<>();
-		for (Group group : mDataSource.getGroupsForTrack(track.getId())){
-			names.add(group.getName());
-		}
-		return names.toArray(new CharSequence[names.size()]);
-	}
-
-    private static  Set<String> getGroupIdsForTrackAsSet(int id) {
-        Set<String> ids = new HashSet<>();
-        for (Group g : mDataSource.getGroupsForTrack(id)) {
-            ids.add(Integer.toString(g.getId()));
-        }
-        //        Log.d(TAG, "getGroupIdsForTrackAsSet is returning: " + TextUtils.join(",", ids));
-        return ids;
-    }
-
-    // Preference.setEntries requires a CharSequence[]
-    private static CharSequence[] getAllGroupNamesAsCharSeq() {
-        List<Group> groups = mDataSource.getGroups();
-        List<String> names = new ArrayList<>();
-        for (Group g : groups) {
-            names.add(g.getName());
-        }
-        CharSequence[] cs = names.toArray(new CharSequence[names.size()]);
-        //        Log.d(TAG, "getAllGroupNamesAsCharSeq is returning: " + TextUtils.join(",", cs));
-        return cs;
-    }
-
-    // Preferences.setEntryValues requires a CharSequence[]
-    private static CharSequence[] getAllGroupIdsAsCharSeq() {
-        List<Group> groups = mDataSource.getGroups();
-        List<String> ids = new ArrayList<>();
-        for (Group g : groups) {
-            ids.add(String.valueOf(g.getId()));
-        }
-        CharSequence[] cs = ids.toArray(new CharSequence[ids.size()]);
-        //        Log.d(TAG, "getAllGroupIdsAsCharSeq is returning: " + TextUtils.join(",", cs));
-        return cs;
-    }
 
 
     @Override
@@ -124,24 +84,14 @@ OnSharedPreferenceChangeListener  {
         //      and call TDS directly to get their data.  (I'm not opposed to making a separate
         //      utility class just for these methods if you like, but this seems clean enough for
         //      today; though I'm still not a fan of these extra long names
-        mGroupsPref = (MultiSelectListPreference) findPreference("groups");
-        mGroupsPref.setValues(getGroupIdsForTrackAsSet(track.getId()));
-
-        mGroupsPref.setEntries(getAllGroupNamesAsCharSeq());
-        mGroupsPref.setEntryValues(getAllGroupIdsAsCharSeq());
-        mGroupsPref.setSummary(getGroupNamesForSummary());
+        mGroupsPref = (GroupListPreference) findPreference("groups");
+        mGroupsPref.setTrack(track);
+        mGroupsPref.populate();
 //        Log.d(TAG, "setValues (0) track.getGroupIdsAsSet() - " + TextUtils.join("; ", track.getGroupIdsAsSet()));
 //        Log.d(TAG, "setEntries (1) getAllGroupNamesAsCharSeq()- " + getAllGroupNamesAsCharSeq() + " -- " + TextUtils.join("; ", getAllGroupNamesAsCharSeq()));
 //        Log.d(TAG, "setEntryValues (2) getAllGroupIdsAsCharSeq()- " + getAllGroupIdsAsCharSeq() + " -- " + TextUtils.join("; ", getAllGroupIdsAsCharSeq()));
 //        Log.d(TAG, "setSummary (3)with " + track.getGroupNamesAsCharSeq() + " -- " + TextUtils.join("; ", track.getGroupNamesAsCharSeq()));
     }
-
-    // Concatenates the names of the groups associated with this track into a readable comma separated list.
-    // Consider internationalizing this better - how are lists done in other languages? Joined with other characters?
-    private String getGroupNamesForSummary() {
-        return TextUtils.join(", ", getGroupNamesForTrackAsCharSeq(track));
-    }
-
 
     public void onResume() {
         super.onResume();
@@ -184,8 +134,8 @@ OnSharedPreferenceChangeListener  {
         	if (pref.equals(multiple_entries_enabled)) {
                 track.setMultipleEntriesEnabled(multiple_entries_enabled.isChecked());
             }
-        } else if (pref instanceof MultiSelectListPreference) {
-            MultiSelectListPreference mp = (MultiSelectListPreference) pref;
+        } else if (pref instanceof GroupListPreference) {
+            GroupListPreference mp = (GroupListPreference) pref;
 //            Log.d(TAG, "MultiSelectListPreference changed, with groupIds: " + TextUtils.join(",", mp.getValues()));
 
             // Convert the Set returned by getValues into a List, as expected by setGroupIdsUsingStrings:
@@ -197,7 +147,7 @@ OnSharedPreferenceChangeListener  {
             mDataSource.linkOneTrackManyGroups(track.getId(), groupIds);
 //            Log.d(TAG, "\tUser selected: " + TextUtils.join(",", groupIds));
 
-            mGroupsPref.setSummary(getGroupNamesForSummary());
+            mGroupsPref.populate();//setSummary(getGroupNamesForSummary());
 //                    + "  \n" + TextUtils.join("\n", mDataSource.getGroups())); // Leaving here for future debugging, until tests are written
 //            Log.d(TAG, "Confirm that the group IDs are correct: " + TextUtils.join(",", track.getGroupIdsAsSet()));
 //            Log.d(TAG, "Confirm that the group NAMES are correct: " + TextUtils.join(",", track.getGroupNamesAsSet()));
