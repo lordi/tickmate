@@ -428,9 +428,8 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         // mTracksCurrentlyDisplayed is updated when the spinner is selected
         if (mTracksCurrentlyDisplayed == null) {
             mTracksCurrentlyDisplayed = getTracksForCurrentGroup();
-
-            Log.d(TAG, "Tracks associated with current group (" + getCurrentGroupId() +
-                    ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
+//            Log.d(TAG, "Tracks associated with current group (" + getCurrentGroupId() +
+//                    ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
         }
 
         Log.v(TAG, "Data range has been updated: " + dateFormat.format(activeDay.getTime()) + " - " + dateFormat.format(today.getTime()));
@@ -469,14 +468,14 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
             mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getActiveTracks();
         } else {
             mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getTracksForGroup(currentGroupId);
-            Log.d(TAG, "Tracks associated with group(" + currentGroupId + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
+//            Log.d(TAG, "Tracks associated with group(" + currentGroupId + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
         }
 //        Log.d(TAG, "Number of tracks to display: " + mTracksCurrentlyDisplayed.size());
 
         Tickmate tm = (Tickmate) context;
 
         tm.refresh();
-        Log.d(TAG, " item selected:  pos(" + mSpinnerPosition + "), groupID(" + currentGroupId + ")");
+//        Log.d(TAG, " item selected:  pos(" + mSpinnerPosition + "), groupID(" + currentGroupId + ")");
     }
 
     @Override
@@ -498,13 +497,13 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.d(TAG, ">>> onTouch - in TA");
+//        Log.d(TAG, ">>> onTouch - in TA");
 
         return mGestureDetector.onTouchEvent(event);
     }
 
     public void onSwipeRight() {
-        Log.d(TAG, ">>> onSwipeRight - in TA");
+//        Log.d(TAG, ">>> onSwipeRight - in TA");
 
         int position = mGroupSpinner.getSelectedItemPosition() - 1;
         if (position < 0) {
@@ -515,7 +514,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     }
 
     public void onSwipeLeft() {
-        Log.d(TAG, ">>> onSwipeLeft - in TA");
+//        Log.d(TAG, ">>> onSwipeLeft - in TA");
 
         int position = mGroupSpinner.getSelectedItemPosition() + 1;
         if (position == mGroupSpinner.getCount()) {
@@ -542,7 +541,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.d(TAG, ">>> onFling");
+//            Log.d(TAG, ">>> onFling");
             if ((e1 == null) || (e2 == null)) return false;
 
             float distanceX = e2.getX() - e1.getX();

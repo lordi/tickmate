@@ -20,8 +20,6 @@ package de.smasi.tickmate.models;
 
 // TODO NOW js - currently trying to allow group order to be changed, in preparation for using a TabView (so users won't be forced to swipe across too many tabs)
 
-import android.util.Log;
-
 /**
  * Groups are a way to organize and categorize Tracks. Groups can be predefined or user-defined.
  */
@@ -119,7 +117,7 @@ public class Group {
     }
 
     public void setOrder(int groupOrder) {
-        Log.e(TAG, "Group.setOrder(" + groupOrder + ")");
+//        Log.d(TAG, "Group.setOrder(" + groupOrder + ")");
         mOrder = groupOrder;
     }
 

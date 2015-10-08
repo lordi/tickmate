@@ -20,7 +20,7 @@ import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class TracksDataSource {
     private static final String TAG = "TracksDataSource";
     private static TracksDataSource mInstance;
@@ -28,11 +28,6 @@ public class TracksDataSource {
 	public static final int DIRECTION_UP = -1;
 	public static final int DIRECTION_DOWN = 1;
 
-    // Indices of columns in the database, used by cursor.getValue(columnIndex)
-    private static final int GROUP_ID_COLUMN = 0;
-    private static final int GROUP_NAME_COLUMN = 1;
-    private static final int GROUP_DESCRIPTION_COLUMN = 2;
-    private static final int GROUP_ORDER_COLUMN = 3;
 
 	private SQLiteDatabase database;
     private DatabaseOpenHelper dbHelper = DatabaseOpenHelper.getInstance(Globals.getInstance());
@@ -57,23 +52,31 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_SECOND
 	};
 
-	private static final String[] allColumnsGroups = {
-			DatabaseOpenHelper.COLUMN_ID,
-			DatabaseOpenHelper.COLUMN_NAME,
-			DatabaseOpenHelper.COLUMN_DESCRIPTION,
+
+    private static final String[] allColumnsGroups = {
+            DatabaseOpenHelper.COLUMN_ID,
+            DatabaseOpenHelper.COLUMN_NAME,
+            DatabaseOpenHelper.COLUMN_DESCRIPTION,
             "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\""
     };
+    // Column indices in the db, for allColumnsGroups. Used by cursor.getInt(columnIndex), getString
+    private static final int GROUP_ID_COLUMN = 0;
+    private static final int GROUP_NAME_COLUMN = 1;
+    private static final int GROUP_DESCRIPTION_COLUMN = 2;
+    private static final int GROUP_ORDER_COLUMN = 3;
 
-    // Used by the cursor to refer to the columns
-    private final static int T2G_COLUMN_INDEX_TRACK_ID = 1;
-    private final static int T2G_COLUMN_INDEX_GROUP_ID = 2;
 
-	private final static String[] allColumnsTracks2Groups = {
-			DatabaseOpenHelper.COLUMN_ID,
-			DatabaseOpenHelper.COLUMN_TRACK_ID,
-			DatabaseOpenHelper.COLUMN_GROUP_ID
-	};
-	private List<Tick> ticks;
+    private final static String[] allColumnsTracks2Groups = {
+            DatabaseOpenHelper.COLUMN_ID,
+            DatabaseOpenHelper.COLUMN_TRACK_ID,
+            DatabaseOpenHelper.COLUMN_GROUP_ID
+    };
+    // Column indices in the db, for allColumnsTracks2Groups. Used by cursor.getInt(columnIndex), getString
+    private final static int T2G_TRACK_ID_COLUMN = 1;
+    private final static int T2G_GROUP_ID_COLUMN = 2;
+
+
+    private List<Tick> ticks;
 
 
     private TracksDataSource(Context context) {
@@ -85,10 +88,6 @@ public class TracksDataSource {
             mInstance = new TracksDataSource(Globals.getInstance());
         }
         return mInstance;
-    }
-
-    public boolean isOpen() {
-        return database != null && database.isOpen();
     }
 
 	private void open() throws SQLException {
@@ -105,9 +104,9 @@ public class TracksDataSource {
 
 	public void deleteTrack(Track track) {
 		long id = track.getId();
-		
+
 		open();
-		
+
 		try {
 			int rows = database.delete(DatabaseOpenHelper.TABLE_TRACKS,
 				DatabaseOpenHelper.COLUMN_ID + " = " + id, null);
@@ -126,7 +125,7 @@ public class TracksDataSource {
                 allColumnsTracks, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
 				null, null, null, null);
 		cursor.moveToFirst();
-        Log.d(TAG, "getTrack called with id = " + id);
+//        Log.d(TAG, "getTrack called with id = " + id);
         Track newTrack = cursorToTrack(cursor);
 		cursor.close();
 		return newTrack;
@@ -199,28 +198,28 @@ public class TracksDataSource {
 
 	/**
 	 * Retrieve all {@link Group}
-	 * from the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
-	 *
+     * from the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
+     *
 	 * @return a list of all Groups for this user
 	 */
     public List<Group> getGroups() {
-		List<Group> groups = new ArrayList<>();
-		open();
+        List<Group> groups = new ArrayList<>();
+        open();
 
-		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_GROUPS,
+        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_GROUPS,
                 allColumnsGroups, null, null, null, null,
                 "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 
         cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
+        while (!cursor.isAfterLast()) {
             Group g = cursorToGroup(cursor);
-            Log.d(TAG, "in getGroups, adding group: "+g);
+            Log.d(TAG, "in getGroups, adding group: " + g);
             groups.add(g);
-			cursor.moveToNext();
-		}
-		cursor.close(); // Make sure to close the cursor
+            cursor.moveToNext();
+        }
+        cursor.close(); // Make sure to close the cursor
         return groups;
-	}
+    }
 
     /**
      * Retrieve all {@link Group} associated with track ID
@@ -280,7 +279,7 @@ public class TracksDataSource {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            int groupId = cursor.getInt(2);
+            int groupId = cursor.getInt(T2G_GROUP_ID_COLUMN);
             cursor.moveToNext();
             groupIds.add(groupId);
         }
@@ -304,8 +303,8 @@ public class TracksDataSource {
         cursor.moveToFirst();
         List<Integer> ids = new ArrayList<>();
         while (!cursor.isAfterLast()) {
-            int trackId = cursor.getInt(1);
-            Log.e(TAG, "Getting track #" + trackId);
+            int trackId = cursor.getInt(T2G_TRACK_ID_COLUMN);
+//            Log.d(TAG, "Getting track #" + trackId);
             ids.add(Integer.valueOf(trackId));
             cursor.moveToNext();
         }
@@ -324,19 +323,16 @@ public class TracksDataSource {
 	 */
     public List<Track> getTracksForGroup(int groupId) {
         // get tracks for group
-        Log.e(TAG, "getTracksForGroup(" + groupId+")");
+//        Log.d(TAG, "getTracksForGroup(" + groupId+")");
         List<Integer> ids = getTrackIdsForGroup(groupId);
-        Log.e(TAG, "   Found tracks IDs: " + ids);
+//        Log.d(TAG, "   Found tracks IDs: " + ids);
 
 
         List<Track> tracks = new ArrayList<>();
-//        for (Integer trackId: ids) {
-//            tracks.add(getTrack(trackId));
-//        }
-        for (int i = 0, n = ids.size(); i < n; i++) {
-            tracks.add(getTrack(ids.get(i)));
+        for (Integer trackId: ids) {
+            tracks.add(getTrack(trackId));
         }
-        Log.e(TAG, "   Found tracks: " + tracks);
+//        Log.d(TAG, "   Found tracks: " + tracks);
         return tracks;
     }
 
@@ -369,11 +365,11 @@ public class TracksDataSource {
             database.update(DatabaseOpenHelper.TABLE_GROUPS, values,
                     DatabaseOpenHelper.COLUMN_ID + "=?",
                     new String[]{Integer.toString(group.getId())});
-            Log.d(TAG, "saving group id=" + group.getId());
+//            Log.d(TAG, "saving group id=" + group.getId());
         } else {
             long t_id = database.insert(DatabaseOpenHelper.TABLE_GROUPS, null, values);
             group.setId((int) t_id);
-            Log.d("Tickmate", "inserted group id=" + group.getId());
+//            Log.d("Tickmate", "inserted group id=" + group.getId());
         }
 
         close();
@@ -386,8 +382,8 @@ public class TracksDataSource {
 //    }
 
     public List<Track> getActiveTracks() {
-		List<Track> tracks = new ArrayList<>();
-		open();
+        List<Track> tracks = new ArrayList<>();
+        open();
 
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
                 allColumnsTracks, DatabaseOpenHelper.COLUMN_ENABLED + " = 1", null, null, null,
@@ -399,18 +395,18 @@ public class TracksDataSource {
 			tracks.add(track);
 			cursor.moveToNext();
 		}
-		
+
 		// Make sure to close the cursor
 		cursor.close();
-		
+
 		return tracks;
 	}
 
 	public void retrieveTicks(Calendar startday, Calendar endday) {
 		ticks = new ArrayList<Tick>();
 
-		open();
-		String[] args = { 
+        open();
+        String[] args = {
 				Integer.toString(startday.get(Calendar.YEAR)),
 				Integer.toString(startday.get(Calendar.YEAR)),
 				Integer.toString(startday.get(Calendar.MONTH)),
@@ -419,7 +415,7 @@ public class TracksDataSource {
 				Integer.toString(endday.get(Calendar.MONTH))
 		};
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
-				allColumnsTicks, 
+				allColumnsTicks,
 				"(" + DatabaseOpenHelper.COLUMN_YEAR + " > ? or (" + DatabaseOpenHelper.COLUMN_YEAR + " = ? and " + DatabaseOpenHelper.COLUMN_MONTH + " >= ?)) and " +
 				"(" + DatabaseOpenHelper.COLUMN_YEAR + " < ? or (" + DatabaseOpenHelper.COLUMN_YEAR + " = ? and " + DatabaseOpenHelper.COLUMN_MONTH + " <= ?))",
 				args, null, null, null, null);
@@ -434,7 +430,7 @@ public class TracksDataSource {
 		// Make sure to close the cursor
 		cursor.close();
 	}
-	
+
 	public Map<Integer, Map<Long, Integer> > retrieveTicksByMonths() {
 		Map<Integer, Map<Long, Integer> > ret = new HashMap<Integer, Map<Long, Integer> >();
 
@@ -443,7 +439,7 @@ public class TracksDataSource {
     				"_track_id",
 					"date(strftime('%y-%m-01', datetime(date, 'unixepoch'))) as month",
 					"count(date) as count"
-				}, null, null, 
+				}, null, null,
 				"_track_id, month", null, null);
 
 		cursor.moveToFirst();
@@ -460,15 +456,15 @@ public class TracksDataSource {
 
 		//Log.d("Tickmate", "loaded: track_id=" + cursor.getInt(0) + " @ " + cursor.getString(1) + " = " + cursor.getInt(2));
 		cursor.close();
-		
+
 		return ret;
 	}
 
 	public List<Tick> getTicks(int track_id) {
 		List<Tick> ticks = new ArrayList<Tick>();
-		
-		open();
-		
+
+        open();
+
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + Integer.toString(track_id),
 				null, null, null, "year, month, day");
@@ -482,12 +478,12 @@ public class TracksDataSource {
 
 		// Make sure to close the cursor
 		cursor.close();
-		
+
 		return ticks;
 	}
-	
+
 	public int getTickCountForDay(Track track, Calendar date) {
-		
+
 		int tickCount = 0;
 		for (int i = 0; i < ticks.size(); i++) {
 			Calendar d = ticks.get(i).date;
@@ -498,15 +494,15 @@ public class TracksDataSource {
 				tickCount++;
 			}
 		}
-	
+
 		return tickCount;
 	}
-	
+
 	public List<Tick> getTicksForDay(Track track, Calendar date) {
 		List<Tick> ticks = new ArrayList<Tick>();
-		
-		open();
-		
+
+        open();
+
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
 				Integer.toString(date.get(Calendar.MONTH)),
@@ -514,14 +510,14 @@ public class TracksDataSource {
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				allColumnsTicks,
 				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
-				DatabaseOpenHelper.COLUMN_YEAR +"=? AND " + 
+				DatabaseOpenHelper.COLUMN_YEAR +"=? AND " +
 				DatabaseOpenHelper.COLUMN_MONTH +"=? AND " +
 				DatabaseOpenHelper.COLUMN_DAY +"=?",
 				args, null, null,
 				DatabaseOpenHelper.COLUMN_HOUR + ", " +
 				DatabaseOpenHelper.COLUMN_MINUTE + ", " +
 				DatabaseOpenHelper.COLUMN_SECOND + " ASC");
-		
+
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Tick tick = cursorToTick(cursor);
@@ -532,7 +528,7 @@ public class TracksDataSource {
 //		Log.d("Tickmate", ticks.size() + "ticks for day " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH));
 		// Make sure to close the cursor
 		cursor.close();
-		
+
 		return ticks;
 	}
 
@@ -571,7 +567,7 @@ public class TracksDataSource {
         group.setOrder(cursor.getInt(GROUP_ORDER_COLUMN));
         return group;
     }
-	
+
 	private Tick cursorToTick(Cursor cursor) {
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, cursor.getInt(2));
@@ -586,8 +582,8 @@ public class TracksDataSource {
 	}
 
 	public void storeTrack(Track t) {
-		open();
-		
+        open();
+
 		ContentValues values = new ContentValues();
 
 		values.put(DatabaseOpenHelper.COLUMN_NAME, t.getName());
@@ -607,8 +603,8 @@ public class TracksDataSource {
 			t.setId((int)t_id);
 			Log.d("Tickmate", "inserted track id=" + t.getId());
 		}
-		
-		close();
+
+        close();
 	}
 
 	public void setTick(Track track, Calendar date, boolean hasTimeInfo) {
@@ -627,36 +623,36 @@ public class TracksDataSource {
                 + " - " + date.get(Calendar.HOUR_OF_DAY) + ":" + date.get(Calendar.MINUTE) + ":" + date.get(Calendar.SECOND));
 		database.insert(DatabaseOpenHelper.TABLE_TICKS, null, values);
 
-		close();
+        close();
 	}
 
 	public void removeTick(Track track, Calendar date) {
-		open();
-		
+        open();
+
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(date.get(Calendar.YEAR)),
 				Integer.toString(date.get(Calendar.MONTH)),
 				Integer.toString(date.get(Calendar.DAY_OF_MONTH)) };
-		
+
 		int affectedRows = database.delete(DatabaseOpenHelper.TABLE_TICKS,
 				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
-				DatabaseOpenHelper.COLUMN_YEAR+"=? AND " + 
-				DatabaseOpenHelper.COLUMN_MONTH+"=? AND " + 
+				DatabaseOpenHelper.COLUMN_YEAR+"=? AND " +
+				DatabaseOpenHelper.COLUMN_MONTH+"=? AND " +
 				DatabaseOpenHelper.COLUMN_DAY+"=?", args);
 		Log.d("Tickmate", "delete " + affectedRows + "rows at " + date.get(Calendar.YEAR) + " " + date.get(Calendar.MONTH) + " " + date.get(Calendar.DAY_OF_MONTH));
 
-		close();
+        close();
 	}
-	
+
 	public boolean removeLastTickOfDay(Track track, Calendar date) {
-		open();
-		List<Tick> ticks = getTicksForDay(track, date);
-		
+        open();
+        List<Tick> ticks = getTicksForDay(track, date);
+
 		if (ticks.size() == 0)
 			return false;
-		
+
 		Tick tick = ticks.get(ticks.size()-1);
-				
+
 		String[] args = { Integer.toString(track.getId()),
 				Integer.toString(tick.tick_id) };
 		int affectedRows = database.delete(DatabaseOpenHelper.TABLE_TICKS,
@@ -669,29 +665,29 @@ public class TracksDataSource {
 				tick.date.get(Calendar.HOUR_OF_DAY) + ":" +
 				tick.date.get(Calendar.MINUTE) + ":" +
 				tick.date.get(Calendar.SECOND));
-		
-		close();
-		
+
+        close();
+
 		if (affectedRows > 0)
 			return true;
-		
+
 		return false;
 	}
 
 	public int getTickCount(int track_id) {
-		open();
-		
+        open();
+
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
 				new String[] {
 					"count("+DatabaseOpenHelper.COLUMN_TRACK_ID+") as count"
-				}, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + Integer.toString(track_id), null, 
+				}, DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + Integer.toString(track_id), null,
 				DatabaseOpenHelper.COLUMN_TRACK_ID , null, null);
 		cursor.moveToFirst();
 		int c = 0;
 		if (cursor.getCount() > 0) {
 			c = cursor.getInt(0);
 		}
-		cursor.close();		
+		cursor.close();
 		return c;
 	}
 
@@ -724,7 +720,7 @@ public class TracksDataSource {
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
                 allColumnsTracks, null, null, null, null,
                 "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
-		
+
 		cursor.moveToFirst();
 		for (int trackOrder = 0; !cursor.isAfterLast(); trackOrder += 10) {
 			Track track = cursorToTrack(cursor);
@@ -740,7 +736,7 @@ public class TracksDataSource {
 	public void moveTrack(Track t, int dir) {
 		open();
 		orderTracks();
-		
+
 		Track t_updated = getTrack(t.getId());
 		t_updated.setOrder(t_updated.getOrder() + dir * 15);
         // js: Why multiply by 15?
@@ -860,23 +856,16 @@ public class TracksDataSource {
            return;  // Link already exists, so exit this method
         }
 
-//        Log.d(TAG, "Before deleting duplicates (of <" + trackId + "," + groupId + ">), the group ids for track (" + trackId + ") are: " + printGroupIdsForTrack(trackId));
-        // AVP:See-linkOneTrackManyGroups TODO Instead of deleting any possibly pre-existing duplicate entry, instead see if the association already exists - if so, do nothing
-        // ^^ Done but not tested
-//        database.delete(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
-//                DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + trackId
-//                        + " AND " + DatabaseOpenHelper.COLUMN_GROUP_ID + " = " + groupId, null);
-
-//        Log.d(TAG, "After deleting duplicates (of <" + trackId + "," + groupId + ">), the group ids for track (" + trackId + ") are: " + printGroupIdsForTrack(trackId));
-
         // The link doesn't already exist, so create it:
         ContentValues values = new ContentValues();
         values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, trackId);
         values.put(DatabaseOpenHelper.COLUMN_GROUP_ID, groupId);
-        long t2g_id = database.insert(DatabaseOpenHelper.TABLE_TRACK2GROUPS, null, values);
-//        Log.d("Tickmate", "inserted t2g id=" + t2g_id + ", to associate track (" + trackId + ") and group (" + groupId + ")");
 
+        cursor.close();
         close();
+
+//        long t2g_id = database.insert(DatabaseOpenHelper.TABLE_TRACK2GROUPS, null, values);  // For Log.d only
+//        Log.d("Tickmate", "inserted t2g id=" + t2g_id + ", to associate track (" + trackId + ") and group (" + groupId + ")");
     }
 
     // Temporary method for debug only
@@ -893,11 +882,9 @@ public class TracksDataSource {
         Group updatedGroup = getGroup(g.getId());
         updatedGroup.setOrder(updatedGroup.getOrder() + direction * 15); // Mimicking moveTrack,
         // Though I don't know why we do: * 15
-        //Log.d("Tickmate", t_updated.getName() + " got " + t_updated.getOrder());
-
         storeGroup(updatedGroup);
-
         orderGroups();
+        //Log.d("Tickmate", t_updated.getName() + " got " + t_updated.getOrder());
 
     }
 }
