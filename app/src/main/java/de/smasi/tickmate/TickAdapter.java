@@ -38,8 +38,8 @@ import de.smasi.tickmate.widgets.TrackButton;
 public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
 	private final Context context;
-	private Calendar activeDay;  // When set, the display will be fixed to this day.
-	    // Null value is intentionally used to indicate display should follow the actual current day.
+    private Calendar activeDay;  // When set, the display will be fixed to this day.
+    // Null value is intentionally used to indicate display should follow the actual current day.
     private Calendar today, yday;
     int count, count_ahead;
     private Map<Calendar, View> mRowCache = new HashMap<>();
@@ -49,7 +49,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     private Spinner mGroupSpinner;
     private ArrayList<Integer> mSpinnerArrayGroupIds = new ArrayList<>();
     private int mSpinnerPosition = 0;  // Can we get rid of this, and simply update the value within the spinner itself?
-//    private Group mDisplayGroup = Group.ALL_GROUP; // Group.ALL_GROUP indicates 'all active tracks' Consider: Is there a better way to indicate that all tracks have been selected for display? Possibly using only spinner position == 0 ?
 
     private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
@@ -128,13 +127,9 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         if (mTracksCurrentlyDisplayed.size() == 0) {
             return 0; // return 0 here if we have no tracks to display so that the empty view will get displayed
-            // TODO Question for Hannes and/or AVP - Should we make further changes to the empty view text?
-            // (todo)  (It has been updated to include "No tracks have been added for this group".)
-            // js: Now I think the 'empty view' should depend on whether we are viewing the 'all
-            // tracks' selection or a group, and maybe whether or not there are existing tracks.
-            // If there are tracks, and we are viewing a group, then the user should get a 'select
-            // tracks for this group' selector (to be created, modelled on 'groups for this track'
-            //  preference in TrackPreferenceFragment)
+            // TODO Should we make further changes to the empty view? Currently adapts to whether
+            //  the selected group has tracks linked to it.  (Should check that it handles the situation
+            //  correctly if there are no tracks at all.)
         } else {
             return this.count;
         }
@@ -282,7 +277,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         java.text.DateFormat dateFormat = android.text.format.DateFormat
                 .getDateFormat(context);
 
-//		Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
+//        Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 
         LinearLayout tickgrid = new LinearLayout(this.context);
 //        LinearLayout tickgrid = new TestCustomEventControlLinearLayout(this.context);

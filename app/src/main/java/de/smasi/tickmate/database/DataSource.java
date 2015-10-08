@@ -41,7 +41,7 @@ public class DataSource {
 			DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY,
 			"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\""
 	};
-	private static final String[] allColumnsTicks = {
+    private static final String[] allColumnsTicks = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_TRACK_ID,
 			DatabaseOpenHelper.COLUMN_YEAR,
@@ -113,14 +113,14 @@ public class DataSource {
 			if (rows > 0)
 				System.out.println("Track deleted with id: " + id);
 		} finally {
-			if (database != null) {
-				close();
+            if (database != null) {
+                close();
 			}
 		}
 	}
 
 	public Track getTrack(int id) {
-		open();
+        open();
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
                 allColumnsTracks, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
 				null, null, null, null);
@@ -167,12 +167,12 @@ public class DataSource {
 		}
 		// Make sure to close the cursor
 		cursor.close();
-		return tracks;
-	}
+        return tracks;
+    }
 
 	/**
 	 * Delete a given {@link Group}
-	 * from the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
+     * from the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
 	 *
 	 * @param group group to delete
 	 */

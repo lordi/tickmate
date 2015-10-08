@@ -117,13 +117,8 @@ OnSharedPreferenceChangeListener  {
         multiple_entries_enabled = (CheckBoxPreference) findPreference("multiple_entries_enabled");
         multiple_entries_enabled.setChecked(track.multipleEntriesEnabled());
 
-        // TODO (Done? js) Rewrite the methods and method names used for this stanza:
-        // AVP:DataSource? Utility class? Maybe have 3 methods in TPF which sensibly massage
-        //      data returned by TDS methods.
-        // js - I've refactored so all of these methods are now local to TPF, are private static,
-        //      and call TDS directly to get their data.  (I'm not opposed to making a separate
-        //      utility class just for these methods if you like, but this seems clean enough for
-        //      today; though I'm still not a fan of these extra long names
+        // TODO avp had wanted the methods used in the following code rewritten, renamed, moved, etc.
+        // Its been improved. Are we done with this, or should it be improved further?
         mGroupsPref = (MultiSelectListPreference) findPreference("groups");
         mGroupsPref.setValues(getGroupIdsForTrackAsSet(track.getId()));
 
@@ -203,6 +198,6 @@ OnSharedPreferenceChangeListener  {
 //            Log.d(TAG, "Confirm that the group NAMES are correct: " + TextUtils.join(",", track.getGroupNamesAsSet()));
 
         }
-		mDataSource.storeTrack(track);
+        mDataSource.storeTrack(track);
     }
 }

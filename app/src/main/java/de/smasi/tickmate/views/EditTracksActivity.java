@@ -195,7 +195,6 @@ public class EditTracksActivity extends ListActivity {
 	    menu.findItem(R.id.edit_tracks_deactivate).setVisible(t.isEnabled());
 	    menu.findItem(R.id.edit_tracks_activate).setVisible(!t.isEnabled());
 
-
 	}
 
 }
