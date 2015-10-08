@@ -10,7 +10,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Track;
 
 public class MultiTickButton extends Button implements OnClickListener, OnLongClickListener {
@@ -31,7 +31,7 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 		this.setHeight(size);
 		this.setMinHeight(size);
 		this.setPadding(0, 0, 0, 0);
-		setTickCount(TracksDataSource.getInstance().getTickCountForDay(track, date));
+		setTickCount(DataSource.getInstance().getTickCountForDay(track, date));
 	}
 
 	Track getTrack () {
@@ -48,7 +48,7 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 	}
 	
 	private void updateStatus() {
-		count = TracksDataSource.getInstance().getTicksForDay(this.getTrack(), this.getDate()).size();
+		count = DataSource.getInstance().getTicksForDay(this.getTrack(), this.getDate()).size();
 		updateText();
 	}
 	
@@ -72,9 +72,9 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 		c.set(Calendar.MILLISECOND, 0);
 
 		if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
-			TracksDataSource.getInstance().setTick(this.getTrack(), c, false);
+			DataSource.getInstance().setTick(this.getTrack(), c, false);
 		} else {
-			TracksDataSource.getInstance().setTick(this.getTrack(), this.date, false);
+			DataSource.getInstance().setTick(this.getTrack(), this.date, false);
 		}
 		
 		updateStatus();
@@ -87,7 +87,7 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 			return false;
 		}
 
-		boolean success = TracksDataSource.getInstance().removeLastTickOfDay(this.getTrack(), this.getDate());
+		boolean success = DataSource.getInstance().removeLastTickOfDay(this.getTrack(), this.getDate());
 		
 		if (success) {
 			updateStatus();

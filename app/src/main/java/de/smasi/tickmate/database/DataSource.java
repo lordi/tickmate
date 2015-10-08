@@ -21,9 +21,9 @@ import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
 
 //@SuppressWarnings("unused")
-public class TracksDataSource {
-    private static final String TAG = "TracksDataSource";
-    private static TracksDataSource mInstance;
+public class DataSource {
+    private static final String TAG = "DataSource";
+    private static DataSource mInstance;
 
 	public static final int DIRECTION_UP = -1;
 	public static final int DIRECTION_DOWN = 1;
@@ -79,13 +79,13 @@ public class TracksDataSource {
     private List<Tick> ticks;
 
 
-    private TracksDataSource(Context context) {
+    private DataSource(Context context) {
         dbHelper = DatabaseOpenHelper.getInstance(context.getApplicationContext());
     }
 
-    public static TracksDataSource getInstance() {
+    public static DataSource getInstance() {
         if (mInstance == null) {
-            mInstance = new TracksDataSource(Globals.getInstance());
+            mInstance = new DataSource(Globals.getInstance());
         }
         return mInstance;
     }
@@ -377,7 +377,7 @@ public class TracksDataSource {
 
 
 //    public List<Track> getActiveTracks(Context context) {
-//        TracksDataSource ds = TracksDataSource.getInstance();
+//        DataSource ds = DataSource.getInstance();
 //        return ds.getActiveTracks();
 //    }
 

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -29,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.widgets.MultiTickButton;
@@ -180,7 +179,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         mGroupSpinner.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 rowHeight, 0.8f));
 
-        List<Group> allGroups = TracksDataSource.getInstance().getGroups();
+        List<Group> allGroups = DataSource.getInstance().getGroups();
 
         ArrayList<String> mSpinnerArrayNames = new ArrayList<>();
         mSpinnerArrayGroupIds.clear();
@@ -419,7 +418,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
             scrollToLatest();
         }
 
-        TracksDataSource ds = TracksDataSource.getInstance();
+        DataSource ds = DataSource.getInstance();
 
         Calendar startday = this.getActiveDay();
         Calendar endday = (Calendar) startday.clone();
@@ -442,7 +441,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     }
 
     private List<Track> getTracksForCurrentGroup() {
-        return TracksDataSource.getInstance().getTracksForGroup(getCurrentGroupId());
+        return DataSource.getInstance().getTracksForGroup(getCurrentGroupId());
     }
 
     private int getCurrentGroupId() {
@@ -465,9 +464,9 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         int currentGroupId = getCurrentGroupId();
         if (currentGroupId == Group.ALL_GROUP.getId()) {
-            mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getActiveTracks();
+            mTracksCurrentlyDisplayed = DataSource.getInstance().getActiveTracks();
         } else {
-            mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getTracksForGroup(currentGroupId);
+            mTracksCurrentlyDisplayed = DataSource.getInstance().getTracksForGroup(currentGroupId);
 //            Log.d(TAG, "Tracks associated with group(" + currentGroupId + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
         }
 //        Log.d(TAG, "Number of tracks to display: " + mTracksCurrentlyDisplayed.size());
@@ -529,7 +528,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         if (spinnerPosition  == 0) {
             return Group.ALL_GROUP;
         } else {
-            return TracksDataSource.getInstance().getGroup(mSpinnerArrayGroupIds.get(spinnerPosition));
+            return DataSource.getInstance().getGroup(mSpinnerArrayGroupIds.get(spinnerPosition));
         }
     }
 

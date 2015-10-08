@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 //import de.smasi.tickmate.models.Track;
 
@@ -85,7 +85,7 @@ public class ChooseGroupActivity extends ListActivity {
         Group g = (Group) getListView().getAdapter().getItem(position);
 
         if (!g.isSectionHeader()) {
-            TracksDataSource.getInstance().storeGroup(g);
+            DataSource.getInstance().storeGroup(g);
             Intent data = new Intent();
             data.putExtra("insert_id", g.getId());
             setResult(RESULT_OK, data);

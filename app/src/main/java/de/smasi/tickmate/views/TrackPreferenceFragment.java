@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 
@@ -33,7 +33,7 @@ OnSharedPreferenceChangeListener  {
     private CheckBoxPreference multiple_entries_enabled;
 	private IconPreference icon;
     private MultiSelectListPreference mGroupsPref;
-    private static TracksDataSource mDataSource = TracksDataSource.getInstance();
+    private static DataSource mDataSource = DataSource.getInstance();
 
     public TrackPreferenceFragment() {
         super();
@@ -118,7 +118,7 @@ OnSharedPreferenceChangeListener  {
         multiple_entries_enabled.setChecked(track.multipleEntriesEnabled());
 
         // TODO (Done? js) Rewrite the methods and method names used for this stanza:
-        // AVP:TracksDataSource? Utility class? Maybe have 3 methods in TPF which sensibly massage
+        // AVP:DataSource? Utility class? Maybe have 3 methods in TPF which sensibly massage
         //      data returned by TDS methods.
         // js - I've refactored so all of these methods are now local to TPF, are private static,
         //      and call TDS directly to get their data.  (I'm not opposed to making a separate

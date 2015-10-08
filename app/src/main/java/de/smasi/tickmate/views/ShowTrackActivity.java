@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.widgets.SummaryGraph;
@@ -28,7 +28,7 @@ import de.smasi.tickmate.widgets.SummaryNumber;
 public class ShowTrackActivity extends Activity {
 
 	private Track track;
-    TracksDataSource ds;
+    DataSource ds;
 	
 	/* Statistics */
 	private int tickCount;
@@ -73,7 +73,7 @@ public class ShowTrackActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_track);
 		
-		this.ds = TracksDataSource.getInstance();
+		this.ds = DataSource.getInstance();
 		Bundle extras = getIntent().getExtras();
 		if (extras == null) {
 			finish();
