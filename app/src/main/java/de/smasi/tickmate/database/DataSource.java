@@ -772,7 +772,7 @@ public class DataSource {
                 linkOneTrackOneGroup(trackId, gId);
             }
         }
-                Log.d(TAG, "Check that new group ids were set correctly for (" + trackId + "), using (" + newGroupIds + ").  After update, they are: " + printGroupIdsForTrack(trackId));
+        Log.d(TAG, "Check that new group ids were set correctly for (" + trackId + "), using (" + newGroupIds + ").  After update, they are: " + printGroupIdsForTrack(trackId));
     }
 
 
@@ -860,11 +860,11 @@ public class DataSource {
         ContentValues values = new ContentValues();
         values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, trackId);
         values.put(DatabaseOpenHelper.COLUMN_GROUP_ID, groupId);
+        long t2g_id = database.insert(DatabaseOpenHelper.TABLE_TRACK2GROUPS, null, values);
 
         cursor.close();
         close();
 
-//        long t2g_id = database.insert(DatabaseOpenHelper.TABLE_TRACK2GROUPS, null, values);  // For Log.d only
 //        Log.d("Tickmate", "inserted t2g id=" + t2g_id + ", to associate track (" + trackId + ") and group (" + groupId + ")");
     }
 
