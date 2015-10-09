@@ -526,7 +526,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         if (position < 0) {
             position = mGroupSpinner.getCount() - 1;
         }
-        Toast.makeText(context, "Swiped right, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // remove before publishing
+//        Toast.makeText(context, "Swiped right, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // consider leaving for future debug
         mGroupSpinner.setSelection(position);
     }
 
@@ -537,7 +537,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         if (position == mGroupSpinner.getCount()) {
             position = 0;
         }
-        Toast.makeText(context, "Swiped left, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // remove before publishing
+//        Toast.makeText(context, "Swiped left, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // consider leaving for future debug
         mGroupSpinner.setSelection(position);
     }
 

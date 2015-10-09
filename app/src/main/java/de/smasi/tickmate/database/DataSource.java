@@ -20,14 +20,12 @@ import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
 
-//@SuppressWarnings("unused")
 public class DataSource {
     private static final String TAG = "DataSource";
     private static DataSource mInstance;
 
 	public static final int DIRECTION_UP = -1;
 	public static final int DIRECTION_DOWN = 1;
-
 
 	private SQLiteDatabase database;
     private DatabaseOpenHelper dbHelper = DatabaseOpenHelper.getInstance(Globals.getInstance());
@@ -41,6 +39,7 @@ public class DataSource {
 			DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY,
 			"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\""
 	};
+
     private static final String[] allColumnsTicks = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_TRACK_ID,
@@ -51,7 +50,6 @@ public class DataSource {
 			DatabaseOpenHelper.COLUMN_MINUTE,
 			DatabaseOpenHelper.COLUMN_SECOND
 	};
-
 
     private static final String[] allColumnsGroups = {
             DatabaseOpenHelper.COLUMN_ID,
@@ -65,7 +63,6 @@ public class DataSource {
     private static final int GROUP_DESCRIPTION_COLUMN = 2;
     private static final int GROUP_ORDER_COLUMN = 3;
 
-
     private final static String[] allColumnsTracks2Groups = {
             DatabaseOpenHelper.COLUMN_ID,
             DatabaseOpenHelper.COLUMN_TRACK_ID,
@@ -74,7 +71,6 @@ public class DataSource {
     // Column indices in the db, for allColumnsTracks2Groups. Used by cursor.getInt(columnIndex), getString
     private final static int T2G_TRACK_ID_COLUMN = 1;
     private final static int T2G_GROUP_ID_COLUMN = 2;
-
 
     private List<Tick> ticks;
 
@@ -790,19 +786,6 @@ public class DataSource {
         close();
         //        Log.d(TAG, "called unlinkOneTrackOneGroup(" + trackId + ", " + groupId + "). ");
     }
-
-	/**
-	 * Store the fact that this set of Tracks and one Group are associated with each other
-	 *
-	 * @param trackIds track ids
-	 * @param groupId group id
-	 */
-//    public void linkManyTracksOneGroup(List<Integer> trackIds, int groupId) {
-//         Consider checking whether the link already exists, and only requesting the link creation if it doesn't already
-//        for (Integer trackId : trackIds) {
-//            linkOneTrackOneGroup(trackId, groupId);
-//        }
-//    }
 
     /**
      * Store the fact that this one Group and set of Tracks are associated with each other
