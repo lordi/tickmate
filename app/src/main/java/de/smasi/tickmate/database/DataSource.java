@@ -20,14 +20,12 @@ import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
 
-//@SuppressWarnings("unused")
-public class TracksDataSource {
-    private static final String TAG = "TracksDataSource";
-    private static TracksDataSource mInstance;
+public class DataSource {
+    private static final String TAG = "DataSource";
+    private static DataSource mInstance;
 
 	public static final int DIRECTION_UP = -1;
 	public static final int DIRECTION_DOWN = 1;
-
 
 	private SQLiteDatabase database;
     private DatabaseOpenHelper dbHelper = DatabaseOpenHelper.getInstance(Globals.getInstance());
@@ -41,7 +39,8 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY,
 			"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\""
 	};
-	private static final String[] allColumnsTicks = {
+
+    private static final String[] allColumnsTicks = {
 			DatabaseOpenHelper.COLUMN_ID,
 			DatabaseOpenHelper.COLUMN_TRACK_ID,
 			DatabaseOpenHelper.COLUMN_YEAR,
@@ -51,7 +50,6 @@ public class TracksDataSource {
 			DatabaseOpenHelper.COLUMN_MINUTE,
 			DatabaseOpenHelper.COLUMN_SECOND
 	};
-
 
     private static final String[] allColumnsGroups = {
             DatabaseOpenHelper.COLUMN_ID,
@@ -65,7 +63,6 @@ public class TracksDataSource {
     private static final int GROUP_DESCRIPTION_COLUMN = 2;
     private static final int GROUP_ORDER_COLUMN = 3;
 
-
     private final static String[] allColumnsTracks2Groups = {
             DatabaseOpenHelper.COLUMN_ID,
             DatabaseOpenHelper.COLUMN_TRACK_ID,
@@ -75,17 +72,16 @@ public class TracksDataSource {
     private final static int T2G_TRACK_ID_COLUMN = 1;
     private final static int T2G_GROUP_ID_COLUMN = 2;
 
-
     private List<Tick> ticks;
 
 
-    private TracksDataSource(Context context) {
+    private DataSource(Context context) {
         dbHelper = DatabaseOpenHelper.getInstance(context.getApplicationContext());
     }
 
-    public static TracksDataSource getInstance() {
+    public static DataSource getInstance() {
         if (mInstance == null) {
-            mInstance = new TracksDataSource(Globals.getInstance());
+            mInstance = new DataSource(Globals.getInstance());
         }
         return mInstance;
     }
@@ -113,14 +109,14 @@ public class TracksDataSource {
 			if (rows > 0)
 				System.out.println("Track deleted with id: " + id);
 		} finally {
-			if (database != null) {
-				close();
+            if (database != null) {
+                close();
 			}
 		}
 	}
 
 	public Track getTrack(int id) {
-		open();
+        open();
 		Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACKS,
                 allColumnsTracks, DatabaseOpenHelper.COLUMN_ID + " = " + id, null,
 				null, null, null, null);
@@ -167,12 +163,12 @@ public class TracksDataSource {
 		}
 		// Make sure to close the cursor
 		cursor.close();
-		return tracks;
-	}
+        return tracks;
+    }
 
 	/**
 	 * Delete a given {@link Group}
-	 * from the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
+     * from the {@link DatabaseOpenHelper#TABLE_GROUPS} database table.
 	 *
 	 * @param group group to delete
 	 */
@@ -377,7 +373,7 @@ public class TracksDataSource {
 
 
 //    public List<Track> getActiveTracks(Context context) {
-//        TracksDataSource ds = TracksDataSource.getInstance();
+//        DataSource ds = DataSource.getInstance();
 //        return ds.getActiveTracks();
 //    }
 
@@ -772,7 +768,7 @@ public class TracksDataSource {
                 linkOneTrackOneGroup(trackId, gId);
             }
         }
-                Log.d(TAG, "Check that new group ids were set correctly for (" + trackId + "), using (" + newGroupIds + ").  After update, they are: " + printGroupIdsForTrack(trackId));
+        Log.d(TAG, "Check that new group ids were set correctly for (" + trackId + "), using (" + newGroupIds + ").  After update, they are: " + printGroupIdsForTrack(trackId));
     }
 
 
@@ -790,19 +786,6 @@ public class TracksDataSource {
         close();
         //        Log.d(TAG, "called unlinkOneTrackOneGroup(" + trackId + ", " + groupId + "). ");
     }
-
-	/**
-	 * Store the fact that this set of Tracks and one Group are associated with each other
-	 *
-	 * @param trackIds track ids
-	 * @param groupId group id
-	 */
-//    public void linkManyTracksOneGroup(List<Integer> trackIds, int groupId) {
-//         Consider checking whether the link already exists, and only requesting the link creation if it doesn't already
-//        for (Integer trackId : trackIds) {
-//            linkOneTrackOneGroup(trackId, groupId);
-//        }
-//    }
 
     /**
      * Store the fact that this one Group and set of Tracks are associated with each other
@@ -860,11 +843,11 @@ public class TracksDataSource {
         ContentValues values = new ContentValues();
         values.put(DatabaseOpenHelper.COLUMN_TRACK_ID, trackId);
         values.put(DatabaseOpenHelper.COLUMN_GROUP_ID, groupId);
+        long t2g_id = database.insert(DatabaseOpenHelper.TABLE_TRACK2GROUPS, null, values);
 
         cursor.close();
         close();
 
-//        long t2g_id = database.insert(DatabaseOpenHelper.TABLE_TRACK2GROUPS, null, values);  // For Log.d only
 //        Log.d("Tickmate", "inserted t2g id=" + t2g_id + ", to associate track (" + trackId + ") and group (" + groupId + ")");
     }
 

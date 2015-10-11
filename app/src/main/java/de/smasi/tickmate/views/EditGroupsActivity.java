@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 
 public class EditGroupsActivity extends ListActivity {
@@ -37,14 +37,14 @@ public class EditGroupsActivity extends ListActivity {
     }
 
     /**
-     * Retrieve Groups from database via {@link de.smasi.tickmate.database.TracksDataSource},
+     * Retrieve Groups from database via {@link DataSource},
      * create a new {@link de.smasi.tickmate.views.GroupListAdapter} with retrieved Groups,
      * and assign adapter to ListView
      */
     protected void loadGroups() {
 
         Group[] groupArray = new Group[0];
-        groupArray = TracksDataSource.getInstance().getGroups().toArray(groupArray);
+        groupArray = DataSource.getInstance().getGroups().toArray(groupArray);
         groupsAdapter = new GroupListAdapter(this, groupArray);
         this.getListView().setAdapter(groupsAdapter);
     }
@@ -118,16 +118,16 @@ public class EditGroupsActivity extends ListActivity {
 
             case R.id.edit_groups_moveup: {
                 Group g  = groupsAdapter.getItem((int)info.id);
-                TracksDataSource ds = TracksDataSource.getInstance();
-                ds.moveGroup(g, TracksDataSource.DIRECTION_UP);
+                DataSource ds = DataSource.getInstance();
+                ds.moveGroup(g, DataSource.DIRECTION_UP);
                 loadGroups();
                 return true;
             }
 
             case R.id.edit_groups_movedown: {
                 Group g = (Group)groupsAdapter.getItem((int)info.id);
-                TracksDataSource ds = TracksDataSource.getInstance();
-                ds.moveGroup(g, TracksDataSource.DIRECTION_DOWN);
+                DataSource ds = DataSource.getInstance();
+                ds.moveGroup(g, DataSource.DIRECTION_DOWN);
                 loadGroups();
                 return true;
             }
@@ -146,7 +146,7 @@ public class EditGroupsActivity extends ListActivity {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Group g = groupsAdapter.getItem((int) info.id);
 
-                                TracksDataSource.getInstance().deleteGroup(g);
+                                DataSource.getInstance().deleteGroup(g);
                                 loadGroups();
                             }
                         })

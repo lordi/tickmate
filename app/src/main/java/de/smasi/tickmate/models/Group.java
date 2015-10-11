@@ -11,7 +11,7 @@ package de.smasi.tickmate.models;
 // AVP TODO store all Track/Group data in memory and update database when necessary (implementing locking if need be)
 // js - ...after ironing out all wrinkles in current (db centric) approach
 // js - We would need to ensure that every time any track/group link is established - whether individually
-//      or using lists of IDs, and whether via Track.linkGroup or Group.linkTrack or TracksDataSource.linkBlah
+//      or using lists of IDs, and whether via Track.linkGroup or Group.linkTrack or DataSource.linkBlah
 //      methods - that all affected objects (as well as db) are updated.  I don't see how to do
 //      this without a centralized list of references to all of the tracks and groups, which would
 //      in turn require that we carefully regulate the creation of new Track and Group objects

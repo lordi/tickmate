@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Track;
 
 public class EditTracksActivity extends ListActivity {
@@ -36,7 +36,7 @@ public class EditTracksActivity extends ListActivity {
 	}
 	
 	protected void loadTracks()  {
-		TracksDataSource ds = TracksDataSource.getInstance();
+		DataSource ds = DataSource.getInstance();
 		Track[] ms = new Track[0];
 		ms = ds.getTracks().toArray(ms);
 		tracksAdapter = new TrackListAdapter(this, ms);
@@ -102,7 +102,7 @@ public class EditTracksActivity extends ListActivity {
 			//Log.v("Tickmate", "tracks sub activity returned." + resultCode + ":"+data.getExtras().getInt("insert_id"));
 			
 			int insert_id = data.getExtras().getInt("insert_id");
-			TracksDataSource ds = TracksDataSource.getInstance();
+			DataSource ds = DataSource.getInstance();
 			Track t = ds.getTrack(insert_id);
 			if (t.isCustomTrack()) {
 				editTrack(t);								
@@ -127,23 +127,23 @@ public class EditTracksActivity extends ListActivity {
 		
 		case R.id.edit_tracks_moveup: {
 				Track t = (Track)tracksAdapter.getItem((int)info.id);
-				TracksDataSource ds = TracksDataSource.getInstance();
-				ds.moveTrack(t, TracksDataSource.DIRECTION_UP);
+				DataSource ds = DataSource.getInstance();
+				ds.moveTrack(t, DataSource.DIRECTION_UP);
 				loadTracks();
 				return true;
 			}	
 		
 		case R.id.edit_tracks_movedown: {
 				Track t = (Track)tracksAdapter.getItem((int)info.id);
-				TracksDataSource ds = TracksDataSource.getInstance();
-				ds.moveTrack(t, TracksDataSource.DIRECTION_DOWN);
+				DataSource ds = DataSource.getInstance();
+				ds.moveTrack(t, DataSource.DIRECTION_DOWN);
 				loadTracks();
 				return true;
 			}
 		
 		case R.id.edit_tracks_activate: {
 				Track t = (Track)tracksAdapter.getItem((int)info.id);
-				TracksDataSource ds = TracksDataSource.getInstance();
+				DataSource ds = DataSource.getInstance();
 				t.setEnabled(true);
 				ds.storeTrack(t);
 				loadTracks();
@@ -152,7 +152,7 @@ public class EditTracksActivity extends ListActivity {
 		
 		case R.id.edit_tracks_deactivate: {
 				Track t = (Track)tracksAdapter.getItem((int)info.id);
-				TracksDataSource ds = TracksDataSource.getInstance();
+				DataSource ds = DataSource.getInstance();
 				t.setEnabled(false);
 				ds.storeTrack(t);
 				loadTracks();
@@ -168,7 +168,7 @@ public class EditTracksActivity extends ListActivity {
 
 			    public void onClick(DialogInterface dialog, int whichButton) {
 			    	Track t = (Track)tracksAdapter.getItem((int)info.id);
-					TracksDataSource ds = TracksDataSource.getInstance();
+					DataSource ds = DataSource.getInstance();
 					ds.deleteTrack(t);
 					loadTracks();
 			    }})
@@ -194,7 +194,6 @@ public class EditTracksActivity extends ListActivity {
 	    
 	    menu.findItem(R.id.edit_tracks_deactivate).setVisible(t.isEnabled());
 	    menu.findItem(R.id.edit_tracks_activate).setVisible(!t.isEnabled());
-
 
 	}
 

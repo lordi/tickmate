@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.widgets.GroupListPreference;
@@ -29,13 +29,13 @@ OnSharedPreferenceChangeListener  {
 	private int track_id;
     private Track track;
     private EditTextPreference name;
-    private static TracksDataSource mDataSource = TracksDataSource.getInstance();
 
     private EditTextPreference description;
     private CheckBoxPreference enabled;
     private CheckBoxPreference multiple_entries_enabled;
 	private IconPreference icon;
     private GroupListPreference mGroupsPref;
+    private static DataSource mDataSource = DataSource.getInstance();
 
     public TrackPreferenceFragment() {
         super();
@@ -87,6 +87,13 @@ OnSharedPreferenceChangeListener  {
         mGroupsPref = (GroupListPreference) findPreference("groups");
         mGroupsPref.setTrack(track);
         mGroupsPref.populate();
+        // TODO avp had wanted the methods used in the following code rewritten, renamed, moved, etc.
+        // Its been improved. Are we done with this, or should it be improved further?
+        //mGroupsPref = (MultiSelectListPreference) findPreference("groups");
+        //mGroupsPref.setValues(getGroupIdsForTrackAsSet(track.getId()));
+        //mGroupsPref.setEntries(getAllGroupNamesAsCharSeq());
+        //mGroupsPref.setEntryValues(getAllGroupIdsAsCharSeq());
+        //mGroupsPref.setSummary(getGroupNamesForSummary());
 //        Log.d(TAG, "setValues (0) track.getGroupIdsAsSet() - " + TextUtils.join("; ", track.getGroupIdsAsSet()));
 //        Log.d(TAG, "setEntries (1) getAllGroupNamesAsCharSeq()- " + getAllGroupNamesAsCharSeq() + " -- " + TextUtils.join("; ", getAllGroupNamesAsCharSeq()));
 //        Log.d(TAG, "setEntryValues (2) getAllGroupIdsAsCharSeq()- " + getAllGroupIdsAsCharSeq() + " -- " + TextUtils.join("; ", getAllGroupIdsAsCharSeq()));
@@ -153,6 +160,6 @@ OnSharedPreferenceChangeListener  {
 //            Log.d(TAG, "Confirm that the group NAMES are correct: " + TextUtils.join(",", track.getGroupNamesAsSet()));
 
         }
-		mDataSource.storeTrack(track);
+        mDataSource.storeTrack(track);
     }
 }

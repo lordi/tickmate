@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -29,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.widgets.MultiTickButton;
@@ -39,8 +38,8 @@ import de.smasi.tickmate.widgets.TrackButton;
 public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
 	private final Context context;
-	private Calendar activeDay;  // When set, the display will be fixed to this day.
-	    // Null value is intentionally used to indicate display should follow the actual current day.
+    private Calendar activeDay;  // When set, the display will be fixed to this day.
+    // Null value is intentionally used to indicate display should follow the actual current day.
     private Calendar today, yday;
     int count, count_ahead;
     private Map<Calendar, View> mRowCache = new HashMap<>();
@@ -50,7 +49,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     private Spinner mGroupSpinner;
     private ArrayList<Integer> mSpinnerArrayGroupIds = new ArrayList<>();
     private int mSpinnerPosition = 0;  // Can we get rid of this, and simply update the value within the spinner itself?
-//    private Group mDisplayGroup = Group.ALL_GROUP; // Group.ALL_GROUP indicates 'all active tracks' Consider: Is there a better way to indicate that all tracks have been selected for display? Possibly using only spinner position == 0 ?
 
     private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
@@ -121,24 +119,35 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         notifyDataSetChanged();
     }
 
+    private boolean isAllGroupSelected() {
+        if (mGroupSpinner == null) {
+            Log.e(TAG, "mGroupSpinner is null in isAllGroupSelected");
+            return true;
+        }
+        return (mGroupSpinner.getSelectedItemPosition() == 0);
+    }
+
+
     public int getCount() {
-        if (mTracksCurrentlyDisplayed == null) {
-            Log.e(TAG, "ERROR, mTracksCurrentlyDisplayed should not be null");
+        // Return either 0 or this.count, depending on whether the empty view should be displayed.
+        // Empty view is displayed if (a) no active tracks exist (b) a group is selected, and there are no tracks
+        //  for that group
+
+        DataSource ds = DataSource.getInstance();
+
+        if (ds.getActiveTracks().size() == 0) {
             return 0;
         }
 
-        if (mTracksCurrentlyDisplayed.size() == 0) {
-            return 0; // return 0 here if we have no tracks to display so that the empty view will get displayed
-            // TODO Question for Hannes and/or AVP - Should we make further changes to the empty view text?
-            // (todo)  (It has been updated to include "No tracks have been added for this group".)
-            // js: Now I think the 'empty view' should depend on whether we are viewing the 'all
-            // tracks' selection or a group, and maybe whether or not there are existing tracks.
-            // If there are tracks, and we are viewing a group, then the user should get a 'select
-            // tracks for this group' selector (to be created, modelled on 'groups for this track'
-            //  preference in TrackPreferenceFragment)
-        } else {
-            return this.count;
+        if (!isAllGroupSelected() && ds.getTracksForGroup(getCurrentGroupId()).size() == 0) {
+            return 0;
         }
+
+        return this.count;
+
+        // TODO Should we make further changes to the empty view? Currently adapts to whether
+        //  the selected group has tracks linked to it.  (TODO check that it handles the situation
+        //  correctly if there are no tracks at all.)
     }
 
 	public Object getItem(int position) {
@@ -155,6 +164,8 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        //        Log.d(TAG, "getView(" + position + ", " + convertView + ", " + parent);
+
         Integer days = (Integer) getItem(position);
         Calendar rowDay = getActiveDay();
         rowDay.add(Calendar.DATE, -days);
@@ -180,7 +191,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         mGroupSpinner.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 rowHeight, 0.8f));
 
-        List<Group> allGroups = TracksDataSource.getInstance().getGroups();
+        List<Group> allGroups = DataSource.getInstance().getGroups();
 
         ArrayList<String> mSpinnerArrayNames = new ArrayList<>();
         mSpinnerArrayGroupIds.clear();
@@ -283,7 +294,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         java.text.DateFormat dateFormat = android.text.format.DateFormat
                 .getDateFormat(context);
 
-//		Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
+//        Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 
         LinearLayout tickgrid = new LinearLayout(this.context);
 //        LinearLayout tickgrid = new TestCustomEventControlLinearLayout(this.context);
@@ -419,7 +430,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
             scrollToLatest();
         }
 
-        TracksDataSource ds = TracksDataSource.getInstance();
+        DataSource ds = DataSource.getInstance();
 
         Calendar startday = this.getActiveDay();
         Calendar endday = (Calendar) startday.clone();
@@ -442,11 +453,16 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     }
 
     private List<Track> getTracksForCurrentGroup() {
-        return TracksDataSource.getInstance().getTracksForGroup(getCurrentGroupId());
+        if (isAllGroupSelected()) {
+            return DataSource.getInstance().getActiveTracks();
+        } else {
+            return DataSource.getInstance().getTracksForGroup(getCurrentGroupId());
+        }
     }
 
     private int getCurrentGroupId() {
         if (mGroupSpinner == null) {
+            Log.e(TAG, "mGroupSpinner is null in getCurrentGroupId");
             return Group.ALL_GROUP.getId();
         }
         return mSpinnerArrayGroupIds.get(mGroupSpinner.getSelectedItemPosition());
@@ -463,11 +479,12 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         }
         mSpinnerPosition = pos;
 
+        // TODO consider replacing following stanza with mTCD = getTracksForCurrentGroup
         int currentGroupId = getCurrentGroupId();
         if (currentGroupId == Group.ALL_GROUP.getId()) {
-            mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getActiveTracks();
+            mTracksCurrentlyDisplayed = DataSource.getInstance().getActiveTracks();
         } else {
-            mTracksCurrentlyDisplayed = TracksDataSource.getInstance().getTracksForGroup(currentGroupId);
+            mTracksCurrentlyDisplayed = DataSource.getInstance().getTracksForGroup(currentGroupId);
 //            Log.d(TAG, "Tracks associated with group(" + currentGroupId + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
         }
 //        Log.d(TAG, "Number of tracks to display: " + mTracksCurrentlyDisplayed.size());
@@ -509,7 +526,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         if (position < 0) {
             position = mGroupSpinner.getCount() - 1;
         }
-        Toast.makeText(context, "Swiped right, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // remove before publishing
+//        Toast.makeText(context, "Swiped right, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // consider leaving for future debug
         mGroupSpinner.setSelection(position);
     }
 
@@ -520,16 +537,16 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         if (position == mGroupSpinner.getCount()) {
             position = 0;
         }
-        Toast.makeText(context, "Swiped left, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // remove before publishing
+//        Toast.makeText(context, "Swiped left, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // consider leaving for future debug
         mGroupSpinner.setSelection(position);
     }
 
     public Group getGroupCurrentlyDisplayed() {
         int spinnerPosition = mGroupSpinner.getSelectedItemPosition();
-        if (spinnerPosition  == 0) {
+        if (isAllGroupSelected()) {
             return Group.ALL_GROUP;
         } else {
-            return TracksDataSource.getInstance().getGroup(mSpinnerArrayGroupIds.get(spinnerPosition));
+            return DataSource.getInstance().getGroup(mSpinnerArrayGroupIds.get(spinnerPosition));
         }
     }
 

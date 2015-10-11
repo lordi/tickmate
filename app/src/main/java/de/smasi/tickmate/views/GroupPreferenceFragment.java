@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 
@@ -30,7 +30,7 @@ public class GroupPreferenceFragment extends PreferenceFragment implements
     private EditTextPreference name;
     private EditTextPreference description;
     private MultiSelectListPreference mTracksPref;
-    private static TracksDataSource mDataSource = TracksDataSource.getInstance();
+    private static DataSource mDataSource = DataSource.getInstance();
     private boolean mOpenTrackList = false;
 
 
@@ -47,7 +47,7 @@ public class GroupPreferenceFragment extends PreferenceFragment implements
 
         group_id = getArguments().getInt("group_id");
         mOpenTrackList = getArguments().getBoolean("openTrackList");
-        group = TracksDataSource.getInstance().getGroup(group_id);
+        group = DataSource.getInstance().getGroup(group_id);
         loadGroup();
         // openTrackList indicates that this preference was created for the purpose of immediately
         //   opening up the track multi-select list
@@ -154,7 +154,7 @@ public class GroupPreferenceFragment extends PreferenceFragment implements
             }
             pref.setSummary(etp.getText());
 
-            TracksDataSource.getInstance().storeGroup(group);
+            DataSource.getInstance().storeGroup(group);
         } else if (pref instanceof MultiSelectListPreference) {
             MultiSelectListPreference mp = (MultiSelectListPreference) pref;
 //            Log.d(TAG, "MultiSelectListPreference changed, with trackIds: " + TextUtils.join(",", mp.getValues()));

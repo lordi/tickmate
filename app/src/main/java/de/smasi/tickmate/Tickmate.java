@@ -152,6 +152,13 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
     @Override
     public void onResume() {
         refresh();
+
+        // Working on #42
+        boolean isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(this).
+                getBoolean("reverse-date-order-key", false);
+        int scrollposition = (isTodayAtTop) ? 0 : mAdapter.getAdapter().getCount() - 1;
+        getListView().smoothScrollToPosition(scrollposition);
+        // -----
         super.onResume();
     }
 

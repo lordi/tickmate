@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Track;
 
 public class ChooseTrackActivity extends ListActivity {
@@ -86,7 +86,7 @@ public class ChooseTrackActivity extends ListActivity {
 		Track t = (Track) getListView().getAdapter().getItem(position);
 		
 		if (!t.isSectionHeader()) {
-			TracksDataSource ds = TracksDataSource.getInstance();
+			DataSource ds = DataSource.getInstance();
 			ds.storeTrack(t);
 			Intent data = new Intent();
 			data.putExtra("insert_id", t.getId());
