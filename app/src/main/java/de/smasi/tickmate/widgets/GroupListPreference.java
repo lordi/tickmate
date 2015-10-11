@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.views.EditGroupsActivity;
@@ -24,7 +24,7 @@ import de.smasi.tickmate.views.EditGroupsActivity;
  * Created by hannes on 08.10.15.
  */
 public class GroupListPreference extends MultiSelectListPreference {
-    private static TracksDataSource mDataSource = TracksDataSource.getInstance();
+    private static DataSource mDataSource = DataSource.getInstance();
     private Track track;
     static private String TAG = "GroupListPreference";
 
