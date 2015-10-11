@@ -84,24 +84,22 @@ OnSharedPreferenceChangeListener  {
         //      and call TDS directly to get their data.  (I'm not opposed to making a separate
         //      utility class just for these methods if you like, but this seems clean enough for
         //      today; though I'm still not a fan of these extra long names
+        // TODO avp had wanted the methods used in the following code rewritten, renamed, moved, etc.
+        // Its been improved. Are we done with this, or should it be improved further?
+        // hg - I moved all methods to GroupListPreference
         mGroupsPref = (GroupListPreference) findPreference("groups");
         mGroupsPref.setTrack(track);
         mGroupsPref.populate();
-        // TODO avp had wanted the methods used in the following code rewritten, renamed, moved, etc.
-        // Its been improved. Are we done with this, or should it be improved further?
-        //mGroupsPref = (MultiSelectListPreference) findPreference("groups");
-        //mGroupsPref.setValues(getGroupIdsForTrackAsSet(track.getId()));
-        //mGroupsPref.setEntries(getAllGroupNamesAsCharSeq());
-        //mGroupsPref.setEntryValues(getAllGroupIdsAsCharSeq());
-        //mGroupsPref.setSummary(getGroupNamesForSummary());
-//        Log.d(TAG, "setValues (0) track.getGroupIdsAsSet() - " + TextUtils.join("; ", track.getGroupIdsAsSet()));
-//        Log.d(TAG, "setEntries (1) getAllGroupNamesAsCharSeq()- " + getAllGroupNamesAsCharSeq() + " -- " + TextUtils.join("; ", getAllGroupNamesAsCharSeq()));
-//        Log.d(TAG, "setEntryValues (2) getAllGroupIdsAsCharSeq()- " + getAllGroupIdsAsCharSeq() + " -- " + TextUtils.join("; ", getAllGroupIdsAsCharSeq()));
-//        Log.d(TAG, "setSummary (3)with " + track.getGroupNamesAsCharSeq() + " -- " + TextUtils.join("; ", track.getGroupNamesAsCharSeq()));
     }
 
     public void onResume() {
         super.onResume();
+
+        // Repopulate GroupListPreference because we might resume from Edit groups activity
+        mGroupsPref = (GroupListPreference) findPreference("groups");
+        mGroupsPref.setTrack(track);
+        mGroupsPref.populate();
+
         getPreferenceScreen().getSharedPreferences()
             .registerOnSharedPreferenceChangeListener(this);
     }

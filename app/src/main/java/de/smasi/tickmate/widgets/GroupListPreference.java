@@ -34,6 +34,7 @@ public class GroupListPreference extends MultiSelectListPreference {
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
+        super.onPrepareDialogBuilder(builder);
         builder.setNeutralButton(R.string.menu_edit_groups, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
