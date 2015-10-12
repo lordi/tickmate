@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Editable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,7 @@ import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
 
 public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener, View.OnClickListener {
     static final int DATE_DIALOG_ID = 0;
+    private static final String TAG = "Tickmate";
 
     private InfiniteScrollAdapter<TickAdapter> mAdapter;
     private Handler mHandler;
@@ -46,7 +48,8 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.fragment_tickmate_ticks);
+        Log.d(TAG, "onCreate(" + savedInstanceState + ")");
+        //setContentView(R.layout.fragment_tickmate_ticks);
 		//matrix = (TickMatrix)findViewById(R.id.tickMatrix1);
         setContentView(R.layout.activity_tickmate_list);
         
@@ -58,11 +61,11 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
         progress.addView(new ProgressBar(this));
 
         mAdapter = new InfiniteScrollAdapter<TickAdapter>(this,
-                new TickAdapter(this, today), progress);
+                new TickAdapter(this, today, savedInstanceState), progress);
         mAdapter.addListener(this);
         mHandler = new Handler();
 
-		updateHeader();
+        updateHeader();
 
 		TextView emptyView = (TextView)findViewById(android.R.id.empty);
 
@@ -70,25 +73,21 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
 	   	getListView().setStackFromBottom(true);
         getListView().setAdapter(mAdapter);
-//        getListView().getRootView().setOnTouchListener(mAdapter.getAdapter());
         getListView().setOnTouchListener(mAdapter.getAdapter());
         getListView().getEmptyView().setOnTouchListener(mAdapter.getAdapter());
-
-
-        if (savedInstanceState != null) {
-            mAdapter.getAdapter().restoreState(savedInstanceState);
-        }
     }
 
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState(" + outState + ")");
         mAdapter.getAdapter().saveState(outState);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
+        Log.d(TAG, "onRestoreInstanceState(" + state + ")");
         mAdapter.getAdapter().restoreState(state);
         super.onRestoreInstanceState(state);
     }
@@ -151,6 +150,8 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
     @Override
     public void onResume() {
+        Log.d(TAG, "onResume()");
+
         refresh();
 
         // Working on #42

@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,18 +54,25 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     private static final int DEFAULT_COUNT_PAST = 21; // by default load 3 weeks of past ticks
     // (see comment by InfiniteScrollAdapter.SCROLL_DOWN_THRESHOLD)
     private static final int DEFAULT_COUNT_AHEAD = 0; // by default show zero days ahead
+    private final static int ALL_GROUPS_SPINNER_INDEX = 0; // Position within the group selector
+        // Spinner which indicates that 'all groups' have been selected.  (Other positions indicate
+        // a specific group has been selected)
+
     private GestureDetector mGestureDetector;
 
-	public TickAdapter(Context context, Calendar activeDay) {
+	public TickAdapter(Context context, Calendar activeDay, Bundle restoreStateBundle) {
 		// super(context, R.layout.rowlayout, days);
 		this.context = context;
 		this.count = DEFAULT_COUNT_PAST;
 		this.count_ahead = DEFAULT_COUNT_AHEAD;
 
+        restoreState(restoreStateBundle); // Should be called before setActiveDay()
+        initSpinnerArrayGroupIds();
         setActiveDay(activeDay);
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
         mGestureDetector = new GestureDetector(context, new GestureListener());
+        Log.e(TAG, "mSpinnerPosition: " + mSpinnerPosition);
     }
 
     public void unsetActiveDay() {
@@ -121,17 +127,18 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     private boolean isAllGroupSelected() {
         if (mGroupSpinner == null) {
-            Log.e(TAG, "mGroupSpinner is null in isAllGroupSelected");
-            return true;
+            Log.e(TAG, "mGroupSpinner is null in isAllGroupSelected. Returning: " +
+                    (mSpinnerPosition == ALL_GROUPS_SPINNER_INDEX));
+            return (mSpinnerPosition == ALL_GROUPS_SPINNER_INDEX);
         }
-        return (mGroupSpinner.getSelectedItemPosition() == 0);
+        return (mGroupSpinner.getSelectedItemPosition() == ALL_GROUPS_SPINNER_INDEX);
     }
 
 
     public int getCount() {
         // Return either 0 or this.count, depending on whether the empty view should be displayed.
-        // Empty view is displayed if (a) no active tracks exist (b) a group is selected, and there are no tracks
-        //  for that group
+        // Empty view is displayed if (a) no active tracks exist (b) a group is selected, and there
+        // are no tracks for that group
 
         DataSource ds = DataSource.getInstance();
 
@@ -191,22 +198,35 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         mGroupSpinner.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 rowHeight, 0.8f));
 
+        // init mSpinnerArraynames
         List<Group> allGroups = DataSource.getInstance().getGroups();
-
         ArrayList<String> mSpinnerArrayNames = new ArrayList<>();
-        mSpinnerArrayGroupIds.clear();
         mSpinnerArrayNames.add(Group.ALL_GROUP.getName());
-        mSpinnerArrayGroupIds.add(Group.ALL_GROUP.getId()); // The first entry in this array refers to the 'All Group', which does not occur in the database.
         for (Group group : allGroups) {
             mSpinnerArrayNames.add(group.getName());
-            mSpinnerArrayGroupIds.add(group.getId());
         }
+
+        initSpinnerArrayGroupIds();
 
         ArrayAdapter<String> spinnerArrayAdapter =
                 new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, mSpinnerArrayNames);
         mGroupSpinner.setAdapter(spinnerArrayAdapter);
         mGroupSpinner.setOnItemSelectedListener(this);
-        mGroupSpinner.setSelection((mSpinnerPosition == -1) ? 0 : mSpinnerPosition); // AVP:Monday TODO Test for the permanence of this selector state.
+        // Protect against errant values before calling setSelection
+         if ((mSpinnerPosition < 0) || (mSpinnerPosition >= mGroupSpinner.getCount())) {
+             Log.e(TAG, "mSpinnerPosition should not be "+mSpinnerPosition);
+             mSpinnerPosition = 0;
+        }
+        mGroupSpinner.setSelection(mSpinnerPosition); // AVP:Monday TODO Test for the permanence of this selector state.
+    }
+
+    private void initSpinnerArrayGroupIds() {
+        List<Group> allGroups = DataSource.getInstance().getGroups();
+        mSpinnerArrayGroupIds.clear();
+        mSpinnerArrayGroupIds.add(Group.ALL_GROUP.getId()); // The first entry in this array refers to the 'All Group', which does not occur in the database.
+        for (Group group : allGroups) {
+            mSpinnerArrayGroupIds.add(group.getId());
+        }
     }
 
 
@@ -461,11 +481,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     }
 
     private int getCurrentGroupId() {
-        if (mGroupSpinner == null) {
-            Log.e(TAG, "mGroupSpinner is null in getCurrentGroupId");
-            return Group.ALL_GROUP.getId();
-        }
-        return mSpinnerArrayGroupIds.get(mGroupSpinner.getSelectedItemPosition());
+        return mSpinnerArrayGroupIds.get(mSpinnerPosition);
     }
 
 
@@ -504,10 +520,16 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     // Preserve the spinner state
     public void restoreState(Bundle state) {
-        mSpinnerPosition = state.getInt("SpinnerPosition", 0);
+        Log.d(TAG, "restoreState");
+        if (state != null) {
+            mSpinnerPosition = state.getInt("SpinnerPosition", 0);
+        } else {
+            mSpinnerPosition = 0;
+        }
     }
 
     public void saveState(Bundle outState) {
+        Log.d(TAG, "saveState()");
         outState.putInt("SpinnerPosition", mSpinnerPosition);
     }
 

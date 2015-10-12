@@ -209,9 +209,9 @@ public class DataSource {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Group g = cursorToGroup(cursor);
-            Log.d(TAG, "in getGroups, adding group: " + g);
             groups.add(g);
             cursor.moveToNext();
+//            Log.d(TAG, "in getGroups, adding group: " + g);
         }
         cursor.close(); // Make sure to close the cursor
         return groups;
