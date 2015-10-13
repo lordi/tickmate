@@ -108,7 +108,11 @@ public class DataSource {
 				DatabaseOpenHelper.COLUMN_ID + " = " + id, null);
 			if (rows > 0)
 				System.out.println("Track deleted with id: " + id);
-		} finally {
+            rows = database.delete(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
+                    DatabaseOpenHelper.COLUMN_TRACK_ID + " = " + id, null);
+            if (rows > 0)
+                Log.d(TAG, String.format("number of track2group relations deleted: %d", rows));
+        } finally {
             if (database != null) {
                 close();
 			}

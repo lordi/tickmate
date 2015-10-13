@@ -155,7 +155,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         // TODO Should we make further changes to the empty view?
         // TODO If there are no Tracks, and 'all groups' is selected, then the text displayed is:
         //   "No tracks *for this group*" when it should simply be "No tracks"
-        // TODO Just crashed on group selection after deleting all tracks.  Possibly when tracks are deleted, the T2G relationships are not deleted correctly?
     }
 
 	public Object getItem(int position) {
