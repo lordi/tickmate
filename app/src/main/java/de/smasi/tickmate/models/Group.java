@@ -1,24 +1,7 @@
 package de.smasi.tickmate.models;
 
-// js TODO For the future, consider:
-//  o Forbidding the creation of a new group that has the same name as an existing group (but code
-//      must not assume such duplicates don't exist.)
-//  o whether longs or ints are better for ids
-//  o introducing icons for groups
-
-
 // AVP TODO load group IDs into Track objects when they are read from database
 // AVP TODO store all Track/Group data in memory and update database when necessary (implementing locking if need be)
-// js - ...after ironing out all wrinkles in current (db centric) approach
-// js - We would need to ensure that every time any track/group link is established - whether individually
-//      or using lists of IDs, and whether via Track.linkGroup or Group.linkTrack or DataSource.linkBlah
-//      methods - that all affected objects (as well as db) are updated.  I don't see how to do
-//      this without a centralized list of references to all of the tracks and groups, which would
-//      in turn require that we carefully regulate the creation of new Track and Group objects
-//      everywhere in the code (otherwise someone may hold a reference to a stale object, which is
-//      not in the centralized master list and whose data is therefore not updated
-
-// TODO NOW js - currently trying to allow group order to be changed, in preparation for using a TabView (so users won't be forced to swipe across too many tabs)
 
 /**
  * Groups are a way to organize and categorize Tracks. Groups can be predefined or user-defined.

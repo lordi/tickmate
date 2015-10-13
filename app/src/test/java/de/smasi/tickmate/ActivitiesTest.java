@@ -1,13 +1,10 @@
 package de.smasi.tickmate;
 
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import android.content.Intent;
+import android.os.Bundle;
+import android.preference.EditTextPreference;
 
-import org.hamcrest.core.IsEqual;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,10 +13,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.preference.EditTextPreference;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -31,6 +24,10 @@ import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.ShowTrackActivity;
 import de.smasi.tickmate.views.TrackPreferenceActivity;
 import de.smasi.tickmate.views.TrackPreferenceFragment;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 @Config(sdk = 17, constants = BuildConfig.class)
 @RunWith(TickmateTestRunner.class)
@@ -103,8 +100,6 @@ public class ActivitiesTest {
         closeMethod.invoke(dataSource);
         assertThat(t, equalTo(t));
 
-//        EditTrackActivity doesn't exist, and TrackPreferenceActivity seems the closest analog:
-
         Intent i = new Intent(RuntimeEnvironment.application.getApplicationContext(), tickmate.getClass());
         i.putExtra("track_id", t.getId());
         ActivityController<TrackPreferenceActivity> r_eta = Robolectric.buildActivity(TrackPreferenceActivity.class)
@@ -114,19 +109,10 @@ public class ActivitiesTest {
                 .resume();
 
         TrackPreferenceActivity eta = r_eta.get();
-        // AVP and/or HG, check this?
-        // I've changed this code...
-//        EditText edit_description = (EditText) eta.findViewById(R.id.edit_description);
-//        assertThat(edit_description.getText().toString(), is("Run my tests"));
-//        edit_description.setText("Krishna Hare");
-        //  ... to this...
         TrackPreferenceFragment tpf = (TrackPreferenceFragment) eta.getFragmentManager().findFragmentById(android.R.id.content);
         EditTextPreference description = (EditTextPreference) tpf.findPreference("description");
         assertThat(description.getText().toString(), is("Run my tests"));
         description.setText("Krishna Hare");
-
-        // ...because R.id.edit_description no longer exists, and EditTrackActivity contains
-        // a TrackPreferenceFragment.
 
         r_eta.pause();
         r_eta.stop();

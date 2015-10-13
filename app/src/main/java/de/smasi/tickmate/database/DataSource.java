@@ -348,7 +348,7 @@ public class DataSource {
 	 *
 	 * @param group Group object
 	 */
-    public void storeGroup(Group group) { // Note: renamed to storeGroup to be consistent with other storeX calls.  We could also change them all to saveX
+    public void storeGroup(Group group) {
         open();
 
         ContentValues values = new ContentValues();
@@ -371,11 +371,6 @@ public class DataSource {
         close();
     }
 
-
-//    public List<Track> getActiveTracks(Context context) {
-//        DataSource ds = DataSource.getInstance();
-//        return ds.getActiveTracks();
-//    }
 
     public List<Track> getActiveTracks() {
         List<Track> tracks = new ArrayList<>();
@@ -695,9 +690,6 @@ public class DataSource {
                 allColumnsGroups, null, null, null, null,
                 "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\" ASC", null);
 
-//        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_GROUPS,
-//                allColumnsGroups, null, null, null, null, null, null);
-
         cursor.moveToFirst();
         for (int groupOrder = 0; !cursor.isAfterLast(); groupOrder += 10) {
             Group group = cursorToGroup(cursor);
@@ -735,7 +727,6 @@ public class DataSource {
 
 		Track t_updated = getTrack(t.getId());
 		t_updated.setOrder(t_updated.getOrder() + dir * 15);
-        // js: Why multiply by 15?
 		//Log.d("Tickmate", t_updated.getName() + " got " + t_updated.getOrder());
 
 		storeTrack(t_updated);
@@ -796,9 +787,8 @@ public class DataSource {
      * @param newTrackIds a complete list of the
      */
         public void linkManyTracksOneGroup(List<Integer> newTrackIds, int groupId) {
-//    public void linkOneTrackManyGroups(int trackId, List<Integer> newGroupIds) {
-        List<Integer> currentTrackIds = getTrackIdsForGroup(groupId);
 //        Log.d(TAG, "Updating group (" + groupId + ") with new track IDS(" + newTrackIds + "), previously were: " + printTrackIdsForGroup(groupId));
+            List<Integer> currentTrackIds = getTrackIdsForGroup(groupId);
 
         // If the ID is currently in the table, but not in newTrackIds, then delete it
         for (Integer tId : currentTrackIds) {

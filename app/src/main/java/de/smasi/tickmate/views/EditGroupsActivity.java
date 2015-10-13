@@ -5,7 +5,6 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -125,9 +124,7 @@ public class EditGroupsActivity extends ListActivity {
                 return true;
             }
 
-            // Consider whether we may want to let the user re-order the groups, in which case ...
-            // ... model the code in EditTracksActivity, after "case R.id.edit_tracks_moveup"
-            // Consider also whether the user will be able to enable/disable groups.
+            // Consider whether the user will be able to enable/disable groups.
 
             case R.id.edit_groups_delete: {
                 new AlertDialog.Builder(this)

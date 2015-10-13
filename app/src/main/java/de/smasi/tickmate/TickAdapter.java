@@ -72,7 +72,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
         mGestureDetector = new GestureDetector(context, new GestureListener());
-        Log.e(TAG, "mSpinnerPosition: " + mSpinnerPosition);
+//        Log.d(TAG, "mSpinnerPosition: " + mSpinnerPosition);
     }
 
     public void unsetActiveDay() {
@@ -442,7 +442,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         boolean previousIsTodayAtTop = isTodayAtTop;  // Used to determine if this value has been toggled since last data set change
 
-        // Appears sufficient to update isTodayAtTop on every data set change - not thoroughly tested.
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
 
@@ -491,15 +490,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         }
         mSpinnerPosition = pos;
 
-        // TODO consider replacing following stanza with mTCD = getTracksForCurrentGroup
-        int currentGroupId = getCurrentGroupId();
-        if (currentGroupId == Group.ALL_GROUP.getId()) {
-            mTracksCurrentlyDisplayed = DataSource.getInstance().getActiveTracks();
-        } else {
-            mTracksCurrentlyDisplayed = DataSource.getInstance().getTracksForGroup(currentGroupId);
-//            Log.d(TAG, "Tracks associated with group(" + currentGroupId + ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
-        }
-//        Log.d(TAG, "Number of tracks to display: " + mTracksCurrentlyDisplayed.size());
+        mTracksCurrentlyDisplayed = getTracksForCurrentGroup();
 
         Tickmate tm = (Tickmate) context;
 

@@ -96,7 +96,8 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
         LinearLayout header_group = ((LinearLayout) findViewById(R.id.header));
 //		if (mAdapter.getOriginalAdapter().getCount() > 0) { // With the group spinner,
 // this getCount() no longer tells us whether these views need to be redrawn.
-// TODO Consider re-inserting a conditional here, which compares values based on the spinner position
+// TODO Consider re-inserting a conditional here to determine whether these views need to be redrawn,
+//    and which might compare values based on the spinner position (or...?)
         header_group.removeAllViews();
         header_group.addView(mAdapter.getOriginalAdapter().getHeader());
 //		}
@@ -136,7 +137,6 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
         }
     }
 
-    // Placing this here temporarily, for dev
     private void editGroups() {
         Intent intent = new Intent(this, EditGroupsActivity.class);
         startActivity(intent);
@@ -154,12 +154,12 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
         refresh();
 
-        // Working on #42
+        // Next three lines introduced to address issue #42
         boolean isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(this).
                 getBoolean("reverse-date-order-key", false);
         int scrollposition = (isTodayAtTop) ? 0 : mAdapter.getAdapter().getCount() - 1;
         getListView().smoothScrollToPosition(scrollposition);
-        // -----
+
         super.onResume();
     }
 
@@ -288,7 +288,6 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
             Intent intent = new Intent(this, GroupPreferenceActivity.class);
             intent.putExtra("group_id", displayedGroup.getId());
             intent.putExtra("openTrackList", true);
-//            startActivityForResult(intent, 1);
             startActivity(intent);
         }
     }

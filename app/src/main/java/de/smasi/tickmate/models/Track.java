@@ -60,8 +60,6 @@ public class Track {
 		return this.iconId;
 	}
 
-    // TODO Question for Hannes, is it okay to rename this isSectionHeader (from isGroupHeader), to avoid
-    //    confusion with ideas related to Groups.java
     public boolean isSectionHeader() {
 
         return getName().startsWith("--- ");
@@ -122,7 +120,7 @@ public class Track {
 
     // Used primarily for debugging.
     public String toString() {
-//        return "Group:  id(" + mId + ") name(" + name + ") description(" + description + ")  groupIds(" + TextUtils.join(",", mGroupIds);
-        return "Group:  id(" + mId + ") name(" + name + ") description(" + description + ")  groupIds(not saved locally at the moment)";
+        return "Group:  id(" + mId + ") name(" + name + ") description(" + description + ")";
     }
+
 }
