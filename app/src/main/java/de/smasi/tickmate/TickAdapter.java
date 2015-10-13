@@ -66,7 +66,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 		this.count = DEFAULT_COUNT_PAST;
 		this.count_ahead = DEFAULT_COUNT_AHEAD;
 
-        restoreState(restoreStateBundle); // Should be called before setActiveDay()
+        restoreState(restoreStateBundle); // Sequence is critical in this stanza
         initSpinnerArrayGroupIds();
         setActiveDay(activeDay);
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
@@ -456,12 +456,9 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         Calendar endday = (Calendar) startday.clone();
         startday.add(Calendar.DATE, -this.count);
 
-        // mTracksCurrentlyDisplayed is updated when the spinner is selected
-        if (mTracksCurrentlyDisplayed == null) {
             mTracksCurrentlyDisplayed = getTracksForCurrentGroup();
 //            Log.d(TAG, "Tracks associated with current group (" + getCurrentGroupId() +
 //                    ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
-        }
 
         Log.v(TAG, "Data range has been updated: " + dateFormat.format(activeDay.getTime()) + " - " + dateFormat.format(today.getTime()));
         ds.retrieveTicks(startday, endday);
@@ -469,7 +466,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         // Keep around for easier debug
 //        Log.d(TAG, "Tracks currently displayed: " + TextUtils.join("\n ", mTracksCurrentlyDisplayed));
 //        for (Track t : mTracksCurrentlyDisplayed) { Log.d(TAG, t.getName()); }
-
     }
 
     private List<Track> getTracksForCurrentGroup() {
