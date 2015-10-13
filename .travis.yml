@@ -1,0 +1,18 @@
+language: android
+
+sudo: false
+
+android:
+  components:
+    - platform-tools
+    - build-tools-22.0.1
+    - android-22
+    - extra-android-support
+  licenses:
+    - '.+'
+
+script:
+ - ./gradlew clean testDebugUnitTest --stacktrace
+    
+notifications:
+  email: false
