@@ -152,9 +152,10 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         return this.count;
 
-        // TODO Should we make further changes to the empty view? Currently adapts to whether
-        //  the selected group has tracks linked to it.  (TODO check that it handles the situation
-        //  correctly if there are no tracks at all.)
+        // TODO Should we make further changes to the empty view?
+        // TODO If there are no Tracks, and 'all groups' is selected, then the text displayed is:
+        //   "No tracks *for this group*" when it should simply be "No tracks"
+        // TODO Just crashed on group selection after deleting all tracks.  Possibly when tracks are deleted, the T2G relationships are not deleted correctly?
     }
 
 	public Object getItem(int position) {
@@ -217,7 +218,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
              Log.e(TAG, "mSpinnerPosition should not be "+mSpinnerPosition);
              mSpinnerPosition = 0;
         }
-        mGroupSpinner.setSelection(mSpinnerPosition); // AVP:Monday TODO Test for the permanence of this selector state.
+        mGroupSpinner.setSelection(mSpinnerPosition);
     }
 
     private void initSpinnerArrayGroupIds() {

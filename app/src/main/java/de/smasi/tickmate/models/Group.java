@@ -1,8 +1,5 @@
 package de.smasi.tickmate.models;
 
-// AVP TODO load group IDs into Track objects when they are read from database
-// AVP TODO store all Track/Group data in memory and update database when necessary (implementing locking if need be)
-
 /**
  * Groups are a way to organize and categorize Tracks. Groups can be predefined or user-defined.
  */

@@ -127,8 +127,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
             case R.id.action_import_db:
                 this.importDB();
                 return true;
-            // Placing this menu item here temporarily, for dev.  TODO Question for Hannes, AVP:
-            //  (TODO cont'd)  In the final version, where in the UI will the user launch the group edit preferences
+            // "Edit Groups" being placed in this menu because we don't yet have a better place.
             case R.id.action_edit_groups:
                 this.editGroups();
                 return true;
@@ -154,7 +153,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
         refresh();
 
-        // Next three lines introduced to address issue #42
+        // Next stanza introduced to address issue #42
         boolean isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(this).
                 getBoolean("reverse-date-order-key", false);
         int scrollposition = (isTodayAtTop) ? 0 : mAdapter.getAdapter().getCount() - 1;
@@ -257,6 +256,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
     public void jumpToToday() {
         Calendar day = Calendar.getInstance();
         ((TickAdapter) getListAdapter()).scrollToLatest();  // TODO js Confirm if this is the best place in the code to force a scroll to latest.
+        // TODO avp and hg, does this look okay to you?  Can I leave the above line where it is and delete the above comment?
         mAdapter.getAdapter().unsetActiveDay();
         refresh();
     }
