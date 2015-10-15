@@ -13,7 +13,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
-	private static DatabaseOpenHelper sharedInstance;
+    private static DatabaseOpenHelper sharedInstance;
 	private Context context;
     private static final String TAG = "DatabaseOpenHelper";
 
@@ -40,6 +40,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_GROUP_ID = "_group_id";
     public static final String COLUMN_MULTIPLE_ENTRIES_PER_DAY = "multiple_entries_per_day";
     public static final String COLUMN_HAS_TIME_INFO = "has_time_info";
+    public static final String COLUMN_COLOR = "color";
 
     private static final String DATABASE_NAME = "tickmate.db";
     private static final int DATABASE_VERSION = 13;
@@ -65,6 +66,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         + COLUMN_ICON + " text not null, "
         + COLUMN_ENABLED + " integer not null,"
         + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0,"
+                + COLUMN_COLOR + " integer DEFAULT 0,"
         + "\"" + COLUMN_ORDER + "\" integer DEFAULT -1"
         + ");";
     private static final String DATABASE_CREATE_TICKS =

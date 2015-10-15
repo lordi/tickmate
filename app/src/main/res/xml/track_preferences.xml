@@ -32,4 +32,11 @@
         android:title="@string/pref_title_groups"
         />
 
+    <de.smasi.tickmate.views.TickColorPreference
+        android:key="tick_button_color"
+        android:title="Color"
+        />
+    <!--TODO move title 'Color' into strings.xml -->
+
+
 </PreferenceScreen>
