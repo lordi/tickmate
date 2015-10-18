@@ -11,7 +11,13 @@
         android:orderInCategory="111"
         android:showAsAction="never"
         android:title="@string/jump_to_today"/>
-    
+
+    <item
+        android:id="@+id/action_edit_groups"
+        android:orderInCategory="112"
+        android:showAsAction="never"
+        android:title="@string/menu_edit_groups"/>
+
     <item
         android:id="@+id/action_export_db"
         android:orderInCategory="120"
@@ -29,13 +35,6 @@
         android:orderInCategory="180"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-
-    <!-- Placing this here temporarily, for easy accessing during dev -->
-    <item
-        android:id="@+id/action_edit_groups"
-        android:orderInCategory="180"
-        android:showAsAction="never"
-        android:title="@string/menu_edit_groups"/>
 
 
     <item
