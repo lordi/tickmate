@@ -24,6 +24,8 @@ Find correlations between your tracks:
 
 ### Notes
 
+![Build status](https://travis-ci.org/lordi/tickmate.svg)
+
 Contains icons from the [Glyphicons FREE icon set](http://glyphicons.com/) (CC-BY-3.0)
 
 Bitcoin donations are happily accepted at [18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu](http://blockchain.info/de/address/18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu).
