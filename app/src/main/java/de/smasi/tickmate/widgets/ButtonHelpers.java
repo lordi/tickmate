@@ -10,7 +10,7 @@ import java.util.Calendar;
  * Created by hannes on 04.09.15.
  */
 public class ButtonHelpers {
-    // Evaluates whether a date should be change-able.
+    // Evaluates whether the tick (check) status for a given date should be changeable.
     // This depends on the preferences (have ticks been disable outside of today?)
     // the current date, and the date of this TickButton
     public static boolean isCheckChangePermitted(Context context, Calendar date) {

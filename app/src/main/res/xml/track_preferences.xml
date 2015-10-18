@@ -26,5 +26,10 @@
                 android:key="multiple_entries_enabled"
                 android:title="@string/multiple_entries"
                 />
-    
+
+    <de.smasi.tickmate.widgets.GroupListPreference
+        android:key="groups"
+        android:title="@string/pref_title_groups"
+        />
+
 </PreferenceScreen>

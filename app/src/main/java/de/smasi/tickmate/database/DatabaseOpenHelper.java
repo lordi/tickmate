@@ -16,9 +16,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	private static DatabaseOpenHelper sharedInstance;
 	private Context context;
     private static final String TAG = "DatabaseOpenHelper";
-    
+
+    /* Table names */
     public static final String TABLE_TRACKS = "tracks";
     public static final String TABLE_TICKS = "ticks";
+    public static final String TABLE_GROUPS = "groups";
+    public static final String TABLE_TRACK2GROUPS = "track2groups";
+
+    /* Field names */
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_DESCRIPTION = "description";
@@ -31,13 +36,13 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_HOUR = "hour";
     public static final String COLUMN_MINUTE = "minute";
     public static final String COLUMN_SECOND = "second";
-    public static final String COLUMN_MODIFIED = "modified";
     public static final String COLUMN_TRACK_ID = "_track_id";
+    public static final String COLUMN_GROUP_ID = "_group_id";
     public static final String COLUMN_MULTIPLE_ENTRIES_PER_DAY = "multiple_entries_per_day";
     public static final String COLUMN_HAS_TIME_INFO = "has_time_info";
 
     private static final String DATABASE_NAME = "tickmate.db";
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
     
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -74,12 +79,28 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         + COLUMN_SECOND + " integer,"
         + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0"
         + ");";
-    
+    private static final String DATABASE_CREATE_GROUPS =
+            "create table " + TABLE_GROUPS + "("
+                    + COLUMN_ID + " integer primary key autoincrement, "
+                    + COLUMN_NAME + " text not null, "
+                    + COLUMN_DESCRIPTION + " text not null, "
+                    + "\"" + COLUMN_ORDER + "\" integer DEFAULT -1"
+                    + ");";
+    private static final String DATABASE_CREATE_TRACK2GROUPS =
+			"create table " + TABLE_TRACK2GROUPS + "("
+					+ COLUMN_ID + " integer primary key autoincrement, "
+					+ COLUMN_TRACK_ID + " integer not null, "
+                    + COLUMN_GROUP_ID + " integer not null "
+                    + ");";
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		Log.d("tickmate", "Creating database");
 		db.execSQL(DATABASE_CREATE_TRACKS);
 		db.execSQL(DATABASE_CREATE_TICKS);
+        db.execSQL(DATABASE_CREATE_GROUPS);
+        db.execSQL(DATABASE_CREATE_TRACK2GROUPS);
+
 	}
 
 	@Override
@@ -107,6 +128,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 					Log.d("tickmate", "Ignoring SQL error: " + e.toString());
 				}
 			}
+            if (oldVersion <= 12) {
+                db.execSQL(DATABASE_CREATE_GROUPS);
+                db.execSQL(DATABASE_CREATE_TRACK2GROUPS);
+            }
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKS);

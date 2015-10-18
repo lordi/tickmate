@@ -3,20 +3,23 @@ package de.smasi.tickmate.models;
 import android.content.Context;
 import android.content.res.Resources;
 
+
 public class Track {
+    private static final String TAG = "Track";
 	String name;
 	String description;
 	String icon;
-	int id;
+	int mId;
 	boolean enabled;
 	boolean multiple_entries_enabled;
 	int iconId;
+
 	int order;
-	
-	public Track(String name) {
+
+    public Track(String name) {
 		super();
 		this.name = name;
-		this.id = 0;
+		this.mId = 0;
 		this.enabled = true;
 		this.description = "";
 		this.iconId = -1;
@@ -27,7 +30,7 @@ public class Track {
 	public Track(String name, String description) {
 		super();
 		this.name = name;
-		this.id = 0;
+		this.mId = 0;
 		this.enabled = true;
 		this.description = description;
 		this.iconId = -1;
@@ -43,10 +46,10 @@ public class Track {
 		this.order = order;
 	}
 
-	@Override
+    @Override
 	public boolean equals(Object o) {
 		Track other = (Track)o;
-		return other.id == id;
+		return other.mId == mId;
 	}	
 
 	public int getIconId(Context ctx) {
@@ -56,10 +59,11 @@ public class Track {
 		}
 		return this.iconId;
 	}
-	
-	public boolean isGroupHeader() {
-		return getName().startsWith("--- ");
-	}
+
+    public boolean isSectionHeader() {
+
+        return getName().startsWith("--- ");
+    }
 
 	public void setIcon(String resName) {
 		this.iconId = -1;
@@ -95,11 +99,11 @@ public class Track {
 	}
 
 	public int getId() {
-		return id;
+		return mId;
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		mId = id;
 	}
 
 	public String getName() {
@@ -113,4 +117,10 @@ public class Track {
 	public boolean isCustomTrack() {
 		return icon.contains("_star_");
 	}
+
+    // Used primarily for debugging.
+    public String toString() {
+        return "Group:  id(" + mId + ") name(" + name + ") description(" + description + ")";
+    }
+
 }

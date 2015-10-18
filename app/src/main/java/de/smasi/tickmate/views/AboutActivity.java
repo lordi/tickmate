@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -33,7 +34,9 @@ public class AboutActivity extends Activity {
 			DatabaseOpenHelper db = new DatabaseOpenHelper(this);
 			desc.setText(getString(R.string.about_description) + "\n\nBackup folder: " + db.getExternalDatabaseFolder().getAbsoluteFile());
 		} catch (IOException e) {
-			// TODO: handle exception
+            desc.setText(getString(R.string.about_description));
+            Log.e("AboutActivity", "IOException: " + e.getMessage());
+            // TODO avp, hg Is this adequate?  ^^
 		}
 		
 	}

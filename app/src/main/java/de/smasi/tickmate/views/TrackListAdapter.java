@@ -29,7 +29,7 @@ public class TrackListAdapter extends ArrayAdapter<Track> {
 		View rowView;
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		if (this.values[position].isGroupHeader()) {
+		if (this.values[position].isSectionHeader()) {
 			rowView = inflater.inflate(R.layout.rowlayout_header, parent, false);
 			TextView textView = (TextView) rowView.findViewById(R.id.section_header);
 			textView.setText(values[position].getName().substring(4).toUpperCase(Locale.getDefault()));			

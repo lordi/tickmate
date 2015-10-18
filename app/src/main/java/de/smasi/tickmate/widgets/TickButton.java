@@ -1,8 +1,6 @@
 package de.smasi.tickmate.widgets;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
@@ -11,17 +9,17 @@ import android.widget.ToggleButton;
 import java.util.Calendar;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.TracksDataSource;
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Track;
 
 
 public class TickButton extends ToggleButton implements OnCheckedChangeListener {
 
     Track track;
-    TracksDataSource ds;
+    DataSource ds;
     Calendar date;
 
-    public TickButton(Context context, Track track, Calendar date, TracksDataSource ds) {
+    public TickButton(Context context, Track track, Calendar date) {
         super(context);
 
         this.track = track;
@@ -39,7 +37,7 @@ public class TickButton extends ToggleButton implements OnCheckedChangeListener 
         this.setTextOff("");
         //this.setAlpha((float) 0.8);
 
-        this.ds = ds;
+        ds = DataSource.getInstance();
 
         setChecked(ds.isTicked(track, date, false));
         this.setOnCheckedChangeListener(this);
@@ -64,7 +62,7 @@ public class TickButton extends ToggleButton implements OnCheckedChangeListener 
 
         TickButton tb = (TickButton)arg0;
 
-        TracksDataSource ds = new TracksDataSource(this.getContext());
+        DataSource ds = DataSource.getInstance();
         if (ticked) {
             ds.setTick(tb.getTrack(), tb.getDate(), true);
         }
