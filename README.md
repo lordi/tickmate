@@ -24,7 +24,7 @@ Find correlations between your tracks:
 
 ### Notes
 
-![Build status](https://travis-ci.org/lordi/tickmate.svg)
+![Build status](https://travis-ci.org/lordi/tickmate.svg?branch=master)
 
 Contains icons from the [Glyphicons FREE icon set](http://glyphicons.com/) (CC-BY-3.0)
 
