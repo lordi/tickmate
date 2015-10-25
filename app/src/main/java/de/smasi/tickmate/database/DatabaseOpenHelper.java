@@ -106,7 +106,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d("tickmate", "Upgrading database");
-		if (oldVersion >= 9 && newVersion <= 12) {
+        if (oldVersion >= 9 && newVersion <= DATABASE_VERSION) {
 			if (oldVersion <= 9) {
 				Log.d("tickmate", "Migrating database to version 10");
 				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_MULTIPLE_ENTRIES_PER_DAY + "\" integer DEFAULT 0;");
