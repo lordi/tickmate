@@ -21,7 +21,7 @@
     <string name="title_activity_show_track">Detaily stopy</string>
     <string name="title_section_weekdays">Dny týdne</string>
     <string name="numer_of_occurances">Počet událostí:</string>
-    <string name="no_tracks_found">Nebyly přidány žádné stopy. Tapni sem pro otevření editoru seznamu stop.</string>
+    <string name="no_tracks_found">Do této skupiny nebyly přidány žádné stopy. Tapni sem pro otevření editoru seznamu stop.</string>
     <string name="multiple_entries">Několik zápisů za den</string>
     <string name="tick_deleted">Poslední značka odstraněna.</string>
     <string name="alert_delete_track_title">Smazat stopu</string>
@@ -30,10 +30,10 @@
     <string name="title_activity_about">O aplikaci Tickmate</string>
     <string name="title_icon_chooser">Vybrat ikonu</string>
     <string name="about_description">Tickmate je v podstatě jednoduchý deník. Pro každý den můžete zaznamenat
-      jestli se něco stalo nebo ne. Tyto události mohou být velmi triviální, jako použití
-      zubní nitě při čištění zubů nebo vypití sklenice piva. Budete schopni vyčíslit své zvyky a nahromaděná data pak můžete
-      zobrazit i za předešlé týdny nebo měsíce a sledovat změny v čase. Touto cestou si můžete ulehčit
-      překonání starých zlozvyků nebo se naučit nové návyky.
+        jestli se něco stalo nebo ne. Tyto události mohou být velmi triviální, jako použití
+        zubní nitě při čištění zubů nebo vypití sklenice piva. Budete schopni vyčíslit své zvyky a nahromaděná data pak můžete
+        zobrazit i za předešlé týdny nebo měsíce a sledovat změny v čase. Touto cestou si můžete ulehčit
+        překonání starých zlozvyků nebo se naučit nové návyky.
 \n\nTickmate je open source software, zveřejněný pod GPLv3 licencí.
 \n\nObsahuje ikony z balíku Glyphicons FREE (CC-BY-3.0)
     </string>
@@ -71,5 +71,17 @@
         <item>Všechny dny</item>
     </string-array>
     <string name="notify_user_ticking_disabled">Měnit tuto značku je vypnuto. Můžete určit možnosti úprav dnů v nastavení aplikace.</string>
+
+    <!-- New in 1.3.0 -->
+    <string name="pref_title_groups">Skupiny</string>
+    <string name="pref_title_tracks">Stopy</string>
+    <string name="menu_edit_groups">Upravit skupiny</string>
+    <string name="title_activity_edit_groups">Moje skupiny</string>
+    <string name="menu_add_group">Přidat skupinu</string>
+    <string name="alert_delete_group_title">Smazat skupinu</string>
+    <string name="alert_delete_group_message">Opravdu si přejete smazat tuto skupinu? Toto nelze vzít zpět.</string>
+    <string name="title_activity_choose_group">Přidat skupinu</string>
+    <string name="group_name">Jméno</string>
+    <string name="title_activity_edit_group">Upravit skupinu</string>
 
 </resources>
