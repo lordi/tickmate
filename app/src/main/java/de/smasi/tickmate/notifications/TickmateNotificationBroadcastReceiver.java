@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.Tickmate;
@@ -20,11 +21,18 @@ public class TickmateNotificationBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "Alarm received");
+        Locale locale = Locale.getDefault();
+
+        java.text.DateFormat dateFormat = android.text.format.DateFormat
+                .getDateFormat(context);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.glyphicons_054_clock_white)
                         .setContentTitle("Tick reminder")
-                        .setContentText("Tap to enter your ticks for " + Calendar.getInstance().toString());
+                        .setAutoCancel(true)
+                        .setContentText("Tap to enter your ticks for " +
+                                Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale)
+                        );
         Intent resultIntent = new Intent(context, Tickmate.class);
 
 
