@@ -132,12 +132,12 @@ public class DatabaseTest {
         // File testDb = new File(getClass().getResource("test.sql").getFile());
         InputStream is = tickmate.getAssets().open("test/smiley-version10.db");
         DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tickmate);
-        File extDb = new File(db.getExternalDatabasePath("smiley.db"));
+        File extDb = new File(db.getExternalDatabasePath("legacy.db"));
 
         FileUtils.saveStreamToFile(is, new FileOutputStream(extDb));
         File intDb = tickmate.getApplicationContext().getDatabasePath("tickmate.db");
         intDb.getParentFile().mkdirs();
-        db.importDatabase("smiley.db");
+        db.importDatabase("legacy.db");
 
         // the legacy db should have 8 tracks (6 active)
         openMethod.invoke(dataSource);
@@ -147,6 +147,31 @@ public class DatabaseTest {
         assertThat(dataSource.getTickCount(2), is(2));
         assertThat(dataSource.getTickCount(3), is(13));
         // make sure that no groups have been imported with a version 10 database
+        // (groups did not exist back then)
+        assertThat(dataSource.getGroups().size(), is(0));
+        closeMethod.invoke(dataSource);
+        ;
+    }
+
+    @Test
+    public void legacyDatabaseVersion12ShouldBeImportable() throws Exception {
+        // File testDb = new File(getClass().getResource("test.sql").getFile());
+        InputStream is = tickmate.getAssets().open("test/tickmate-version12.db");
+        DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tickmate);
+        File extDb = new File(db.getExternalDatabasePath("legacy.db"));
+
+        FileUtils.saveStreamToFile(is, new FileOutputStream(extDb));
+        File intDb = tickmate.getApplicationContext().getDatabasePath("tickmate.db");
+        intDb.getParentFile().mkdirs();
+        db.importDatabase("legacy.db");
+
+        // the legacy db should have 8 tracks (6 active)
+        openMethod.invoke(dataSource);
+        assertThat(dataSource.getTracks().size(), is(2));
+        assertThat(dataSource.getActiveTracks().size(), is(2));
+        assertThat(dataSource.getTickCount(1), is(5));
+        assertThat(dataSource.getTickCount(2), is(4));
+        // make sure that no groups have been imported with a version 12 database
         // (groups did not exist back then)
         assertThat(dataSource.getGroups().size(), is(0));
         closeMethod.invoke(dataSource);
