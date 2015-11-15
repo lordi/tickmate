@@ -1,10 +1,12 @@
-package de.smasi.tickmate.models;
+package de.smasi.tickmatedata.models;
 
 import android.content.Context;
 import android.content.res.Resources;
 
+import java.io.Serializable;
 
-public class Track {
+
+public class Track implements Serializable {
     private static final String TAG = "Track";
 	String name;
 	String description;

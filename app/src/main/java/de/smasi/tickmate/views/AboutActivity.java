@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DatabaseOpenHelper;
+import de.smasi.tickmatedata.database.DatabaseOpenHelper;
 
 public class AboutActivity extends Activity {
 

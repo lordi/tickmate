@@ -1,4 +1,4 @@
-package de.smasi.tickmate.database;
+package de.smasi.tickmatedata.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,10 +15,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.smasi.tickmate.Globals;
-import de.smasi.tickmate.models.Group;
-import de.smasi.tickmate.models.Tick;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.Globals;
+import de.smasi.tickmatedata.models.Group;
+import de.smasi.tickmatedata.models.Tick;
+import de.smasi.tickmatedata.models.Track;
 
 public class DataSource {
     private static final String TAG = "DataSource";

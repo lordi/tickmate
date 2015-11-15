@@ -29,8 +29,8 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.Calendar;
 
-import de.smasi.tickmate.database.DatabaseOpenHelper;
-import de.smasi.tickmate.models.Group;
+import de.smasi.tickmatedata.database.DatabaseOpenHelper;
+import de.smasi.tickmatedata.models.Group;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditGroupsActivity;
 import de.smasi.tickmate.views.EditTracksActivity;

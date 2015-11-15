@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Set;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.models.Group;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.models.Group;
+import de.smasi.tickmatedata.models.Track;
 
 public class GroupPreferenceFragment extends PreferenceFragment implements
         OnSharedPreferenceChangeListener {

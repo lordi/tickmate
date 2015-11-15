@@ -1,4 +1,4 @@
-package de.smasi.tickmate;
+package de.smasi.tickmatedata;
 
 import android.app.Application;
 

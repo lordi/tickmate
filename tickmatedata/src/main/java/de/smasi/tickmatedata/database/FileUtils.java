@@ -1,4 +1,4 @@
-package de.smasi.tickmate.database;
+package de.smasi.tickmatedata.database;
 
 import android.os.Environment;
 import android.util.Log;

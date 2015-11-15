@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.models.Group;
+import de.smasi.tickmatedata.models.Group;
 
 public class GroupListAdapter extends ArrayAdapter<Group> {
     private final Context context;

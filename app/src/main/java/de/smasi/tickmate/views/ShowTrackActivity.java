@@ -19,9 +19,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.models.Tick;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.models.Tick;
+import de.smasi.tickmatedata.models.Track;
 import de.smasi.tickmate.widgets.SummaryGraph;
 import de.smasi.tickmate.widgets.SummaryNumber;
 

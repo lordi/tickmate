@@ -1,8 +1,9 @@
-package de.smasi.tickmate.models;
+package de.smasi.tickmatedata.models;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class Tick {
+public class Tick implements Serializable {
 	public int track_id;
 	public int tick_id;
 	public Calendar date; // unix timestamp

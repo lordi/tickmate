@@ -6,11 +6,54 @@
     android:layout_height="match_parent" android:id="@+id/container"
     tools:context=".WearMainActivity" tools:deviceIds="wear">
 
-    <TextView android:id="@+id/text" app:layout_box="all" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:text="@string/hello_world" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView android:id="@+id/clock" app:layout_box="all" android:layout_gravity="bottom|start"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:textColor="@android:color/white" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_gravity="center_horizontal"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:indeterminate="true"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/splash"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView android:id="@+id/splash_title"
+            app:layout_box="all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:layout_marginBottom="5dp"
+            android:text="TICKMATE WEAR" />
+
+        <Button
+            android:id="@+id/load_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Load Tracks"/>
+
+    </LinearLayout>
+
+    <android.support.wearable.view.WearableListView
+        app:layout_box="all"
+        android:id="@+id/track_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </android.support.wearable.view.WearableListView>
 
 </android.support.wearable.view.BoxInsetLayout>

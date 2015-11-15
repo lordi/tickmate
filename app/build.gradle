@@ -19,11 +19,10 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.1.0'
-    compile 'com.google.android.support:wearable:+'
-//    compile 'com.google.android.gms:play-services-wearable:+'
+    compile 'com.android.support:support-v4:23.1.1'
     compile files('libs/androidplot-core-0.6.1.jar')
-
     testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.0"
+    testCompile 'org.robolectric:robolectric:3.0'
+    compile project(':tickmatedata')
+    compile 'com.google.android.gms:play-services-wearable:8.3.0'
 }

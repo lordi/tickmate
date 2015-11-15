@@ -16,8 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.models.Group;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.models.Group;
 
 public class EditGroupsActivity extends ListActivity {
 

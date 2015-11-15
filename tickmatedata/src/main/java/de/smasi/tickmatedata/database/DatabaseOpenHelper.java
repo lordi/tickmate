@@ -1,4 +1,4 @@
-package de.smasi.tickmate.database;
+package de.smasi.tickmatedata.database;
 
 import android.content.Context;
 import android.database.SQLException;

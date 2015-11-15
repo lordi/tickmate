@@ -1,9 +1,11 @@
-package de.smasi.tickmate.models;
+package de.smasi.tickmatedata.models;
+
+import java.io.Serializable;
 
 /**
  * Groups are a way to organize and categorize Tracks. Groups can be predefined or user-defined.
  */
-public class Group {
+public class Group implements Serializable {
 
     public static final Group ALL_GROUP = new Group("All");  // Used to indicate that 'all groups' have been selected for display
     private static final String TAG = "Group";
