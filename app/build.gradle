@@ -23,6 +23,6 @@ dependencies {
     compile files('libs/androidplot-core-0.6.1.jar')
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.0'
-    compile project(':tickmatedata')
+    compile project(':tickmatelib')
     compile 'com.google.android.gms:play-services-wearable:8.3.0'
 }

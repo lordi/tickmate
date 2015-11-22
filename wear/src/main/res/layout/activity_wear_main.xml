@@ -27,7 +27,8 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:visibility="visible">
 
         <TextView android:id="@+id/splash_title"
             app:layout_box="all"
@@ -36,24 +37,44 @@
             android:layout_gravity="center"
             android:textSize="18sp"
             android:layout_marginBottom="5dp"
-            android:text="TICKMATE WEAR" />
+            android:textAllCaps="true"
+            android:text="@string/app_name" />
 
-        <Button
-            android:id="@+id/load_button"
+        <TextView android:id="@+id/error_desc"
+            app:layout_box="all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Load Tracks"/>
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
+            android:text="Unable to connect to handset." />
 
     </LinearLayout>
 
-    <android.support.wearable.view.WearableListView
-        app:layout_box="all"
-        android:id="@+id/track_listview"
+
+    <LinearLayout
+        android:id="@+id/track_container"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
-    </android.support.wearable.view.WearableListView>
+        <android.support.wearable.view.GridViewPager
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:keepScreenOn="true" />
+
+        <android.support.wearable.view.DotsPageIndicator
+            android:id="@+id/page_indicator"
+            android:background="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom" />
+
+    </LinearLayout>
 
 </android.support.wearable.view.BoxInsetLayout>
