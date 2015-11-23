@@ -1,7 +1,6 @@
 package de.smasi.tickmate.widgets;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -11,6 +10,7 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import de.smasi.tickmatedata.models.Tick;
@@ -26,6 +26,7 @@ import de.smasi.tickmatedata.widgets.ButtonHelpers;
 public class WearMultiTickButton extends Button implements View.OnClickListener, View.OnLongClickListener, MessageApi.MessageListener {
     Track track;
     Calendar date;
+    Calendar lastTickDate;
     int count;
     private WearDataClient mWearDataClient;
 
@@ -33,6 +34,7 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         super(context);
         this.setOnClickListener(this);
         this.setOnLongClickListener(this);
+        this.setBackgroundResource(de.smasi.tickmatedata.R.drawable.toggle_button);
         this.track = track;
         this.date = date;
         int size = 32;
@@ -63,16 +65,20 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         try {
-            Bundle args = DataUtils.getObjectFromData(messageEvent.getData());
-            Track track = (Track) args.getSerializable("track");
-            Calendar calendar = (Calendar) args.getSerializable("calendar");
-            if (track.getId() == this.track.getId() && calendar.equals(this.date)) {
+            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
+            Track track = (Track) args.get("track");
+            Calendar calendar = (Calendar) args.get("calendar");
+            if (track.getId() == this.track.getId() &&
+                    (calendar.equals(this.date) || calendar.equals(this.lastTickDate))) {
                 if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_GET_TICKS) ||
                         messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_SET_TICK) ||
                         messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_LAST_TICK_OF_DAY)) {
-                    byte[] tickData = args.getByteArray("ticks");
-                    List<Tick> ticks = DataUtils.getObjectFromData(tickData);
-                    setTickCount(ticks.size());
+                    List<Tick> ticks = (List<Tick>) args.get("ticks");
+                    if (ticks != null) {
+                        setTickCount(ticks.size());
+                    } else {
+                        setTickCount(0);
+                    }
                     setUpdating(false);
                 }
             }
@@ -83,7 +89,7 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
     }
 
     private void setUpdating(boolean isUpdating) {
-        setEnabled(!isUpdating);
+//        setEnabled(!isUpdating);
         // TODO: Show loading indicator on button while loading ticks
     }
 
@@ -113,9 +119,11 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         c.set(Calendar.MILLISECOND, 0);
 
         if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
+            this.lastTickDate = c;
             mWearDataClient.setTick(this.track, c, false);
             setUpdating(true);
         } else {
+            this.lastTickDate = this.date;
             mWearDataClient.setTick(this.track, this.date, false);
             setUpdating(true);
         }

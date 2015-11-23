@@ -1,7 +1,6 @@
 package de.smasi.tickmate.widgets;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -11,6 +10,7 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 
 import de.smasi.tickmatedata.models.Track;
 import de.smasi.tickmatedata.wear.DataUtils;
@@ -44,6 +44,7 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
         this.setTextOff("");
         //this.setAlpha((float) 0.8);
 
+        setChecked(false);
         this.mWearDataClient = wearDataClient;
         Wearable.MessageApi.addListener(mWearDataClient.googleApiClient, this);
         mWearDataClient.isTicked(track, date, true);
@@ -63,15 +64,14 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         try {
-            Bundle args = DataUtils.getObjectFromData(messageEvent.getData());
-            Track track = (Track) args.getSerializable("track");
-            Calendar calendar = (Calendar) args.getSerializable("calendar");
+            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
+            Track track = (Track) args.get("track");
+            Calendar calendar = (Calendar) args.get("calendar");
             if (track.getId() == this.track.getId() && calendar.equals(this.date)) {
                 if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_IS_TICKED) ||
                         messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_SET_TICK) ||
                         messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_TICK)) {
-                    boolean isTicked = args.getBoolean("isTicked");
-                    setChecked(isTicked);
+                    Boolean isTicked = (Boolean) args.get("isTicked");
                     setUpdating(false);
                 }
             }
@@ -81,7 +81,7 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
     }
 
     private void setUpdating(boolean isUpdating) {
-        setEnabled(!isUpdating);
+//        setEnabled(!isUpdating);
         // TODO: Show loading indicator on button while loading ticks
     }
 

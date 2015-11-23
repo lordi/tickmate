@@ -55,9 +55,18 @@ public class Track implements Serializable {
 	}	
 
 	public int getIconId(Context ctx) {
+		return getIconId(ctx, false);
+	}
+
+	public int getIconId(Context ctx, boolean dark) {
 		if (this.iconId == -1) {
 			Resources r = ctx.getResources();
-			this.iconId = r.getIdentifier(this.icon, "drawable", ctx.getPackageName());
+			if (dark) {
+				String iconName = this.icon.replace("_white", "");
+				this.iconId = r.getIdentifier(iconName, "drawable", ctx.getPackageName());
+			} else {
+				this.iconId = r.getIdentifier(this.icon, "drawable", ctx.getPackageName());
+			}
 		}
 		return this.iconId;
 	}

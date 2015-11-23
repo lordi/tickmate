@@ -174,20 +174,25 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
         @Override
         public Fragment getFragment(int row, int col) {
             Track track = tracks.get(row);
-            CardFragment fragment = null;
+            Fragment fragment = null;
             if (col == 0) {
                 fragment = new FragmentTicks();
 //                fragment = FragmentTicks.create(track.getName(), "", track.getIconId(WearMainActivity.this));
                 Bundle args = new Bundle();
                 args.putSerializable("track", track);
                 fragment.setArguments(args);
+            } else if (col == 1) {
+                CardFragment cardFragment = CardFragment.create(track.getName(), track.getDescription(), track.getIconId(WearMainActivity.this, true));
+                cardFragment.setCardGravity(2);
+                return cardFragment;
             } else {
-                fragment = FragmentTicks.create(track.getName(), "Add ticks here. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.", track.getIconId(WearMainActivity.this));
+                CardFragment cardFragment = CardFragment.create(track.getName(), "Stats will appear here soon...", track.getIconId(WearMainActivity.this, true));
+                cardFragment.setCardGravity(2);
+                return cardFragment;
             }
 
             // Advanced settings (card gravity, card expansion/scrolling)
-            fragment.setCardGravity(2);
-            fragment.setExpansionEnabled(false);
+//            fragment.setExpansionEnabled(true);
 //            fragment.setExpansionDirection(CardFragment.EXPAND_UP);
 //            fragment.setExpansionFactor(2);
 

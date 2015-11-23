@@ -1,11 +1,12 @@
 package de.smasi.tickmate.fragments;
 
-import android.content.Context;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.wearable.view.CardFragment;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,31 +24,25 @@ import de.smasi.tickmatedata.wear.WearDataClient;
 /**
  * Created by Adrian Geuss on 21.11.15.
  */
-public class FragmentTicks extends CardFragment {
+public class FragmentTicks extends Fragment {
 
     private LinearLayout mContainer;
     private TextView mTrackTitle;
-    private TextView mDate;
+    private ImageView mTrackIcon;
 
     private WearDataClient mWearDataClient;
     private Calendar mTodayCal;
 
+    @Nullable
     @Override
-    public View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_ticks, container);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_ticks, container, false);
 
         mContainer = (LinearLayout) v.findViewById(R.id.container);
         mTrackTitle = (TextView) v.findViewById(R.id.track_title);
-        mDate = (TextView) v.findViewById(R.id.date);
+        mTrackIcon = (ImageView) v.findViewById(R.id.track_icon);
 
-        return v;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mWearDataClient = new WearDataClient(context,
+        mWearDataClient = new WearDataClient(getActivity(),
                 new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(Bundle bundle) {
@@ -69,7 +64,9 @@ public class FragmentTicks extends CardFragment {
         Bundle args = getArguments();
         Track track = (Track) args.getSerializable("track");
         mTrackTitle.setText(track.getName());
-        mDate.setText("Today");
+        mTrackIcon.setImageResource(track.getIconId(getActivity(), true));
+
+        return v;
     }
 
     private Track getTrack() {

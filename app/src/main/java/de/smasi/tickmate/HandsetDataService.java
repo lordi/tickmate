@@ -1,7 +1,5 @@
 package de.smasi.tickmate;
 
-import android.os.Bundle;
-
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
@@ -10,6 +8,7 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import de.smasi.tickmatedata.database.DataSource;
@@ -53,17 +52,16 @@ public class HandsetDataService extends WearableListenerService {
             });
 
         } else if (messageEvent.getPath().equalsIgnoreCase( WearDataClient.WEAR_MESSAGE_GET_TICKS )) {
-            Bundle args = DataUtils.getObjectFromData(messageEvent.getData());
+            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
-                Track track = (Track) args.getSerializable("track");
-                Calendar calendar = (Calendar) args.getSerializable("calendar");
+                Track track = (Track) args.get("track");
+                Calendar calendar = (Calendar) args.get("calendar");
                 List<Tick> ticks = dataSource.getTicksForDay(track, calendar);
-                byte[] tickData = DataUtils.dataFromTickList(ticks);
-                Bundle response = new Bundle();
-                response.putByteArray("ticks", tickData);
-                response.putSerializable("track", track);
-                response.putSerializable("calendar", calendar);
-                final byte[] data = DataUtils.dataFromBundle(response);
+                LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+                response.put("ticks", ticks);
+                response.put("track", track);
+                response.put("calendar", calendar);
+                final byte[] data = DataUtils.dataFromHashMap(response);
 
                 final HandsetDataClient dataClient = getDataClient();
                 // get nodes
@@ -80,19 +78,19 @@ public class HandsetDataService extends WearableListenerService {
             }
 
         } else if (messageEvent.getPath().equalsIgnoreCase(WearDataClient.WEAR_MESSAGE_IS_TICKED)) {
-            Bundle args = DataUtils.getObjectFromData(messageEvent.getData());
+            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
-                Track track = (Track) args.getSerializable("track");
-                Calendar calendar = (Calendar) args.getSerializable("calendar");
-                boolean hasTimeInfo = args.getBoolean("hasTimeInfo");
+                Track track = (Track) args.get("track");
+                Calendar calendar = (Calendar) args.get("calendar");
+                Boolean hasTimeInfo = (Boolean) args.get("hasTimeInfo");
 
-                boolean isTicked = dataSource.isTicked(track, calendar, hasTimeInfo);
+                Boolean isTicked = dataSource.isTicked(track, calendar, hasTimeInfo);
 
-                Bundle response = new Bundle();
-                response.putSerializable("track", track);
-                response.putSerializable("calendar", calendar);
-                response.putBoolean("isTicked", isTicked);
-                final byte[] data = DataUtils.dataFromBundle(response);
+                LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+                response.put("track", track);
+                response.put("calendar", calendar);
+                response.put("isTicked", isTicked);
+                final byte[] data = DataUtils.dataFromHashMap(response);
 
                 final HandsetDataClient dataClient = getDataClient();
                 // get nodes
@@ -110,25 +108,24 @@ public class HandsetDataService extends WearableListenerService {
             }
 
         } else if (messageEvent.getPath().equalsIgnoreCase(WearDataClient.WEAR_MESSAGE_SET_TICK)) {
-            Bundle args = DataUtils.getObjectFromData(messageEvent.getData());
+            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
-                Track track = (Track) args.getSerializable("track");
-                Calendar calendar = (Calendar) args.getSerializable("calendar");
-                boolean hasTimeInfo = args.getBoolean("hasTimeInfo");
+                Track track = (Track) args.get("track");
+                Calendar calendar = (Calendar) args.get("calendar");
+                Boolean hasTimeInfo = (Boolean) args.get("hasTimeInfo");
 
                 dataSource.setTick(track, calendar, hasTimeInfo);
 
-                Bundle response = new Bundle();
-                response.putSerializable("track", track);
-                response.putSerializable("calendar", calendar);
+                LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+                response.put("track", track);
+                response.put("calendar", calendar);
                 if (!track.multipleEntriesEnabled()) {
-                    response.putBoolean("isTicked", dataSource.isTicked(track, calendar, hasTimeInfo));
+                    response.put("isTicked", dataSource.isTicked(track, calendar, hasTimeInfo));
                 } else {
                     List<Tick> ticks = dataSource.getTicksForDay(track, calendar);
-                    byte[] tickData = DataUtils.dataFromTickList(ticks);
-                    response.putByteArray("ticks", tickData);
+                    response.put("ticks", ticks);
                 }
-                final byte[] data = DataUtils.dataFromBundle(response);
+                final byte[] data = DataUtils.dataFromHashMap(response);
 
                 final HandsetDataClient dataClient = getDataClient();
                 // get nodes
@@ -145,21 +142,20 @@ public class HandsetDataService extends WearableListenerService {
             }
 
         } else if (messageEvent.getPath().equalsIgnoreCase(WearDataClient.WEAR_MESSAGE_REMOVE_LAST_TICK_OF_DAY)) {
-            Bundle args = DataUtils.getObjectFromData(messageEvent.getData());
+            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
-                Track track = (Track) args.getSerializable("track");
-                Calendar calendar = (Calendar) args.getSerializable("calendar");
+                Track track = (Track) args.get("track");
+                Calendar calendar = (Calendar) args.get("calendar");
 
                 dataSource.removeLastTickOfDay(track, calendar);
                 List<Tick> ticks = dataSource.getTicksForDay(track, calendar);
-                byte[] tickData = DataUtils.dataFromTickList(ticks);
 
-                Bundle response = new Bundle();
-                response.putSerializable("track", track);
-                response.putSerializable("calendar", calendar);
-                response.putByteArray("ticks", tickData);
+                LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+                response.put("track", track);
+                response.put("calendar", calendar);
+                response.put("ticks", ticks);
 
-                final byte[] data = DataUtils.dataFromBundle(response);
+                final byte[] data = DataUtils.dataFromHashMap(response);
 
                 final HandsetDataClient dataClient = getDataClient();
                 // get nodes
@@ -176,21 +172,21 @@ public class HandsetDataService extends WearableListenerService {
             }
 
         } else if (messageEvent.getPath().equalsIgnoreCase(WearDataClient.WEAR_MESSAGE_REMOVE_TICK)) {
-            Bundle args = DataUtils.getObjectFromData(messageEvent.getData());
+            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
-                Track track = (Track) args.getSerializable("track");
-                Calendar calendar = (Calendar) args.getSerializable("calendar");
-                boolean hasTimeInfo = args.getBoolean("hasTimeInfo");
+                Track track = (Track) args.get("track");
+                Calendar calendar = (Calendar) args.get("calendar");
+                Boolean hasTimeInfo = (Boolean) args.get("hasTimeInfo");
 
                 dataSource.removeTick(track, calendar);
 
-                Bundle response = new Bundle();
-                response.putSerializable("track", track);
-                response.putSerializable("calendar", calendar);
+                LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+                response.put("track", track);
+                response.put("calendar", calendar);
                 if (!track.multipleEntriesEnabled()) {
-                    response.putBoolean("isTicked", dataSource.isTicked(track, calendar, hasTimeInfo));
+                    response.put("isTicked", dataSource.isTicked(track, calendar, hasTimeInfo));
                 }
-                final byte[] data = DataUtils.dataFromBundle(response);
+                final byte[] data = DataUtils.dataFromHashMap(response);
 
                 final HandsetDataClient dataClient = getDataClient();
                 // get nodes

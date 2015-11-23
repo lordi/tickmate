@@ -1,12 +1,11 @@
 package de.smasi.tickmatedata.wear;
 
-import android.os.Bundle;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import de.smasi.tickmatedata.models.Tick;
@@ -46,13 +45,13 @@ public class DataUtils {
         return (T)in.readObject();
     }
 
-    public static byte[] dataFromBundle(Bundle bundle) {
+    public static byte[] dataFromHashMap(LinkedHashMap map) {
         byte [] data = new byte[] {};
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(bundle);
+            oos.writeObject(map);
             data = baos.toByteArray();
         } catch (IOException e) {
 
