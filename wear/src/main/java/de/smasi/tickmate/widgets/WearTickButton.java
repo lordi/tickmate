@@ -1,6 +1,7 @@
 package de.smasi.tickmate.widgets;
 
 import android.content.Context;
+import android.os.Vibrator;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -25,6 +26,7 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
     Track track;
     private WearDataClient mWearDataClient;
     Calendar date;
+    boolean pendingChanges = false;
 
     public WearTickButton(Context context, WearDataClient wearDataClient, Track track, Calendar date) {
         super(context);
@@ -73,6 +75,15 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
                         messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_TICK)) {
                     Boolean isTicked = (Boolean) args.get("isTicked");
                     setUpdating(false);
+
+                    // Haptic feedback as confirmation
+                    if (pendingChanges == true) {
+                        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        if (vibrator.hasVibrator()) {
+                            vibrator.vibrate(100);
+                        }
+                    }
+                    pendingChanges = false;
                 }
             }
         } catch (Exception e) {
@@ -95,8 +106,10 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
 
         if (ticked) {
             mWearDataClient.setTick(this.track, this.date, true);
+            pendingChanges = true;
         } else {
             mWearDataClient.removeTick(this.track, this.date, true);
+            pendingChanges = true;
         }
     }
 }

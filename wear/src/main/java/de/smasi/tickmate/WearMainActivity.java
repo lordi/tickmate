@@ -27,6 +27,7 @@ import com.google.android.gms.wearable.Wearable;
 import java.util.List;
 
 import de.smasi.tickmate.fragments.FragmentTicks;
+import de.smasi.tickmate.utils.TrackUsage;
 import de.smasi.tickmatedata.models.Track;
 import de.smasi.tickmatedata.wear.DataUtils;
 import de.smasi.tickmatedata.wear.WearDataClient;
@@ -82,6 +83,26 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
         mTrackViewPager = (GridViewPager) findViewById(R.id.pager);
         mTrackPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
         mTrackPageIndicator.setPager(mTrackViewPager);
+
+        mTrackViewPager.setOnPageChangeListener(new GridViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, int i1, float v, float v1, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i, int i1) {
+                if (mTrackPagerAdapter.tracks != null) {
+                    Track track = mTrackPagerAdapter.tracks.get(i);
+                    TrackUsage.usedTrack(WearMainActivity.this, track);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
 //    @Override
@@ -111,6 +132,9 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
         if (messageEvent.getPath().equalsIgnoreCase(WearDataClient.WEAR_MESSAGE_GET_TRACKS)) {
             byte[] data = messageEvent.getData();
             List<Track> tracks = DataUtils.getObjectFromData(data);
+
+            // Sort tracks by usage
+            TrackUsage.sortTracksByUsage(this, tracks);
 
             if (tracks != null) {
                 mTrackPagerAdapter = new TrackPagerAdapter(this, getFragmentManager(), tracks);
@@ -163,7 +187,7 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
     public class TrackPagerAdapter extends FragmentGridPagerAdapter {
 
         private final Context mContext;
-        private List<Track> tracks;
+        public List<Track> tracks;
 
         public TrackPagerAdapter(Context ctx, android.app.FragmentManager fm, List<Track> tracks) {
             super(fm);

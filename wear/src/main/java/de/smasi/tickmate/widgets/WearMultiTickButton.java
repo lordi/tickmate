@@ -1,6 +1,7 @@
 package de.smasi.tickmate.widgets;
 
 import android.content.Context;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -13,6 +14,8 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import de.smasi.tickmate.R;
+import de.smasi.tickmate.utils.TrackUsage;
 import de.smasi.tickmatedata.models.Tick;
 import de.smasi.tickmatedata.models.Track;
 import de.smasi.tickmatedata.wear.DataUtils;
@@ -27,6 +30,7 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
     Track track;
     Calendar date;
     Calendar lastTickDate;
+    boolean pendingChanges = false;
     int count;
     private WearDataClient mWearDataClient;
 
@@ -38,6 +42,8 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         this.track = track;
         this.date = date;
         int size = 32;
+        this.setTextColor(getResources().getColor(R.color.white));
+        this.setTextSize(28);
         this.setWidth(size);
         this.setMinWidth(size);
         this.setMaxWidth(size);
@@ -80,6 +86,15 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
                         setTickCount(0);
                     }
                     setUpdating(false);
+
+                    // Haptic feedback as confirmation
+                    if (pendingChanges == true) {
+                        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        if (vibrator.hasVibrator()) {
+                            vibrator.vibrate(100);
+                        }
+                    }
+                    pendingChanges = false;
                 }
             }
         } catch (Exception e) {
@@ -121,10 +136,12 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
             this.lastTickDate = c;
             mWearDataClient.setTick(this.track, c, false);
+            pendingChanges = true;
             setUpdating(true);
         } else {
             this.lastTickDate = this.date;
             mWearDataClient.setTick(this.track, this.date, false);
+            pendingChanges = true;
             setUpdating(true);
         }
     }
