@@ -44,6 +44,7 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
     private GridViewPager mTrackViewPager;
 //    private DotsPageIndicator mTrackPageIndicator;
     private TrackPagerAdapter mTrackPagerAdapter;
+    private int selectedRow = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +92,11 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
 
             @Override
             public void onPageSelected(int row, int col) {
-                if (mTrackPagerAdapter.tracks != null) {
-                    Track track = mTrackPagerAdapter.tracks.get(row);
-                    TrackUsage.usedTrack(WearMainActivity.this, track);
-                }
+                selectedRow = row;
+//                if (mTrackPagerAdapter.tracks != null) {
+//                    Track track = mTrackPagerAdapter.tracks.get(row);
+//                    TrackUsage.usedTrack(WearMainActivity.this, track);
+//                }
             }
 
             @Override
@@ -125,6 +127,16 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
 //    private void updateDisplay() {
 //        mContainerView.setBackgroundColor(getResources().getColor(android.R.color.black));
 //    }
+
+
+    @Override
+    protected void onPause() {
+        if (mTrackPagerAdapter != null && mTrackPagerAdapter.tracks != null) {
+            Track track = mTrackPagerAdapter.tracks.get(selectedRow);
+            TrackUsage.usedTrack(this, track);
+        }
+        super.onPause();
+    }
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
