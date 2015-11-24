@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.utils.TrackUsage;
 import de.smasi.tickmatedata.models.Tick;
 import de.smasi.tickmatedata.models.Track;
 import de.smasi.tickmatedata.wear.DataUtils;
@@ -71,14 +70,15 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         try {
-            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
-            Track track = (Track) args.get("track");
-            Calendar calendar = (Calendar) args.get("calendar");
-            if (track.getId() == this.track.getId() &&
-                    (calendar.equals(this.date) || calendar.equals(this.lastTickDate))) {
-                if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_GET_TICKS) ||
-                        messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_SET_TICK) ||
-                        messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_LAST_TICK_OF_DAY)) {
+            if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_GET_TICKS) ||
+                    messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_SET_TICK) ||
+                    messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_LAST_TICK_OF_DAY)) {
+                LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
+                Track track = (Track) args.get("track");
+                Calendar calendar = (Calendar) args.get("calendar");
+                if (track.getId() == this.track.getId() &&
+                        (calendar.equals(this.date) || calendar.equals(this.lastTickDate))) {
+
                     List<Tick> ticks = (List<Tick>) args.get("ticks");
                     if (ticks != null) {
                         setTickCount(ticks.size());
@@ -88,7 +88,7 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
                     setUpdating(false);
 
                     // Haptic feedback as confirmation
-                    if (pendingChanges == true) {
+                    if (pendingChanges) {
                         Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
                         if (vibrator.hasVibrator()) {
                             vibrator.vibrate(100);
@@ -99,7 +99,6 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return;
         }
     }
 

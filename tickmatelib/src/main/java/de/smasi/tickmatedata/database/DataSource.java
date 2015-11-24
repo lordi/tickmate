@@ -426,6 +426,129 @@ public class DataSource {
 		cursor.close();
 	}
 
+    public List<Tick> retrieveTicksForTrack(Track track, Calendar startday, Calendar endday) {
+        List<Tick> ticks = new ArrayList<>();
+
+        open();
+        String[] args = {
+                Integer.toString(track.getId()),
+                Integer.toString(startday.get(Calendar.YEAR)),
+                Integer.toString(startday.get(Calendar.YEAR)),
+                Integer.toString(startday.get(Calendar.MONTH)),
+                Integer.toString(startday.get(Calendar.YEAR)),
+                Integer.toString(startday.get(Calendar.MONTH)),
+                Integer.toString(startday.get(Calendar.DAY_OF_MONTH)),
+                Integer.toString(startday.get(Calendar.YEAR)),
+                Integer.toString(startday.get(Calendar.MONTH)),
+                Integer.toString(startday.get(Calendar.DAY_OF_MONTH)),
+                Integer.toString(startday.get(Calendar.HOUR_OF_DAY)),
+                Integer.toString(startday.get(Calendar.YEAR)),
+                Integer.toString(startday.get(Calendar.MONTH)),
+                Integer.toString(startday.get(Calendar.DAY_OF_MONTH)),
+                Integer.toString(startday.get(Calendar.HOUR_OF_DAY)),
+                Integer.toString(startday.get(Calendar.MINUTE)),
+                Integer.toString(startday.get(Calendar.YEAR)),
+                Integer.toString(startday.get(Calendar.MONTH)),
+                Integer.toString(startday.get(Calendar.DAY_OF_MONTH)),
+                Integer.toString(startday.get(Calendar.HOUR_OF_DAY)),
+                Integer.toString(startday.get(Calendar.MINUTE)),
+                Integer.toString(startday.get(Calendar.SECOND)),
+                Integer.toString(endday.get(Calendar.YEAR)),
+                Integer.toString(endday.get(Calendar.YEAR)),
+                Integer.toString(endday.get(Calendar.MONTH)),
+                Integer.toString(endday.get(Calendar.YEAR)),
+                Integer.toString(endday.get(Calendar.MONTH)),
+                Integer.toString(endday.get(Calendar.DAY_OF_MONTH)),
+                Integer.toString(endday.get(Calendar.YEAR)),
+                Integer.toString(endday.get(Calendar.MONTH)),
+                Integer.toString(endday.get(Calendar.DAY_OF_MONTH)),
+                Integer.toString(endday.get(Calendar.HOUR_OF_DAY)),
+                Integer.toString(endday.get(Calendar.YEAR)),
+                Integer.toString(endday.get(Calendar.MONTH)),
+                Integer.toString(endday.get(Calendar.DAY_OF_MONTH)),
+                Integer.toString(endday.get(Calendar.HOUR_OF_DAY)),
+                Integer.toString(endday.get(Calendar.MINUTE)),
+                Integer.toString(endday.get(Calendar.YEAR)),
+                Integer.toString(endday.get(Calendar.MONTH)),
+                Integer.toString(endday.get(Calendar.DAY_OF_MONTH)),
+                Integer.toString(endday.get(Calendar.HOUR_OF_DAY)),
+                Integer.toString(endday.get(Calendar.MINUTE)),
+                Integer.toString(endday.get(Calendar.SECOND)),
+        };
+        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TICKS,
+                allColumnsTicks,
+                DatabaseOpenHelper.COLUMN_TRACK_ID + " = ? and ("
+                    + DatabaseOpenHelper.COLUMN_YEAR + " > ? or "
+                    + "("
+                        + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_MONTH + " >= ? "
+                    + ") or ("
+                        + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_MONTH + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_DAY + " >= ?"
+                    + ") or ("
+                        + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_MONTH + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_DAY + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_HOUR + " >= ? "
+                    + ") or ("
+                        + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_MONTH + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_DAY + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_HOUR + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_MINUTE + " >= ? "
+                    + ") or ("
+                        + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_MONTH + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_DAY + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_HOUR + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_MINUTE + " = ? and "
+                        + DatabaseOpenHelper.COLUMN_SECOND + " >= ? "
+                    + ")"
+                + ") and ("
+                    + DatabaseOpenHelper.COLUMN_YEAR + " < ? or "
+                    + "("
+                    + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_MONTH + " <= ? "
+                    + ") or ("
+                    + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_MONTH + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_DAY + " <= ?"
+                    + ") or ("
+                    + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_MONTH + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_DAY + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_HOUR + " <= ? "
+                    + ") or ("
+                    + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_MONTH + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_DAY + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_HOUR + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_MINUTE + " <= ? "
+                    + ") or ("
+                    + DatabaseOpenHelper.COLUMN_YEAR + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_MONTH + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_DAY + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_HOUR + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_MINUTE + " = ? and "
+                    + DatabaseOpenHelper.COLUMN_SECOND + " <= ? "
+                    + ")"
+                + ")",
+                args, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Tick tick = cursorToTick(cursor);
+            ticks.add(tick);
+            cursor.moveToNext();
+        }
+
+        // Make sure to close the cursor
+        cursor.close();
+
+        return ticks;
+    }
+
 	public Map<Integer, Map<Long, Integer> > retrieveTicksByMonths() {
 		Map<Integer, Map<Long, Integer> > ret = new HashMap<Integer, Map<Long, Integer> >();
 

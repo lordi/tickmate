@@ -201,6 +201,35 @@ public class HandsetDataService extends WearableListenerService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if (messageEvent.getPath().equalsIgnoreCase(WearDataClient.WEAR_MESSAGE_RETRIEVE_TICKS)) {
+            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
+            try {
+                Track track = (Track) args.get("track");
+                Calendar startCalendar = (Calendar) args.get("startCalendar");
+                Calendar endCalendar = (Calendar) args.get("endCalendar");
+
+                List<Tick> ticks = dataSource.retrieveTicksForTrack(track, startCalendar, endCalendar);
+
+                LinkedHashMap<String, Object> response = new LinkedHashMap<>();
+                response.put("track", track);
+                response.put("startCalendar", startCalendar);
+                response.put("endCalendar", endCalendar);
+                response.put("ticks", ticks);
+                final byte[] data = DataUtils.dataFromHashMap(response);
+
+                final HandsetDataClient dataClient = getDataClient();
+                // get nodes
+                Wearable.NodeApi.getConnectedNodes(dataClient.googleApiClient).setResultCallback(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
+                    @Override
+                    public void onResult(NodeApi.GetConnectedNodesResult getConnectedNodesResult) {
+                        for (Node node : getConnectedNodesResult.getNodes()) {
+                            dataClient.sendMessage(WearDataClient.WEAR_MESSAGE_RETRIEVE_TICKS, data, node);
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             super.onMessageReceived(messageEvent);
         }

@@ -66,18 +66,19 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         try {
-            LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
-            Track track = (Track) args.get("track");
-            Calendar calendar = (Calendar) args.get("calendar");
-            if (track.getId() == this.track.getId() && calendar.equals(this.date)) {
-                if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_IS_TICKED) ||
-                        messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_SET_TICK) ||
-                        messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_TICK)) {
+            if ( messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_IS_TICKED) ||
+                    messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_SET_TICK) ||
+                    messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_TICK) ) {
+                LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
+                Track track = (Track) args.get("track");
+                Calendar calendar = (Calendar) args.get("calendar");
+                if (track.getId() == this.track.getId() && calendar.equals(this.date)) {
+
                     Boolean isTicked = (Boolean) args.get("isTicked");
                     setUpdating(false);
 
                     // Haptic feedback as confirmation
-                    if (pendingChanges == true) {
+                    if (pendingChanges) {
                         Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
                         if (vibrator.hasVibrator()) {
                             vibrator.vibrate(100);

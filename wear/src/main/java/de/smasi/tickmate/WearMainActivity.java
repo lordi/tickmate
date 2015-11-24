@@ -6,8 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.BoxInsetLayout;
-import android.support.wearable.view.CardFragment;
-import android.support.wearable.view.DotsPageIndicator;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
@@ -26,6 +24,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.List;
 
+import de.smasi.tickmate.fragments.FragmentStats;
 import de.smasi.tickmate.fragments.FragmentTicks;
 import de.smasi.tickmate.utils.TrackUsage;
 import de.smasi.tickmatedata.models.Track;
@@ -43,7 +42,7 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
     private TextView mErrorDesc;
     private LinearLayout mTrackLayout;
     private GridViewPager mTrackViewPager;
-    private DotsPageIndicator mTrackPageIndicator;
+//    private DotsPageIndicator mTrackPageIndicator;
     private TrackPagerAdapter mTrackPagerAdapter;
 
     @Override
@@ -81,8 +80,8 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
         mErrorDesc = (TextView) findViewById(R.id.error_desc);
         mTrackLayout = (LinearLayout) findViewById(R.id.track_container);
         mTrackViewPager = (GridViewPager) findViewById(R.id.pager);
-        mTrackPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
-        mTrackPageIndicator.setPager(mTrackViewPager);
+//        mTrackPageIndicator = (DotsPageIndicator) findViewById(R.id.page_indicator);
+//        mTrackPageIndicator.setPager(mTrackViewPager);
 
         mTrackViewPager.setOnPageChangeListener(new GridViewPager.OnPageChangeListener() {
             @Override
@@ -91,9 +90,9 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
             }
 
             @Override
-            public void onPageSelected(int i, int i1) {
+            public void onPageSelected(int row, int col) {
                 if (mTrackPagerAdapter.tracks != null) {
-                    Track track = mTrackPagerAdapter.tracks.get(i);
+                    Track track = mTrackPagerAdapter.tracks.get(row);
                     TrackUsage.usedTrack(WearMainActivity.this, track);
                 }
             }
@@ -133,10 +132,10 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
             byte[] data = messageEvent.getData();
             List<Track> tracks = DataUtils.getObjectFromData(data);
 
-            // Sort tracks by usage
-            TrackUsage.sortTracksByUsage(this, tracks);
-
             if (tracks != null) {
+                // Sort tracks by usage
+                TrackUsage.sortTracksByUsage(this, tracks);
+
                 mTrackPagerAdapter = new TrackPagerAdapter(this, getFragmentManager(), tracks);
                 mTrackViewPager.setAdapter(mTrackPagerAdapter);
 
@@ -201,24 +200,17 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
             Fragment fragment = null;
             if (col == 0) {
                 fragment = new FragmentTicks();
-//                fragment = FragmentTicks.create(track.getName(), "", track.getIconId(WearMainActivity.this));
                 Bundle args = new Bundle();
                 args.putSerializable("track", track);
                 fragment.setArguments(args);
             } else if (col == 1) {
-                CardFragment cardFragment = CardFragment.create(track.getName(), track.getDescription(), track.getIconId(WearMainActivity.this, true));
-                cardFragment.setCardGravity(2);
-                return cardFragment;
-            } else {
-                CardFragment cardFragment = CardFragment.create(track.getName(), "Stats will appear here soon...", track.getIconId(WearMainActivity.this, true));
-                cardFragment.setCardGravity(2);
-                return cardFragment;
+                fragment = new FragmentStats();
+                Bundle args = new Bundle();
+                args.putSerializable("track", track);
+                args.putLong("timespanMillis", 24 * 60 * 60 * 1000);
+                args.putLong("spanSteps", 7);
+                fragment.setArguments(args);
             }
-
-            // Advanced settings (card gravity, card expansion/scrolling)
-//            fragment.setExpansionEnabled(true);
-//            fragment.setExpansionDirection(CardFragment.EXPAND_UP);
-//            fragment.setExpansionFactor(2);
 
             return fragment;
         }
@@ -230,7 +222,7 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
 
         @Override
         public int getColumnCount(int i) {
-            return 3;
+            return 2;
         }
 
         @Override
