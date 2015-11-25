@@ -10,6 +10,7 @@ import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -91,7 +92,9 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
                     if (pendingChanges) {
                         Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
                         if (vibrator.hasVibrator()) {
-                            vibrator.vibrate(100);
+                            long[] pattern = new long[10];
+                            Arrays.fill(pattern, 10);
+                            vibrator.vibrate(pattern, -1);
                         }
                     }
                     pendingChanges = false;

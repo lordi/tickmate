@@ -10,6 +10,7 @@ import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 
@@ -81,7 +82,9 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
                     if (pendingChanges) {
                         Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
                         if (vibrator.hasVibrator()) {
-                            vibrator.vibrate(100);
+                            long[] pattern = new long[10];
+                            Arrays.fill(pattern, 10);
+                            vibrator.vibrate(pattern, -1);
                         }
                     }
                     pendingChanges = false;

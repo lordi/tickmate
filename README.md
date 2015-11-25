@@ -15,7 +15,7 @@ It uses the Android Wear [MessageApi](http://developer.android.com/training/wear
 
 ![Android Wear: Setting Tick](artwork/android_wear/wear_tick.png)
 ![Android Wear: Setting Multitick](artwork/android_wear/wear_multitick.png)
-![Android Wear: Weekly stats](artwork/android_wear/waer_stats.png)
+![Android Wear: Weekly stats](artwork/android_wear/wear_stats.png)
 
 ### Analysis
 

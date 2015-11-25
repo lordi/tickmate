@@ -7,22 +7,6 @@
     tools:context=".WearMainActivity" tools:deviceIds="wear">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_gravity="center_horizontal"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:indeterminate="true"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
         android:id="@+id/splash"
         android:orientation="vertical"
         android:layout_width="wrap_content"
@@ -39,6 +23,14 @@
             android:layout_marginBottom="5dp"
             android:textAllCaps="true"
             android:text="@string/app_name" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_gravity="center_horizontal"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:indeterminate="true"/>
 
         <TextView android:id="@+id/error_desc"
             app:layout_box="all"
