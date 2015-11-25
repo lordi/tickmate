@@ -95,9 +95,17 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
                 if (track.getId() == this.track.getId() &&
                         (startCalendar.equals(this.startCalendar) || endCalendar.equals(this.endCalendar))) {
                     List<Tick> ticks = (List<Tick>) args.get("ticks");
-                    if (ticks != null) {
-                        createChart(ticks, startCalendar, endCalendar);
+                    if (ticks != null && getActivity() != null) {
+                        createChart(ticks, endCalendar);
                     }
+                }
+            } else if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_SET_TICK) ||
+                    messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_TICK) ||
+                    messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_LAST_TICK_OF_DAY)) {
+                LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
+                Track track = (Track) args.get("track");
+                if (track.getId() == track.getId()) {
+                    loadChartData();
                 }
             }
         } catch (Exception e) {
@@ -107,7 +115,6 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
     }
 
     private void loadChartData() {
-        SimpleDateFormat weekDayFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
         endCalendar = Calendar.getInstance();
         startCalendar = (Calendar) endCalendar.clone();
         startCalendar.setTimeInMillis(startCalendar.getTime().getTime() - (spanSteps * timespanMillis));
@@ -115,7 +122,7 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
         mWearDataClient.retrieveTicks(track, startCalendar, endCalendar);
     }
 
-    private void createChart(List<Tick> ticks, Calendar startCalendar, Calendar endCalendar) {
+    private void createChart(List<Tick> ticks, Calendar endCalendar) {
         // Bar chart customization
         int barColor = getActivity().getResources().getColor(R.color.button_blue);
 
@@ -142,6 +149,7 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
         dataset.setColor(barColor);
         mBarChartView.setBarSpacing(32.0f);
         mBarChartView.setRoundCorners(10.0f);
+        mBarChartView.reset();
         mBarChartView.addData(dataset);
 
         // Generic chart customization
