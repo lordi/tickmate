@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import de.smasi.tickmate.R;
 import de.smasi.tickmatedata.models.Tick;
@@ -76,7 +77,10 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
                     messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_LAST_TICK_OF_DAY)) {
                 LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
                 Track track = (Track) args.get("track");
-                Calendar calendar = (Calendar) args.get("calendar");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((Long) args.get("calendar"));
+                calendar.setTimeZone(TimeZone.getTimeZone((String) args.get("calendarTimeZoneId")));
+
                 if (track.getId() == this.track.getId() &&
                         (calendar.equals(this.date) || calendar.equals(this.lastTickDate))) {
 

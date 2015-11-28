@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import de.smasi.tickmate.R;
 import de.smasi.tickmatedata.models.Tick;
@@ -90,8 +91,13 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
             if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_RETRIEVE_TICKS)) {
                 LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
                 Track track = (Track) args.get("track");
-                Calendar startCalendar = (Calendar) args.get("startCalendar");
-                Calendar endCalendar = (Calendar) args.get("endCalendar");
+                Calendar startCalendar = Calendar.getInstance();
+                startCalendar.setTimeInMillis((Long) args.get("startCalendar"));
+                startCalendar.setTimeZone(TimeZone.getTimeZone((String) args.get("startCalendarTimeZoneId")));
+                Calendar endCalendar = Calendar.getInstance();
+                endCalendar.setTimeInMillis((Long) args.get("endCalendar"));
+                endCalendar.setTimeZone(TimeZone.getTimeZone((String) args.get("endCalendarTimeZoneId")));
+
                 if (track.getId() == this.track.getId() &&
                         (startCalendar.equals(this.startCalendar) || endCalendar.equals(this.endCalendar))) {
                     List<Tick> ticks = (List<Tick>) args.get("ticks");
@@ -137,8 +143,8 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
 
             long tickCount = 0;
             for (Tick tick: ticks) {
-                if (calendar.get(Calendar.YEAR) == tick.date.get(Calendar.YEAR) &&
-                        calendar.get(Calendar.DAY_OF_YEAR) == tick.date.get(Calendar.DAY_OF_YEAR)) {
+                if (calendar.get(Calendar.YEAR) == tick.getDate().get(Calendar.YEAR) &&
+                        calendar.get(Calendar.DAY_OF_YEAR) == tick.getDate().get(Calendar.DAY_OF_YEAR)) {
                     tickCount++;
                 }
             }

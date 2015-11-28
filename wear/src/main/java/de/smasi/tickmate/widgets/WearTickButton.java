@@ -13,6 +13,7 @@ import com.google.android.gms.wearable.Wearable;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.TimeZone;
 
 import de.smasi.tickmatedata.models.Track;
 import de.smasi.tickmatedata.wear.DataUtils;
@@ -72,7 +73,10 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
                     messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_TICK) ) {
                 LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
                 Track track = (Track) args.get("track");
-                Calendar calendar = (Calendar) args.get("calendar");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((Long) args.get("calendar"));
+                calendar.setTimeZone(TimeZone.getTimeZone((String) args.get("calendarTimeZoneId")));
+
                 if (track.getId() == this.track.getId() && calendar.equals(this.date)) {
 
                     Boolean isTicked = (Boolean) args.get("isTicked");

@@ -10,6 +10,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import de.smasi.tickmatedata.database.DataSource;
 import de.smasi.tickmatedata.models.Tick;
@@ -55,12 +56,15 @@ public class HandsetDataService extends WearableListenerService {
             LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
                 Track track = (Track) args.get("track");
-                Calendar calendar = (Calendar) args.get("calendar");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((Long) args.get("calendar"));
+                calendar.setTimeZone(TimeZone.getTimeZone((String) args.get("calendarTimeZoneId")));
                 List<Tick> ticks = dataSource.getTicksForDay(track, calendar);
                 LinkedHashMap<String, Object> response = new LinkedHashMap<>();
                 response.put("ticks", ticks);
                 response.put("track", track);
-                response.put("calendar", calendar);
+                response.put("calendar", calendar.getTimeInMillis());
+                response.put("calendarTimeZoneId", calendar.getTimeZone().getID());
                 final byte[] data = DataUtils.dataFromHashMap(response);
 
                 final HandsetDataClient dataClient = getDataClient();
@@ -81,14 +85,17 @@ public class HandsetDataService extends WearableListenerService {
             LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
                 Track track = (Track) args.get("track");
-                Calendar calendar = (Calendar) args.get("calendar");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((Long) args.get("calendar"));
+                calendar.setTimeZone(TimeZone.getTimeZone((String) args.get("calendarTimeZoneId")));
                 Boolean hasTimeInfo = (Boolean) args.get("hasTimeInfo");
 
                 Boolean isTicked = dataSource.isTicked(track, calendar, hasTimeInfo);
 
                 LinkedHashMap<String, Object> response = new LinkedHashMap<>();
                 response.put("track", track);
-                response.put("calendar", calendar);
+                response.put("calendar", calendar.getTimeInMillis());
+                response.put("calendarTimeZoneId", calendar.getTimeZone().getID());
                 response.put("isTicked", isTicked);
                 final byte[] data = DataUtils.dataFromHashMap(response);
 
@@ -111,14 +118,17 @@ public class HandsetDataService extends WearableListenerService {
             LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
                 Track track = (Track) args.get("track");
-                Calendar calendar = (Calendar) args.get("calendar");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((Long) args.get("calendar"));
+                calendar.setTimeZone(TimeZone.getTimeZone((String) args.get("calendarTimeZoneId")));
                 Boolean hasTimeInfo = (Boolean) args.get("hasTimeInfo");
 
                 dataSource.setTick(track, calendar, hasTimeInfo);
 
                 LinkedHashMap<String, Object> response = new LinkedHashMap<>();
                 response.put("track", track);
-                response.put("calendar", calendar);
+                response.put("calendar", calendar.getTimeInMillis());
+                response.put("calendarTimeZoneId", calendar.getTimeZone().getID());
                 if (!track.multipleEntriesEnabled()) {
                     response.put("isTicked", dataSource.isTicked(track, calendar, hasTimeInfo));
                 } else {
@@ -145,14 +155,17 @@ public class HandsetDataService extends WearableListenerService {
             LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
                 Track track = (Track) args.get("track");
-                Calendar calendar = (Calendar) args.get("calendar");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((Long) args.get("calendar"));
+                calendar.setTimeZone(TimeZone.getTimeZone((String) args.get("calendarTimeZoneId")));
 
                 dataSource.removeLastTickOfDay(track, calendar);
                 List<Tick> ticks = dataSource.getTicksForDay(track, calendar);
 
                 LinkedHashMap<String, Object> response = new LinkedHashMap<>();
                 response.put("track", track);
-                response.put("calendar", calendar);
+                response.put("calendar", calendar.getTimeInMillis());
+                response.put("calendarTimeZoneId", calendar.getTimeZone().getID());
                 response.put("ticks", ticks);
 
                 final byte[] data = DataUtils.dataFromHashMap(response);
@@ -175,14 +188,17 @@ public class HandsetDataService extends WearableListenerService {
             LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
                 Track track = (Track) args.get("track");
-                Calendar calendar = (Calendar) args.get("calendar");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((Long) args.get("calendar"));
+                calendar.setTimeZone(TimeZone.getTimeZone((String) args.get("calendarTimeZoneId")));
                 Boolean hasTimeInfo = (Boolean) args.get("hasTimeInfo");
 
                 dataSource.removeTick(track, calendar);
 
                 LinkedHashMap<String, Object> response = new LinkedHashMap<>();
                 response.put("track", track);
-                response.put("calendar", calendar);
+                response.put("calendar", calendar.getTimeZone());
+                response.put("calendarTimeZoneId", calendar.getTimeZone().getID());
                 if (!track.multipleEntriesEnabled()) {
                     response.put("isTicked", dataSource.isTicked(track, calendar, hasTimeInfo));
                 }
@@ -205,15 +221,21 @@ public class HandsetDataService extends WearableListenerService {
             LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
             try {
                 Track track = (Track) args.get("track");
-                Calendar startCalendar = (Calendar) args.get("startCalendar");
-                Calendar endCalendar = (Calendar) args.get("endCalendar");
+                Calendar startCalendar = Calendar.getInstance();
+                startCalendar.setTimeInMillis((Long) args.get("startCalendar"));
+                startCalendar.setTimeZone(TimeZone.getTimeZone((String) args.get("startCalendarTimeZoneId")));
+                Calendar endCalendar = Calendar.getInstance();
+                endCalendar.setTimeInMillis((Long) args.get("endCalendar"));
+                endCalendar.setTimeZone(TimeZone.getTimeZone((String) args.get("endCalendarTimeZoneId")));
 
                 List<Tick> ticks = dataSource.retrieveTicksForTrack(track, startCalendar, endCalendar);
 
                 LinkedHashMap<String, Object> response = new LinkedHashMap<>();
                 response.put("track", track);
-                response.put("startCalendar", startCalendar);
-                response.put("endCalendar", endCalendar);
+                response.put("startCalendar", startCalendar.getTimeInMillis());
+                response.put("startCalendarTimeZoneId", startCalendar.getTimeZone().getID());
+                response.put("endCalendar", endCalendar.getTimeInMillis());
+                response.put("endCalendarTimeZoneId", endCalendar.getTimeZone().getID());
                 response.put("ticks", ticks);
                 final byte[] data = DataUtils.dataFromHashMap(response);
 
