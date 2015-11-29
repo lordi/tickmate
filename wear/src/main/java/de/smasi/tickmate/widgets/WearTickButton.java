@@ -82,6 +82,10 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
                     Boolean isTicked = (Boolean) args.get("isTicked");
                     setUpdating(false);
 
+                    setOnCheckedChangeListener(null);
+                    setChecked(isTicked);
+                    setOnCheckedChangeListener(this);
+
                     // Haptic feedback as confirmation
                     if (pendingChanges) {
                         Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
