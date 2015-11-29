@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.wearable.MessageApi;
@@ -54,6 +55,7 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         this.mWearDataClient = wearDataClient;
         Wearable.MessageApi.addListener(mWearDataClient.googleApiClient, this);
         updateStatus();
+        setText("?");
     }
 
     Track getTrack () {
@@ -139,16 +141,16 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MILLISECOND, 0);
 
+        setTickCount(this.count + 1);
+        pendingChanges = true;
+        setUpdating(true);
+
         if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
             this.lastTickDate = c;
             mWearDataClient.setTick(this.track, c, false);
-            pendingChanges = true;
-            setUpdating(true);
         } else {
             this.lastTickDate = this.date;
             mWearDataClient.setTick(this.track, this.date, false);
-            pendingChanges = true;
-            setUpdating(true);
         }
     }
 
@@ -160,6 +162,7 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         }
 
         mWearDataClient.removeLastTickOfDay(this.track, this.date);
+        setTickCount(this.count-1);
         setUpdating(true);
 
         return true;

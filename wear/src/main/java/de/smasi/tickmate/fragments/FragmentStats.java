@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.smasi.tickmate.R;
 import de.smasi.tickmatedata.models.Tick;
@@ -46,6 +49,8 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
     private Calendar endCalendar;
     private long timespanMillis;
     private long spanSteps;
+    private Timer chartUpdateTimer = new Timer();
+    private boolean chartTimerRunning = false;
 
     private Track track;
     private WearDataClient mWearDataClient;
@@ -105,18 +110,33 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
                         createChart(ticks, endCalendar);
                     }
                 }
-            } else if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_SET_TICK) ||
+            }
+            else if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_SET_TICK) ||
                     messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_TICK) ||
                     messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_LAST_TICK_OF_DAY)) {
                 LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
                 Track track = (Track) args.get("track");
                 if (track.getId() == track.getId()) {
-                    loadChartData();
+                    if (!chartTimerRunning) {
+                        chartUpdateTimer.cancel();
+                        chartUpdateTimer.purge();
+                        chartUpdateTimer = new Timer();
+                        Log.v("FragmentStats", "Did cancel scheduled chart update.");
+                    }
+
+                    chartUpdateTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            chartTimerRunning = true;
+                            Log.v("FragmentStats", "Starting scheduled chart update.");
+                            loadChartData();
+                            chartTimerRunning = false;
+                        }
+                    }, 200);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return;
         }
     }
 
