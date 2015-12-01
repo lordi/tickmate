@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import de.smasi.tickmatedata.models.Tick;
 import de.smasi.tickmatedata.models.Track;
 
 /**
@@ -66,26 +65,6 @@ public class DataUtils {
     }
 
     public static byte[] dataFromTrackList(List<Track> objectList) {
-        byte [] data = new byte[] {};
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(objectList);
-            data = baos.toByteArray();
-        } catch (IOException e) {
-
-        } finally {
-            try {
-                baos.close();
-            } catch (IOException e) {
-
-            }
-        }
-        return data;
-    }
-
-    public static byte[] dataFromTickList(List<Tick> objectList) {
         byte [] data = new byte[] {};
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
