@@ -33,7 +33,8 @@ public class WearDataClient extends DataClient {
     public void getTickCountForDay(final Track track, final Calendar calendar) {
         LinkedHashMap<String, Object> args = new LinkedHashMap<>();
         args.put("track", track);
-        args.put("calendar", calendar);
+        args.put("calendar", calendar.getTimeInMillis());
+        args.put("calendarTimeZoneId", calendar.getTimeZone().getID());
         byte[] data = DataUtils.dataFromHashMap(args);
         sendMessageToAllNodes(WearDataClient.WEAR_MESSAGE_GET_TICKS, data);
     }
@@ -41,7 +42,8 @@ public class WearDataClient extends DataClient {
     public void isTicked(Track t, Calendar date, Boolean hasTimeInfo) {
         LinkedHashMap<String, Object> args = new LinkedHashMap<>();
         args.put("track", t);
-        args.put("calendar", date);
+        args.put("calendar", date.getTimeInMillis());
+        args.put("calendarTimeZoneId", date.getTimeZone().getID());
         args.put("hasTimeInfo", hasTimeInfo);
         byte[] data = DataUtils.dataFromHashMap(args);
         sendMessageToAllNodes(WearDataClient.WEAR_MESSAGE_IS_TICKED, data);
@@ -50,7 +52,8 @@ public class WearDataClient extends DataClient {
     public void setTick(final Track track, final Calendar calendar, final Boolean hasTimeInfo) {
         LinkedHashMap<String, Object> args = new LinkedHashMap<>();
         args.put("track", track);
-        args.put("calendar", calendar);
+        args.put("calendar", calendar.getTimeInMillis());
+        args.put("calendarTimeZoneId", calendar.getTimeZone().getID());
         args.put("hasTimeInfo", hasTimeInfo);
         byte[] data = DataUtils.dataFromHashMap(args);
         sendMessageToAllNodes(WearDataClient.WEAR_MESSAGE_SET_TICK, data);
@@ -59,7 +62,8 @@ public class WearDataClient extends DataClient {
     public void removeLastTickOfDay(Track track, Calendar calendar) {
         LinkedHashMap<String, Object> args = new LinkedHashMap<>();
         args.put("track", track);
-        args.put("calendar", calendar);
+        args.put("calendar", calendar.getTimeInMillis());
+        args.put("calendarTimeZoneId", calendar.getTimeZone().getID());
         byte[] data = DataUtils.dataFromHashMap(args);
         sendMessageToAllNodes(WearDataClient.WEAR_MESSAGE_REMOVE_LAST_TICK_OF_DAY, data);
     }
@@ -67,7 +71,8 @@ public class WearDataClient extends DataClient {
     public void removeTick(Track track, Calendar date, final Boolean hasTimeInfo) {
         LinkedHashMap<String, Object> args = new LinkedHashMap<>();
         args.put("track", track);
-        args.put("calendar", date);
+        args.put("calendar", date.getTimeInMillis());
+        args.put("calendarTimeZoneId", date.getTimeZone().getID());
         args.put("hasTimeInfo", hasTimeInfo);
         byte[] data = DataUtils.dataFromHashMap(args);
         sendMessageToAllNodes(WearDataClient.WEAR_MESSAGE_REMOVE_TICK, data);
@@ -76,8 +81,10 @@ public class WearDataClient extends DataClient {
     public void retrieveTicks(Track track, Calendar startCalendar, Calendar endCalendar) {
         LinkedHashMap<String, Object> args = new LinkedHashMap<>();
         args.put("track", track);
-        args.put("startCalendar", startCalendar);
-        args.put("endCalendar", endCalendar);
+        args.put("startCalendar", startCalendar.getTimeInMillis());
+        args.put("startCalendarTimeZoneId", startCalendar.getTimeZone().getID());
+        args.put("endCalendar", endCalendar.getTimeInMillis());
+        args.put("endCalendarTimeZoneId", endCalendar.getTimeZone().getID());
         byte[] data = DataUtils.dataFromHashMap(args);
         sendMessageToAllNodes(WearDataClient.WEAR_MESSAGE_RETRIEVE_TICKS, data);
     }

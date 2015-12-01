@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.wearable.MessageApi;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import de.smasi.tickmate.R;
 import de.smasi.tickmatedata.models.Tick;
@@ -53,6 +55,7 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         this.mWearDataClient = wearDataClient;
         Wearable.MessageApi.addListener(mWearDataClient.googleApiClient, this);
         updateStatus();
+        setText("?");
     }
 
     Track getTrack () {
@@ -76,7 +79,10 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
                     messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_REMOVE_LAST_TICK_OF_DAY)) {
                 LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
                 Track track = (Track) args.get("track");
-                Calendar calendar = (Calendar) args.get("calendar");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis((Long) args.get("calendar"));
+                calendar.setTimeZone(TimeZone.getTimeZone((String) args.get("calendarTimeZoneId")));
+
                 if (track.getId() == this.track.getId() &&
                         (calendar.equals(this.date) || calendar.equals(this.lastTickDate))) {
 
@@ -135,16 +141,16 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MILLISECOND, 0);
 
+        setTickCount(this.count + 1);
+        pendingChanges = true;
+        setUpdating(true);
+
         if (c.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
             this.lastTickDate = c;
             mWearDataClient.setTick(this.track, c, false);
-            pendingChanges = true;
-            setUpdating(true);
         } else {
             this.lastTickDate = this.date;
             mWearDataClient.setTick(this.track, this.date, false);
-            pendingChanges = true;
-            setUpdating(true);
         }
     }
 
@@ -156,6 +162,7 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         }
 
         mWearDataClient.removeLastTickOfDay(this.track, this.date);
+        setTickCount(this.count-1);
         setUpdating(true);
 
         return true;

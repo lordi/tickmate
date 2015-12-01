@@ -604,7 +604,7 @@ public class DataSource {
 
 		int tickCount = 0;
 		for (int i = 0; i < ticks.size(); i++) {
-			Calendar d = ticks.get(i).date;
+			Calendar d = ticks.get(i).getDate();
 			if (ticks.get(i).track_id == track.getId() &&
 				d.get(Calendar.YEAR) == date.get(Calendar.YEAR) &&
 				d.get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
@@ -777,12 +777,12 @@ public class DataSource {
 				DatabaseOpenHelper.COLUMN_TRACK_ID +"=? AND " +
 				DatabaseOpenHelper.COLUMN_ID +"=?", args);
 		Log.d("Tickmate", "delete " + affectedRows + "rows at " +
-				tick.date.get(Calendar.YEAR) + " " +
-				tick.date.get(Calendar.MONTH) + " " +
-				tick.date.get(Calendar.DAY_OF_MONTH) + " - " +
-				tick.date.get(Calendar.HOUR_OF_DAY) + ":" +
-				tick.date.get(Calendar.MINUTE) + ":" +
-				tick.date.get(Calendar.SECOND));
+				tick.getDate().get(Calendar.YEAR) + " " +
+				tick.getDate().get(Calendar.MONTH) + " " +
+				tick.getDate().get(Calendar.DAY_OF_MONTH) + " - " +
+				tick.getDate().get(Calendar.HOUR_OF_DAY) + ":" +
+				tick.getDate().get(Calendar.MINUTE) + ":" +
+				tick.getDate().get(Calendar.SECOND));
 
         close();
 

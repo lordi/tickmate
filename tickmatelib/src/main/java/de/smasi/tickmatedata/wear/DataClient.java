@@ -80,7 +80,7 @@ public class DataClient implements GoogleApiClient.ConnectionCallbacks, GoogleAp
                     .setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
                         @Override
                         public void onResult(MessageApi.SendMessageResult sendMessageResult) {
-                            Log.v("DataClient", "Did send message to " + node.getDisplayName());
+                            Log.v("DataClient", "Did send " + messagePath + " to " + node.getDisplayName());
                         }
                     });
         }
