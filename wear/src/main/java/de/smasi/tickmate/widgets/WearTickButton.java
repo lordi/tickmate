@@ -35,6 +35,9 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
 
         this.track = track;
         this.date = (Calendar)date.clone();
+        this.date.set(Calendar.HOUR_OF_DAY, 0);
+        this.date.set(Calendar.MINUTE, 0);
+        this.date.set(Calendar.SECOND, 0);
         //this.setLayoutParams(new android.widget.LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 20));
         this.setBackgroundResource(de.smasi.tickmatedata.R.drawable.toggle_button);
         int size = 32;
@@ -77,14 +80,19 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
                 calendar.setTimeInMillis((Long) args.get("calendar"));
                 calendar.setTimeZone(TimeZone.getTimeZone((String) args.get("calendarTimeZoneId")));
 
-                if (track.getId() == this.track.getId() && calendar.equals(this.date)) {
+                if (track.getId() == this.track.getId() &&
+                        calendar.get(Calendar.YEAR) == this.date.get(Calendar.YEAR) &&
+                        calendar.get(Calendar.MONTH) == this.date.get(Calendar.MONTH) &&
+                        calendar.get(Calendar.DAY_OF_MONTH) == this.date.get(Calendar.DAY_OF_MONTH)) {
 
                     Boolean isTicked = (Boolean) args.get("isTicked");
                     setUpdating(false);
 
-                    setOnCheckedChangeListener(null);
-                    setChecked(isTicked);
-                    setOnCheckedChangeListener(this);
+                    if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_IS_TICKED)) {
+                        setOnCheckedChangeListener(null);
+                        setChecked(isTicked);
+                        setOnCheckedChangeListener(this);
+                    }
 
                     // Haptic feedback as confirmation
                     if (pendingChanges) {

@@ -25,6 +25,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -61,6 +62,17 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
         View v = inflater.inflate(R.layout.fragment_stats, container, false);
 
         mBarChartView = (BarChartView) v.findViewById(R.id.barchart);
+
+        int gridColor = getActivity().getResources().getColor(R.color.semitransparent_grey);
+        Paint gridPaint = new Paint();
+        gridPaint.setColor(gridColor);
+        gridPaint.setStyle(Paint.Style.STROKE);
+        gridPaint.setAntiAlias(true);
+        gridPaint.setStrokeWidth(Tools.fromDpToPx(1.0f));
+        gridPaint.setPathEffect(new DashPathEffect(new float[]{2, 0}, 0));
+        mBarChartView.setGrid(ChartView.GridType.NONE, gridPaint);
+        mBarChartView.setAxisColor(gridColor);
+        mBarChartView.setLabelsFormat(new DecimalFormat("#"));
 
         Bundle args = getArguments();
         track = (Track) args.getSerializable("track");
@@ -117,22 +129,23 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
                 LinkedHashMap<String, Object> args = DataUtils.getObjectFromData(messageEvent.getData());
                 Track track = (Track) args.get("track");
                 if (track.getId() == track.getId()) {
-                    if (!chartTimerRunning) {
-                        chartUpdateTimer.cancel();
-                        chartUpdateTimer.purge();
-                        chartUpdateTimer = new Timer();
-                        Log.v("FragmentStats", "Did cancel scheduled chart update.");
-                    }
-
-                    chartUpdateTimer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            chartTimerRunning = true;
-                            Log.v("FragmentStats", "Starting scheduled chart update.");
-                            loadChartData();
-                            chartTimerRunning = false;
+                    synchronized (this) {
+                        if (!chartTimerRunning) {
+                            chartUpdateTimer.cancel();
+                            chartUpdateTimer.purge();
+                            chartUpdateTimer = new Timer();
+                            Log.v("FragmentStats", "Did cancel scheduled chart update.");
                         }
-                    }, 200);
+
+                        chartUpdateTimer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                chartTimerRunning = true;
+                                Log.v("FragmentStats", "Starting scheduled chart update.");
+                                loadChartData();
+                            }
+                        }, 1000);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -152,8 +165,8 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
         // Bar chart customization
         int barColor = getActivity().getResources().getColor(R.color.button_blue);
 
-        BarSet dataset = new BarSet();
-
+        List<String> labels = new ArrayList<>();
+        List<Float> values = new ArrayList<>();
         for (int i=0; i < spanSteps; i++) {
             Calendar calendar = (Calendar) endCalendar.clone();
             calendar.setTimeInMillis(calendar.getTime().getTime() - (i * timespanMillis));
@@ -169,28 +182,40 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
                 }
             }
 
-            dataset.addBar(weekDay, tickCount);
+            labels.add(weekDay);
+            values.add((float)tickCount);
         }
 
-        dataset.setColor(barColor);
+        if (mBarChartView.getData() == null ||
+                mBarChartView.getData().size() == 0) {
+            BarSet dataset = new BarSet();
+            for (int i=0; i < spanSteps; i++) {
+                String label = labels.get(i);
+                Float value = values.get(i);
+                dataset.addBar(label, value);
+            }
+            dataset.setColor(barColor);
+            mBarChartView.addData(dataset);
+
+            Log.v("FragmentStats", "Adding new dataset to chart.");
+        } else {
+            float[] updateValues = new float[values.size()];
+            float maxValue = 0;
+            for (int i=0; i < values.size(); i++) {
+                Float value = values.get(i);
+                updateValues[i] = value;
+                if (value > maxValue) {
+                    maxValue = value;
+                }
+            }
+            mBarChartView.updateValues(0, updateValues);
+            mBarChartView.notifyDataUpdate();
+            mBarChartView.setAxisBorderValues(0, (int) maxValue);
+                    Log.v("FragmentStats", "Updating chart.");
+        }
+
         mBarChartView.setBarSpacing(32.0f);
         mBarChartView.setRoundCorners(10.0f);
-        mBarChartView.reset();
-        mBarChartView.addData(dataset);
-
-        // Generic chart customization
-//        mBarChartView.setXLabels()
-        // Paint object used to draw Grid
-        int gridColor = getActivity().getResources().getColor(R.color.semitransparent_grey);
-        Paint gridPaint = new Paint();
-        gridPaint.setColor(gridColor);
-        gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setAntiAlias(true);
-        gridPaint.setStrokeWidth(Tools.fromDpToPx(1.0f));
-        gridPaint.setPathEffect(new DashPathEffect(new float[]{2, 0}, 0));
-        mBarChartView.setGrid(ChartView.GridType.NONE, gridPaint);
-        mBarChartView.setAxisColor(gridColor);
-        mBarChartView.setLabelsFormat(new DecimalFormat("#"));
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -202,6 +227,7 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
                 anim.setAlpha(3);
                 anim.setOverlap(0.5f, new int[]{0, 1, 2, 3, 4, 5, 6,});
                 mBarChartView.show(anim);
+                chartTimerRunning = false;
             }
         }, 100);
     }

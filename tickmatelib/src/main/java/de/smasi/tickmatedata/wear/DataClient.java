@@ -64,11 +64,12 @@ public class DataClient implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         sendMessage(messagePath, payload, nodes);
     }
 
-    public void sendMessageToAllNodes(final String messagePath, final byte[] payload) {
+    public void sendMessageToRemoteNodes(final String messagePath, final byte[] payload) {
         Wearable.NodeApi.getConnectedNodes(googleApiClient).setResultCallback(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
             @Override
             public void onResult(NodeApi.GetConnectedNodesResult getConnectedNodesResult) {
-                sendMessage(messagePath, payload, getConnectedNodesResult.getNodes());
+                List<Node> nodes = getConnectedNodesResult.getNodes();
+                sendMessage(messagePath, payload, nodes);
             }
         });
     }

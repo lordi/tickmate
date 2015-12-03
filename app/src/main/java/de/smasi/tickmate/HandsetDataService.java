@@ -197,7 +197,7 @@ public class HandsetDataService extends WearableListenerService {
 
                 LinkedHashMap<String, Object> response = new LinkedHashMap<>();
                 response.put("track", track);
-                response.put("calendar", calendar.getTimeZone());
+                response.put("calendar", calendar.getTimeInMillis());
                 response.put("calendarTimeZoneId", calendar.getTimeZone().getID());
                 if (!track.multipleEntriesEnabled()) {
                     response.put("isTicked", dataSource.isTicked(track, calendar, hasTimeInfo));
