@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.wearable.MessageApi;
@@ -54,8 +53,8 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
         this.setPadding(0, 0, 0, 0);
         this.mWearDataClient = wearDataClient;
         Wearable.MessageApi.addListener(mWearDataClient.googleApiClient, this);
+        setEnabled(false);
         updateStatus();
-        setText("?");
     }
 
     Track getTrack () {
@@ -88,6 +87,7 @@ public class WearMultiTickButton extends Button implements View.OnClickListener,
 
                     List<Tick> ticks = (List<Tick>) args.get("ticks");
                     if (ticks != null) {
+                        setEnabled(true);
                         setTickCount(ticks.size());
                     } else {
                         setTickCount(0);

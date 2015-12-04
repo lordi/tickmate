@@ -11,7 +11,6 @@ import android.support.wearable.view.GridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -151,30 +150,16 @@ public class WearMainActivity extends WearableActivity implements MessageApi.Mes
                 mTrackPagerAdapter = new TrackPagerAdapter(this, getFragmentManager(), tracks);
                 mTrackViewPager.setAdapter(mTrackPagerAdapter);
 
+                mCircleProgressBar.setVisibility(View.INVISIBLE);
+                mSplash.setVisibility(View.GONE);
+                mTrackLayout.setVisibility(View.VISIBLE);
+
                 // Fade in
-                AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
                 alphaAnimation.setDuration(500);
                 alphaAnimation.setFillAfter(true);
-                alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        mSplash.setVisibility(View.GONE);
-                        mTrackLayout.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                mSplash.startAnimation(alphaAnimation);
+                mTrackLayout.startAnimation(alphaAnimation);
             }
-            mCircleProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 

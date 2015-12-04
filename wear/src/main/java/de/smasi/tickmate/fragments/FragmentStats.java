@@ -144,7 +144,7 @@ public class FragmentStats extends Fragment implements MessageApi.MessageListene
                                 Log.v("FragmentStats", "Starting scheduled chart update.");
                                 loadChartData();
                             }
-                        }, 1000);
+                        }, 500);
                     }
                 }
             }

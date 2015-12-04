@@ -54,8 +54,9 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
         setChecked(false);
         this.mWearDataClient = wearDataClient;
         Wearable.MessageApi.addListener(mWearDataClient.googleApiClient, this);
-        mWearDataClient.isTicked(track, date, true);
+        setEnabled(false);
         setUpdating(true);
+        mWearDataClient.isTicked(track, date, true);
 
         this.setOnCheckedChangeListener(this);
     }
@@ -91,6 +92,7 @@ public class WearTickButton extends ToggleButton implements CompoundButton.OnChe
                     if (messageEvent.getPath().equals(WearDataClient.WEAR_MESSAGE_IS_TICKED)) {
                         setOnCheckedChangeListener(null);
                         setChecked(isTicked);
+                        setEnabled(true);
                         setOnCheckedChangeListener(this);
                     }
 
