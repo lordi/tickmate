@@ -8,6 +8,8 @@ android {
         applicationId "de.smasi.tickmate"
         minSdkVersion 11
         targetSdkVersion 23
+        versionCode 28
+        versionName "1.3.0"
     }
 
     buildTypes {
@@ -25,4 +27,5 @@ dependencies {
     testCompile 'org.robolectric:robolectric:3.0'
     compile project(':tickmatelib')
     compile 'com.google.android.gms:play-services-wearable:8.3.0'
+    wearApp project(':wear')
 }
