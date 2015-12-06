@@ -17,8 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.models.Track;
 
 public class EditTracksActivity extends ListActivity {
 

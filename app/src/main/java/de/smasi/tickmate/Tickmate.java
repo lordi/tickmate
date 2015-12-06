@@ -1,5 +1,6 @@
 package de.smasi.tickmate;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -7,9 +8,12 @@ import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,8 +33,8 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.Calendar;
 
-import de.smasi.tickmate.database.DatabaseOpenHelper;
-import de.smasi.tickmate.models.Group;
+import de.smasi.tickmatedata.database.DatabaseOpenHelper;
+import de.smasi.tickmatedata.models.Group;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditGroupsActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
@@ -40,6 +44,8 @@ import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
 
 public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener, View.OnClickListener {
     static final int DATE_DIALOG_ID = 0;
+    static final int TICKMATE_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 100;
+    static final int TICKMATE_PERMISSIONS_READ_EXTERNAL_STORAGE = 101;
     private static final String TAG = "Tickmate";
 
     private InfiniteScrollAdapter<TickAdapter> mAdapter;
@@ -122,10 +128,10 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
                 this.jumpToToday();
                 return true;
             case R.id.action_export_db:
-                this.exportDB();
+                this.startExportDB();
                 return true;
             case R.id.action_import_db:
-                this.importDB();
+                this.startImportDB();
                 return true;
             // "Edit Groups" being placed in this menu because we don't yet have a better place.
             case R.id.action_edit_groups:
@@ -180,6 +186,50 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
     public void jumpToDate() {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    public void startExportDB() {
+        if (ContextCompat.checkSelfPermission(Tickmate.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            /*if (ActivityCompat.shouldShowRequestPermissionRationale(Tickmate.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                //TODO: show explanation
+
+            } else {*/
+
+                ActivityCompat.requestPermissions(Tickmate.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        TICKMATE_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+
+            //}
+        } else {
+            exportDB();
+        }
+    }
+
+    public void startImportDB() {
+        if (ContextCompat.checkSelfPermission(Tickmate.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            /*if (ActivityCompat.shouldShowRequestPermissionRationale(Tickmate.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                //TODO: show explanation
+
+            } else {*/
+
+                ActivityCompat.requestPermissions(Tickmate.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        TICKMATE_PERMISSIONS_READ_EXTERNAL_STORAGE);
+
+            //}
+        } else {
+            importDB();
+        }
     }
 
     public void exportDB() {
@@ -289,6 +339,37 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
             intent.putExtra("group_id", displayedGroup.getId());
             intent.putExtra("openTrackList", true);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case TICKMATE_PERMISSIONS_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    exportDB();
+
+                } else {
+                    Toast.makeText(Tickmate.this, getResources().getString(R.string.export_db_failed), Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+
+            case TICKMATE_PERMISSIONS_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    importDB();
+
+                } else {
+                    Toast.makeText(Tickmate.this, getResources().getString(R.string.import_db_failed), Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
         }
     }
 

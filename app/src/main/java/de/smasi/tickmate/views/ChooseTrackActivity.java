@@ -17,8 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.models.Track;
 
 public class ChooseTrackActivity extends ListActivity {
 	

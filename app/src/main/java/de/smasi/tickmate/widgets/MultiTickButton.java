@@ -9,9 +9,10 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.R;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.models.Track;
+import de.smasi.tickmatedata.widgets.ButtonHelpers;
 
 public class MultiTickButton extends Button implements OnClickListener, OnLongClickListener {
 	Track track;

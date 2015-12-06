@@ -17,9 +17,9 @@ import org.robolectric.util.ActivityController;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.database.DatabaseOpenHelper;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.database.DatabaseOpenHelper;
+import de.smasi.tickmatedata.models.Track;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.ShowTrackActivity;
 import de.smasi.tickmate.views.TrackPreferenceActivity;

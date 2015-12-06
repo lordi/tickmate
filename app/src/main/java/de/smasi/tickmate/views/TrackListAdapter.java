@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.models.Track;
 
 public class TrackListAdapter extends ArrayAdapter<Track> {
 	private final Context context;

@@ -19,9 +19,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.models.Tick;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.models.Tick;
+import de.smasi.tickmatedata.models.Track;
 import de.smasi.tickmate.widgets.SummaryGraph;
 import de.smasi.tickmate.widgets.SummaryNumber;
 
@@ -178,7 +178,7 @@ public class ShowTrackActivity extends Activity {
 		
 		// Collect all data
 		for (Tick tick : ticks) {
-			int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - 2;
+			int day_of_week = tick.getDate().get(Calendar.DAY_OF_WEEK) - 2;
 			if (day_of_week < 0) day_of_week = 6;
 			int newcount = this.weekdaysData.get(day_of_week)+1;
 			if (newcount > this.weekdaysMaximum) {
@@ -186,7 +186,7 @@ public class ShowTrackActivity extends Activity {
 			}
 			this.weekdaysData.set(day_of_week, newcount);
 			
-			int weekyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.WEEK_OF_YEAR) * 10000;
+			int weekyear = tick.getDate().get(Calendar.YEAR) + tick.getDate().get(Calendar.WEEK_OF_YEAR) * 10000;
 			if (weekyear_to_index.containsKey(weekyear)) {
 				int index = weekyear_to_index.get(weekyear);
 				int newcount2 = this.weeksData.get(index)+1;
@@ -195,7 +195,7 @@ public class ShowTrackActivity extends Activity {
 				this.weeksData.set(index, newcount2);
 			}
 			
-			int monthyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.MONTH) * 10000;
+			int monthyear = tick.getDate().get(Calendar.YEAR) + tick.getDate().get(Calendar.MONTH) * 10000;
 			if (monthyear_to_index.containsKey(monthyear)) {
 				int index = monthyear_to_index.get(monthyear);
 				int newcount2 = this.monthsData.get(index)+1;
@@ -204,7 +204,7 @@ public class ShowTrackActivity extends Activity {
 				this.monthsData.set(index, newcount2);
 			}
 			
-			int quarteryear = tick.date.get(Calendar.YEAR) * 4 + tick.date.get(Calendar.MONTH) / 3;
+			int quarteryear = tick.getDate().get(Calendar.YEAR) * 4 + tick.getDate().get(Calendar.MONTH) / 3;
 			if (quarteryear_to_index.containsKey(quarteryear)) {
 				int index = quarteryear_to_index.get(quarteryear);
 				int newcount2 = this.quarterData.get(index)+1;
@@ -213,7 +213,7 @@ public class ShowTrackActivity extends Activity {
 				this.quarterData.set(index, newcount2);
 			}
 
-			int cyear = tick.date.get(Calendar.YEAR);
+			int cyear = tick.getDate().get(Calendar.YEAR);
 			if (year_to_index.containsKey(cyear)) {
 				int index = year_to_index.get(cyear);
 				int newcount2 = this.yearsData.get(index) + 1;
@@ -242,8 +242,8 @@ public class ShowTrackActivity extends Activity {
 		ticks = ds.getTicks(track_id);
 		
 		if (ticks.size() > 0) {
-			firstTickDate = ticks.get(0).date;
-			lastTickDate = ticks.get(ticks.size() - 1).date;
+			firstTickDate = ticks.get(0).getDate();
+			lastTickDate = ticks.get(ticks.size() - 1).getDate();
 		}
 		else {
 			firstTickDate = null;

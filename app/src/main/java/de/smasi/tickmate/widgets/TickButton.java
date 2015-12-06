@@ -8,9 +8,10 @@ import android.widget.ToggleButton;
 
 import java.util.Calendar;
 
-import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.R;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.models.Track;
+import de.smasi.tickmatedata.widgets.ButtonHelpers;
 
 
 public class TickButton extends ToggleButton implements OnCheckedChangeListener {

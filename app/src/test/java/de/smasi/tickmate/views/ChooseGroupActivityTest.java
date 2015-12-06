@@ -11,7 +11,7 @@ import org.robolectric.util.ActivityController;
 
 import de.smasi.tickmate.BuildConfig;
 import de.smasi.tickmate.TickmateTestRunner;
-import de.smasi.tickmate.models.Group;
+import de.smasi.tickmatedata.models.Group;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;

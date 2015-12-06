@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.smasi.tickmate.R;
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.models.Track;
 import de.smasi.tickmate.widgets.GroupListPreference;
 
 public class TrackPreferenceFragment extends PreferenceFragment implements

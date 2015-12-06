@@ -22,10 +22,10 @@ import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import de.smasi.tickmate.database.DataSource;
-import de.smasi.tickmate.database.DatabaseOpenHelper;
-import de.smasi.tickmate.database.FileUtils;
-import de.smasi.tickmate.models.Track;
+import de.smasi.tickmatedata.database.DataSource;
+import de.smasi.tickmatedata.database.DatabaseOpenHelper;
+import de.smasi.tickmatedata.database.FileUtils;
+import de.smasi.tickmatedata.models.Track;
 
 @Config(sdk = 17, constants = BuildConfig.class)
 @RunWith(TickmateTestRunner.class)
