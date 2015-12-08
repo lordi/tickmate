@@ -653,6 +653,7 @@ public class DataSource {
 	public boolean isTicked(Track t, Calendar date, boolean hasTimeInfo) {
 		date.clear(Calendar.MILLISECOND);
 		//Log.v("Tickmate", "checking for " + t.getId() + " and " + date.toString());
+        List<Tick> ticks = this.getTicksForDay(t, date);
 		return ticks.contains(new Tick(t.getId(), date));
 	}
 
