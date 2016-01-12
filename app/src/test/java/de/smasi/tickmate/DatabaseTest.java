@@ -175,6 +175,36 @@ public class DatabaseTest {
         // (groups did not exist back then)
         assertThat(dataSource.getGroups().size(), is(0));
         closeMethod.invoke(dataSource);
-        ;
+    }
+
+    @Test
+    public void legacyDatabaseVersion13ShouldBeImportable() throws Exception {
+        // File testDb = new File(getClass().getResource("test.sql").getFile());
+        InputStream is = tickmate.getAssets().open("test/tickmate-version13.db");
+        DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tickmate);
+        File extDb = new File(db.getExternalDatabasePath("legacy.db"));
+
+        FileUtils.saveStreamToFile(is, new FileOutputStream(extDb));
+        File intDb = tickmate.getApplicationContext().getDatabasePath("tickmate.db");
+        intDb.getParentFile().mkdirs();
+        db.importDatabase("legacy.db");
+
+        // the legacy db should have 8 tracks (6 active)
+        openMethod.invoke(dataSource);
+        assertThat(dataSource.getTracks().size(), is(3));
+        assertThat(dataSource.getActiveTracks().size(), is(3));
+        assertThat(dataSource.getTickCount(1), is(6));
+        assertThat(dataSource.getTickCount(2), is(4));
+        assertThat(dataSource.getTickCount(3), is(5));
+        // make sure that 3 groups have been imported
+        assertThat(dataSource.getGroups().size(), is(3));
+        assertThat(dataSource.getGroupsForTrack(1).size(), is(1));
+        assertThat(dataSource.getGroupsForTrack(2).size(), is(3));
+        assertThat(dataSource.getGroupsForTrack(3).size(), is(1));
+        assertThat(dataSource.getGroups().get(1).getName(), is("Wochenende"));
+        assertThat(dataSource.getTrack(3).multipleEntriesEnabled(), is(true));
+        assertThat(dataSource.getTrack(2).multipleEntriesEnabled(), is(false));
+
+        closeMethod.invoke(dataSource);
     }
 }
