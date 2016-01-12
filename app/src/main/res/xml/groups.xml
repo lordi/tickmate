@@ -4,71 +4,71 @@
     <section name="Frequency">
         <group
             name="Daily"
-            description="Things you might do every day."/>
+            description="Things that might occur every day"/>
         <group
             name="Weekdays"
-            description="Things you might do on weekdays."/>
+            description="Things that might occur on weekdays"/>
         <group
             name="Weekends"
-            description="Things you might do on the weekend."/>
+            description="Things that might occur on the weekend"/>
         <group
             name="Irregular"
-            description="Events which don't occur on any kind of schedule."/>
+            description="Events that don't occur on any kind of schedule"/>
         <group
             name="Rare"
-            description="Events which rarely occur."/>
+            description="Events that rarely occur"/>
     </section>
 
     <section
         name="Time of Day">
         <group
             name="Mornings"
-            description="Things you might do in the mornings."/>
+            description="Things I might do in the mornings"/>
         <group
             name="Midday"
-            description="Things you might do in middle of the day - perhaps at lunchtime."/>
+            description="Things I might do in middle of the day"/>
         <group
             name="Evenings"
-            description="Things you might do in the evenings - maybe after getting home from work or school."/>
+            description="Things I might do in the evenings"/>
         <group
             name="Pre-sleep"
-            description="Things you might do immediately before going to sleep."/>
+            description="Things I might do immediately before going to sleep"/>
     </section>
 
 
     <section name="Importance">
         <group
             name="Mandatory"
-            description="Actions which you must do."/>
+            description="Things I must do"/>
         <group
             name="Optional"
-            description="You'll do these actions if you feel like it."/>
+            description="I'll do these actions if I feel like it"/>
     </section>
 
     <section name="Location">
         <group
             name="Home"
-            description="Actions that are done at home. "/>
+            description="Things that occur at home"/>
         <group
             name="Work"
-            description="Actions that are done at work. "/>
+            description="Things that occur at work"/>
         <group
             name="Other"
-            description="Modify this group name and description for a location important to you."/>
+            description="Modify this group name and description for a location important to you"/>
     </section>
 
     <section name="Other">
         <group
             name="Medical events"
-            description="Disease symptoms, medications you must take, etc."/>
+            description="Disease symptoms, medications you must take, etc"/>
         <group
             name="Goal oriented"
-            description="Do these regularly in order to reach a goal."/>
+            description="I do these regularly in order to reach a goal"/>
         <group
             name="New Habits"
-            description="Do these regularly to develop a new habit."/>
+            description="I do these regularly to develop a new habit"/>
         <group
             name="Custom"
-            description="Customize this group for your own use."/>
+            description="Customize this group for your own use"/>
     </section>
 </groups>

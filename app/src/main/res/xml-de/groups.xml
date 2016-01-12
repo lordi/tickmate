@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<groups>
+    <!-- Consider introducing icons, as with tracks. -->
+    <section name="Regelmäßigkeit">
+        <group
+            name="Täglich"
+            description="Dinge, die jeden Tag auftreten können"/>
+        <group
+            name="Wochentags"
+            description="Dinge, die in der Woche auftreten können"/>
+        <group
+            name="Wochenende"
+            description="Dinge, die am Wochenende auftreten können"/>
+        <group
+            name="Unregelmäßig"
+            description="Dinge, die unregelmäßig auftreten"/>
+        <group
+            name="Selten"
+            description="Dinge, die selten auftreten"/>
+    </section>
+
+    <section
+        name="Tageszeit">
+        <group
+            name="Morgens"
+            description="Dinge, die morgens auftreten können"/>
+        <group
+            name="Mittags"
+            description="Dinge, die mittags auftreten können"/>
+        <group
+            name="Abends"
+            description="Dinge, die abends auftreten können"/>
+        <group
+            name="Vor dem Einschlafen"
+            description="Dinge, die vor dem Einschlafen auftreten können"/>
+    </section>
+
+    <section name="Wichtigkeit">
+        <group
+            name="Verpflichtend"
+            description="Dinge, die ich machen muss"/>
+        <group
+            name="Optional"
+            description="Dinge, die ich mache, wenn mir danach ist"/>
+    </section>
+
+    <section name="Ort">
+        <group
+            name="Zu Hause"
+            description="Dinge, die zu Hause auftreten"/>
+        <group
+            name="Arbeit"
+            description="Dinge, die auf der Arbeit auftreten"/>
+        <group
+            name="Anderer Ort"
+            description="Passen Sie den Ort und die Beschreibung an"/>
+    </section>
+
+    <section name="Andere">
+        <group
+            name="Gesundheit"
+            description="Symptome, Arznei, etc."/>
+        <group
+            name="Ziele"
+            description="Diese Dinge will ich regelmäßig machen"/>
+        <group
+            name="Angewohnheit"
+            description="Diese Dinge will ich mir angewöhnen"/>
+        <group
+            name="Anderes"
+            description="Passen Sie diese Gruppe an"/>
+    </section>
+</groups>
