@@ -5,17 +5,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.preference.MultiSelectListPreference;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import de.smasi.tickmate.R;
+import de.smasi.tickmate.Tickmate;
 import de.smasi.tickmate.database.DataSource;
+import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.views.EditGroupsActivity;
@@ -42,6 +47,32 @@ public class GroupListPreference extends MultiSelectListPreference {
                 getContext().startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onClick() {
+        /*
+         * If there are no groups when this preference is clicked, open the "Edit
+         * Groups" activity.
+         */
+        if (mDataSource.getGroups().size() == 0) {
+            new AlertDialog.Builder(getContext())
+                    .setMessage(R.string.no_groups_found)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Intent intent = new Intent(getContext(), EditGroupsActivity.class);
+                            getContext().startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Do nothing.
+                }
+                    }).show();
+        }
+        else {
+            super.onClick();
+        }
     }
 
     public void setTrack(Track track) {

@@ -83,4 +83,6 @@
     <string name="title_activity_choose_group">Gruppe hinzufügen</string>
     <string name="group_name">Bezeichnung</string>
     <string name="title_activity_edit_group">Gruppe bearbeiten</string>
+    <string name="no_groups_found">Es wurden keine Gruppen gefunden. Wollen Sie den Gruppeneditor öffnen?</string>
+
 </resources>
