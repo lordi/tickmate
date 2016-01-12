@@ -5,12 +5,14 @@ package de.smasi.tickmate.models;
  */
 public class Group {
 
-    public static final Group ALL_GROUP = new Group("All");  // Used to indicate that 'all groups' have been selected for display
+    // Used to indicate that 'all groups' have been selected for display
+    public static final Group ALL_GROUP = new Group("__all__");
+
     private static final String TAG = "Group";
 
     private int mId = -1;         // Unique identifier will be assigned by database
-    private String mName = "(Name not initialized)";
-    private String mDescription = "(Description not initialized)";
+    private String mName = "";
+    private String mDescription = "";
     private boolean mIsSectionHeader = false; // For entries derived from groups.xml to be section headers
     private int mOrder = 0;
 

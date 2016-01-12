@@ -2,6 +2,7 @@ package de.smasi.tickmate;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
@@ -201,7 +203,8 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         // init mSpinnerArraynames
         List<Group> allGroups = DataSource.getInstance().getGroups();
         ArrayList<String> mSpinnerArrayNames = new ArrayList<>();
-        mSpinnerArrayNames.add(Group.ALL_GROUP.getName());
+        Resources resources = context.getResources();
+        mSpinnerArrayNames.add(resources.getString(R.string.group_all_name));
         for (Group group : allGroups) {
             mSpinnerArrayNames.add(group.getName());
         }

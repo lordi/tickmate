@@ -84,5 +84,6 @@
     <string name="group_name">Name</string>
     <string name="title_activity_edit_group">Edit group</string>
     <string name="no_groups_found">No groups have been found. Do you want to open the group editor?</string>
+    <string name="group_all_name">All</string>
 
 </resources>
