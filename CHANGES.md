@@ -1,6 +1,12 @@
 master
 ------
 
+v1.3.0
+------
+
+ * Groups can be created and ticks can be put in any number of groups (thanks @js)
+ * Tracks with multiple ticks per day can be protected as well (#52, #60)
+
 v1.2.3
 ------
 
