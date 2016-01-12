@@ -125,23 +125,15 @@ OnSharedPreferenceChangeListener  {
                 track.setMultipleEntriesEnabled(multiple_entries_enabled.isChecked());
             }
         } else if (pref instanceof GroupListPreference) {
-            GroupListPreference mp = (GroupListPreference) pref;
-//            Log.d(TAG, "MultiSelectListPreference changed, with groupIds: " + TextUtils.join(",", mp.getValues()));
-
-            // Convert the Set returned by getValues into a List, as expected by setGroupIdsUsingStrings:
-            List<Integer> groupIds = new ArrayList<>();
-            for (String value : mp.getValues()) {
-                groupIds.add(Integer.valueOf(value));
+            if (pref.equals(mGroupsPref)) {
+                // Convert the Set returned by getValues into a List, as expected by setGroupIdsUsingStrings:
+                List<Integer> groupIds = new ArrayList<>();
+                for (String value : mGroupsPref.getValues()) {
+                    groupIds.add(Integer.valueOf(value));
+                }
+                mDataSource.linkOneTrackManyGroups(track.getId(), groupIds);
+                mGroupsPref.populate();
             }
-
-            mDataSource.linkOneTrackManyGroups(track.getId(), groupIds);
-//            Log.d(TAG, "\tUser selected: " + TextUtils.join(",", groupIds));
-
-            mGroupsPref.populate();//setSummary(getGroupNamesForSummary());
-//                    + "  \n" + TextUtils.join("\n", mDataSource.getGroups())); // Leaving here for future debugging, until tests are written
-//            Log.d(TAG, "Confirm that the group IDs are correct: " + TextUtils.join(",", track.getGroupIdsAsSet()));
-//            Log.d(TAG, "Confirm that the group NAMES are correct: " + TextUtils.join(",", track.getGroupNamesAsSet()));
-
         }
         mDataSource.storeTrack(track);
     }
