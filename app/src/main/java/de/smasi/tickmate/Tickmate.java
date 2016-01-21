@@ -48,19 +48,15 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate(" + savedInstanceState + ")");
-        //setContentView(R.layout.fragment_tickmate_ticks);
-		//matrix = (TickMatrix)findViewById(R.id.tickMatrix1);
+
         setContentView(R.layout.activity_tickmate_list);
-        
-		Calendar today = Calendar.getInstance();
-		
+
         RelativeLayout progress = new RelativeLayout(this);
         progress.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, 100));
         progress.setGravity(Gravity.CENTER);
         progress.addView(new ProgressBar(this));
 
-        mAdapter = new InfiniteScrollAdapter<TickAdapter>(this,
+        mAdapter = new InfiniteScrollAdapter<>(this,
                 new TickAdapter(this, null, savedInstanceState), progress);
         mAdapter.addListener(this);
         mHandler = new Handler();
@@ -254,9 +250,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
     }
 
     public void jumpToToday() {
-        Calendar day = Calendar.getInstance();
-        ((TickAdapter) getListAdapter()).scrollToLatest();  // TODO js Confirm if this is the best place in the code to force a scroll to latest.
-        // TODO avp and hg, does this look okay to you?  Can I leave the above line where it is and delete the above comment?
+        ((TickAdapter) getListAdapter()).scrollToLatest();
         mAdapter.getAdapter().unsetActiveDay();
         refresh();
     }

@@ -234,7 +234,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
 
     public View getHeader() {
-//        Log.d(TAG, "calling getHeader");
         int rowHeight = -1;
 
         // trackHeader will contain the track icons, while header will contain both the spinner and trackHeader
@@ -317,7 +316,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         java.text.DateFormat dateFormat = android.text.format.DateFormat
                 .getDateFormat(context);
 
-//        Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
+        //Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 
         LinearLayout tickgrid = new LinearLayout(this.context);
 //        LinearLayout tickgrid = new TestCustomEventControlLinearLayout(this.context);
