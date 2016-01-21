@@ -87,13 +87,13 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         today.set(Calendar.MINUTE, 0);
         today.set(Calendar.SECOND, 0);
         today.set(Calendar.MILLISECOND, 0);
+
+        yday = (Calendar) today.clone();
+        yday.add(Calendar.DATE, -1);
     }
 
 	public void setActiveDay(Calendar activeDay) {
         updateToday();
-
-		yday = (Calendar) today.clone();
-		yday.add(Calendar.DATE, -1);
 
         // null is used to indicate 'not set'
 		if (activeDay != null) {
@@ -439,7 +439,10 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 	public void notifyDataSetChanged() {
 		java.text.DateFormat dateFormat = android.text.format.DateFormat
 				.getDateFormat(context);
-		super.notifyDataSetChanged();
+
+        // Today may have changed, for instance when the App was running in the background
+        // for a while and then resumed. So, update today!
+        updateToday();
 
         mRowCache.clear();
 
@@ -458,16 +461,18 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         Calendar endday = (Calendar) startday.clone();
         startday.add(Calendar.DATE, -this.count);
 
-            mTracksCurrentlyDisplayed = getTracksForCurrentGroup();
+        mTracksCurrentlyDisplayed = getTracksForCurrentGroup();
 //            Log.d(TAG, "Tracks associated with current group (" + getCurrentGroupId() +
 //                    ") are: (" + TextUtils.join(",", mTracksCurrentlyDisplayed) + ")");
 
-        Log.v(TAG, "Data range has been updated: " + dateFormat.format(activeDay.getTime()) + " - " + dateFormat.format(today.getTime()));
+        Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(today.getTime()));
         ds.retrieveTicks(startday, endday);
 
         // Keep around for easier debug
 //        Log.d(TAG, "Tracks currently displayed: " + TextUtils.join("\n ", mTracksCurrentlyDisplayed));
 //        for (Track t : mTracksCurrentlyDisplayed) { Log.d(TAG, t.getName()); }
+
+        super.notifyDataSetChanged();
     }
 
     private List<Track> getTracksForCurrentGroup() {
