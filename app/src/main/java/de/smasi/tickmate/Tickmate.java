@@ -61,7 +61,7 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
         progress.addView(new ProgressBar(this));
 
         mAdapter = new InfiniteScrollAdapter<TickAdapter>(this,
-                new TickAdapter(this, today, savedInstanceState), progress);
+                new TickAdapter(this, null, savedInstanceState), progress);
         mAdapter.addListener(this);
         mHandler = new Handler();
 
