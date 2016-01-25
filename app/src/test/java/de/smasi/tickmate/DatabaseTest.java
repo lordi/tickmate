@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,6 +27,7 @@ import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.database.FileUtils;
 import de.smasi.tickmate.models.Track;
+import de.smasi.tickmate.models.Group;
 
 @Config(sdk = 17, constants = BuildConfig.class)
 @RunWith(TickmateTestRunner.class)
@@ -206,5 +208,70 @@ public class DatabaseTest {
         assertThat(dataSource.getTrack(2).multipleEntriesEnabled(), is(false));
 
         closeMethod.invoke(dataSource);
+    }
+
+    @Test
+    public void databaseGroupOrderTest() throws Exception {
+        openMethod.invoke(dataSource);
+        assertThat(dataSource.getTracks().size(), is(0));
+        closeMethod.invoke(dataSource);
+
+        Track t1 = new Track("Track 1", "Count to one");
+        Track t2 = new Track("Track 2", "Count to two");
+        Track t3 = new Track("Track 3", "Count to three");
+        Track t4 = new Track("Track 4", "Count to four");
+        Track t5 = new Track("Track 5", "Count to five");
+
+        t1.setEnabled(true);
+        t1.setOrder(1);
+        t2.setEnabled(true);
+        t2.setOrder(2);
+        t3.setEnabled(true);
+        t3.setOrder(3);
+        t4.setEnabled(true);
+        t4.setOrder(4);
+        t5.setEnabled(true);
+        t5.setOrder(5);
+
+        openMethod.invoke(dataSource);
+        /* store in random order */
+        dataSource.storeTrack(t5);
+        dataSource.storeTrack(t2);
+        dataSource.storeTrack(t3);
+        dataSource.storeTrack(t1);
+        dataSource.storeTrack(t4);
+        closeMethod.invoke(dataSource);
+
+        openMethod.invoke(dataSource);
+        assertThat(dataSource.getTracks().size(), is(5));
+
+        assertThat(dataSource.getTracks().get(0).getName(), is("Track 1"));
+        assertThat(dataSource.getTracks().get(1).getName(), is("Track 2"));
+        assertThat(dataSource.getTracks().get(2).getName(), is("Track 3"));
+        assertThat(dataSource.getTracks().get(3).getName(), is("Track 4"));
+        assertThat(dataSource.getTracks().get(4).getName(), is("Track 5"));
+
+        closeMethod.invoke(dataSource);
+
+        Group g = new Group("My Group");
+        g.setOrder(1);
+
+        openMethod.invoke(dataSource);
+        dataSource.storeGroup(g);
+        dataSource.linkOneTrackOneGroup(t4.getId(), g.getId());
+        dataSource.linkOneTrackOneGroup(t1.getId(), g.getId());
+        dataSource.linkOneTrackOneGroup(t3.getId(), g.getId());
+        dataSource.linkOneTrackOneGroup(t2.getId(), g.getId());
+        closeMethod.invoke(dataSource);
+
+        openMethod.invoke(dataSource);
+        List<Track> ts = dataSource.getTracksForGroup(g.getId());
+        assertThat(ts.get(0).getName(), is("Track 1"));
+        assertThat(ts.get(1).getName(), is("Track 2"));
+        assertThat(ts.get(2).getName(), is("Track 3"));
+        assertThat(ts.get(3).getName(), is("Track 4"));
+
+        closeMethod.invoke(dataSource);
+
     }
 }

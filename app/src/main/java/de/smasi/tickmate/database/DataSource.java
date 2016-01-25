@@ -297,14 +297,23 @@ public class DataSource {
 	 */
     private List<Integer> getTrackIdsForGroup(int groupId) {
         open();
-        Cursor cursor = database.query(DatabaseOpenHelper.TABLE_TRACK2GROUPS,
-                allColumnsTracks2Groups, DatabaseOpenHelper.COLUMN_GROUP_ID + " = " + groupId, null, null, null, null, null);
+        Cursor cursor = database.rawQuery(
+            "SELECT " + DatabaseOpenHelper.TABLE_TRACKS + "." + DatabaseOpenHelper.COLUMN_ID +
+                " FROM " + DatabaseOpenHelper.TABLE_TRACK2GROUPS +
+                " JOIN " + DatabaseOpenHelper.TABLE_TRACKS +
+                " ON " + DatabaseOpenHelper.TABLE_TRACK2GROUPS + "." + DatabaseOpenHelper.COLUMN_TRACK_ID +
+                    " = " + DatabaseOpenHelper.TABLE_TRACKS + "." + DatabaseOpenHelper.COLUMN_ID +
+                " WHERE " + DatabaseOpenHelper.TABLE_TRACK2GROUPS + "." + DatabaseOpenHelper.COLUMN_GROUP_ID +
+                    " = ?" +
+             " ORDER BY " + DatabaseOpenHelper.TABLE_TRACKS + ".\"" + DatabaseOpenHelper.COLUMN_ORDER + "\"",
+                new String[] { String.format("%d", groupId) }
+        );
 
         cursor.moveToFirst();
         List<Integer> ids = new ArrayList<>();
         while (!cursor.isAfterLast()) {
-            int trackId = cursor.getInt(T2G_TRACK_ID_COLUMN);
-//            Log.d(TAG, "Getting track #" + trackId);
+            int trackId = cursor.getInt(0);
+            //Log.d(TAG, "Getting track #" + trackId);
             ids.add(Integer.valueOf(trackId));
             cursor.moveToNext();
         }
