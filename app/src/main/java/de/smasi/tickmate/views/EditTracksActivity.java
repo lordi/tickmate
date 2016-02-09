@@ -99,7 +99,7 @@ public class EditTracksActivity extends ListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (data != null && data.getExtras() != null) {
-			//Log.v("Tickmate", "tracks sub activity returned." + resultCode + ":"+data.getExtras().getInt("insert_id"));
+			//Log.v("Tickmate", "tracks sub activity returned." + resultCode + ":"+data.getExtras().getColorValue("insert_id"));
 			
 			int insert_id = data.getExtras().getInt("insert_id");
 			DataSource ds = DataSource.getInstance();
