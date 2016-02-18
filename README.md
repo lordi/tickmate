@@ -28,7 +28,7 @@ Find correlations between your tracks:
 
 Contains icons from the [Glyphicons FREE icon set](http://glyphicons.com/) (CC-BY-3.0)
 
-Bitcoin donations are happily accepted at [18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu](http://blockchain.info/de/address/18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu).
+Bitcoin donations are happily accepted at [18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu](https://blockchain.info/address/18tub3juj26zyGwdpmGDLgtLEpfFf2Nvhu).
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=&url=https://github.com/lordi/tickmate&title=Tickmate&language=&tags=github&category=software) 
 
