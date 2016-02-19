@@ -46,19 +46,16 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     private Map<Calendar, View> mRowCache = new HashMap<>();
 
 
-    private List<Track> mTracksCurrentlyDisplayed; // All of the active tracks which should be currently visible (determined by group selector)
+    private List<Track> mTracksCurrentlyDisplayed; // Determined by group selector
     private Spinner mGroupSpinner;
     private ArrayList<Integer> mSpinnerArrayGroupIds = new ArrayList<>();
-    private int mSpinnerPosition = 0;  // Can we get rid of this, and simply update the value within the spinner itself?
+    private int mSpinnerPosition = 0;  
 
     private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
-    private static final int DEFAULT_COUNT_PAST = 21; // by default load 3 weeks of past ticks
-    // (see comment by InfiniteScrollAdapter.SCROLL_DOWN_THRESHOLD)
-    private static final int DEFAULT_COUNT_AHEAD = 0; // by default show zero days ahead
-    private final static int ALL_GROUPS_SPINNER_INDEX = 0; // Position within the group selector
-        // Spinner which indicates that 'all groups' have been selected.  (Other positions indicate
-        // a specific group has been selected)
+    private static final int DEFAULT_COUNT_PAST = 21; 
+    private static final int DEFAULT_COUNT_AHEAD = 0; 
+    private final static int ALL_GROUPS_SPINNER_INDEX = 0; // Zero == 'all groups' 
 
     private GestureDetector mGestureDetector;
 
@@ -68,7 +65,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 		this.count = DEFAULT_COUNT_PAST;
 		this.count_ahead = DEFAULT_COUNT_AHEAD;
 
-        restoreState(restoreStateBundle); // Sequence is critical in this stanza
+        restoreState(restoreStateBundle); 
         initSpinnerArrayGroupIds();
         setActiveDay(activeDay);
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
@@ -87,6 +84,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         today.set(Calendar.MINUTE, 0);
         today.set(Calendar.SECOND, 0);
         today.set(Calendar.MILLISECOND, 0);
+
 
         yday = (Calendar) today.clone();
         yday.add(Calendar.DATE, -1);
@@ -116,7 +114,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     public Calendar getActiveDay() {
 		if (this.activeDay == null) {
             updateToday();
-            return (Calendar) this.today.clone();  // Prevents need to clone the returned value
+            return (Calendar) this.today.clone();  
         } else {
             return (Calendar) this.activeDay.clone();
         }
@@ -153,10 +151,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         }
 
         return this.count;
-
-        // TODO Should we make further changes to the empty view?
-        // TODO If there are no Tracks, and 'all groups' is selected, then the text displayed is:
-        //   "No tracks *for this group*" when it should simply be "No tracks"
     }
 
 	public Object getItem(int position) {
@@ -189,7 +183,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         return v;
     }
-
 
     // Also initializes the array lists associated with the group spinner
     // Called only by getHeader - extracted to a separate method to improve readability
@@ -239,18 +232,18 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         // trackHeader will contain the track icons, while header will contain both the spinner and trackHeader
         LinearLayout header = new LinearLayout(this.context);
         header.setOrientation(LinearLayout.VERTICAL);
-        header.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        header.setOnTouchListener(this); 
 
         LinearLayout trackHeader = new LinearLayout(this.context);
         trackHeader.setOrientation(LinearLayout.HORIZONTAL);
-        trackHeader.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        trackHeader.setOnTouchListener(this); 
 
         LinearLayout headerrow = new LinearLayout(this.context);
         headerrow.setOrientation(LinearLayout.HORIZONTAL);
-        headerrow.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        headerrow.setOnTouchListener(this); 
 
         TextView b2 = new TextView(context);
-        b2.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        b2.setOnTouchListener(this); 
         b2.setText("");
 
         b2.setPadding(0, 0, 0, 0);
@@ -261,7 +254,7 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
         for (Track track : mTracksCurrentlyDisplayed) {
             TrackButton b = new TrackButton(context, track);
-            b.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+            b.setOnTouchListener(this); 
             b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                     LayoutParams.MATCH_PARENT, (1.0f) / mTracksCurrentlyDisplayed.size()));
             headerrow.addView(b);
@@ -297,12 +290,12 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
      */
     private void addStartWeekSeparator(ViewGroup tickGrid) {
         TextView splitter2 = new TextView(this.context);
-        splitter2.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        splitter2.setOnTouchListener(this); 
         splitter2.setText("");
         splitter2.setHeight(5);
         tickGrid.addView(splitter2);
         TextView splitter = new TextView(this.context);
-        splitter.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        splitter.setOnTouchListener(this); 
         splitter.setText("");
         splitter.setHeight(11);
         splitter.setBackgroundResource(R.drawable.center_line);
@@ -319,18 +312,14 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         //Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 
         LinearLayout tickgrid = new LinearLayout(this.context);
-//        LinearLayout tickgrid = new TestCustomEventControlLinearLayout(this.context);
-//        getListView().getRootView().setOnTouchListener(mAdapter.getAdapter());
-        tickgrid.setOnTouchListener(this);  // Hack to ensure swipes are intercepted; improve & remove
-
+        tickgrid.setOnTouchListener(this);
         tickgrid.setOrientation(LinearLayout.VERTICAL);
-
         String s = dateFormat.format(date);
 
         TextView t_weekday = new TextView(this.context);
-        t_weekday.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        t_weekday.setOnTouchListener(this); 
         TextView t_date = new TextView(this.context);
-        t_date.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        t_date.setOnTouchListener(this); 
 
         if (cal.compareTo(today) == 0)
             t_date.setText(context.getString(R.string.today));
@@ -358,10 +347,10 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         t_date.setTextColor(Color.GRAY);
         t_weekday.setWidth(120);
         LinearLayout row = new LinearLayout(this.context);
-        row.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        row.setOnTouchListener(this); 
         row.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout l = new LinearLayout(this.context);
-        l.setOnTouchListener(this); // Hack to ensure swipes are intercepted; improve & remove
+        l.setOnTouchListener(this); 
         l.setOrientation(LinearLayout.VERTICAL);
         l.addView(t_weekday);
         l.addView(t_date);
@@ -467,7 +456,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         Log.v(TAG, "Data range has been updated: " + dateFormat.format(startday.getTime()) + " - " + dateFormat.format(today.getTime()));
         ds.retrieveTicks(startday, endday);
 
-        // Keep around for easier debug
 //        Log.d(TAG, "Tracks currently displayed: " + TextUtils.join("\n ", mTracksCurrentlyDisplayed));
 //        for (Track t : mTracksCurrentlyDisplayed) { Log.d(TAG, t.getName()); }
 
@@ -507,8 +495,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
-        // Consider: Confirm that doing nothing is truly the best choice here. Leaves previous mDisplayGroupName the same.
     }
 
 
@@ -553,7 +539,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         if (position == mGroupSpinner.getCount()) {
             position = 0;
         }
-//        Toast.makeText(context, "Swiped left, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // consider leaving for future debug
         mGroupSpinner.setSelection(position);
     }
 

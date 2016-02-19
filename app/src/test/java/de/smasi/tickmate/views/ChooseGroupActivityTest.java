@@ -35,11 +35,6 @@ public class ChooseGroupActivityTest {
         mActivity = null;
     }
 
-    @Test @Ignore
-    public void test_onCreate_xmlParser() {
-        // TODO: JS has said he will work on this
-    }
-
     @Test
     public void test_onListItemClick() {
         // create a Group that is not a section header
