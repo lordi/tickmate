@@ -275,22 +275,30 @@ public class ShowTrackActivity extends Activity {
 		}
 		
 		sn1.setData(tickCount, 0, (String) getText(R.string.show_track_total));
+        sn1.setColor(track.getTickColor().getColorValue());
 		sn2.setData(weeklymean, 1, (String) getText(R.string.show_track_weeklymean));
-		sn3.setData(days_since_last, 0, (String) getText(R.string.show_track_dayssincelast));
+        sn2.setColor(track.getTickColor().getColorValue());
+        sn3.setData(days_since_last, 0, (String) getText(R.string.show_track_dayssincelast));
+        sn3.setColor(track.getTickColor().getColorValue());
 
 		retrieveGraphData();
 		
 		graph_weekdays = (SummaryGraph) findViewById(R.id.summaryGraph_weekdays);
-		graph_weekdays.setCyclic(true);
-		graph_weekdays.setData(this.weekdaysData, this.weekdaysKeys, this.weekdaysMaximum);
+        graph_weekdays.setCyclic(true);
+        graph_weekdays.setData(this.weekdaysData, this.weekdaysKeys, this.weekdaysMaximum);
+        graph_weekdays.setColor(track.getTickColor().getColorValue());
 		graph_weeks = (SummaryGraph) findViewById(R.id.summaryGraph_weeks);
 		graph_weeks.setData(this.weeksData, this.weeksKeys, this.weeksMaximum);
-		graph_months = (SummaryGraph) findViewById(R.id.summaryGraph_months);
+        graph_weeks.setColor(track.getTickColor().getColorValue());
+        graph_months = (SummaryGraph) findViewById(R.id.summaryGraph_months);
 		graph_months.setData(this.monthsData, this.monthsKeys, this.monthsMaximum);
-		graph_quarters = (SummaryGraph) findViewById(R.id.summaryGraph_quarters);
+        graph_months.setColor(track.getTickColor().getColorValue());
+        graph_quarters = (SummaryGraph) findViewById(R.id.summaryGraph_quarters);
 		graph_quarters.setData(this.quarterData, this.quarterKeys, this.quarterMaximum);
-		graph_years = (SummaryGraph) findViewById(R.id.summaryGraph_years);
+        graph_quarters.setColor(track.getTickColor().getColorValue());
+        graph_years = (SummaryGraph) findViewById(R.id.summaryGraph_years);
 		graph_years.setData(this.yearsData, this.yearsKeys, this.yearsMaximum);
+        graph_years.setColor(track.getTickColor().getColorValue());
 
 		image_icon = (ImageView) findViewById(R.id.image_icon);
 		image_icon.setImageResource(track.getIconId(this));

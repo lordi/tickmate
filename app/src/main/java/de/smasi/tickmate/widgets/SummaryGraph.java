@@ -17,8 +17,8 @@ import de.smasi.tickmate.R;
 
 public class SummaryGraph extends View {
 	Path path;
-	
-	public SummaryGraph(Context context, AttributeSet attrs, int defStyle) {
+
+    public SummaryGraph(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context);
 	}
@@ -36,7 +36,8 @@ public class SummaryGraph extends View {
 	private Integer maximum;
 	private boolean cyclic;
 	private float density;
-	
+    private int mColor;
+
 	public boolean isCyclic() {
 		return cyclic;
 	}
@@ -46,6 +47,7 @@ public class SummaryGraph extends View {
 		this.cyclic = cyclic;
 	}
 
+    public void setColor(int color) { this.mColor = color; }
 
 	public SummaryGraph(Context context) {
 		super(context);
@@ -61,6 +63,7 @@ public class SummaryGraph extends View {
 		this.keys = new LinkedList<String>();
 		this.maximum = 7;
 		this.cyclic = false;
+        this.mColor = getResources().getColor(android.R.color.holo_blue_light);
 		
 		this.density = context.getResources().getDisplayMetrics().density;
 
@@ -93,9 +96,9 @@ public class SummaryGraph extends View {
 		// vertical lines
 		//canvas.drawLine(0, 0, width, height, paint);
 		//canvas.drawLine(0, height, width, 0, paint);
-		paint.setStrokeWidth(2);
-		paint.setStyle(Paint.Style.STROKE);  
-		paint.setColor(getResources().getColor(android.R.color.holo_blue_light));
+        paint.setStrokeWidth(2);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(mColor);
 		//canvas.drawRect(0, 0, width, height, paint);
 		canvas.drawLine(0, height, width, height, paint);
 		paint.setStyle(Paint.Style.FILL);  
@@ -133,12 +136,12 @@ public class SummaryGraph extends View {
 		else 
 			path.cubicTo((float) ((len+0.5f)*width/len), oldH, width, height, width, height);
 	
-		paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));
+		paint.setColor(mColor);
 		paint.setStrokeWidth(2.2f);
 		paint.setStyle(Style.STROKE);
 		canvas.drawPath(path, paint);
 		paint.setStyle(Style.FILL);
-		paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));
+		paint.setColor(mColor);
 		paint.setAlpha(64);
 		canvas.drawPath(path, paint);
 		paint.setStyle(Style.FILL);
@@ -149,14 +152,14 @@ public class SummaryGraph extends View {
 			float h = (height0-val/(1.0f*this.maximum)*height0) + bottomGap;
 			float x = (i+0.5f)*width/len;
 			paint.setStrokeWidth(1);
-			paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));
+			paint.setColor(mColor);
 			//canvas.drawRect(i*width/len, h, (i+1)*width/len, height, paint);
 			if (val > 0) {
 				paint.setColor(getResources().getColor(android.R.color.secondary_text_dark));
 				canvas.drawText(Integer.toString(val), x, h-9.5f,paint);
 				paint.setColor(getResources().getColor(android.R.color.white));
 				canvas.drawCircle((i+0.5f)*width/len, h, 6.0f, paint);
-				paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));
+				paint.setColor(mColor);
 				canvas.drawCircle((i+0.5f)*width/len, h, 3.0f, paint);
 			}
 			paint.setColor(getResources().getColor(android.R.color.secondary_text_dark));
