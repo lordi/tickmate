@@ -36,7 +36,6 @@ public class AboutActivity extends Activity {
 		} catch (IOException e) {
             desc.setText(getString(R.string.about_description));
             Log.e("AboutActivity", "IOException: " + e.getMessage());
-            // TODO avp, hg Is this adequate?  ^^
 		}
 		
 	}

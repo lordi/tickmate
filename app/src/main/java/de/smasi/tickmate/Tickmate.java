@@ -90,13 +90,8 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
     private void updateHeader() {
         LinearLayout header_group = ((LinearLayout) findViewById(R.id.header));
-//		if (mAdapter.getOriginalAdapter().getCount() > 0) { // With the group spinner,
-// this getCount() no longer tells us whether these views need to be redrawn.
-// TODO Consider re-inserting a conditional here to determine whether these views need to be redrawn,
-//    and which might compare values based on the spinner position (or...?)
         header_group.removeAllViews();
         header_group.addView(mAdapter.getOriginalAdapter().getHeader());
-//		}
     }
 
     @Override
@@ -123,7 +118,6 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
             case R.id.action_import_db:
                 this.importDB();
                 return true;
-            // "Edit Groups" being placed in this menu because we don't yet have a better place.
             case R.id.action_edit_groups:
                 this.editGroups();
                 return true;

@@ -30,11 +30,7 @@ public class InfiniteScrollAdapter<T extends BaseAdapter> extends BaseAdapter {
 
 
     // SCROLL_DOWN_THRESHOLD should be less than TickAdapter.DEFAULT_COUNT_PAST, otherwise the first load happens in two (or more) chunks
-    private final static int SCROLL_DOWN_THRESHOLD = 15;  // When the date order is reversed, this
-        // value determines how close 'position' must be to the bottom of the current data set before
-        // triggering the addition of new items. This number should be large enough to ensure position
-        // will actually reach the threshold, even on high res screens (which may have a large number of items).
-        // Alternatively, one could calculate or query for the items displayed on this particular device at this time.
+    private final static int SCROLL_DOWN_THRESHOLD = 15;  // Determines when to 'infinite scroll'; must be large enough to ensure position reaches the threshold, even on larger screens
     private Context context;
 
     public interface InfiniteScrollListener {
@@ -178,13 +174,12 @@ public class InfiniteScrollAdapter<T extends BaseAdapter> extends BaseAdapter {
 
     public boolean isProgressViewPosition(int position) {
         shouldInfiniteScrollAtTop = ! PreferenceManager.getDefaultSharedPreferences(context).
-                getBoolean("reverse-date-order-key", false);  // Where is the best (efficient) place to update this value?
+                getBoolean("reverse-date-order-key", false);
 
         if (shouldInfiniteScrollAtTop) {
-            return shouldShowProgressView() && position == 0; //getCount() - 1;
+            return shouldShowProgressView() && position == 0;
         } else {  // scroll at bottom
             return shouldShowProgressView() && position > (getCount() - SCROLL_DOWN_THRESHOLD);
-            // TODO Revisit this.  Should the threshold adjust to the # of lines visible on screen?
         }
     }
 
