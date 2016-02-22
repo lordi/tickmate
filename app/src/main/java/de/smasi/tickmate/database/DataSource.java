@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.smasi.tickmate.Globals;
+import de.smasi.tickmate.TickColor;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
@@ -555,11 +556,7 @@ public class DataSource {
 		track.setEnabled(cursor.getInt(2) >= 1);
 		track.setMultipleEntriesEnabled(cursor.getInt(5) >= 1);
 		track.setIcon(cursor.getString(4));
-//  TODO modify to replace next three lines with "track.setTickColor(new TickColor(cursor.getInt(6)));
-        int c = cursor.getInt(6);
-        Log.e(TAG, "getting color from database: " + Integer.toHexString(c));
-        track.getTickColor().setColorValue(c);
-
+        track.setTickColor(new TickColor(cursor.getInt(6)));
         track.setOrder(cursor.getInt(7));
         return track;
 	}

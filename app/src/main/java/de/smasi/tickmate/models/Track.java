@@ -128,11 +128,11 @@ public class Track {
         return "Group:  id(" + mId + ") name(" + name + ") description(" + description + ")";
     }
 
-    static int[] colors = new int[]{0xFF0000, 0xFF4400, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x0000FF};  // TODO remove after testing
-
     public TickColor getTickColor() {
         return mTickColor;
 }
 
-
+    public void setTickColor(TickColor tickColor) {
+        this.mTickColor = tickColor;
+    }
 }
