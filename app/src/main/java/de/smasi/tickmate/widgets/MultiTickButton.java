@@ -35,9 +35,9 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 		this.setHeight(size);
 		this.setMinHeight(size);
 		this.setPadding(0, 0, 0, 0);
-		setTickCount(DataSource.getInstance().getTickCountForDay(track, date));
         mUnTickedDrawable = TickColor.getUnTickedButtonDrawable(this.getContext());
         mTickedDrawable = TickColor.getTickedButtonDrawable(this.getContext(), track.getTickColor().getColorValue());
+        setTickCount(DataSource.getInstance().getTickCountForDay(track, date));
 	}
 
 	Track getTrack () {
