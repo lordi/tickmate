@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<groups>
+    <!-- Consider introducing icons, as with tracks. -->
+    <section name="Opakování">
+        <group
+            name="Denně"
+            description="Denně opakované události"/>
+        <group
+            name="Týdně"
+            description="Týdně opakované události"/>
+        <group
+            name="Víkendy"
+            description="Události probíhající o víkendech"/>
+        <group
+            name="Nepravidelně"
+            description="Události bez pravidelného rytmu"/>
+        <group
+            name="Vzácně"
+            description="Události s vzácným výskytem"/>
+    </section>
+
+    <section
+        name="Čas dne">
+        <group
+            name="Ráno"
+            description="Události opakované poránu"/>
+        <group
+            name="Poledne"
+            description="Události opakované v polende"/>
+        <group
+            name="Večer"
+            description="Události opakované večer"/>
+        <group
+            name="Před spaním"
+            description="Události opakované těsně před spaním"/>
+    </section>
+
+
+    <section name="Důležitost">
+        <group
+            name="Povinné"
+            description="Povinné události"/>
+        <group
+            name="Nepovinné"
+            description="Tyto dělám jen když mám chuť"/>
+    </section>
+
+    <section name="Umístění">
+        <group
+            name="Doma"
+            description="Události probíhající doma"/>
+        <group
+            name="Práce"
+            description="Události probíhající v práci"/>
+        <group
+            name="Jinde"
+            description="Upravte jméno skupiny jménem vlastního důležitého umístění"/>
+    </section>
+
+    <section name="Ostatní">
+        <group
+            name="Zdravotní úkony"
+            description="Příznaky nemoci, brané léky, atd"/>
+        <group
+            name="Zaměřené na cíl"
+            description="Tyto opakuji pravidelně pro dosažení úkolu"/>
+        <group
+            name="Nové zvyky"
+            description="Tyto opakuji pravidelně pro vytvoření nového zvyku"/>
+        <group
+            name="Různé"
+            description="Upravte tuto skupinu pro vlastní použití"/>
+    </section>
+</groups>
