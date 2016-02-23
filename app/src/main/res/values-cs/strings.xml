@@ -83,5 +83,7 @@
     <string name="title_activity_choose_group">Přidat skupinu</string>
     <string name="group_name">Jméno</string>
     <string name="title_activity_edit_group">Upravit skupinu</string>
+    <string name="no_groups_found">Nebyly nalezeny žádné skupiny. Má se otevřít editor skupin?</string>
+    <string name="group_all_name">Vše</string>
 
 </resources>
