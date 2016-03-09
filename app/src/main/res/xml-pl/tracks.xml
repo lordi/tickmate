@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tracks>
+
+	<section name="Dieta/Odżywianie/Używki">
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Weganizm"
+			description="Bez jedzenia produktów pochodzenia zwierzęcego" />
+
+		<track icon="@drawable/glyphicons_001_leaf_white" name="Wegetarianizm"
+			description="Bez jedzenia ryb i mięsa" />
+
+		<track icon="@drawable/glyphicons_291_celebration_white" name="Alkohol"
+			description="Picie napojów alkoholowych" />
+
+		<track icon="@drawable/glyphicons_294_coffe_cup_white" name="Kawa"
+			description="Wypicie kawy" />
+
+		<track icon="@drawable/glyphicons_275_fast_food_white" name="Fast food"
+			description="Jedzenie w fast foodzie" />
+
+		<track icon="@drawable/glyphicons_273_drink_white" name="Napoje bezalkoholowe"
+			description="Wypicie napoju bezalkoholowego" />
+
+		<track icon="@drawable/glyphicons_272_cake_white" name="Słodycze"
+			description="Jedzenie słodyczy lub ciasta" />
+
+		<track icon="@drawable/glyphicons_362_smoking_white" name="Palenie"
+			description="Przyjęcie dawki nikotyny" />
+
+		<track icon="@drawable/glyphicons_298_hospital_white" name="Medytacja"
+			description="Sesja medytacji" />
+
+
+	</section>
+	<section name="Ćwiczenia">
+		<track icon="@drawable/glyphicons_314_table_tennis_white" name="Sport"
+			description="Uprawianie ulubionego sportu" />
+
+		<track icon="@drawable/glyphicons_326_piano_white" name="Instrument"
+			description="Gra na ulubionym instrumencie" />
+
+		<track icon="@drawable/glyphicons_175_stop_white" name="Joga"
+			description="Uprawianie jogi" />
+
+		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Siłownia"
+			description="Ćwiczenia na siłowni" />
+
+		<track icon="@drawable/glyphicons_334_candle_white" name="Meditation"
+			description="Wyciszenie umysłu" />
+
+	</section>
+    
+	
+    <section name="Dom">
+    	<track
+	        icon="@drawable/glyphicons_002_dog_white"
+        	name="Pies"
+        	description="Wyprowadzenie psa"/>
+		        
+    	<track
+	        icon="@drawable/glyphicons_310_flower_white"
+        	name="Rośliny"
+        	description="Podlanie roślin"/>
+		
+		<track
+	        icon="@drawable/glyphicons_067_cleaning_white"
+        	name="Sprzątanie"
+        	description="Pokoje są sprzątnięte"/>
+			
+    </section>
+    
+    <section name="Transport">
+    	<track
+	        icon="@drawable/glyphicons_014_train_white"
+        	name="Transport publiczny"
+        	description="Jazda autobusem lub tramwajem"/>
+				
+    	<track
+	        icon="@drawable/glyphicons_005_car_white"
+        	name="Samochód"
+        	description="Jazda samochodem"/>
+		
+    	<track
+	        icon="@drawable/glyphicons_306_bicycle_white"
+        	name="Rower"
+        	description="Użycie roweru do dojazdu do jakiegoś miejsca"/>
+		
+    </section>
+    
+        
+    <section name="Społeczność/Seksualność">
+    	<track
+	        icon="@drawable/glyphicons_410_facebook_white"
+        	name="Sieć społecznościowa"
+        	description="Użycie ulubionej sieci społecznościowej"/>
+			
+    	<track
+	        icon="@drawable/myicons_smiley_white"
+        	name="Uśmiech"
+        	description="Sprawienie, że ktoś się uśmiechnął lub zaśmiał"/>
+			
+    	<track
+	        icon="@drawable/glyphicons_273_drink_white"
+        	name="Kluby"
+        	description="Wyjście do klubu lub baru"/>
+				
+    	<track
+	        icon="@drawable/glyphicons_012_heart_white"
+        	name="Kocham cię"
+        	description="Powiedzenie komuś, że się go kocha"/>
+			
+    	<track
+	        icon="@drawable/glyphicons_022_fire_white"
+        	name="Seks"
+        	description="Stosunek płciowy"/>
+			
+    </section>
+    
+    <section name="Hygiena">
+    	<track
+	        icon="@drawable/glyphicons_097_vector_path_line_white"
+        	name="Nić dentystyczna"
+        	description="Użycie nici dentystycznej na lśniących zębach"/>
+			
+    </section>
+    
+    <section name="Ogólne/Abstrakcja">
+	    <track
+			icon="@drawable/glyphicons_152_check_white"
+	        name="Todo"
+        	description="Zrobienie jakichś godnych odnotowania rzeczy"/>
+		
+	    <track
+			icon="@drawable/glyphicons_343_thumbs_up_white"
+	        name="Dobry dzień"
+        	description="W sumie uważam ten dzień za dobry"/>
+						
+		<track icon="@drawable/glyphicons_282_cardio_white" name="Symptom"
+			description="Wystąpił symptom choroby" />
+		
+		<track icon="@drawable/glyphicons_049_star_white" name="Własne"
+			description="Zdefiniowane przez użytkownika" />
+			    	    
+    </section>
+    
+</tracks>

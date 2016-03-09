@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tickmate</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="title_section_ticks">Moje zaznaczenia</string>
+    <string name="title_section_weeks">Tygodnie</string>
+    <string name="title_section_months">Miesiące</string>
+    <string name="title_activity_edit_tracks">Moje ślady</string>
+    <string name="my_tracks">Moje ślady</string>
+    <string name="title_activity_choose_track">Dodaj ślad</string>
+    <string name="choose_track">Dodaj ślad</string>
+    <string name="title_activity_edit_track">Edytuj ślad</string>
+    <string name="edit_description_hint">Opis</string>
+    <string name="today">dziś</string>
+    <string name="yesterday">wczoraj</string>
+    <string name="inactive">niekatywne</string>
+    <string name="edit">Edycja</string>
+    <string name="deactivate">Dezaktywacja</string>
+    <string name="delete">Usuń</string>
+    <string name="title_activity_show_track">Szczegóły śladu</string>
+    <string name="title_section_weekdays">Dni tygodnia</string>
+    <string name="numer_of_occurances">Ilość wystąpień:</string>
+    <string name="no_tracks_found">Nie dodano śladów do tej grupy. Dotknij tu, aby otworzyć edytor listy śladów.</string>
+    <string name="multiple_entries">Wiele wpisów w ciągu dnia</string>
+    <string name="tick_deleted">Usunięto ostatnie zaznaczanie.</string>
+    <string name="alert_delete_track_title">Usuń ślad</string>
+    <string name="jump_to_date">Przejdź do daty</string>
+    <string name="jump_to_today">Przejdź do dziś</string>
+    <string name="title_activity_about">o Tickmate</string>
+    <string name="title_icon_chooser">Wybór ikony</string>
+    <string name="about_description">Tickmate to po prostu jednobitowy dziennik. Dla każdego dnia możesz określić
+        czy coś się wydarzyło, czy nie. Wystąpienia mogą być określonymi rzeczami, takimi jak czyszceznie zębów nicią
+        albo wypicie drinka. Możesz mierzyć swoje nawyki, a zgromadzone dane mogą być wyświetlane dla ostatnich
+        tygodni lub miesięcy, by śledzić zmiany w czasie. W ten sposób może ci pomóc przemóc stare nawyki lub wdrożyć nowe.
+\n\nTickmate to wolne oprogramowanie, na licencji GPLv3.
+\n\nZawiera ikony z zestawu ikon Glyphicons FREE (CC-BY-3.0)
+    </string>
+    <string name="import_db">Import bazy danych</string>
+    <string name="export_db">Backup bazy danych</string>
+    <string name="import_db_success">Baza danych zaimportowana pomyślnie.</string>
+    <string name="export_db_success">Baza danych wyeksportowana pomyślnie.</string>
+    <string name="import_db_none_found">Nie znaleziono backupów baz danych.</string>
+    <string name="import_db_really">Czy na pewno chcesz zaimportować wybraną bazę danych? Zastąpi ona wszystkie ślady oraz haczyki i NIE będzie możliwe cofnięcie.</string>
+    <string name="show_track_total">Razem</string>
+    <string name="show_track_weeklymean">Średnia tygodniowa</string>
+    <string name="show_track_dayssincelast">Dni od ostatniego</string>
+    
+    <!-- New in 1.2.0 -->
+    
+    <string name="move_up">W górę</string>
+    <string name="move_down">W dół</string>
+    <string name="activate">Aktywacja</string>
+    <string name="track_name">Nazwa</string>
+    <string name="track_enabled">Aktywny</string>
+    <string name="track_icon">Symbol</string>
+    <string name="title_section_quarters">Kwartały</string>
+
+    <!-- New in 1.2.2 -->
+    <string name="alert_delete_track_message">Czy na pewno chcesz usunąć ten ślad? Usunięcia nie można cofnąć, a twoje zaznaczenia zostaną utracone, chyba, że masz backup.</string>
+
+    <!-- New in 1.2.3 -->
+    <string name="title_section_years">Lata</string>
+    <string name="pref_title_reverse_date_display_order">Według malejącej daty</string>
+    <string name="pref_description_reverse_date_display_order">Wyświetlaj późniejsze dni u góry</string>
+    <string name="pref_title_limit_active_date">Edytowalne dni</string>
+    <string-array name="pref_titles_active_date">
+        <item>Aktywuj tylko dany dzień</item>
+        <item>Aktywuj dany dzień i poprzedni</item>
+        <item>Wszystkie dni</item>
+    </string-array>
+    <string name="notify_user_ticking_disabled">Zmiana tego zaznaczenia jest nieaktywna. Możesz określić które dni można zmieniać w ustawieniach.</string>
+
+    <!-- New in 1.3.0 -->
+    <string name="pref_title_groups">Grupy</string>
+    <string name="pref_title_tracks">Ślady</string>
+    <string name="menu_edit_groups">Edycja grup</string>
+    <string name="title_activity_edit_groups">Moje grupy</string>
+    <string name="menu_add_group">Dodaj grupę</string>
+    <string name="alert_delete_group_title">Usuń grupę</string>
+    <string name="alert_delete_group_message">Czy na pewno chcesz usunąć tę grupę? Usunięcia nie można cofnąć.</string>
+    <string name="title_activity_choose_group">Dodaj grupę</string>
+    <string name="group_name">Nazwa</string>
+    <string name="title_activity_edit_group">Edycja grupy</string>
+    <string name="no_groups_found">Nie znaleziono grup. Czy chcesz otworzyć edytor grup?</string>
+    <string name="group_all_name">Wszystko</string>
+
+</resources>

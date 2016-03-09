@@ -8,6 +8,7 @@ Localization
   * Hebrew (Michal)
   * Russian (@kwinto)
   * Spanish (@agusdallalba, Teti)
+  * Polish (rozie)
 
 Contribute
 ----------
