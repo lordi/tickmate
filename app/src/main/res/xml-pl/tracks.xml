@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tracks>
 
-	<section name="Dieta/Od¿ywianie/U¿ywki">
+	<section name="Dieta/OdÅ¼ywianie/UÅ¼ywki">
 		<track icon="@drawable/glyphicons_001_leaf_white" name="Weganizm"
-			description="Bez jedzenia produktów pochodzenia zwierzêcego" />
+			description="Bez jedzenia produktÃ³w pochodzenia zwierzÄ™cego" />
 
 		<track icon="@drawable/glyphicons_001_leaf_white" name="Wegetarianizm"
-			description="Bez jedzenia ryb i miêsa" />
+			description="Bez jedzenia ryb i miÄ™sa" />
 
 		<track icon="@drawable/glyphicons_291_celebration_white" name="Alkohol"
-			description="Picie napojów alkoholowych" />
+			description="Picie napojÃ³w alkoholowych" />
 
 		<track icon="@drawable/glyphicons_294_coffe_cup_white" name="Kawa"
 			description="Wypicie kawy" />
@@ -20,18 +20,18 @@
 		<track icon="@drawable/glyphicons_273_drink_white" name="Napoje bezalkoholowe"
 			description="Wypicie napoju bezalkoholowego" />
 
-		<track icon="@drawable/glyphicons_272_cake_white" name="S³odycze"
-			description="Jedzenie s³odyczy lub ciasta" />
+		<track icon="@drawable/glyphicons_272_cake_white" name="SÅ‚odycze"
+			description="Jedzenie sÅ‚odyczy lub ciasta" />
 
 		<track icon="@drawable/glyphicons_362_smoking_white" name="Palenie"
-			description="Przyjêcie dawki nikotyny" />
+			description="PrzyjÄ™cie dawki nikotyny" />
 
 		<track icon="@drawable/glyphicons_298_hospital_white" name="Medytacja"
 			description="Sesja medytacji" />
 
 
 	</section>
-	<section name="Æwiczenia">
+	<section name="Ä†wiczenia">
 		<track icon="@drawable/glyphicons_314_table_tennis_white" name="Sport"
 			description="Uprawianie ulubionego sportu" />
 
@@ -41,11 +41,11 @@
 		<track icon="@drawable/glyphicons_175_stop_white" name="Joga"
 			description="Uprawianie jogi" />
 
-		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Si³ownia"
-			description="Æwiczenia na si³owni" />
+		<track icon="@drawable/glyphicons_356_dumbbell_white" name="SiÅ‚ownia"
+			description="Ä†wiczenia na siÅ‚owni" />
 
 		<track icon="@drawable/glyphicons_334_candle_white" name="Meditation"
-			description="Wyciszenie umys³u" />
+			description="Wyciszenie umysÅ‚u" />
 
 	</section>
     
@@ -58,13 +58,13 @@
 		        
     	<track
 	        icon="@drawable/glyphicons_310_flower_white"
-        	name="Ro¶liny"
-        	description="Podlanie ro¶lin"/>
+        	name="RoÅ›liny"
+        	description="Podlanie roÅ›lin"/>
 		
 		<track
 	        icon="@drawable/glyphicons_067_cleaning_white"
-        	name="Sprz±tanie"
-        	description="Pokoje s± sprz±tniête"/>
+        	name="SprzÄ…tanie"
+        	description="Pokoje sÄ… sprzÄ…tniÄ™te"/>
 			
     </section>
     
@@ -76,69 +76,69 @@
 				
     	<track
 	        icon="@drawable/glyphicons_005_car_white"
-        	name="Samochód"
+        	name="SamochÃ³d"
         	description="Jazda samochodem"/>
 		
     	<track
 	        icon="@drawable/glyphicons_306_bicycle_white"
         	name="Rower"
-        	description="U¿ycie roweru do dojazdu do jakiego¶ miejsca"/>
+        	description="UÅ¼ycie roweru do dojazdu do jakiegoÅ› miejsca"/>
 		
     </section>
     
         
-    <section name="Spo³eczno¶æ/Seksualno¶æ">
+    <section name="SpoÅ‚ecznoÅ›Ä‡/SeksualnoÅ›Ä‡">
     	<track
 	        icon="@drawable/glyphicons_410_facebook_white"
-        	name="Sieæ spo³eczno¶ciowa"
-        	description="U¿ycie ulubionej sieci spo³eczno¶ciowej"/>
+        	name="SieÄ‡ spoÅ‚ecznoÅ›ciowa"
+        	description="UÅ¼ycie ulubionej sieci spoÅ‚ecznoÅ›ciowej"/>
 			
     	<track
 	        icon="@drawable/myicons_smiley_white"
-        	name="U¶miech"
-        	description="Sprawienie, ¿e kto¶ siê u¶miechn±³ lub za¶mia³"/>
+        	name="UÅ›miech"
+        	description="Sprawienie, Å¼e ktoÅ› siÄ™Â uÅ›miechnÄ…Å‚Â lub zaÅ›miaÅ‚"/>
 			
     	<track
 	        icon="@drawable/glyphicons_273_drink_white"
         	name="Kluby"
-        	description="Wyj¶cie do klubu lub baru"/>
+        	description="WyjÅ›cie do klubu lub baru"/>
 				
     	<track
 	        icon="@drawable/glyphicons_012_heart_white"
-        	name="Kocham ciê"
-        	description="Powiedzenie komu¶, ¿e siê go kocha"/>
+        	name="Kocham ciÄ™"
+        	description="Powiedzenie komuÅ›, Å¼e siÄ™ go kocha"/>
 			
     	<track
 	        icon="@drawable/glyphicons_022_fire_white"
         	name="Seks"
-        	description="Stosunek p³ciowy"/>
+        	description="Stosunek pÅ‚ciowy"/>
 			
     </section>
     
     <section name="Hygiena">
     	<track
 	        icon="@drawable/glyphicons_097_vector_path_line_white"
-        	name="Niæ dentystyczna"
-        	description="U¿ycie nici dentystycznej na l¶ni±cych zêbach"/>
+        	name="NiÄ‡ dentystyczna"
+        	description="UÅ¼ycie nici dentystycznej na lÅ›niÄ…cych zÄ™bach"/>
 			
     </section>
     
-    <section name="Ogólne/Abstrakcja">
+    <section name="OgÃ³lne/Abstrakcja">
 	    <track
 			icon="@drawable/glyphicons_152_check_white"
 	        name="Todo"
-        	description="Zrobienie jakich¶ godnych odnotowania rzeczy"/>
+        	description="Zrobienie jakichÅ› godnych odnotowania rzeczy"/>
 		
 	    <track
 			icon="@drawable/glyphicons_343_thumbs_up_white"
-	        name="Dobry dzieñ"
-        	description="W sumie uwa¿am ten dzieñ za dobry"/>
+	        name="Dobry dzieÅ„"
+        	description="W sumie uwaÅ¼am ten dzieÅ„ za dobry"/>
 						
 		<track icon="@drawable/glyphicons_282_cardio_white" name="Symptom"
-			description="Wyst±pi³ symptom choroby" />
+			description="WystÄ…piÅ‚ symptom choroby" />
 		
-		<track icon="@drawable/glyphicons_049_star_white" name="W³asne"
-			description="Zdefiniowane przez u¿ytkownika" />
+		<track icon="@drawable/glyphicons_049_star_white" name="WÅ‚asne"
+			description="Zdefiniowane przez uÅ¼ytkownika" />
 			    	    
     </section>
     
