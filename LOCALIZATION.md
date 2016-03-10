@@ -4,11 +4,12 @@ Localization
   * Czech (@svetlemodry)
   * Danish (Johan Hilge Thygesen)
   * French (@dmaulat)
-  * German (me)
+  * German (@lordi)
   * Hebrew (Michal)
+  * Italian (@Elinvention)
+  * Polish (@rozie)
   * Russian (@kwinto)
   * Spanish (@agusdallalba, Teti)
-  * Polish (rozie)
 
 Contribute
 ----------
