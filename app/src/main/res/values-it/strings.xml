@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tickmate</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="title_section_ticks">I miei tick</string>
+    <string name="title_section_weeks">Settimane</string>
+    <string name="title_section_months">Mesi</string>
+    <string name="title_activity_edit_tracks">Le mie tracce</string>
+    <string name="my_tracks">Le mie tracce</string>
+    <string name="title_activity_choose_track">Aggiungi traccia</string>
+    <string name="choose_track">Aggiungi traccia</string>
+    <string name="title_activity_edit_track">Modifica traccia</string>
+    <string name="edit_description_hint">Descrizione</string>
+    <string name="today">oggi</string>
+    <string name="yesterday">ieri</string>
+    <string name="inactive">inattivo</string>
+    <string name="edit">Modifica</string>
+    <string name="deactivate">Disattiva</string>
+    <string name="delete">Cancella</string>
+    <string name="title_activity_show_track">Dettagli traccia</string>
+    <string name="title_section_weekdays">Giorni della settimana</string>
+    <string name="numer_of_occurances">Numeri di occorrenze:</string>
+    <string name="no_tracks_found">Nessuna traccia è stata aggiunta a questo gruppo. Tocca qui per aprire l\'editor delle tracce.</string>
+    <string name="multiple_entries">Più voci per giorno</string>
+    <string name="tick_deleted">Rimosso l\'ultimo tick.</string>
+    <string name="alert_delete_track_title">Cancella traccia</string>
+    <string name="jump_to_date">Salta alla data…</string>
+    <string name="jump_to_today">Salta ad oggi</string>
+    <string name="title_activity_about">Info su Tickmate</string>
+    <string name="title_icon_chooser">Scegli una icona</string>
+    <string name="about_description">Tickmate è un semplice registro ad un bit. Per ogni giorno puoi specificare 
+        se qualcosa è avvenuto o no. Le occorrenze possono essere eventi arbitrari, come lavarsi i denti 
+        o farsi una bevuta. Sarai così in grado di quantificare le tue abitudini e i dati accumulati possono essere 
+        mostrati per le settimane o i mesi passati per tracciare i cambiamenti. In questo modo potrebbe aiutarti ad 
+        abbandonare le tue vecchie abitudini e a prenderne di nuove.
+\n\nTickmate è open source, rilasciato su licenza GPLv3.
+\n\nContiene icone dal Glyphicons FREE icon set (CC-BY-3.0)
+    </string>
+    <string name="import_db">Importa database</string>
+    <string name="export_db">Backup database</string>
+    <string name="import_db_success">Database importato con successo.</string>
+    <string name="export_db_success">Database esportato con successo. </string>
+    <string name="import_db_none_found">Nessun database di backup trovato.</string>
+    <string name="import_db_really">Sei sicuro di voler importare il database selezionato? Questo sostituirà tutte le tracce e i tick e non è reversibile.</string>
+    <string name="show_track_total">Totale</string>
+    <string name="show_track_weeklymean">Media settimanale</string>
+    <string name="show_track_dayssincelast">Giorni dall\'ultimo</string>
+    
+    <!-- New in 1.2.0 -->
+    
+    <string name="move_up">Muovi su</string>
+    <string name="move_down">Muovi giù</string>
+    <string name="activate">Attiva</string>
+    <string name="track_name">Nome</string>
+    <string name="track_enabled">Abilitato</string>
+    <string name="track_icon">Simbolo</string>
+    <string name="title_section_quarters">Quarters</string>
+
+    <!-- New in 1.2.2 -->
+    <string name="alert_delete_track_message">Sei sicuro di voler eliminare questa traccia? Questa operazione non può essere annullata e i tuoi tick andranno persi a meno che tu non abbia fatto un backup.</string>
+
+    <!-- New in 1.2.3 -->
+    <string name="title_section_years">Anni</string>
+    <string name="pref_title_reverse_date_display_order">Ordine della data discendente</string>
+    <string name="pref_description_reverse_date_display_order">Mostra i giorni meno recenti in cima</string>
+    <string name="pref_title_limit_active_date">Giorni modificabili</string>
+    <string-array name="pref_titles_active_date">
+        <item>Solo i giorni attivi</item>
+        <item>Giorno attivo e il giorno precedente</item>
+        <item>Tutti i giorni</item>
+    </string-array>
+    <string name="notify_user_ticking_disabled">La modifica di questo tick è disabilitata. Puoi specificare quali giorni sono modificabili nelle impostazioni.</string>
+
+    <!-- New in 1.3.0 -->
+    <string name="pref_title_groups">Gruppi</string>
+    <string name="pref_title_tracks">Tracce</string>
+    <string name="menu_edit_groups">Modifica Gruppi</string>
+    <string name="title_activity_edit_groups">I miei gruppi</string>
+    <string name="menu_add_group">Aggiungi Gruppo</string>
+    <string name="alert_delete_group_title">Elimina gruppo</string>
+    <string name="alert_delete_group_message">Sei sicuro di voler eliminare questo gruppo? Questa operazione non può essere annullata.</string>
+    <string name="title_activity_choose_group">Aggiungi gruppo</string>
+    <string name="group_name">Nome</string>
+    <string name="title_activity_edit_group">Modifica gruppo</string>
+    <string name="no_groups_found">Nessun gruppo trovato. Vuoi aprire l\'editor dei gruppi?</string>
+    <string name="group_all_name">Tutti</string>
+
+</resources>
