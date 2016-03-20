@@ -1,6 +1,12 @@
 master
 ------
 
+v1.3.2
+------
+
+ * Localization updates: Czech, Polish, Italian
+ * Do not request external storage for API level 19 and above (thanks @sebas86)
+
 v1.3.1
 ------
 
