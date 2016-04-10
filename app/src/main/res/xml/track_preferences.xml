@@ -11,7 +11,7 @@
                 android:title="@string/track_name"
                  />
         
-        <de.smasi.tickmate.views.IconPreference
+        <de.smasi.tickmate.prefs.IconPreference
                android:icon="@drawable/glyphicons_334_candle_white"
                 android:key="icon"
                 android:title="@string/track_icon"
@@ -27,12 +27,12 @@
                 android:title="@string/multiple_entries"
                 />
 
-    <de.smasi.tickmate.widgets.GroupListPreference
+    <de.smasi.tickmate.prefs.GroupListPreference
         android:key="groups"
         android:title="@string/pref_title_groups"
         />
 
-    <de.smasi.tickmate.widgets.TickColorPreference
+    <de.smasi.tickmate.prefs.TickColorPreference
         android:key="tick_button_color"
         android:title="Color"
         />

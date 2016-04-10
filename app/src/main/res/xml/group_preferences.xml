@@ -7,12 +7,6 @@
         android:title="@string/group_name"
         />
 
-    <!--<de.smasi.tickmate.views.IconPreference-->
-    <!--android:icon="@drawable/glyphicons_334_candle_white"-->
-    <!--android:key="icon"-->
-    <!--android:title="@string/group_icon"-->
-    <!--/>-->
-
     <EditTextPreference
         android:key="description"
         android:title="@string/edit_description_hint"

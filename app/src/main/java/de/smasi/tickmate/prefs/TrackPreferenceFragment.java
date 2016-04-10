@@ -1,4 +1,4 @@
-package de.smasi.tickmate.views;
+package de.smasi.tickmate.prefs;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -15,8 +15,6 @@ import java.util.List;
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Track;
-import de.smasi.tickmate.widgets.GroupListPreference;
-import de.smasi.tickmate.widgets.TickColorPreference;
 
 public class TrackPreferenceFragment extends PreferenceFragment implements
 OnSharedPreferenceChangeListener  {
@@ -80,7 +78,6 @@ OnSharedPreferenceChangeListener  {
 
         mTickColorPreference = (TickColorPreference) findPreference("tick_button_color");
         mTickColorPreference.setColor(track.getTickColor());
-//        mTickColorPreference.setIcon(track.getTickColor().getTickedButtonDrawable(getActivity()));
     }
 
     public void onResume() {
