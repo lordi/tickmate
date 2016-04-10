@@ -15,7 +15,6 @@
             android:id="@+id/show_track_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#972121"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="10dp"
