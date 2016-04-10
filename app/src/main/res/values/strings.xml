@@ -87,6 +87,7 @@
     <string name="group_all_name">All</string>
 
     <!-- New in 1.4.0 -->
-    <string name="title_color_chooser">Please choose a color</string>
+    <string name="title_color_chooser">Color picker</string>
+    <string name="pref_title_color">Color</string>
 
 </resources>

@@ -34,9 +34,8 @@
 
     <de.smasi.tickmate.prefs.TickColorPreference
         android:key="tick_button_color"
-        android:title="Color"
+        android:title="@string/pref_title_color"
         />
-    <!--TODO move title 'Color' into strings.xml -->
 
 
 </PreferenceScreen>
