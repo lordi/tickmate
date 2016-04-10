@@ -1,4 +1,4 @@
-package de.smasi.tickmate.views;
+package de.smasi.tickmate.prefs;
 
 
 import android.content.SharedPreferences;

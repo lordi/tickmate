@@ -1,4 +1,4 @@
-package de.smasi.tickmate.views;
+package de.smasi.tickmate.prefs;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -15,7 +15,6 @@ import java.util.List;
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Track;
-import de.smasi.tickmate.widgets.GroupListPreference;
 
 public class TrackPreferenceFragment extends PreferenceFragment implements
 OnSharedPreferenceChangeListener  {
@@ -31,6 +30,7 @@ OnSharedPreferenceChangeListener  {
 	private IconPreference icon;
     private GroupListPreference mGroupsPref;
     private static DataSource mDataSource = DataSource.getInstance();
+    private TickColorPreference mTickColorPreference;
 
     public TrackPreferenceFragment() {
         super();
@@ -75,6 +75,9 @@ OnSharedPreferenceChangeListener  {
         mGroupsPref = (GroupListPreference) findPreference("groups");
         mGroupsPref.setTrack(track);
         mGroupsPref.populate();
+
+        mTickColorPreference = (TickColorPreference) findPreference("tick_button_color");
+        mTickColorPreference.setColor(track.getTickColor());
     }
 
     public void onResume() {
@@ -99,15 +102,18 @@ OnSharedPreferenceChangeListener  {
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
             String key) {
         Preference pref = findPreference(key);
-//        Log.v(TAG, "onSharedPreferenceChanged -- " + pref.getTitle());
+        Log.v(TAG, "onSharedPreferenceChanged -- " + pref.getTitle());
 
         if (pref instanceof IconPreference) {
             if (pref.equals(icon)) {
         		track.setIcon(icon.getText());
                 //icon.setSummary(track.getIcon());
         	}
-        }            
-        else if (pref instanceof EditTextPreference) {
+        }
+        if (pref instanceof TickColorPreference) {  // TickColorPreference instances are also EditTextPreference
+            Log.d(TAG, "TickColor changed: " + mTickColorPreference.getHexString());
+            track.getTickColor().setColorValue(Integer.parseInt(mTickColorPreference.getHexString(),16));
+        } else if (pref instanceof EditTextPreference) {
             EditTextPreference etp = (EditTextPreference) pref;
             if (pref.equals(name)) {
             	track.setName(name.getText());

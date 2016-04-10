@@ -13,7 +13,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
-	private static DatabaseOpenHelper sharedInstance;
+    private static DatabaseOpenHelper sharedInstance;
 	private Context context;
     private static final String TAG = "DatabaseOpenHelper";
 
@@ -40,9 +40,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_GROUP_ID = "_group_id";
     public static final String COLUMN_MULTIPLE_ENTRIES_PER_DAY = "multiple_entries_per_day";
     public static final String COLUMN_HAS_TIME_INFO = "has_time_info";
+    public static final String COLUMN_COLOR = "color";
 
     private static final String DATABASE_NAME = "tickmate.db";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
     
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -65,6 +66,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         + COLUMN_ICON + " text not null, "
         + COLUMN_ENABLED + " integer not null,"
         + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0,"
+        + COLUMN_COLOR + " integer DEFAULT 0,"
         + "\"" + COLUMN_ORDER + "\" integer DEFAULT -1"
         + ");";
     private static final String DATABASE_CREATE_TICKS =
@@ -131,6 +133,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             if (oldVersion <= 12) {
                 db.execSQL(DATABASE_CREATE_GROUPS);
                 db.execSQL(DATABASE_CREATE_TRACK2GROUPS);
+            }
+            if (oldVersion <= 13) {
+                Log.d("tickmate", "Migrating database to version 14");
+                db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_COLOR + "\" integer DEFAULT 0x33b5e5;");
             }
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);

@@ -3,6 +3,8 @@ package de.smasi.tickmate.views;
 import android.app.Activity;
 import android.os.Bundle;
 
+import de.smasi.tickmate.prefs.TrackPreferenceFragment;
+
 public class TrackPreferenceActivity extends Activity {
 		
     @Override

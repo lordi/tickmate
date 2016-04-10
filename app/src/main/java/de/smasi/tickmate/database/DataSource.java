@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.smasi.tickmate.Globals;
+import de.smasi.tickmate.TickColor;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Tick;
 import de.smasi.tickmate.models.Track;
@@ -37,6 +38,7 @@ public class DataSource {
 			DatabaseOpenHelper.COLUMN_DESCRIPTION,
 			DatabaseOpenHelper.COLUMN_ICON,
 			DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY,
+            DatabaseOpenHelper.COLUMN_COLOR,
 			"\"" + DatabaseOpenHelper.COLUMN_ORDER + "\""
 	};
 
@@ -57,7 +59,7 @@ public class DataSource {
             DatabaseOpenHelper.COLUMN_DESCRIPTION,
             "\"" + DatabaseOpenHelper.COLUMN_ORDER + "\""
     };
-    // Column indices in the db, for allColumnsGroups. Used by cursor.getInt(columnIndex), getString
+    // Column indices in the db, for allColumnsGroups.
     private static final int GROUP_ID_COLUMN = 0;
     private static final int GROUP_NAME_COLUMN = 1;
     private static final int GROUP_DESCRIPTION_COLUMN = 2;
@@ -68,7 +70,7 @@ public class DataSource {
             DatabaseOpenHelper.COLUMN_TRACK_ID,
             DatabaseOpenHelper.COLUMN_GROUP_ID
     };
-    // Column indices in the db, for allColumnsTracks2Groups. Used by cursor.getInt(columnIndex), getString
+    // Column indices in the db, for allColumnsTracks2Groups.
     private final static int T2G_TRACK_ID_COLUMN = 1;
     private final static int T2G_GROUP_ID_COLUMN = 2;
 
@@ -458,7 +460,7 @@ public class DataSource {
 			cursor.moveToNext();
 		}
 
-		//Log.d("Tickmate", "loaded: track_id=" + cursor.getInt(0) + " @ " + cursor.getString(1) + " = " + cursor.getInt(2));
+		//Log.d("Tickmate", "loaded: track_id=" + cursor.getColorValue(0) + " @ " + cursor.getString(1) + " = " + cursor.getColorValue(2));
 		cursor.close();
 
 		return ret;
@@ -554,8 +556,9 @@ public class DataSource {
 		track.setEnabled(cursor.getInt(2) >= 1);
 		track.setMultipleEntriesEnabled(cursor.getInt(5) >= 1);
 		track.setIcon(cursor.getString(4));
-		track.setOrder(cursor.getInt(6));
-		return track;
+        track.setTickColor(new TickColor(cursor.getInt(6)));
+        track.setOrder(cursor.getInt(7));
+        return track;
 	}
 
 	/**
@@ -595,6 +598,8 @@ public class DataSource {
 		values.put(DatabaseOpenHelper.COLUMN_MULTIPLE_ENTRIES_PER_DAY, t.multipleEntriesEnabled() ? 1 : 0);
 		values.put(DatabaseOpenHelper.COLUMN_DESCRIPTION, t.getDescription());
 		values.put(DatabaseOpenHelper.COLUMN_ICON, t.getIcon());
+        Log.e(TAG, "storing color: " + Integer.toHexString(t.getTickColor().getColorValue()));
+                values.put(DatabaseOpenHelper.COLUMN_COLOR, t.getTickColor().getColorValue());
 		values.put("\"" + DatabaseOpenHelper.COLUMN_ORDER + "\"", t.getOrder());
 
 		if (t.getId() > 0) {

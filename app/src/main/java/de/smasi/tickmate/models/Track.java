@@ -2,6 +2,9 @@ package de.smasi.tickmate.models;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
+
+import de.smasi.tickmate.TickColor;
 
 
 public class Track {
@@ -13,6 +16,7 @@ public class Track {
 	boolean enabled;
 	boolean multiple_entries_enabled;
 	int iconId;
+    TickColor mTickColor = new TickColor(0x0022DD);
 
 	int order;
 
@@ -66,7 +70,8 @@ public class Track {
     }
 
 	public void setIcon(String resName) {
-		this.iconId = -1;
+        Log.d(TAG, "setIcon(" + resName + ")");
+        this.iconId = -1;
 		this.icon = resName;
 	}
 
@@ -123,4 +128,11 @@ public class Track {
         return "Group:  id(" + mId + ") name(" + name + ") description(" + description + ")";
     }
 
+    public TickColor getTickColor() {
+        return mTickColor;
+}
+
+    public void setTickColor(TickColor tickColor) {
+        this.mTickColor = tickColor;
+    }
 }

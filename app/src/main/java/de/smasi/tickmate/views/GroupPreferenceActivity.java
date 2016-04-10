@@ -3,6 +3,8 @@ package de.smasi.tickmate.views;
 import android.app.Activity;
 import android.os.Bundle;
 
+import de.smasi.tickmate.prefs.GroupPreferenceFragment;
+
 public class GroupPreferenceActivity extends Activity {
 
     @Override

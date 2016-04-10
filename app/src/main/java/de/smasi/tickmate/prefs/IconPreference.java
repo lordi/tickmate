@@ -1,4 +1,4 @@
-package de.smasi.tickmate.views;
+package de.smasi.tickmate.prefs;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -10,6 +10,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 import de.smasi.tickmate.R;
+import de.smasi.tickmate.views.IconListAdapter;
 
 public class IconPreference extends EditTextPreference {
 

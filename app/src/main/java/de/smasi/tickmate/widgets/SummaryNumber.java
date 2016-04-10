@@ -13,8 +13,9 @@ import de.smasi.tickmate.R;
 
 public class SummaryNumber extends View {
 	Path path;
-	
-	public SummaryNumber(Context context, AttributeSet attrs, int defStyle) {
+    private int mColor;
+
+    public SummaryNumber(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init();
 	}
@@ -42,8 +43,10 @@ public class SummaryNumber extends View {
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		this.number = 23;
 		this.decimals = 1;
-		this.bottomtext = "example text";
-	}
+		this.bottomtext = "";
+        this.mColor = getResources().getColor(android.R.color.holo_blue_light);
+
+    }
 
 	public void setData(double d, int decimals, String bottomtext) {
 		this.number = d;
@@ -70,9 +73,8 @@ public class SummaryNumber extends View {
 		//canvas.drawLine(0, 0, width, height, paint);
 		//canvas.drawLine(0, height, width, 0, paint);
 		paint.setStrokeWidth(2);
-		paint.setStyle(Paint.Style.STROKE);  
-		paint.setColor(getResources().getColor(android.R.color.holo_blue_dark));
-		paint.setAlpha(64);
+		paint.setColor(mColor);
+		paint.setAlpha(128);
 		paint.setStyle(Paint.Style.FILL);  
 
 		float padding = 3.0f;
@@ -96,8 +98,9 @@ public class SummaryNumber extends View {
 		
 		canvas.drawText(this.bottomtext, cx, (float)height, paint);
 	}
-	
 
-	
 
+    public void setColor(int color) {
+        this.mColor = color;
+    }
 }

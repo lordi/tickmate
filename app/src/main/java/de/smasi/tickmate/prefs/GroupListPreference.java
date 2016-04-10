@@ -1,4 +1,4 @@
-package de.smasi.tickmate.widgets;
+package de.smasi.tickmate.prefs;
 
 import android.app.AlertDialog;
 import android.content.Context;

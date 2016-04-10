@@ -1,6 +1,7 @@
 package de.smasi.tickmate.widgets;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import de.smasi.tickmate.R;
+import de.smasi.tickmate.TickColor;
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Track;
 
@@ -17,6 +19,8 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 	Track track;
 	Calendar date;
 	int count;
+    private Drawable mTickedDrawable;
+    private Drawable mUnTickedDrawable;
 
 	public MultiTickButton(Context context, Track track, Calendar date) {
 		super(context);
@@ -31,7 +35,9 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 		this.setHeight(size);
 		this.setMinHeight(size);
 		this.setPadding(0, 0, 0, 0);
-		setTickCount(DataSource.getInstance().getTickCountForDay(track, date));
+        mUnTickedDrawable = TickColor.getUnTickedButtonDrawable(this.getContext());
+        mTickedDrawable = TickColor.getTickedButtonDrawable(this.getContext(), track.getTickColor().getColorValue());
+        setTickCount(DataSource.getInstance().getTickCountForDay(track, date));
 	}
 
 	Track getTrack () {
@@ -54,10 +60,12 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 	
 	private void updateText() {		
 		if (count > 0) {
-			this.setBackgroundResource(R.drawable.counter_positive);
+//			this.setBackgroundResource(R.drawable.counter_positive);
+            this.setBackgroundDrawable(mTickedDrawable);
 			this.setText(Integer.toString(count));
 		} else {
-			this.setBackgroundResource(R.drawable.counter_neutral);
+//			this.setBackgroundResource(R.drawable.counter_neutral);
+            this.setBackgroundDrawable(mUnTickedDrawable);
 			this.setText("");
 		}
 	}

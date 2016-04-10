@@ -23,7 +23,7 @@ import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.ShowTrackActivity;
 import de.smasi.tickmate.views.TrackPreferenceActivity;
-import de.smasi.tickmate.views.TrackPreferenceFragment;
+import de.smasi.tickmate.prefs.TrackPreferenceFragment;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
