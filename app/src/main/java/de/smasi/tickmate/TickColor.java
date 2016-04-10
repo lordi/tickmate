@@ -45,23 +45,24 @@ public class TickColor {
             0x6d4c41,
             0x757575,
             0x546e7a,
+            0x0099cc  // pre 1.4 tickmate color
     };
     private static List<TickColor> sTickColors;
 
     public TickColor(int color) {
-        Log.d(TAG, "TickColor: " + Integer.toHexString(color));
         mColorValue = color;
         mName = Integer.toHexString(color);
     }
 
     public Drawable getDrawable(int alpha) {
+        Log.d(TAG, "getTickedButtonDrawable " + getName());
         ColorDrawable cd = new ColorDrawable(Color.parseColor(hex()));
         cd.setAlpha(alpha);
         return cd;
     }
 
     public Drawable getTickedButtonDrawable(Context c) {
-        Log.d(TAG, "getTickedButtonDrawable with mColorValue = " + Integer.toHexString(mColorValue));
+        Log.d(TAG, "getTickedButtonDrawable  " + getName());
         return getTickedButtonDrawable(c, mColorValue);
     }
 
@@ -84,11 +85,11 @@ public class TickColor {
     }
 
     public String hex() {
-        return "#" + Integer.toHexString(mColorValue);
+        return String.format("#%06X", mColorValue);
     }
 
     public String getName() {
-        return Integer.toHexString(mColorValue);
+        return hex();
     }
 
     public int getColorValue() {
