@@ -45,9 +45,6 @@ public class TickColor {
             0x6d4c41,
             0x757575,
             0x546e7a,
-
-
-
     };
     private static List<TickColor> sTickColors;
 

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -36,11 +37,13 @@ public class TickColorListAdapter extends BaseAdapter {
         ImageView imageView;
         imageView = new ImageView(mContext);
 
-        imageView.setLayoutParams(new GridView.LayoutParams(240, 120));
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        imageView.setLayoutParams(new GridView.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
 
         imageView.setPadding(8, 8, 8, 8);
-        imageView.setImageDrawable(TickColor.getPreferenceDrawable(mContext, position));  // TODO JS for now, using the unchecked image.  replace with appropriate colored image
+        int color = TickColor.getColor(position).getColorValue();
+        imageView.setImageDrawable(TickColor.getTickedButtonDrawable(mContext, color));
         return imageView;
     }
 }

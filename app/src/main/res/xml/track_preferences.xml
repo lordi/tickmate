@@ -32,7 +32,7 @@
         android:title="@string/pref_title_groups"
         />
 
-    <de.smasi.tickmate.views.TickColorPreference
+    <de.smasi.tickmate.widgets.TickColorPreference
         android:key="tick_button_color"
         android:title="Color"
         />

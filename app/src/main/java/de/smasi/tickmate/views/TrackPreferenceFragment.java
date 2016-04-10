@@ -16,6 +16,7 @@ import de.smasi.tickmate.R;
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.widgets.GroupListPreference;
+import de.smasi.tickmate.widgets.TickColorPreference;
 
 public class TrackPreferenceFragment extends PreferenceFragment implements
 OnSharedPreferenceChangeListener  {
