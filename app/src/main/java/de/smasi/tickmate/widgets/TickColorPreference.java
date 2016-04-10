@@ -57,7 +57,7 @@ public class TickColorPreference extends EditTextPreference {
 
         setLayoutResource(R.layout.tick_color_preference);
         setDialogLayoutResource(R.layout.dialog_tick_color_chooser);
-        setDialogTitle("Choose a tick color");
+        setDialogTitle(R.string.title_color_chooser);
     }
 
     // Returns a sting hex code ready for 'parseInt(x,16)'
