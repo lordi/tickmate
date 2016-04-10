@@ -74,7 +74,7 @@ public class SummaryNumber extends View {
 		//canvas.drawLine(0, height, width, 0, paint);
 		paint.setStrokeWidth(2);
 		paint.setColor(mColor);
-		paint.setAlpha(255);
+		paint.setAlpha(128);
 		paint.setStyle(Paint.Style.FILL);  
 
 		float padding = 3.0f;
