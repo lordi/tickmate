@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<groups>
+    <!-- Consider introducing icons, as with tracks. -->
+    <section name="Częstotliwość">
+        <group
+            name="Codzienne"
+            description="Rzeczy, które mogą się wydarzyć każdego dnia"/>
+        <group
+            name="Dni powszednie"
+            description="Rzeczy, które mogą się wydarzyć w dni powszednie"/>
+        <group
+            name="Weekendy"
+            description="Rzeczy, które mogą się wydarzyć w weekend"/>
+        <group
+            name="Nieregularne"
+            description="Wydarzenia, które nie zdarzają się regularnie"/>
+        <group
+            name="Rzadkie"
+            description="Wydarzenia rzeadko spotykane"/>
+    </section>
+
+    <section
+        name="Czas dnia">
+        <group
+            name="Poranki"
+            description="Rzeczy, które mogą się wydarzyć rankiem"/>
+        <group
+            name="Dzień"
+            description="Rzeczy które mogę robić w ciągu dnia"/>
+        <group
+            name="Wieczory"
+            description="Rzeczy, które mogę robić wieczorami"/>
+        <group
+            name="Przed snem"
+            description="Rzeczy, które mogę robić zaraz przed zaśnięciem"/>
+    </section>
+
+
+    <section name="Ważność">
+        <group
+            name="Wymagane"
+            description="Rzeczy, które muszę zrobić"/>
+        <group
+            name="Opcjonalne"
+            description="Rzeczy, które zrobię, jeśli będę mieć ochotę"/>
+    </section>
+
+    <section name="Lokalizacja">
+        <group
+            name="Dom"
+            description="Rzeczy, które zdarzają się w domu"/>
+        <group
+            name="Praca"
+            description="Rzeczy, które zdarzają się w domu"/>
+        <group
+            name="Inne"
+            description="Zmień nazwę grupy i opis na lokalizację ważną dla ciebie"/>
+    </section>
+
+    <section name="Inne">
+        <group
+            name="Zdarzenia medyczne"
+            description="Symptomy choroby, lekarstwa, które musisz zażyć itp."/>
+        <group
+            name="Zorientowane na cel"
+            description="Robię te rzeczyw celu osiągnięcia celu"/>
+        <group
+            name="Nowe nawyki"
+            description="Robię te rzeczy regularnie aby rozwinąć nawyk"/>
+        <group
+            name="Własne"
+            description="Skonfiguruj tę grupę do własnego użytku"/>
+    </section>
+</groups>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<groups>
+    <!-- Consider introducing icons, as with tracks. -->
+    <section name="Frequenza">
+        <group
+            name="Giornaliera"
+            description="Cose che potrebbero avvenire ogni giorno"/>
+        <group
+            name="Settimanali"
+            description="Cose che potrebbero avvenire settimanalmente"/>
+        <group
+            name="Fine settimana"
+            description="Cose che potrebbero avvenire i fine settimana"/>
+        <group
+            name="Irregolari"
+            description="Eventi che accadono senza una ricorrenza"/>
+        <group
+            name="Raro"
+            description="Eventi che occorrono raramente"/>
+    </section>
+
+    <section
+        name="Momento del giorno">
+        <group
+            name="Mattina"
+            description="Cose che potrei fare la mattina"/>
+        <group
+            name="Mezzogiorno"
+            description="Cose che potrei fare a metà giornata"/>
+        <group
+            name="Sere"
+            description="Cose che potrei fare di sera"/>
+        <group
+            name="Prima di andare a letto"
+            description="Cose che potrei fare immediatamente prima di andare a letto"/>
+    </section>
+
+
+    <section name="Importanza">
+        <group
+            name="Obbligatorio"
+            description="Cose che devo fare"/>
+        <group
+            name="Opzionali"
+            description="Farò queste azioni se me la sento"/>
+    </section>
+
+    <section name="Posizione">
+        <group
+            name="Casa"
+            description="Cose che potrei fare a casa"/>
+        <group
+            name="Lavoro"
+            description="Cosa che potrei fare a lavoro"/>
+        <group
+            name="Altro"
+            description="Modifica il nome di questo gruppo e descrizione per un posto importante per te"/>
+    </section>
+
+    <section name="Altro">
+        <group
+            name="Eventi medici"
+            description="Sintomi di una malattia, medicine che devi prendere, etc"/>
+        <group
+            name="Obiettivo"
+            description="Faccio queste azioni regolarmente per raggiungere un obiettivo"/>
+        <group
+            name="Nuove Abitudini"
+            description="Faccio queste azioni per sviluppare nuove abitudini"/>
+        <group
+            name="Personalizzato"
+            description="Personalizza questo gruppo per i tuoi scopi"/>
+    </section>
+</groups>
