@@ -7,6 +7,8 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
 
@@ -84,24 +86,15 @@ public class SummaryGraph extends View {
 	
 		// normal
 		paint.setStrokeWidth(0);
-		
-		int textSize = getResources().getDimensionPixelSize(R.dimen.fontsize_small);
+        paint.setAlpha(255);
+
+        int textSize = getResources().getDimensionPixelSize(R.dimen.fontsize_small);
 		paint.setTextSize(textSize);
 
 		float bottomGap = textSize + 4.0f * density;
 		float height = getHeight() - (textSize + 3.0f * density);
 		float height0 = height - bottomGap;
 		float width = getWidth();
-
-		// vertical lines
-		//canvas.drawLine(0, 0, width, height, paint);
-		//canvas.drawLine(0, height, width, 0, paint);
-        paint.setStrokeWidth(2);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(mColor);
-		//canvas.drawRect(0, 0, width, height, paint);
-		canvas.drawLine(0, height, width, height, paint);
-		paint.setStyle(Paint.Style.FILL);  
 
 		int len = this.data.size();
 		
@@ -135,18 +128,28 @@ public class SummaryGraph extends View {
 		}
 		else 
 			path.cubicTo((float) ((len+0.5f)*width/len), oldH, width, height, width, height);
-	
-		paint.setColor(mColor);
-		paint.setStrokeWidth(2.2f);
-		paint.setStyle(Style.STROKE);
-		canvas.drawPath(path, paint);
+
+        int dpSize = 2;
+        DisplayMetrics dm = getResources().getDisplayMetrics() ;
+        float strokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpSize, dm);
+
 		paint.setStyle(Style.FILL);
 		paint.setColor(mColor);
-		paint.setAlpha(64);
-		canvas.drawPath(path, paint);
-		paint.setStyle(Style.FILL);
-		paint.setAlpha(255);
-			
+		paint.setAlpha(128);
+        canvas.drawPath(path, paint);
+        paint.setAlpha(255);
+        paint.setStrokeWidth(strokeWidth);
+        paint.setStyle(Style.STROKE);
+        canvas.drawPath(path, paint);
+
+        // vertical lines
+        //canvas.drawLine(0, 0, width, height, paint);
+        //canvas.drawLine(0, height, width, 0, paint);
+        //canvas.drawRect(0, 0, width, height, paint);
+        canvas.drawLine(0, height, width, height, paint);
+
+        paint.setStyle(Style.FILL);
+
 		for (int i=0; i < len; i++) {
 			int val = this.data.get(i);
 			float h = (height0-val/(1.0f*this.maximum)*height0) + bottomGap;

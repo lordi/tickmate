@@ -1,8 +1,10 @@
 package de.smasi.tickmate;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.Log;
@@ -55,6 +57,11 @@ public class TickColor {
         mName = Integer.toHexString(color);
     }
 
+    public Drawable getDrawable(int alpha) {
+        ColorDrawable cd = new ColorDrawable(Color.parseColor(hex()));
+        cd.setAlpha(alpha);
+        return cd;
+    }
 
     public Drawable getTickedButtonDrawable(Context c) {
         Log.d(TAG, "getTickedButtonDrawable with mColorValue = " + Integer.toHexString(mColorValue));
@@ -77,6 +84,10 @@ public class TickColor {
             sUnTickedButton = context.getDrawable(R.drawable.off_64);
         }
         return sUnTickedButton;
+    }
+
+    public String hex() {
+        return "#" + Integer.toHexString(mColorValue);
     }
 
     public String getName() {

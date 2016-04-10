@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -302,7 +304,16 @@ public class ShowTrackActivity extends Activity {
 
 		image_icon = (ImageView) findViewById(R.id.image_icon);
 		image_icon.setImageResource(track.getIconId(this));
-	}
+
+        LinearLayout header = (LinearLayout) findViewById(R.id.show_track_header);
+
+        // Unfortunately, getTickColor().getColorValue() doesn't work here :(
+        //header.setBackgroundColor(Color.parseColor(track.getTickColor().hex()));
+        header.setBackgroundDrawable(track.getTickColor().getDrawable(128));
+
+        header.invalidate();
+        getActionBar().setBackgroundDrawable(track.getTickColor().getDrawable(255));
+    }
 	
 	private void deleteTrack() {
 		this.ds.deleteTrack(this.track);
