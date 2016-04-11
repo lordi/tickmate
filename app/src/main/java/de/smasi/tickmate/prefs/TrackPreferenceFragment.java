@@ -111,8 +111,7 @@ OnSharedPreferenceChangeListener  {
         	}
         }
         if (pref instanceof TickColorPreference) {  // TickColorPreference instances are also EditTextPreference
-            Log.d(TAG, "TickColor changed: " + mTickColorPreference.getHexString());
-            track.getTickColor().setColorValue(Integer.parseInt(mTickColorPreference.getHexString(),16));
+            track.getTickColor().setColorValue(mTickColorPreference.getColorValue());
         } else if (pref instanceof EditTextPreference) {
             EditTextPreference etp = (EditTextPreference) pref;
             if (pref.equals(name)) {

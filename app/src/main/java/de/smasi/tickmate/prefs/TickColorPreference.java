@@ -26,11 +26,13 @@ public class TickColorPreference extends EditTextPreference {
     private static final String TAG = "TickColorPreference";
 
     public void setColor(TickColor tickColor) {
-        super.setText(tickColor.getName());
         setIcon(tickColor.getTickedButtonDrawable(getContext()));
-        setText(tickColor.getName());
+        setText(String.format("%X", tickColor.getColorValue()));
     }
 
+    public int getColorValue() {
+        return Integer.parseInt(getText(), 16);
+    }
 
     @Override
 
@@ -43,7 +45,6 @@ public class TickColorPreference extends EditTextPreference {
         gridView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                setText(TickColor.getColor(position).getName());
                 setColor(TickColor.getColor(position));
                 getDialog().dismiss();
             }
@@ -58,11 +59,5 @@ public class TickColorPreference extends EditTextPreference {
         setLayoutResource(R.layout.tick_color_preference);
         setDialogLayoutResource(R.layout.dialog_tick_color_chooser);
         setDialogTitle(R.string.title_color_chooser);
-    }
-
-    // Returns a sting hex code ready for 'parseInt(x,16)'
-    public String getHexString() {
-        // TODO confirm which modifications to getText() are actually needed to make this work
-        return getText().trim().toUpperCase();
     }
 }
