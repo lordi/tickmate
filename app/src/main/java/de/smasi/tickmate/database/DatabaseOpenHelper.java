@@ -136,7 +136,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             }
             if (oldVersion <= 13) {
                 Log.d("tickmate", "Migrating database to version 14");
-                db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_COLOR + "\" integer DEFAULT 0x33b5e5;");
+                db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_COLOR + "\" integer DEFAULT 0x4ea6e0;");
             }
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);

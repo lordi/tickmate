@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -45,7 +47,7 @@ public class TickColor {
             0x6d4c41,
             0x757575,
             0x546e7a,
-            0x0099cc  // pre 1.4 tickmate color
+            0x4ea6e0  // pre 1.4 tickmate color
     };
     private static List<TickColor> sTickColors;
 
@@ -68,10 +70,10 @@ public class TickColor {
 
     public static Drawable getTickedButtonDrawable(Context context, int tickButtonColor) {
         // Prepare the layers & color filter for the LayerDrawable
-        ColorFilter cf = new LightingColorFilter(0xFFFFFF, tickButtonColor);
-
-        Drawable buttonCenterDrawable = context.getDrawable(R.drawable.tick_button_center_no_frame_64);
-        Drawable buttonBorderDrawable = context.getDrawable(R.drawable.tick_button_frame_64);
+        ColorFilter cf = new LightingColorFilter(tickButtonColor, 0);
+        //ColorDrawable buttonCenterDrawable = new ColorDrawable(0xFF000000 + tickButtonColor);
+        Drawable buttonCenterDrawable = context.getDrawable(R.drawable.mask_64);
+        Drawable buttonBorderDrawable = context.getDrawable(R.drawable.on_64);
         buttonCenterDrawable.setColorFilter(cf);
         sTickedButton = new LayerDrawable(new Drawable[]{buttonCenterDrawable, buttonBorderDrawable});
         return sTickedButton;
