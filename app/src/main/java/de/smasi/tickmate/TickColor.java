@@ -25,28 +25,28 @@ public class TickColor {
     private static Drawable sUnTickedButton;
     private static Drawable sTickedButton;
 
-    // Material design colors, 600
+    // Material design colors, 400-600
     // https://www.google.com/design/spec/style/color.html
     private static int[] sColors = new int[] {
-            0xe53935,
-            0xd81b60,
-            0x8e24aa,
-            0x5e35b1,
-            0x3949ab,
+            0xf44336,
+            0xec407a,
+            0xab47bc,
+            0x673ab7,
+            0x5c6bc0,
             0x1e88e5,
             0x039be5,
-            0x00acc1,
-            0x00897b,
-            0x43a047,
+            0x00bcd4,
+            0x26a69a,
+            0x81c784,
             0x7cb342,
             0xc0ca33,
             0xfdd835,
             0xffb300,
             0xfb8c00,
             0xf4511e,
-            0x6d4c41,
-            0x757575,
-            0x546e7a,
+            0xbcaaa4,
+            0xbdbdbd,
+            0xb0bec5,
             0x4ea6e0  // pre 1.4 tickmate color
     };
     private static List<TickColor> sTickColors;
