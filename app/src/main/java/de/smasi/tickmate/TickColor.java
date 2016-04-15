@@ -4,11 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -72,8 +71,8 @@ public class TickColor {
         // Prepare the layers & color filter for the LayerDrawable
         ColorFilter cf = new LightingColorFilter(tickButtonColor, 0);
         //ColorDrawable buttonCenterDrawable = new ColorDrawable(0xFF000000 + tickButtonColor);
-        Drawable buttonCenterDrawable = context.getDrawable(R.drawable.mask_64);
-        Drawable buttonBorderDrawable = context.getDrawable(R.drawable.on_64);
+        Drawable buttonCenterDrawable = ContextCompat.getDrawable(context, R.drawable.mask_64);
+        Drawable buttonBorderDrawable = ContextCompat.getDrawable(context, R.drawable.on_64);
         buttonCenterDrawable.setColorFilter(cf);
         sTickedButton = new LayerDrawable(new Drawable[]{buttonCenterDrawable, buttonBorderDrawable});
         return sTickedButton;
