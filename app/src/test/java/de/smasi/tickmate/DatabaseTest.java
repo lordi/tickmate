@@ -207,6 +207,8 @@ public class DatabaseTest {
         assertThat(dataSource.getTrack(3).multipleEntriesEnabled(), is(true));
         assertThat(dataSource.getTrack(2).multipleEntriesEnabled(), is(false));
 
+        assertThat(dataSource.getTrack(1).getTickColor().getColorValue(), is(0x4ea6e0));
+
         closeMethod.invoke(dataSource);
     }
 
@@ -270,6 +272,32 @@ public class DatabaseTest {
         assertThat(ts.get(1).getName(), is("Track 2"));
         assertThat(ts.get(2).getName(), is("Track 3"));
         assertThat(ts.get(3).getName(), is("Track 4"));
+
+        closeMethod.invoke(dataSource);
+
+    }
+
+
+    @Test
+    public void legacyDatabaseVersion14ShouldBeImportable() throws Exception {
+        // File testDb = new File(getClass().getResource("test.sql").getFile());
+        InputStream is = tickmate.getAssets().open("test/tickmate-version14.db");
+        DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tickmate);
+        File extDb = new File(db.getExternalDatabasePath("legacy.db"));
+
+        FileUtils.saveStreamToFile(is, new FileOutputStream(extDb));
+        File intDb = tickmate.getApplicationContext().getDatabasePath("tickmate.db");
+        intDb.getParentFile().mkdirs();
+        db.importDatabase("legacy.db");
+
+        // the legacy db should have 3 tracks
+        openMethod.invoke(dataSource);
+        assertThat(dataSource.getTracks().size(), is(3));
+        assertThat(dataSource.getActiveTracks().size(), is(3));
+        assertThat(dataSource.getTickCount(1), is(23));
+
+        assertThat(dataSource.getTrack(1).getTickColor().getColorValue(), is(0x4ea6e0));
+        assertThat(dataSource.getTrack(2).getTickColor().getColorValue(), is(48340));
 
         closeMethod.invoke(dataSource);
 
