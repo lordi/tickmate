@@ -1,6 +1,11 @@
 master
 ------
 
+v1.4.0
+------
+
+ * The user can choose a color for each track (thanks @js)
+
 v1.3.2
 ------
 
