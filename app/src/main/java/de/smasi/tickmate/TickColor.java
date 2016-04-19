@@ -80,7 +80,7 @@ public class TickColor {
 
     public static Drawable getUnTickedButtonDrawable(Context context) {
         if (sUnTickedButton == null) {
-            sUnTickedButton = context.getDrawable(R.drawable.off_64);
+            sUnTickedButton = ContextCompat.getDrawable(context, R.drawable.off_64);
         }
         return sUnTickedButton;
     }
