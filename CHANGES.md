@@ -1,6 +1,11 @@
 master
 ------
 
+v1.4.1
+------
+
+ * Bugfix release
+
 v1.4.0
 ------
 
