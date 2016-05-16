@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.smasi.tickmate"
-    android:versionCode="34"
-    android:versionName="1.4.1" >
+    android:versionCode="35"
+    android:versionName="1.4.2-rc1" >
 
     <uses-sdk
         android:minSdkVersion="11"
