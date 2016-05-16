@@ -25,6 +25,7 @@
         <CheckBoxPreference
                 android:key="multiple_entries_enabled"
                 android:title="@string/multiple_entries"
+                android:summary="@string/pref_multiple_entries_enabled_summary"
                 />
 
     <de.smasi.tickmate.prefs.GroupListPreference
