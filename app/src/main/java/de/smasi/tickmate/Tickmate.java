@@ -19,16 +19,16 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Calendar;
 
+import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.views.AboutActivity;
@@ -36,14 +36,24 @@ import de.smasi.tickmate.views.EditGroupsActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
 import de.smasi.tickmate.views.GroupPreferenceActivity;
 import de.smasi.tickmate.views.SettingsActivity;
+import de.smasi.tickmate.views.TickHeader;
 import lab.prada.android.ui.infinitescroll.InfiniteScrollAdapter;
 
-public class Tickmate extends ListActivity implements InfiniteScrollAdapter.InfiniteScrollListener, View.OnClickListener {
-    static final int DATE_DIALOG_ID = 0;
+public class Tickmate extends ListActivity implements
+        InfiniteScrollAdapter.InfiniteScrollListener,
+        View.OnClickListener,
+        TickHeader.TickHeaderListener {
+
     private static final String TAG = "Tickmate";
 
+    // views
+    private TickHeader mListHeader;
+    private ListView mListView;
     private InfiniteScrollAdapter<TickAdapter> mAdapter;
+
     private Handler mHandler;
+
+    private int mCurrentGroupId;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,39 +69,18 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
         mAdapter = new InfiniteScrollAdapter<>(this,
                 new TickAdapter(this, null, savedInstanceState), progress);
         mAdapter.addListener(this);
+
         mHandler = new Handler();
 
-        updateHeader();
+        mListHeader = (TickHeader) findViewById(R.id.list_header);
+        mListHeader.initialize(this);
 
-		TextView emptyView = (TextView)findViewById(android.R.id.empty);
-
-		emptyView.setOnClickListener(this);
-
-	   	getListView().setStackFromBottom(true);
-        getListView().setAdapter(mAdapter);
-        getListView().setOnTouchListener(mAdapter.getAdapter());
-        getListView().getEmptyView().setOnTouchListener(mAdapter.getAdapter());
-    }
-
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "onSaveInstanceState(" + outState + ")");
-        mAdapter.getAdapter().saveState(outState);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle state) {
-        Log.d(TAG, "onRestoreInstanceState(" + state + ")");
-        mAdapter.getAdapter().restoreState(state);
-        super.onRestoreInstanceState(state);
-    }
-
-    private void updateHeader() {
-        LinearLayout header_group = ((LinearLayout) findViewById(R.id.header));
-        header_group.removeAllViews();
-        header_group.addView(mAdapter.getOriginalAdapter().getHeader());
+        mListView = (ListView) findViewById(android.R.id.list);
+        mListView.setStackFromBottom(true);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnTouchListener(mListHeader);
+        mListView.getEmptyView().setOnClickListener(this);
+        mListView.getEmptyView().setOnTouchListener(mListHeader);
     }
 
     @Override
@@ -258,17 +247,24 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
 
     public void refresh() {
         mAdapter.getAdapter().notifyDataSetChanged();
-        getListView().invalidateViews();
-        updateHeader();
+        mListHeader.refresh();
     }
 
     public Calendar getDate() {
         return mAdapter.getAdapter().getActiveDay();
     }
 
+    public Group getCurrentGroup() {
+        if (mCurrentGroupId == TickmateConstants.ALL_GROUPS_SPINNER_INDEX) {
+            return Group.ALL_GROUP;
+        } else {
+            return DataSource.getInstance().getGroup(mCurrentGroupId);
+        }
+    }
+
     @Override
     public void onClick(View v) {
-        Group displayedGroup = mAdapter.getAdapter().getGroupCurrentlyDisplayed();
+        Group displayedGroup = getCurrentGroup();
 
         if ( displayedGroup == Group.ALL_GROUP ) {
             this.editTracks(getCurrentFocus());
@@ -278,6 +274,13 @@ public class Tickmate extends ListActivity implements InfiniteScrollAdapter.Infi
             intent.putExtra("openTrackList", true);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onGroupSelected(int groupId) {
+        mCurrentGroupId = groupId;
+
+        mAdapter.getAdapter().setCurrentGroup(groupId);
     }
 
     public static class DatePickerFragment extends DialogFragment implements
