@@ -98,6 +98,49 @@
                 </TableLayout>
 
                 <TextView
+                    android:id="@+id/TextView06"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/title_section_streaks"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="164dp">
+
+                    <de.smasi.tickmate.widgets.SummaryGraph
+                        android:id="@+id/summaryGraph_streaks"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="164dp" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <de.smasi.tickmate.widgets.SummaryNumber
+                            android:id="@+id/summaryNumberStreakOn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.0"/>
+
+                        <de.smasi.tickmate.widgets.SummaryNumber
+                            android:id="@+id/summaryNumberStreakOff"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.0"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
                     android:id="@+id/TextView04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

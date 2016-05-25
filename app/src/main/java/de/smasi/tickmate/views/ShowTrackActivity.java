@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ public class ShowTrackActivity extends Activity {
 	private SummaryGraph graph_months;
 	private SummaryGraph graph_quarters;
 	private SummaryGraph graph_years;
+    private SummaryGraph graph_streaks;
 
 	/* Graphs */
 	private List<Integer> weekdaysData;
@@ -70,7 +72,13 @@ public class ShowTrackActivity extends Activity {
 	private List<String> yearsKeys;
 	private int yearsMaximum;
 
-	@Override
+    private List<Integer> streaksData;
+    private List<String> streaksKeys;
+    private int streakOnMaximum;
+    private int streakOffMaximum;
+
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_track);
@@ -177,11 +185,22 @@ public class ShowTrackActivity extends Activity {
 			year.add(Calendar.YEAR, -1);
 			this.yearsData.add(0, 0);
 		}
-		
+
+        // Prepare streaks
+        this.streaksData = new LinkedList<>();
+        this.streaksKeys = new LinkedList<>();
+        for (int i = 0; i < 7; i++) {
+            this.streaksData.add(0);
+            this.streaksKeys.add(0, "");
+        }
+        this.streakOnMaximum = 0;
+        this.streakOffMaximum = 0;
+        Calendar last_on = null;
+
 		// Collect all data
 		for (Tick tick : ticks) {
-			int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - 2;
-			if (day_of_week < 0) day_of_week = 6;
+            int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - 2;
+            if (day_of_week < 0) day_of_week = 6;
 			int newcount = this.weekdaysData.get(day_of_week)+1;
 			if (newcount > this.weekdaysMaximum) {
 				this.weekdaysMaximum = newcount;
@@ -223,9 +242,43 @@ public class ShowTrackActivity extends Activity {
 					this.yearsMaximum = newcount2;
 				this.yearsData.set(index, newcount2);
 			}
-		}
-		
-		if (this.weeksMaximum < 7)
+
+            if (last_on == null) {
+                streaksData.add(1);
+            }
+            else {
+                tick.date.set(Calendar.MILLISECOND, 0);
+                last_on.set(Calendar.MILLISECOND, 0);
+                int days_since = (int)((tick.date.getTimeInMillis() - last_on.getTimeInMillis()) / (24*60*60*1000));
+                //Log.d("Tickmate", String.format("Days_since=%d, from %d to %d", days_since, tick.date.getTimeInMillis(), last_on.getTimeInMillis()));
+                if (days_since > this.streakOffMaximum) {
+                    this.streakOffMaximum = days_since;
+                }
+
+                if (days_since == 0) {
+                    // multi-tick, ignore
+                }
+                else if (days_since == 1) {
+                    // increase last streak by one day
+                    int currentStreak = streaksData.get(streaksData.size() - 1) + 1;
+                    streaksData.set(streaksData.size() - 1, currentStreak);
+                    if (currentStreak > this.streakOnMaximum) {
+                        this.streakOnMaximum = currentStreak;
+                    }
+                }
+                else {
+                    // add a new streak
+                    streaksData.add(1);
+                }
+            }
+            last_on = tick.date;
+        }
+
+        if (streaksData.size() > 7) {
+            streaksData = streaksData.subList(streaksData.size() - 7, streaksData.size());
+        }
+
+        if (this.weeksMaximum < 7)
 			this.weeksMaximum = 7;
 		
 		if (this.monthsMaximum < 31)
@@ -275,7 +328,7 @@ public class ShowTrackActivity extends Activity {
 			days_since_last = ((double)(today.getTimeInMillis() - lastTickDate.getTimeInMillis())) / milliSecsInADay; 
 			weeklymean = tickCount/weeks;
 		}
-		
+
 		sn1.setData(tickCount, 0, (String) getText(R.string.show_track_total));
         sn1.setColor(track.getTickColor().getColorValue());
 		sn2.setData(weeklymean, 1, (String) getText(R.string.show_track_weeklymean));
@@ -284,8 +337,22 @@ public class ShowTrackActivity extends Activity {
         sn3.setColor(track.getTickColor().getColorValue());
 
 		retrieveGraphData();
-		
-		graph_weekdays = (SummaryGraph) findViewById(R.id.summaryGraph_weekdays);
+
+        /* Streaks */
+        SummaryNumber streakOnNumber = (SummaryNumber) findViewById(R.id.summaryNumberStreakOn);
+        SummaryNumber streakOffNumber = (SummaryNumber) findViewById(R.id.summaryNumberStreakOff);
+
+        streakOnNumber.setData(streakOnMaximum, 0, (String) getText(R.string.longest_streak_on));
+        streakOnNumber.setColor(track.getTickColor().getColorValue());
+
+        streakOffNumber.setData(streakOffMaximum, 0, (String) getText(R.string.longest_streak_off));
+        streakOffNumber.setColor(track.getTickColor().getColorValue());
+
+        graph_streaks = (SummaryGraph) findViewById(R.id.summaryGraph_streaks);
+        graph_streaks.setData(this.streaksData, this.streaksKeys, this.streakOnMaximum);
+        graph_streaks.setColor(track.getTickColor().getColorValue());
+
+        graph_weekdays = (SummaryGraph) findViewById(R.id.summaryGraph_weekdays);
         graph_weekdays.setCyclic(true);
         graph_weekdays.setData(this.weekdaysData, this.weekdaysKeys, this.weekdaysMaximum);
         graph_weekdays.setColor(track.getTickColor().getColorValue());

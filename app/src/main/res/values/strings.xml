@@ -90,4 +90,10 @@
     <string name="title_color_chooser">Color picker</string>
     <string name="pref_title_color">Color</string>
 
+    <!-- New in 1.4.2 -->
+    <string name="title_section_streaks">Streaks</string>
+    <string name="longest_streak_on">Longest streak</string>
+    <string name="longest_streak_off">Longest break</string>
+    <string name="pref_multiple_entries_enabled_summary">Multiple taps on a day will be counted. Use long press to decrease the counter.</string>
+
 </resources>

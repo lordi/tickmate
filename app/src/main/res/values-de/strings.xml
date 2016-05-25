@@ -89,4 +89,11 @@
     <!-- New in 1.4.0 -->
     <string name="title_color_chooser">Farbauswahl</string>
     <string name="pref_title_color">Farbe</string>
+
+    <!-- New in 1.4.2 -->
+    <string name="title_section_streaks">Ketten</string>
+    <string name="longest_streak_on">Längeste Kette</string>
+    <string name="longest_streak_off">Längste Pause</string>
+    <string name="pref_multiple_entries_enabled_summary">Pro Tag werden mehrere Klicks gezählt. Durch langes Drücken wird der Wert wieder vermindert.</string>
+
 </resources>

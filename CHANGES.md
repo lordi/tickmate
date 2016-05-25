@@ -1,6 +1,11 @@
 master
 ------
 
+v1.4.2
+------
+
+ * Add longest streak / longest break to statistics page
+
 v1.4.1
 ------
 
