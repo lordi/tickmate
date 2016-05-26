@@ -2,41 +2,32 @@ package de.smasi.tickmate;
 
 import android.app.ListActivity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.widgets.MultiTickButton;
 import de.smasi.tickmate.widgets.TickButton;
-import de.smasi.tickmate.widgets.TrackButton;
 
-public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
+public class TickAdapter extends BaseAdapter {
 
 	private final Context context;
     private Calendar activeDay;  // When set, the display will be fixed to this day.
@@ -45,19 +36,14 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
     int count, count_ahead;
     private Map<Calendar, View> mRowCache = new HashMap<>();
 
-
     private List<Track> mTracksCurrentlyDisplayed; // Determined by group selector
-    private Spinner mGroupSpinner;
-    private ArrayList<Integer> mSpinnerArrayGroupIds = new ArrayList<>();
-    private int mSpinnerPosition = 0;  
 
     private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
     private static final int DEFAULT_COUNT_PAST = 21; 
-    private static final int DEFAULT_COUNT_AHEAD = 0; 
-    private final static int ALL_GROUPS_SPINNER_INDEX = 0; // Zero == 'all groups' 
+    private static final int DEFAULT_COUNT_AHEAD = 0;
 
-    private GestureDetector mGestureDetector;
+    private int mCurrentGroupId;
 
 	public TickAdapter(Context context, Calendar activeDay, Bundle restoreStateBundle) {
 		// super(context, R.layout.rowlayout, days);
@@ -65,13 +51,9 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 		this.count = DEFAULT_COUNT_PAST;
 		this.count_ahead = DEFAULT_COUNT_AHEAD;
 
-        restoreState(restoreStateBundle); 
-        initSpinnerArrayGroupIds();
         setActiveDay(activeDay);
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
                 getBoolean("reverse-date-order-key", false);
-        mGestureDetector = new GestureDetector(context, new GestureListener());
-//        Log.d(TAG, "mSpinnerPosition: " + mSpinnerPosition);
     }
 
     public void unsetActiveDay() {
@@ -125,16 +107,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         notifyDataSetChanged();
     }
 
-    private boolean isAllGroupSelected() {
-        if (mGroupSpinner == null) {
-            Log.e(TAG, "mGroupSpinner is null in isAllGroupSelected. Returning: " +
-                    (mSpinnerPosition == ALL_GROUPS_SPINNER_INDEX));
-            return (mSpinnerPosition == ALL_GROUPS_SPINNER_INDEX);
-        }
-        return (mGroupSpinner.getSelectedItemPosition() == ALL_GROUPS_SPINNER_INDEX);
-    }
-
-
     public int getCount() {
         // Return either 0 or this.count, depending on whether the empty view should be displayed.
         // Empty view is displayed if (a) no active tracks exist (b) a group is selected, and there
@@ -146,7 +118,8 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
             return 0;
         }
 
-        if (!isAllGroupSelected() && ds.getTracksForGroup(getCurrentGroupId()).size() == 0) {
+        if ((mCurrentGroupId != Group.ALL_GROUP.getId())
+                && (ds.getTracksForGroup(mCurrentGroupId).size() == 0)) {
             return 0;
         }
 
@@ -163,6 +136,11 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
 
     public long getItemId(int position) {
         return position;
+    }
+
+    public void setCurrentGroup(int groupId) {
+        mCurrentGroupId = groupId;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -184,105 +162,6 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         return v;
     }
 
-    // Also initializes the array lists associated with the group spinner
-    // Called only by getHeader - extracted to a separate method to improve readability
-    private void initializeGroupSpinner(int rowHeight) {
-        mGroupSpinner = new Spinner(context);
-        mGroupSpinner.setPadding(0, 0, 0, 0);
-
-        mGroupSpinner.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                rowHeight, 0.8f));
-
-        // init mSpinnerArraynames
-        List<Group> allGroups = DataSource.getInstance().getGroups();
-        ArrayList<String> mSpinnerArrayNames = new ArrayList<>();
-        Resources resources = context.getResources();
-        mSpinnerArrayNames.add(resources.getString(R.string.group_all_name));
-        for (Group group : allGroups) {
-            mSpinnerArrayNames.add(group.getName());
-        }
-
-        initSpinnerArrayGroupIds();
-
-        ArrayAdapter<String> spinnerArrayAdapter =
-                new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, mSpinnerArrayNames);
-        mGroupSpinner.setAdapter(spinnerArrayAdapter);
-        mGroupSpinner.setOnItemSelectedListener(this);
-        // Protect against errant values before calling setSelection
-         if ((mSpinnerPosition < 0) || (mSpinnerPosition >= mGroupSpinner.getCount())) {
-             Log.e(TAG, "mSpinnerPosition should not be "+mSpinnerPosition);
-             mSpinnerPosition = 0;
-        }
-        mGroupSpinner.setSelection(mSpinnerPosition);
-    }
-
-    private void initSpinnerArrayGroupIds() {
-        List<Group> allGroups = DataSource.getInstance().getGroups();
-        mSpinnerArrayGroupIds.clear();
-        mSpinnerArrayGroupIds.add(Group.ALL_GROUP.getId()); // The first entry in this array refers to the 'All Group', which does not occur in the database.
-        for (Group group : allGroups) {
-            mSpinnerArrayGroupIds.add(group.getId());
-        }
-    }
-
-
-    public View getHeader() {
-        int rowHeight = -1;
-
-        // trackHeader will contain the track icons, while header will contain both the spinner and trackHeader
-        LinearLayout header = new LinearLayout(this.context);
-        header.setOrientation(LinearLayout.VERTICAL);
-        header.setOnTouchListener(this); 
-
-        LinearLayout trackHeader = new LinearLayout(this.context);
-        trackHeader.setOrientation(LinearLayout.HORIZONTAL);
-        trackHeader.setOnTouchListener(this); 
-
-        LinearLayout headerrow = new LinearLayout(this.context);
-        headerrow.setOrientation(LinearLayout.HORIZONTAL);
-        headerrow.setOnTouchListener(this); 
-
-        TextView b2 = new TextView(context);
-        b2.setOnTouchListener(this); 
-        b2.setText("");
-
-        b2.setPadding(0, 0, 0, 0);
-        b2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                rowHeight, 0.8f));
-
-        initializeGroupSpinner(rowHeight);
-
-        for (Track track : mTracksCurrentlyDisplayed) {
-            TrackButton b = new TrackButton(context, track);
-            b.setOnTouchListener(this); 
-            b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.MATCH_PARENT, (1.0f) / mTracksCurrentlyDisplayed.size()));
-            headerrow.addView(b);
-        }
-
-        headerrow.setWeightSum(1.0f);
-        headerrow.setPadding(5, 5, 10, 5);
-        headerrow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                rowHeight, 0.2f));
-
-        // Consider whether removing the view only to add it again is truly necessary, or if this should be redesigned.
-        ViewGroup parent = (ViewGroup) mGroupSpinner.getParent();
-        if (parent != null) {
-            parent.removeView(mGroupSpinner);
-        }
-
-        trackHeader.addView(b2);
-        trackHeader.addView(headerrow);
-        trackHeader.setWeightSum(1.0f);
-        trackHeader.setPadding(10, 0, 10, 0);
-        trackHeader.setBackgroundResource(R.drawable.bottom_line);
-        if (mGroupSpinner.getCount() > 1) {
-            header.addView(mGroupSpinner);
-        }
-        header.addView(trackHeader);
-        return header;
-    }
-
     /**
      * Used to create and insert the week separator
      *
@@ -290,12 +169,10 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
      */
     private void addStartWeekSeparator(ViewGroup tickGrid) {
         TextView splitter2 = new TextView(this.context);
-        splitter2.setOnTouchListener(this); 
         splitter2.setText("");
         splitter2.setHeight(5);
         tickGrid.addView(splitter2);
         TextView splitter = new TextView(this.context);
-        splitter.setOnTouchListener(this); 
         splitter.setText("");
         splitter.setHeight(11);
         splitter.setBackgroundResource(R.drawable.center_line);
@@ -312,14 +189,11 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         //Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 
         LinearLayout tickgrid = new LinearLayout(this.context);
-        tickgrid.setOnTouchListener(this);
         tickgrid.setOrientation(LinearLayout.VERTICAL);
         String s = dateFormat.format(date);
 
         TextView t_weekday = new TextView(this.context);
-        t_weekday.setOnTouchListener(this); 
         TextView t_date = new TextView(this.context);
-        t_date.setOnTouchListener(this); 
 
         if (cal.compareTo(today) == 0)
             t_date.setText(context.getString(R.string.today));
@@ -347,10 +221,8 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         t_date.setTextColor(Color.GRAY);
         t_weekday.setWidth(120);
         LinearLayout row = new LinearLayout(this.context);
-        row.setOnTouchListener(this); 
         row.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout l = new LinearLayout(this.context);
-        l.setOnTouchListener(this); 
         l.setOrientation(LinearLayout.VERTICAL);
         l.addView(t_weekday);
         l.addView(t_date);
@@ -462,117 +334,12 @@ public class TickAdapter extends BaseAdapter implements AdapterView.OnItemSelect
         super.notifyDataSetChanged();
     }
 
+    // TODO this should really live in a cache (also, it's duplicated in TickHeader)
     private List<Track> getTracksForCurrentGroup() {
-        if (isAllGroupSelected()) {
+        if (mCurrentGroupId == Group.ALL_GROUP.getId()) {
             return DataSource.getInstance().getActiveTracks();
         } else {
-            return DataSource.getInstance().getTracksForGroup(getCurrentGroupId());
+            return DataSource.getInstance().getTracksForGroup(mCurrentGroupId);
         }
     }
-
-    private int getCurrentGroupId() {
-        return mSpinnerArrayGroupIds.get(mSpinnerPosition);
-    }
-
-
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
-
-        // Unless a new item was selected in the spinner, do nothing.
-        if (pos == mSpinnerPosition) {
-            Log.d(TAG, "Spinner selection matches previous selection, nothing to do.");
-            return;
-        }
-        mSpinnerPosition = pos;
-
-        mTracksCurrentlyDisplayed = getTracksForCurrentGroup();
-
-        Tickmate tm = (Tickmate) context;
-
-        tm.refresh();
-//        Log.d(TAG, " item selected:  pos(" + mSpinnerPosition + "), groupID(" + currentGroupId + ")");
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-    }
-
-
-    // Preserve the spinner state
-    public void restoreState(Bundle state) {
-        Log.d(TAG, "restoreState");
-        if (state != null) {
-            mSpinnerPosition = state.getInt("SpinnerPosition", 0);
-        } else {
-            mSpinnerPosition = 0;
-        }
-    }
-
-    public void saveState(Bundle outState) {
-        Log.d(TAG, "saveState()");
-        outState.putInt("SpinnerPosition", mSpinnerPosition);
-    }
-
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-//        Log.d(TAG, ">>> onTouch - in TA");
-
-        return mGestureDetector.onTouchEvent(event);
-    }
-
-    public void onSwipeRight() {
-//        Log.d(TAG, ">>> onSwipeRight - in TA");
-
-        int position = mGroupSpinner.getSelectedItemPosition() - 1;
-        if (position < 0) {
-            position = mGroupSpinner.getCount() - 1;
-        }
-//        Toast.makeText(context, "Swiped right, was (" + mGroupSpinner.getSelectedItemPosition() + "), now (" + position + ")", Toast.LENGTH_SHORT).show();  // consider leaving for future debug
-        mGroupSpinner.setSelection(position);
-    }
-
-    public void onSwipeLeft() {
-//        Log.d(TAG, ">>> onSwipeLeft - in TA");
-
-        int position = mGroupSpinner.getSelectedItemPosition() + 1;
-        if (position == mGroupSpinner.getCount()) {
-            position = 0;
-        }
-        mGroupSpinner.setSelection(position);
-    }
-
-    public Group getGroupCurrentlyDisplayed() {
-        int spinnerPosition = mGroupSpinner.getSelectedItemPosition();
-        if (isAllGroupSelected()) {
-            return Group.ALL_GROUP;
-        } else {
-            return DataSource.getInstance().getGroup(mSpinnerArrayGroupIds.get(spinnerPosition));
-        }
-    }
-
-
-    private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
-        private static final int SWIPE_THRESHOLD = 50;
-        private static final int SWIPE_VELOCITY_THRESHOLD = 50;
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//            Log.d(TAG, ">>> onFling");
-            if ((e1 == null) || (e2 == null)) return false;
-
-            float distanceX = e2.getX() - e1.getX();
-            float distanceY = e2.getY() - e1.getY();
-            if (Math.abs(distanceX) > Math.abs(distanceY) && Math.abs(distanceX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                if (distanceX > 0)
-                    onSwipeRight();
-                else
-                    onSwipeLeft();
-                return true;
-            }
-            return false;
-        }
-    }
-
 }
