@@ -13,8 +13,9 @@ ignore_ids = ()
 
 for track_id, track in tm.tracks.iterrows():
     if not track_id in ignore_ids:
-        pd.rolling_mean(tm.timeseries[track_id]\
-            .resample('M', how='sum'), 4)\
+        tm.timeseries[track_id]\
+            .resample('M').sum()\
+            .rolling(window=4,center=False).mean()\
             .plot(label=track['name'], linewidth=2, legend=True)
 
 plt.show()

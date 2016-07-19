@@ -1,0 +1,5 @@
+sqlite3
+numpy
+matplotlib
+pandas>=0.18.0
+

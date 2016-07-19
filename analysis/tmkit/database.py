@@ -41,7 +41,7 @@ class TickmateDatabase(object):
         _ticks['date'] = pd.to_datetime(
             _ticks.year.astype(str) + "/" +
             (_ticks.month + 1).astype(str) + "/" +
-            _ticks.day.astype(str), coerce=True)
+            _ticks.day.astype(str), errors='coerce')
         _ticks['count'] = 1
         _ticks = _ticks.groupby(('track_id', 'date'))['count'].count()
         return _ticks
@@ -50,7 +50,7 @@ class TickmateDatabase(object):
     def timeseries(self):
         _timeseries = pd.DataFrame()
         for track_id, track in self.tracks.iterrows():
-            _timeseries[track_id] = self.ticks[track_id].resample('D').fillna(0)
+            _timeseries[track_id] = self.ticks[track_id].resample('D').sum().fillna(0)
         return _timeseries
 
     @cached_property

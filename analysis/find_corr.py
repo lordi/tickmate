@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 
 import matplotlib
@@ -13,7 +14,7 @@ names = list(tm.tracks.name)
 
 ts = tm.timeseries.copy()
 ts.columns = names
-print ts.corr()
+print(ts.corr())
 
 fig, ax = plt.subplots()
 cax = ax.imshow(np.array(ts.corr()), cmap=plt.cm.hot, interpolation='nearest',
