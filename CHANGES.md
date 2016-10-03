@@ -5,6 +5,8 @@ v1.4.2
 ------
 
  * Add longest streak / longest break to statistics page
+ * Restores previously selected group (thanks Allison)
+ * Show backup folder in export and import dialog
 
 v1.4.1
 ------
