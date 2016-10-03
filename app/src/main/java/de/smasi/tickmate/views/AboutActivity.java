@@ -32,7 +32,8 @@ public class AboutActivity extends Activity {
 		
 		try {
 			DatabaseOpenHelper db = new DatabaseOpenHelper(this);
-			desc.setText(getString(R.string.about_description) + "\n\nBackup folder: " + db.getExternalDatabaseFolder().getAbsoluteFile());
+			desc.setText(getString(R.string.about_description) + "\n\n"
+                    + getString(R.string.backup_folder) + " " + db.getExternalDatabaseFolder().getAbsoluteFile());
 		} catch (IOException e) {
             desc.setText(getString(R.string.about_description));
             Log.e("AboutActivity", "IOException: " + e.getMessage());

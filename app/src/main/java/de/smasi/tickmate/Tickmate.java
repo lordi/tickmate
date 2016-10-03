@@ -162,7 +162,23 @@ public class Tickmate extends ListActivity implements
     }
 
     public void exportDB() {
+        DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(this);
+
         final EditText input = new EditText(this);
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        layout.addView(input);
+
+        try {
+            final TextView descriptionBox = new TextView(this);
+            descriptionBox.setText(getString(R.string.backup_folder) + " " + db.getExternalDatabaseFolder ().getAbsoluteFile());
+            layout.addView(descriptionBox);
+        } catch (IOException e) {
+            Log.e("Tickmate", "IOException: " + e.getMessage());
+        }
+
         Calendar today = Calendar.getInstance();
 
         int year = today.get(Calendar.YEAR);
@@ -172,7 +188,7 @@ public class Tickmate extends ListActivity implements
         input.setText(String.format("tickmate-backup-%04d%02d%02d.db", year, month, day));
         new AlertDialog.Builder(this)
                 .setTitle(R.string.export_db)
-                .setView(input)
+                .setView(layout)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         Editable value = input.getText();
@@ -192,10 +208,19 @@ public class Tickmate extends ListActivity implements
     }
 
     public void importDB() {
-        final String[] items = DatabaseOpenHelper.getInstance(this).getExternalDatabaseNames();
+        DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(this);
+        final String[] items = db.getExternalDatabaseNames();
+
+        String backupFolderText = "";
+        try {
+            backupFolderText = "\n\n" + getString(R.string.backup_folder) + " " + db.getExternalDatabaseFolder ().getAbsoluteFile();
+        } catch (IOException e) {
+            Log.e("Tickmate", "IOException: " + e.getMessage());
+        }
+
         if (items.length == 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.import_db_none_found)
+            builder.setMessage(getString(R.string.import_db_none_found) + backupFolderText)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                         }
@@ -223,6 +248,12 @@ public class Tickmate extends ListActivity implements
                             })
                             .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setNeutralButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Toast.makeText(Tickmate.this, "xx", Toast.LENGTH_LONG).show();
                                 }
                             })
                             .show();
