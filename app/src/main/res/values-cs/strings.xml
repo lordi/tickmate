@@ -86,4 +86,15 @@
     <string name="no_groups_found">Nebyly nalezeny žádné skupiny. Má se otevřít editor skupin?</string>
     <string name="group_all_name">Vše</string>
 
+    <!-- New in 1.4.0 -->
+    <string name="title_color_chooser">Výběr barev</string>
+    <string name="pref_title_color">Barva</string>
+
+    <!-- New in 1.4.2 -->
+    <string name="title_section_streaks">Řada</string>
+    <string name="longest_streak_on">Nejdelší řada</string>
+    <string name="longest_streak_off">Nejdelší pauza</string>
+    <string name="pref_multiple_entries_enabled_summary">Několikanásobná ťuknutí za den budou počítána. Dlouhým stlačením snížit počítadlo.</string>
+    <string name="backup_folder">Adresář se zálohami je:</string>
+
 </resources>
