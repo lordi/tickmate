@@ -288,7 +288,7 @@ public class Tickmate extends ListActivity implements
     }
 
     public Group getCurrentGroup() {
-        if (mCurrentGroupId == TickmateConstants.ALL_GROUPS_SPINNER_INDEX) {
+        if (mCurrentGroupId == TickmateConstants.ALL_GROUPS_SPINNER_INDEX || mCurrentGroupId == Group.ALL_GROUP.getId()) {
             return Group.ALL_GROUP;
         } else {
             return DataSource.getInstance().getGroup(mCurrentGroupId);
