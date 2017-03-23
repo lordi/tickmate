@@ -324,9 +324,9 @@ public class ShowTrackActivity extends Activity {
 		double days_since_last = -1;
 		
 		if (firstTickDate != null && lastTickDate != null) {
-			double weeks = Math.ceil(((double)(today.getTimeInMillis() - firstTickDate.getTimeInMillis())) / milliSecsInADay / 7.0); 
+			double days = Math.ceil(((double)(today.getTimeInMillis() - firstTickDate.getTimeInMillis())) / milliSecsInADay); 
 			days_since_last = ((double)(today.getTimeInMillis() - lastTickDate.getTimeInMillis())) / milliSecsInADay; 
-			weeklymean = tickCount/weeks;
+			weeklymean = (tickCount/days)*7.0;
 		}
 
 		sn1.setData(tickCount, 0, (String) getText(R.string.show_track_total));
