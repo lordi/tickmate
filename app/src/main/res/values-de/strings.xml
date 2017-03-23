@@ -31,8 +31,8 @@
     <string name="title_icon_chooser">Symbol auswählen</string>
     <string name="about_description">Tickmate ist ein "Ein-Bit-Tagebuch". Du kannst für jeden Tag angeben, ob
     	etwas passiert ist oder nicht, z.B. ob du Zahnseide verwendet hast oder einen über
-    	den Durst getrunken hast. Du kannst somit deine Angewohnheiten oder sonstige Sachen quantifzieren
-    	und dir die Verändung über die letzten Wochen und Monate anzeigen lassen. Vielleicht hilft Tickmate
+    	den Durst getrunken hast. Du kannst somit deine Angewohnheiten oder sonstige Sachen quantifizieren
+    	und dir die Veränderungen über die letzten Wochen und Monate anzeigen lassen. Vielleicht hilft Tickmate
     	so dabei, deine Angewohnheiten objektiv zu sehen und sie gegebenenfalls zu ändern.
 \n\nTickmate ist Open-Source-Software (GPLv3).
 \n\nBenutzt Icons von Glyphicons FREE icon set (CC-BY-3.0).
@@ -41,7 +41,7 @@
     <string name="export_db">Datenbank sichern</string>
     <string name="import_db_success">Datenbank erfolgreich importiert.</string>
     <string name="export_db_success">Datenbank erfolgreich gesichert. </string>
-    <string name="import_db_none_found">Es konnten keine gesicherten Datenbank gefunden werden.</string>
+    <string name="import_db_none_found">Es konnten keine gesicherten Datenbanken gefunden werden.</string>
     <string name="import_db_really">Sind Sie sicher, dass Sie die ausgewählte Datenbank importieren möchten? Dies kann NICHT rückgängig gemacht werden und wird alle vorhandenen Tracks und Ticks ersetzen.</string>
     <string name="show_track_total">Insgesamt</string>
     <string name="show_track_weeklymean">Wochenmittel</string>
@@ -92,7 +92,7 @@
 
     <!-- New in 1.4.2 -->
     <string name="title_section_streaks">Ketten</string>
-    <string name="longest_streak_on">Längeste Kette</string>
+    <string name="longest_streak_on">Längste Kette</string>
     <string name="longest_streak_off">Längste Pause</string>
     <string name="pref_multiple_entries_enabled_summary">Pro Tag werden mehrere Klicks gezählt. Durch langes Drücken wird der Wert wieder vermindert.</string>
     <string name="backup_folder">Der Backup-Ordner ist:</string>

@@ -17,8 +17,8 @@
 		<track icon="@drawable/glyphicons_275_fast_food_white" name="Фастфуд"
 			description="Поход в ресторан фастфуда" />
 
-		<track icon="@drawable/glyphicons_273_drink_white" name="Soft drink"
-			description="Drank a soft drink" />
+		<track icon="@drawable/glyphicons_273_drink_white" name="Безалкогольный напиток"
+			description="Употребление безалкогольного напитка" />
 
 		<track icon="@drawable/glyphicons_272_cake_white" name="Сладости"
 			description="Употребление сладостей или торта" />
@@ -138,7 +138,7 @@
 			description="Случился симптом заболевания" />
 		
 		<track icon="@drawable/glyphicons_049_star_white" name="Пользовательский"
-			description="Отлеживание указанное пользователем" />
+			description="Отслеживание указанное пользователем" />
 			    	    
     </section>
     
