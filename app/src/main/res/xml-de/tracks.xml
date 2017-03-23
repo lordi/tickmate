@@ -77,8 +77,8 @@
 	</section>
 
 	<section name="Soziales Leben/Sexualität">
-		<track icon="@drawable/glyphicons_410_facebook_white" name="Social network"
-			description="Used my favourite social network site" />
+		<track icon="@drawable/glyphicons_410_facebook_white" name="Soziales Netzwerk"
+			description="Mein soziales Lieblingsnetzwerk genutzt" />
 
 		<track icon="@drawable/myicons_smiley_white" name="Smile"
 			description="Jemanden zum Lachen gebracht" />

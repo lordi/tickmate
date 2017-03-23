@@ -24,7 +24,7 @@
 			description="Ate sweets or cake" />
 
 		<track icon="@drawable/glyphicons_362_smoking_white" name="Smoke"
-			description="Got my daily rush of nicotin" />
+			description="Got my daily rush of nicotine" />
 
 		<track icon="@drawable/glyphicons_298_hospital_white" name="Medication"
 			description="Took my medication" />
@@ -42,7 +42,7 @@
 			description="Practiced yoga" />
 
 		<track icon="@drawable/glyphicons_356_dumbbell_white" name="Work out"
-			description="Exercised " />
+			description="Exercised" />
 
 		<track icon="@drawable/glyphicons_334_candle_white" name="Meditation"
 			description="Silenced my mind" />
