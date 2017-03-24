@@ -193,7 +193,7 @@ public class ShowTrackActivity extends Activity {
             this.streaksData.add(0);
             this.streaksKeys.add(0, "");
         }
-        this.streakOnMaximum = 0;
+        this.streakOnMaximum = ticks.size() > 0 ? 1 : 0;
         this.streakOffMaximum = 0;
         Calendar last_on = null;
 
