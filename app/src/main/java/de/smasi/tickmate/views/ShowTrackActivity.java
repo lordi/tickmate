@@ -252,7 +252,7 @@ public class ShowTrackActivity extends Activity {
                 int days_since = (int)((tick.date.getTimeInMillis() - last_on.getTimeInMillis()) / (24*60*60*1000));
                 //Log.d("Tickmate", String.format("Days_since=%d, from %d to %d", days_since, tick.date.getTimeInMillis(), last_on.getTimeInMillis()));
                 if (days_since > this.streakOffMaximum) {
-                    this.streakOffMaximum = days_since;
+                    this.streakOffMaximum = days_since - 1;
                 }
 
                 if (days_since == 0) {
