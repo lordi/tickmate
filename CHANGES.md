@@ -1,5 +1,10 @@
-master
+v1.4.3
 ------
+
+ * Fix crashing start screen (thanks @StefRe)
+ * Fix streaks/breaks calculation (thanks @StefRe)
+ * Fix weekly mean calculation (thanks @jtMUMT)
+ * Fix Multi-Track day-of-month bug (thanks @StefRe)
 
 v1.4.2
 ------
