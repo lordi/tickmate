@@ -45,9 +45,9 @@
     <string name="show_track_total">Razem</string>
     <string name="show_track_weeklymean">Średnia tygodniowa</string>
     <string name="show_track_dayssincelast">Dni od ostatniego</string>
-    
+
     <!-- New in 1.2.0 -->
-    
+
     <string name="move_up">W górę</string>
     <string name="move_down">W dół</string>
     <string name="activate">Aktywacja</string>
@@ -84,5 +84,16 @@
     <string name="title_activity_edit_group">Edycja grupy</string>
     <string name="no_groups_found">Nie znaleziono grup. Czy chcesz otworzyć edytor grup?</string>
     <string name="group_all_name">Wszystko</string>
+
+    <!-- New in 1.4.0 -->
+    <string name="title_color_chooser">Wybór koloru</string>
+    <string name="pref_title_color">Kolor</string>
+
+    <!-- New in 1.4.2 -->
+    <string name="title_section_streaks">Serie</string>
+    <string name="longest_streak_on">Najdłuższa seria</string>
+    <string name="longest_streak_off">Najdłuższa przerwa</string>
+    <string name="pref_multiple_entries_enabled_summary">Zliczanych będzie wiele wystąpień w ciągu dnia. Przytrzymaj, aby zmniejszyć licznik.</string>
+    <string name="backup_folder">Katlog backupu:</string>
 
 </resources>
