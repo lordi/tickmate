@@ -68,6 +68,7 @@
     <string-array name="pref_titles_active_date">
         <item>Active day only</item>
         <item>Active day and day before</item>
+        <item>Active day and day/weekend before</item>
         <item>All days</item>
     </string-array>
     <string name="notify_user_ticking_disabled">Changing this tick is disabled. You can specify which days are editable in the settings.</string>
