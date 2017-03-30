@@ -4,6 +4,7 @@
     <string-array name="pref_values_active_date">:
         <item>ALLOW_CURRENT</item>
         <item>ALLOW_CURRENT_AND_NEXT_DAY</item>
+        <item>ALLOW_CURRENT_AND_NEXT_DAY_AND_WEEKEND</item>
         <item>ALLOW_ALL</item>
     </string-array>
 
