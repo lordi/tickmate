@@ -15,4 +15,13 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_limit_active_date" />
 
+    <ListPreference
+        android:defaultValue="LONGCLICK_DECREMENT"
+        android:entries="@array/pref_titles_long_click"
+        android:entryValues="@array/pref_values_long_click"
+        android:key="long-click-key"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_long_click" />
+
 </PreferenceScreen>

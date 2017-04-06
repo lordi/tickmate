@@ -98,4 +98,12 @@
     <string name="pref_multiple_entries_enabled_summary">Multiple taps on a day will be counted. Use long press to decrease the counter.</string>
     <string name="backup_folder">The backup folder is:</string>
 
+    <!-- New in 1.4.4 -->
+    <string name="pref_title_long_click">Long click on tick</string>
+    <string-array name="pref_titles_long_click">
+        <item>Enter number of ticks</item>
+        <item>Remove last tick</item>
+    </string-array>
+    <string name="set_number_of_ticks">Number of ticks %1$s</string>
+
 </resources>

@@ -98,4 +98,12 @@
     <string name="pref_multiple_entries_enabled_summary">Pro Tag werden mehrere Klicks gezählt. Durch langes Drücken wird der Wert wieder vermindert.</string>
     <string name="backup_folder">Der Backup-Ordner ist:</string>
 
+    <!-- New in 1.4.4 -->
+    <string name="pref_title_long_click">Langer Klick auf einen Tick</string>
+    <string-array name="pref_titles_long_click">
+        <item>Eingabe der Tickanzahl</item>
+        <item>Entfernt letzten Tick</item>
+    </string-array>
+    <string name="set_number_of_ticks">Anzahl Ticks %1$s</string>
+
 </resources>
