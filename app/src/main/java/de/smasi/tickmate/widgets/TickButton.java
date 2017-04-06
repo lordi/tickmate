@@ -83,7 +83,15 @@ public class TickButton extends ToggleButton implements OnCheckedChangeListener 
             //  TODO Anything we should do to ensure that all appropriate fields in all objects get updated when the user changes the tick color setting for a track?
             mTickedDrawable = TickColor.getTickedButtonDrawable(this.getContext(), track.getTickColor().getColorValue());
             setBackgroundDrawable(mTickedDrawable);
-            ds.setTick(tb.getTrack(), tb.getDate(), true);
+
+            Calendar c = Calendar.getInstance();
+            if (c.get(Calendar.DAY_OF_YEAR) == tb.getDate().get(Calendar.DAY_OF_YEAR) &&
+                    c.get(Calendar.YEAR) == tb.getDate().get(Calendar.YEAR) &&
+                    c.get(Calendar.ERA) == tb.getDate().get(Calendar.ERA)) {
+                ds.setTick(tb.getTrack(), c, true);
+            } else {
+                ds.setTick(tb.getTrack(), tb.getDate(), false);
+            }
         }
         else {
             setBackgroundDrawable(mUnTickedDrawable);
