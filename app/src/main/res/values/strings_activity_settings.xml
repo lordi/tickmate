@@ -7,4 +7,10 @@
         <item>ALLOW_ALL</item>
     </string-array>
 
+    <string-array name="pref_values_long_click">:
+        <item>LONGCLICK_PICK_VALUE</item>
+        <item>LONGCLICK_DECREMENT</item>
+    </string-array>
+
+
 </resources>

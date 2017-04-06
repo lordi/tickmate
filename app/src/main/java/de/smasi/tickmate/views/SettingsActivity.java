@@ -26,6 +26,7 @@ public class SettingsActivity extends PreferenceActivity {
     private void setupSimplePreferencesScreen() {
         addPreferencesFromResource(R.xml.pref_general);
         bindPreferenceSummaryToValue(findPreference("active-date-key"));
+        bindPreferenceSummaryToValue(findPreference("long-click-key"));
     }
 
 

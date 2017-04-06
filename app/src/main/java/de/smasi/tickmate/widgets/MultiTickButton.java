@@ -1,11 +1,17 @@
 package de.smasi.tickmate.widgets;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -97,13 +103,57 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 			return false;
 		}
 
-		boolean success = DataSource.getInstance().removeLastTickOfDay(this.getTrack(), this.getDate());
-		
-		if (success) {
-			updateStatus();
-			Toast.makeText(this.getContext(), R.string.tick_deleted, Toast.LENGTH_SHORT).show();
-		}
-		
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		String longClickPref = sharedPrefs.getString("long-click-key", "LONGCLICK_DECREMENT");
+
+		if (longClickPref.equals("LONGCLICK_PICK_VALUE")) {
+
+			final View vFinal = v;  // view must be final to be accessed by inner class (performClick())
+			final int oldValue = DataSource.getInstance().getTicksForDay(this.getTrack(), this.getDate()).size();
+            final NumberPicker np = new NumberPicker(v.getContext());
+            np.setMinValue(0);
+            np.setMaxValue(99);
+			np.setWrapSelectorWheel(false);
+			np.setValue(oldValue);
+
+			java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(v.getContext());
+
+            new AlertDialog.Builder(v.getContext())
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							int newValue = np.getValue();
+							if (newValue > oldValue){
+								for( int i = oldValue; i < newValue; i++ ){
+									vFinal.performClick();
+								}
+							} else if (newValue < oldValue){
+								for( int i = oldValue; i > newValue; i-- ){
+									DataSource.getInstance().removeLastTickOfDay(getTrack(), getDate());
+								}
+								updateStatus();
+							}
+						}
+					})
+					.setView(np)
+					.setIcon(track.getIconId(v.getContext()))
+					.setTitle(getResources().getString(R.string.set_number_of_ticks, dateFormat.format(date.getTime())))
+					.show()
+					// the next line doesn't wrap the dialog but rather keeps the dialog open when rotating the
+					// device, without it the dialog disappears upon rotation (see also stackoverflow.com/questions/14907104)
+					.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+        } else {
+
+            boolean success = DataSource.getInstance().removeLastTickOfDay(this.getTrack(), this.getDate());
+
+            if (success) {
+                updateStatus();
+                Toast.makeText(this.getContext(), R.string.tick_deleted, Toast.LENGTH_SHORT).show();
+            }
+        }
+
 		return true;
 	}
 }
