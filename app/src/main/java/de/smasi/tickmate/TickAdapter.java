@@ -62,7 +62,7 @@ public class TickAdapter extends BaseAdapter {
 
     private void updateToday() {
         today = Calendar.getInstance();
-        today.set(Calendar.HOUR, 0);
+        today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);
         today.set(Calendar.SECOND, 0);
         today.set(Calendar.MILLISECOND, 0);
@@ -80,7 +80,7 @@ public class TickAdapter extends BaseAdapter {
 			java.text.DateFormat dateFormat = android.text.format.DateFormat
 					.getDateFormat(context);
 			Log.d(TAG, "Active day set to " + dateFormat.format(activeDay.getTime()));
-			activeDay.set(Calendar.HOUR, 0);
+			activeDay.set(Calendar.HOUR_OF_DAY, 0);
 			activeDay.set(Calendar.MINUTE, 0);
 			activeDay.set(Calendar.SECOND, 0);
 			activeDay.set(Calendar.MILLISECOND, 0);
