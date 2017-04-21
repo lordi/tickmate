@@ -60,8 +60,6 @@ public class IconListAdapter extends BaseAdapter {
 
         imageView.setImageResource(icon_id);
         imageView.setContentDescription(icon_names.get(position));
-        //imageView.setMinimumWidth(100);
-        //imageView.setMinimumHeight(100);
         return imageView;
     }
 
