@@ -67,6 +67,7 @@
     <string-array name="pref_titles_active_date">
         <item>Aktywuj tylko dany dzień</item>
         <item>Aktywuj dany dzień i poprzedni</item>
+        <item>Aktywuj dany dzień i dzień/weekend poprzeni</item>
         <item>Wszystkie dni</item>
     </string-array>
     <string name="notify_user_ticking_disabled">Zmiana tego zaznaczenia jest nieaktywna. Możesz określić które dni można zmieniać w ustawieniach.</string>
@@ -94,6 +95,15 @@
     <string name="longest_streak_on">Najdłuższa seria</string>
     <string name="longest_streak_off">Najdłuższa przerwa</string>
     <string name="pref_multiple_entries_enabled_summary">Zliczanych będzie wiele wystąpień w ciągu dnia. Przytrzymaj, aby zmniejszyć licznik.</string>
-    <string name="backup_folder">Katlog backupu:</string>
+    <string name="backup_folder">Katalog backupu:</string>
+
+    <!-- New in 1.4.4 -->
+    <string name="pref_title_long_click">Przytrzymaj na zdarzeniu</string>
+    <string-array name="pref_titles_long_click">
+        <item>Podaj ilość zdarzeń</item>
+        <item>Usuń ostatnie zdarzenie</item>
+    </string-array>
+    <string name="set_number_of_ticks">Ilość zdarzeń %1$s</string>
+
 
 </resources>
