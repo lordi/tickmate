@@ -59,6 +59,7 @@ public class IconListAdapter extends BaseAdapter {
 		int icon_id = r.getIdentifier((String)getItem(position), "drawable", context.getPackageName());
 
         imageView.setImageResource(icon_id);
+        imageView.setContentDescription(icon_names.get(position));
         return imageView;
     }
 
