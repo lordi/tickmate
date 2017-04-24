@@ -88,7 +88,7 @@ public class MultiTickButton extends Button implements OnClickListener, OnLongCl
 		if (c.get(Calendar.DAY_OF_YEAR) == this.date.get(Calendar.DAY_OF_YEAR) &&
 				c.get(Calendar.YEAR) == this.date.get(Calendar.YEAR) &&
 				c.get(Calendar.ERA) == this.date.get(Calendar.ERA)) {
-			DataSource.getInstance().setTick(this.getTrack(), c, false);
+			DataSource.getInstance().setTick(this.getTrack(), c, true);
 		} else {
 			DataSource.getInstance().setTick(this.getTrack(), this.date, false);
 		}
