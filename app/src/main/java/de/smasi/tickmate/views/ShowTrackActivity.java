@@ -111,21 +111,16 @@ public class ShowTrackActivity extends Activity {
 		
 		// Collect week days
 		this.weekdaysKeys = new LinkedList<String>();
-		Calendar day = (Calendar) today.clone();
-		day.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        this.weekdaysData = new LinkedList<Integer>();
+        Calendar day = (Calendar) today.clone();
+		day.set(Calendar.DAY_OF_WEEK, today.getFirstDayOfWeek());
 		
 		for (int i = 0; i < 7; i++) {
 			this.weekdaysKeys.add(day.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, locale).toUpperCase(locale));
 			day.add(Calendar.DATE, 1);
-		}		
-		this.weekdaysData = new LinkedList<Integer>();
-		this.weekdaysData.add(0);
-		this.weekdaysData.add(0);
-		this.weekdaysData.add(0);
-		this.weekdaysData.add(0);		
-		this.weekdaysData.add(0);
-		this.weekdaysData.add(0);	
-		this.weekdaysData.add(0);
+            this.weekdaysData.add(0);
+		}
+
 
 		// Prepare weeks
 		Map<Integer, Integer> weekyear_to_index = new HashMap<Integer, Integer>();
@@ -199,8 +194,8 @@ public class ShowTrackActivity extends Activity {
 
 		// Collect all data
 		for (Tick tick : ticks) {
-            int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - 2;
-            if (day_of_week < 0) day_of_week = 6;
+            int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - today.getFirstDayOfWeek();
+            if (day_of_week < 0) day_of_week += 7;
 			int newcount = this.weekdaysData.get(day_of_week)+1;
 			if (newcount > this.weekdaysMaximum) {
 				this.weekdaysMaximum = newcount;
