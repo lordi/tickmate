@@ -44,6 +44,7 @@ public class TickColorListAdapter extends BaseAdapter {
         imageView.setPadding(8, 8, 8, 8);
         int color = TickColor.getColor(position).getColorValue();
         imageView.setImageDrawable(TickColor.getTickedButtonDrawable(mContext, color));
+        imageView.setContentDescription(TickColor.getColor(position).getName());
         return imageView;
     }
 }
