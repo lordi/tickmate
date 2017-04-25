@@ -583,6 +583,7 @@ public class DataSource {
 		c.set(Calendar.HOUR_OF_DAY, cursor.getInt(5));
 		c.set(Calendar.MINUTE, cursor.getInt(6));
 		c.set(Calendar.SECOND, cursor.getInt(7));
+		c.set(Calendar.MILLISECOND, 0);
 		Tick tick = new Tick(cursor.getInt(1), c);
 		tick.tick_id = cursor.getInt(0);
 		return tick;
