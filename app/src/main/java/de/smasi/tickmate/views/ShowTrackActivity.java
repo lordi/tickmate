@@ -190,84 +190,81 @@ public class ShowTrackActivity extends Activity {
         }
         this.streakOnMaximum = ticks.size() > 0 ? 1 : 0;
         this.streakOffMaximum = 0;
-        Calendar last_on = null;
 
-		// Collect all data
-		for (Tick tick : ticks) {
-            int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - today.getFirstDayOfWeek();
-            if (day_of_week < 0) day_of_week += 7;
-			int newcount = this.weekdaysData.get(day_of_week)+1;
-			if (newcount > this.weekdaysMaximum) {
-				this.weekdaysMaximum = newcount;
-			}
-			this.weekdaysData.set(day_of_week, newcount);
-			
-			int weekyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.WEEK_OF_YEAR) * 10000;
-			if (weekyear_to_index.containsKey(weekyear)) {
-				int index = weekyear_to_index.get(weekyear);
-				int newcount2 = this.weeksData.get(index)+1;
-				if (newcount2 > this.weeksMaximum)
-					this.weeksMaximum = newcount2;
-				this.weeksData.set(index, newcount2);
-			}
-			
-			int monthyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.MONTH) * 10000;
-			if (monthyear_to_index.containsKey(monthyear)) {
-				int index = monthyear_to_index.get(monthyear);
-				int newcount2 = this.monthsData.get(index)+1;
-				if (newcount2 > this.monthsMaximum)
-					this.monthsMaximum = newcount2;
-				this.monthsData.set(index, newcount2);
-			}
-			
-			int quarteryear = tick.date.get(Calendar.YEAR) * 4 + tick.date.get(Calendar.MONTH) / 3;
-			if (quarteryear_to_index.containsKey(quarteryear)) {
-				int index = quarteryear_to_index.get(quarteryear);
-				int newcount2 = this.quarterData.get(index)+1;
-				if (newcount2 > this.quarterMaximum)
-					this.quarterMaximum = newcount2;
-				this.quarterData.set(index, newcount2);
+		if (ticks.size() > 0) {
+			Calendar last_on = firstTickDate;
+			streaksData.set(streaksData.size() - 1, 1);
+
+			// Collect all data
+			for (Tick tick : ticks) {
+				int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - today.getFirstDayOfWeek();
+				if (day_of_week < 0) day_of_week += 7;
+				int newcount = this.weekdaysData.get(day_of_week)+1;
+				if (newcount > this.weekdaysMaximum) {
+					this.weekdaysMaximum = newcount;
+				}
+				this.weekdaysData.set(day_of_week, newcount);
+
+				int weekyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.WEEK_OF_YEAR) * 10000;
+				if (weekyear_to_index.containsKey(weekyear)) {
+					int index = weekyear_to_index.get(weekyear);
+					int newcount2 = this.weeksData.get(index)+1;
+					if (newcount2 > this.weeksMaximum)
+						this.weeksMaximum = newcount2;
+					this.weeksData.set(index, newcount2);
+				}
+
+				int monthyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.MONTH) * 10000;
+				if (monthyear_to_index.containsKey(monthyear)) {
+					int index = monthyear_to_index.get(monthyear);
+					int newcount2 = this.monthsData.get(index)+1;
+					if (newcount2 > this.monthsMaximum)
+						this.monthsMaximum = newcount2;
+					this.monthsData.set(index, newcount2);
+				}
+
+				int quarteryear = tick.date.get(Calendar.YEAR) * 4 + tick.date.get(Calendar.MONTH) / 3;
+				if (quarteryear_to_index.containsKey(quarteryear)) {
+					int index = quarteryear_to_index.get(quarteryear);
+					int newcount2 = this.quarterData.get(index)+1;
+					if (newcount2 > this.quarterMaximum)
+						this.quarterMaximum = newcount2;
+					this.quarterData.set(index, newcount2);
+				}
+
+				int cyear = tick.date.get(Calendar.YEAR);
+				if (year_to_index.containsKey(cyear)) {
+					int index = year_to_index.get(cyear);
+					int newcount2 = this.yearsData.get(index) + 1;
+					if (newcount2 > this.yearsMaximum)
+						this.yearsMaximum = newcount2;
+					this.yearsData.set(index, newcount2);
+				}
+
+				int days_since = (int)((tick.date.getTimeInMillis() - last_on.getTimeInMillis()) / (24*60*60*1000));
+				if (days_since > this.streakOffMaximum) {
+					this.streakOffMaximum = days_since - 1;
+				}
+				if (days_since == 1) {
+					// increase last streak by one day
+					int currentStreak = streaksData.get(streaksData.size() - 1) + 1;
+					streaksData.set(streaksData.size() - 1, currentStreak);
+					if (currentStreak > this.streakOnMaximum) {
+						this.streakOnMaximum = currentStreak;
+					}
+				}
+				else if (days_since > 1){
+					streaksData.add(-days_since + 1);	// add a new pause
+					streaksData.add(1);					// add a new streak
+				}
+				last_on = tick.date;
 			}
 
-			int cyear = tick.date.get(Calendar.YEAR);
-			if (year_to_index.containsKey(cyear)) {
-				int index = year_to_index.get(cyear);
-				int newcount2 = this.yearsData.get(index) + 1;
-				if (newcount2 > this.yearsMaximum)
-					this.yearsMaximum = newcount2;
-				this.yearsData.set(index, newcount2);
+			int days_since = (int)((today.getTimeInMillis() - last_on.getTimeInMillis()) / (24*60*60*1000));
+			if (days_since > 0) {
+				streaksData.add(-days_since);
 			}
-
-            if (last_on == null) {
-                streaksData.add(1);
-            }
-            else {
-                tick.date.set(Calendar.MILLISECOND, 0);
-                last_on.set(Calendar.MILLISECOND, 0);
-                int days_since = (int)((tick.date.getTimeInMillis() - last_on.getTimeInMillis()) / (24*60*60*1000));
-                //Log.d("Tickmate", String.format("Days_since=%d, from %d to %d", days_since, tick.date.getTimeInMillis(), last_on.getTimeInMillis()));
-                if (days_since > this.streakOffMaximum) {
-                    this.streakOffMaximum = days_since - 1;
-                }
-
-                if (days_since == 0) {
-                    // multi-tick, ignore
-                }
-                else if (days_since == 1) {
-                    // increase last streak by one day
-                    int currentStreak = streaksData.get(streaksData.size() - 1) + 1;
-                    streaksData.set(streaksData.size() - 1, currentStreak);
-                    if (currentStreak > this.streakOnMaximum) {
-                        this.streakOnMaximum = currentStreak;
-                    }
-                }
-                else {
-                    // add a new streak
-                    streaksData.add(1);
-                }
-            }
-            last_on = tick.date;
-        }
+		}
 
         if (streaksData.size() > 7) {
             streaksData = streaksData.subList(streaksData.size() - 7, streaksData.size());
