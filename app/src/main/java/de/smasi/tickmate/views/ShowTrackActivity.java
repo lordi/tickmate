@@ -77,6 +77,7 @@ public class ShowTrackActivity extends Activity {
     private int streakOnMaximum;
     private int streakOffMaximum;
 
+	private final static int NUMBER_OF_CATEGORIES = 7;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,11 +129,11 @@ public class ShowTrackActivity extends Activity {
 		this.weeksData = new LinkedList<Integer>();
 		Calendar week = (Calendar) today.clone();
 		week.clear(Calendar.HOUR);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			//month.getDisplayName(Calendar.WEEK_OF_YEAR, Calendar.SHORT, Locale.getDefault())
 			this.weeksKeys.add(0, Integer.toString(week.get(Calendar.WEEK_OF_YEAR)));
 			int index = week.get(Calendar.YEAR) + week.get(Calendar.WEEK_OF_YEAR) * 10000;
-			weekyear_to_index.put(index, 6-i);
+			weekyear_to_index.put(index, NUMBER_OF_CATEGORIES-1-i);
 			week.add(Calendar.WEEK_OF_YEAR, -1);
 			this.weeksData.add(0, 0);
 		}
@@ -144,10 +145,10 @@ public class ShowTrackActivity extends Activity {
 		this.monthsData = new LinkedList<Integer>();
 		Calendar month = (Calendar) today.clone();
 		month.clear(Calendar.HOUR);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			this.monthsKeys.add(0, month.getDisplayName(Calendar.MONTH, Calendar.SHORT, locale));
 			int index = month.get(Calendar.YEAR) + month.get(Calendar.MONTH) * 10000;
-			monthyear_to_index.put(index, 6-i);
+			monthyear_to_index.put(index, NUMBER_OF_CATEGORIES-1-i);
 			month.add(Calendar.MONTH, -1);
 			this.monthsData.add(0, 0);			
 		}
@@ -158,11 +159,11 @@ public class ShowTrackActivity extends Activity {
 		this.quarterData = new LinkedList<Integer>();
 		Calendar quarter = (Calendar) today.clone();
 		quarter.clear(Calendar.HOUR);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			//month.getDisplayName(Calendar.WEEK_OF_YEAR, Calendar.SHORT, Locale.getDefault())
 			this.quarterKeys.add(0, "Q" + Integer.toString(quarter.get(Calendar.MONTH)/3+1));
 			int index = quarter.get(Calendar.YEAR) * 4 + quarter.get(Calendar.MONTH) / 3;
-			quarteryear_to_index.put(index, 6-i);
+			quarteryear_to_index.put(index, NUMBER_OF_CATEGORIES-1-i);
 			quarter.add(Calendar.MONTH, -3);
 			this.quarterData.add(0, 0);			
 		}
@@ -173,10 +174,10 @@ public class ShowTrackActivity extends Activity {
 		this.yearsData = new LinkedList<Integer>();
 		Calendar year = (Calendar) today.clone();
 		year.clear(Calendar.HOUR);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			this.yearsKeys.add(0, Integer.toString(year.get(Calendar.YEAR)));
 			int index = year.get(Calendar.YEAR);
-			year_to_index.put(index, 6-i);
+			year_to_index.put(index, NUMBER_OF_CATEGORIES-1-i);
 			year.add(Calendar.YEAR, -1);
 			this.yearsData.add(0, 0);
 		}
@@ -184,7 +185,7 @@ public class ShowTrackActivity extends Activity {
         // Prepare streaks
         this.streaksData = new LinkedList<>();
         this.streaksKeys = new LinkedList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 2 * NUMBER_OF_CATEGORIES; i++) {
             this.streaksData.add(0);
             this.streaksKeys.add(0, "");
         }
@@ -263,11 +264,14 @@ public class ShowTrackActivity extends Activity {
 			int days_since = (int)((today.getTimeInMillis() - last_on.getTimeInMillis()) / (24*60*60*1000));
 			if (days_since > 0) {
 				streaksData.add(-days_since);
+				if (days_since > this.streakOffMaximum) {
+					this.streakOffMaximum = days_since;
+				}
 			}
 		}
 
-        if (streaksData.size() > 7) {
-            streaksData = streaksData.subList(streaksData.size() - 7, streaksData.size());
+        if (streaksData.size() > 2 * NUMBER_OF_CATEGORIES) {
+            streaksData = streaksData.subList(streaksData.size() - 2 * NUMBER_OF_CATEGORIES, streaksData.size());
         }
 
         if (this.weeksMaximum < 7)
@@ -341,7 +345,7 @@ public class ShowTrackActivity extends Activity {
         streakOffNumber.setColor(track.getTickColor().getColorValue());
 
         graph_streaks = (SummaryGraph) findViewById(R.id.summaryGraph_streaks);
-        graph_streaks.setData(this.streaksData, this.streaksKeys, this.streakOnMaximum);
+        graph_streaks.setData(this.streaksData, this.streaksKeys, this.streakOnMaximum, this.streakOffMaximum);
         graph_streaks.setColor(track.getTickColor().getColorValue());
 
         graph_weekdays = (SummaryGraph) findViewById(R.id.summaryGraph_weekdays);
