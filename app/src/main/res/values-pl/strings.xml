@@ -91,7 +91,7 @@
     <string name="pref_title_color">Kolor</string>
 
     <!-- New in 1.4.2 -->
-    <string name="title_section_streaks">Serie</string>
+    <string name="title_section_streaks">Serie/Przerwy</string>
     <string name="longest_streak_on">Najdłuższa seria</string>
     <string name="longest_streak_off">Najdłuższa przerwa</string>
     <string name="pref_multiple_entries_enabled_summary">Zliczanych będzie wiele wystąpień w ciągu dnia. Przytrzymaj, aby zmniejszyć licznik.</string>
