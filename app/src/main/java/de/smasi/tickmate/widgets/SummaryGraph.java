@@ -86,7 +86,7 @@ public class SummaryGraph extends View {
 
 		int len = this.data.size();
 
-		if (len == 0 || maximum == 0f)
+		if (len == 0)
 			return;
 
 	    paint.setAntiAlias(true);
@@ -104,6 +104,8 @@ public class SummaryGraph extends View {
 		final int fontBottom = fontMetricsInt.bottom;
 
 		float margin = MARKER_RADIUS + fontBottom + fontTop;  // for point/axis labels below/above chart area
+		if (this.maximum <= 0)
+			this.maximum = 1f;
 		float height0 = this.maximum / (this.maximum + this.minimum) * (getHeight() - 2 * margin);
 		                // height of positive section of chart
 		float height = height0 + margin; // distance from top to abscissa

@@ -198,6 +198,9 @@ public class ShowTrackActivity extends Activity {
 
 			// Collect all data
 			for (Tick tick : ticks) {
+				tick.date.set(Calendar.HOUR_OF_DAY,0);
+				tick.date.set(Calendar.MINUTE,0);
+				tick.date.set(Calendar.SECOND,0);
 				int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - today.getFirstDayOfWeek();
 				if (day_of_week < 0) day_of_week += 7;
 				int newcount = this.weekdaysData.get(day_of_week)+1;
@@ -294,14 +297,23 @@ public class ShowTrackActivity extends Activity {
 		
 		if (ticks.size() > 0) {
 			firstTickDate = ticks.get(0).date;
+			firstTickDate.set(Calendar.HOUR_OF_DAY,0);
+			firstTickDate.set(Calendar.MINUTE,0);
+			firstTickDate.set(Calendar.SECOND,0);
 			lastTickDate = ticks.get(ticks.size() - 1).date;
+			lastTickDate.set(Calendar.HOUR_OF_DAY,0);
+			lastTickDate.set(Calendar.MINUTE,0);
+			lastTickDate.set(Calendar.SECOND,0);
 		}
 		else {
 			firstTickDate = null;
 			lastTickDate = null;
 		}
 		today = Calendar.getInstance();
-	
+		today.set(Calendar.HOUR_OF_DAY,0);
+		today.set(Calendar.MINUTE,0);
+		today.set(Calendar.SECOND,0);
+
 		fillTrackUI();
 		
 	}
