@@ -128,12 +128,14 @@
                             android:id="@+id/summaryNumberStreakOn"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginBottom="2.5dp"
                             android:layout_weight="1.0"/>
 
                         <de.smasi.tickmate.widgets.SummaryNumber
                             android:id="@+id/summaryNumberStreakOff"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="2.5dp"
                             android:layout_weight="1.0"/>
 
                     </LinearLayout>

@@ -13,5 +13,13 @@
         <item>LONGCLICK_DECREMENT</item>
     </string-array>
 
+    <string-array name="pref_values_trend_range">
+        <item>7</item>
+        <item>14</item>
+        <item>30</item>
+        <item>91</item>
+        <item>183</item>
+        <item>365</item>
+    </string-array>
 
 </resources>

@@ -27,6 +27,7 @@ public class SettingsActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.pref_general);
         bindPreferenceSummaryToValue(findPreference("active-date-key"));
         bindPreferenceSummaryToValue(findPreference("long-click-key"));
+        bindPreferenceSummaryToValue(findPreference("trend-range-key"));
     }
 
 
