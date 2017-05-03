@@ -105,5 +105,14 @@
         <item>Entfernt letzten Tick</item>
     </string-array>
     <string name="set_number_of_ticks">Anzahl Ticks %1$s</string>
+    <string name="pref_title_trend_range">Trendbereich</string>
+    <string-array name="pref_titles_trend_range">
+        <item>Wochentrend</item>
+        <item>14-Tage-Trend</item>
+        <item>Monatstrend</item>
+        <item>Quartalstrend</item>
+        <item>Halbjahrestrend</item>
+        <item>Jahrestrend</item>
+    </string-array>
 
 </resources>

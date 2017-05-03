@@ -24,4 +24,13 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_long_click" />
 
+    <ListPreference
+        android:defaultValue="14"
+        android:entries="@array/pref_titles_trend_range"
+        android:entryValues="@array/pref_values_trend_range"
+        android:key="trend-range-key"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_trend_range" />
+
 </PreferenceScreen>

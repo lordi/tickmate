@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -76,6 +77,10 @@ public class ShowTrackActivity extends Activity {
     private List<String> streaksKeys;
     private int streakOnMaximum;
     private int streakOffMaximum;
+
+	private int trendRange;
+	private String trendCaption;
+	private int trendData[] = null;
 
 	private final static int NUMBER_OF_CATEGORIES = 7;
 
@@ -271,6 +276,26 @@ public class ShowTrackActivity extends Activity {
 					this.streakOffMaximum = days_since;
 				}
 			}
+
+			// trend calculation (only if trend range is less than or equal data range)
+			if ((int) ((today.getTimeInMillis() - firstTickDate.getTimeInMillis()) / (24 * 60 * 60 * 1000)) >= trendRange - 1) {
+				this.trendData = new int[trendRange];
+				ListIterator<Tick> tickReverseIterator = ticks.listIterator(ticks.size()); // credits to stackoverflow.com/a/15005226/3944322
+				int days;       // number of days from today
+				Tick tick;
+				try {
+					while (tickReverseIterator.hasPrevious()) {
+						tick = tickReverseIterator.previous();
+						tick.date.set(Calendar.HOUR_OF_DAY, 0); //TODO general solution for clearing time
+						tick.date.set(Calendar.MINUTE, 0);
+						tick.date.set(Calendar.SECOND, 0);
+						days = (int) ((today.getTimeInMillis() - tick.date.getTimeInMillis()) / (24 * 60 * 60 * 1000));
+						trendData[days]++;
+					}
+				} catch (IndexOutOfBoundsException stopHere) {
+					// stop iterating over ordered list here, as we've left the trend range
+				}
+			}
 		}
 
         if (streaksData.size() > 2 * NUMBER_OF_CATEGORIES) {
@@ -314,6 +339,17 @@ public class ShowTrackActivity extends Activity {
 		today.set(Calendar.MINUTE,0);
 		today.set(Calendar.SECOND,0);
 
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		trendRange = Integer.parseInt(sharedPrefs.getString("trend-range-key", "14"));
+		String[] trendRangeValues = getResources().getStringArray(R.array.pref_values_trend_range);
+		int trendRangeIndex;
+		for (trendRangeIndex = 0; trendRangeIndex < trendRangeValues.length; trendRangeIndex++){
+			if (Integer.parseInt(trendRangeValues[trendRangeIndex]) == trendRange)
+				break;
+		}
+		String[] trendRangeTitles = getResources().getStringArray(R.array.pref_titles_trend_range);
+		trendCaption = trendRangeTitles[trendRangeIndex];
+
 		fillTrackUI();
 		
 	}
@@ -327,24 +363,39 @@ public class ShowTrackActivity extends Activity {
 		SummaryNumber sn2 = (SummaryNumber) findViewById(R.id.summaryNumber2);
 		SummaryNumber sn3 = (SummaryNumber) findViewById(R.id.summaryNumber3);
 
+		retrieveGraphData();
+
 		double milliSecsInADay = 1000.0 * 3600 * 24;
 		double weeklymean = -1;
-		double days_since_last = -1;
-		
+
 		if (firstTickDate != null && lastTickDate != null) {
 			double days = Math.ceil(((double)(today.getTimeInMillis() - firstTickDate.getTimeInMillis())) / milliSecsInADay); 
-			days_since_last = ((double)(today.getTimeInMillis() - lastTickDate.getTimeInMillis())) / milliSecsInADay; 
 			weeklymean = (tickCount/days)*7.0;
 		}
 
 		sn1.setData(tickCount, 0, (String) getText(R.string.show_track_total));
-        sn1.setColor(track.getTickColor().getColorValue());
+		sn1.setColor(track.getTickColor().getColorValue());
 		sn2.setData(weeklymean, 1, (String) getText(R.string.show_track_weeklymean));
-        sn2.setColor(track.getTickColor().getColorValue());
-        sn3.setData(days_since_last, 0, (String) getText(R.string.show_track_dayssincelast));
-        sn3.setColor(track.getTickColor().getColorValue());
+		sn2.setColor(track.getTickColor().getColorValue());
 
-		retrieveGraphData();
+		// Trend indicator
+		if (trendData != null) {
+			int n = trendData.length - 1;
+			long sx = n * (n + 1) / 2;        // some shortcuts for sequential x values, although
+			long sxx = sx * (2 * n + 1) / 3;  // time saving is negligible for our small values of n
+			long sy = 0L, sxy = 0L;
+			for (int i = 0; i <= n; i++) {
+				sy += trendData[i];
+				sxy += i * trendData[i];
+			}
+			// the slope is -b in a + bx as time runs backwards in trendData
+			double slope = (double) (sx * sy - trendData.length * sxy) / (trendData.length * sxx - sx * sx);
+			sn3.setData(90.0 * slope, -1, trendCaption);
+		} else {
+			sn3.setData(-1.0, 0, trendCaption);
+		}
+		sn3.setColor(track.getTickColor().getColorValue());
+
 
         /* Streaks */
         SummaryNumber streakOnNumber = (SummaryNumber) findViewById(R.id.summaryNumberStreakOn);

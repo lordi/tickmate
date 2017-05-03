@@ -105,5 +105,14 @@
         <item>Remove last tick</item>
     </string-array>
     <string name="set_number_of_ticks">Number of ticks %1$s</string>
+    <string name="pref_title_trend_range">Trend range</string>
+    <string-array name="pref_titles_trend_range">
+        <item>1-week trend</item>
+        <item>2-week trend</item>
+        <item>1-month trend</item>
+        <item>3-month trend</item>
+        <item>6-month trend</item>
+        <item>1-year trend</item>
+    </string-array>
 
 </resources>
