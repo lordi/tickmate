@@ -102,7 +102,7 @@ public class SummaryNumber extends View {
 			paint.getTextBounds("1", 0, 1, textBounds); // vertically align any value, with and without decimal separator
 			canvas.drawText(text, cx, cy + textBounds.height() / 2f, paint);
 		} else {
-			if (this.number > -90f && this.number < 90f) {
+			if (this.number > -90 && this.number < 90) {
 				text = "\u279E";  // Heavy Triangle-headed Rightwards Arrow
 			} else {
 				this.number = this.number > 0 ? 90.0 : -90.0;  // cap angle at 90° ...
