@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.lang.Math;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -83,8 +85,8 @@ public class ShowTrackActivity extends Activity {
 	int[] trendRangeValues;						// from pref_values_trend_range
 	String[] trendRangeTitles;
 	int trendRangeIndex;
-	double[] trendSlopes = {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0 }; // length = length of pref_values_trend_range
-	int[] trendAvailable = {0, 0, 0, 0, 0, 0}; 	// same length as trendSlopes[], 0 = trend not available, -1 = trend available
+	double[] trendAngles = {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0 }; // length = length of pref_values_trend_range
+	int[] trendAvailable = {0, 0, 0, 0, 0, 0}; 	// same length as trendAngles[], 0 = trend not available, -1 = trend available
 
 	private final static int NUMBER_OF_CATEGORIES = 7;
 
@@ -386,7 +388,7 @@ public class ShowTrackActivity extends Activity {
 			int n;								 // number of day in range
 			long sx, sxx, sy = 0L, sxy = 0L;
 			int i = 0;							 // cumulative index into trendData
-			for (int j = 0; j < trendSlopes.length; j++){
+			for (int j = 0; j < trendAngles.length; j++){
 				n = trendRangeValues[j] - 1;
 				if ((int) ((today.getTimeInMillis() - firstTickDate.getTimeInMillis()) / (24 * 60 * 60 * 1000)) >= n) {
 					sx = n * (n + 1) / 2;        // some shortcuts for sequential x values, although
@@ -395,17 +397,17 @@ public class ShowTrackActivity extends Activity {
 						sy += trendData[i];
 						sxy += i * trendData[i];
 					}
-					trendSlopes[j] = (double) (sx * sy - (n + 1) * sxy) / ((n + 1) * sxx - sx * sx);
-					// scale to biggest possible slope for single tick track, see github.com/lordi/tickmate/issues/98#issuecomment-300133172
-					double scaleFactor = (n + 1) % 2 == 0 ? 3. / (2. * (n + 1)- 2. / (n + 1)) : 3. / (2. * (n + 1));
-					trendSlopes[j] *= 90. / scaleFactor;
+					trendAngles[j] = Math.toDegrees(Math.atan((double) (sx * sy - (n + 1) * sxy) / ((n + 1) * sxx - sx * sx)));
+					// scale to biggest possible angle for single tick track, see github.com/lordi/tickmate/issues/98#issuecomment-300133172
+					double maxAngle = Math.toDegrees(Math.atan((n + 1) % 2 == 0 ? 3. / (2. * (n + 1)- 2. / (n + 1)) : 3. / (2. * (n + 1))));
+					trendAngles[j] *= 90. / maxAngle;
 					trendAvailable[j] = -1;  	 // trend is available
 				} else {
 					break;						 // no longer trends available
 				}
 			}
 		}
-		sn3.setData(trendSlopes[trendRangeIndex], trendAvailable[trendRangeIndex], trendRangeTitles[trendRangeIndex]);
+		sn3.setData(trendAngles[trendRangeIndex], trendAvailable[trendRangeIndex], trendRangeTitles[trendRangeIndex]);
 		sn3.setColor(track.getTickColor().getColorValue());
 		sn3.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -414,7 +416,7 @@ public class ShowTrackActivity extends Activity {
 				if (trendRangeIndex >= trendRangeTitles.length){
 					trendRangeIndex = 0;
 				}
-				sn3.setData(trendSlopes[trendRangeIndex], trendAvailable[trendRangeIndex], trendRangeTitles[trendRangeIndex]);
+				sn3.setData(trendAngles[trendRangeIndex], trendAvailable[trendRangeIndex], trendRangeTitles[trendRangeIndex]);
 				sn3.invalidate();
 			}
 		});
