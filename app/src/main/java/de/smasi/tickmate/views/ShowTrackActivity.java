@@ -117,7 +117,33 @@ public class ShowTrackActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
-	
+
+	/**
+	 * Returns the week year of {@code cal} which is in sync with the week cycle.
+	 * (Calendar#getWeekYear() is only available for API level 24 and newer, so we have to roll
+	 * our own version)
+	 *
+	 * @param cal date for which the week year is being calculated
+	 * @return the week year
+	 */
+	private int getWeekYear( Calendar cal ){
+		int year = cal.get(Calendar.YEAR);
+		int week = cal.get(Calendar.WEEK_OF_YEAR);
+
+		if (cal.get(Calendar.MONTH) == Calendar.JANUARY) {
+			if (week >= 52) {
+				year--;
+			}
+		} else {
+			if (week == 1) {
+				year++;
+			}
+		}
+
+		return year;
+	}
+
+
 	private void retrieveGraphData() {
 		Locale locale = Locale.getDefault();
 		
@@ -143,7 +169,7 @@ public class ShowTrackActivity extends Activity {
 		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			//month.getDisplayName(Calendar.WEEK_OF_YEAR, Calendar.SHORT, Locale.getDefault())
 			this.weeksKeys.add(0, Integer.toString(week.get(Calendar.WEEK_OF_YEAR)));
-			int index = week.get(Calendar.YEAR) + week.get(Calendar.WEEK_OF_YEAR) * 10000;
+			int index = getWeekYear(week) + week.get(Calendar.WEEK_OF_YEAR) * 10000;
 			weekyear_to_index.put(index, NUMBER_OF_CATEGORIES-1-i);
 			week.add(Calendar.WEEK_OF_YEAR, -1);
 			this.weeksData.add(0, 0);
@@ -220,7 +246,7 @@ public class ShowTrackActivity extends Activity {
 				}
 				this.weekdaysData.set(day_of_week, newcount);
 
-				int weekyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.WEEK_OF_YEAR) * 10000;
+				int weekyear = getWeekYear(tick.date) + tick.date.get(Calendar.WEEK_OF_YEAR) * 10000;
 				if (weekyear_to_index.containsKey(weekyear)) {
 					int index = weekyear_to_index.get(weekyear);
 					int newcount2 = this.weeksData.get(index)+1;
