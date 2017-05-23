@@ -165,7 +165,6 @@ public class ShowTrackActivity extends Activity {
 		this.weeksKeys = new LinkedList<String>();
 		this.weeksData = new LinkedList<Integer>();
 		Calendar week = (Calendar) today.clone();
-		week.clear(Calendar.HOUR);
 		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			//month.getDisplayName(Calendar.WEEK_OF_YEAR, Calendar.SHORT, Locale.getDefault())
 			this.weeksKeys.add(0, Integer.toString(week.get(Calendar.WEEK_OF_YEAR)));
@@ -181,7 +180,6 @@ public class ShowTrackActivity extends Activity {
 		this.monthsKeys = new LinkedList<String>();
 		this.monthsData = new LinkedList<Integer>();
 		Calendar month = (Calendar) today.clone();
-		month.clear(Calendar.HOUR);
 		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			this.monthsKeys.add(0, month.getDisplayName(Calendar.MONTH, Calendar.SHORT, locale));
 			int index = month.get(Calendar.YEAR) + month.get(Calendar.MONTH) * 10000;
@@ -195,7 +193,6 @@ public class ShowTrackActivity extends Activity {
 		this.quarterKeys = new LinkedList<String>();
 		this.quarterData = new LinkedList<Integer>();
 		Calendar quarter = (Calendar) today.clone();
-		quarter.clear(Calendar.HOUR);
 		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			//month.getDisplayName(Calendar.WEEK_OF_YEAR, Calendar.SHORT, Locale.getDefault())
 			this.quarterKeys.add(0, "Q" + Integer.toString(quarter.get(Calendar.MONTH)/3+1));
@@ -210,7 +207,6 @@ public class ShowTrackActivity extends Activity {
 		this.yearsKeys = new LinkedList<String>();
 		this.yearsData = new LinkedList<Integer>();
 		Calendar year = (Calendar) today.clone();
-		year.clear(Calendar.HOUR);
 		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			this.yearsKeys.add(0, Integer.toString(year.get(Calendar.YEAR)));
 			int index = year.get(Calendar.YEAR);
@@ -235,9 +231,6 @@ public class ShowTrackActivity extends Activity {
 
 			// Collect all data
 			for (Tick tick : ticks) {
-				tick.date.set(Calendar.HOUR_OF_DAY,0);
-				tick.date.set(Calendar.MINUTE,0);
-				tick.date.set(Calendar.SECOND,0);
 				int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - today.getFirstDayOfWeek();
 				if (day_of_week < 0) day_of_week += 7;
 				int newcount = this.weekdaysData.get(day_of_week)+1;
@@ -317,9 +310,6 @@ public class ShowTrackActivity extends Activity {
 			try {
 				while (tickReverseIterator.hasPrevious()) {
 					tick = tickReverseIterator.previous();
-					tick.date.set(Calendar.HOUR_OF_DAY, 0); //TODO general solution for clearing time
-					tick.date.set(Calendar.MINUTE, 0);
-					tick.date.set(Calendar.SECOND, 0);
 					days = (int) ((today.getTimeInMillis() - tick.date.getTimeInMillis()) / (24 * 60 * 60 * 1000));
 					trendData[days]++;
 				}
@@ -352,13 +342,7 @@ public class ShowTrackActivity extends Activity {
 		
 		if (ticks.size() > 0) {
 			firstTickDate = ticks.get(0).date;
-			firstTickDate.set(Calendar.HOUR_OF_DAY,0);
-			firstTickDate.set(Calendar.MINUTE,0);
-			firstTickDate.set(Calendar.SECOND,0);
 			lastTickDate = ticks.get(ticks.size() - 1).date;
-			lastTickDate.set(Calendar.HOUR_OF_DAY,0);
-			lastTickDate.set(Calendar.MINUTE,0);
-			lastTickDate.set(Calendar.SECOND,0);
 		}
 		else {
 			firstTickDate = null;
@@ -368,6 +352,7 @@ public class ShowTrackActivity extends Activity {
 		today.set(Calendar.HOUR_OF_DAY,0);
 		today.set(Calendar.MINUTE,0);
 		today.set(Calendar.SECOND,0);
+		today.set(Calendar.MILLISECOND,0);
 
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		int trendRange = Integer.parseInt(sharedPrefs.getString("trend-range-key", "14"));

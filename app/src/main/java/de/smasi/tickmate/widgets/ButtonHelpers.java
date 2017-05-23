@@ -19,7 +19,7 @@ public class ButtonHelpers {
         String limitActivePref = sharedPrefs.getString("active-date-key", "ALLOW_ALL");
 
         Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR, 0);
+        today.set(Calendar.HOUR_OF_DAY, 0);
         today.set(Calendar.MINUTE, 0);
         today.set(Calendar.SECOND, 0);
         today.set(Calendar.MILLISECOND, 0);
