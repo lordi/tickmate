@@ -1,3 +1,11 @@
+v1.4.4
+------
+
+ * Trend indicator (@StefRe)
+ * Option to enter tick count on long click (@StefRe)
+ * Can set editable days to include the weekend (@StefRe)
+ * Various bugfixes related to time info (@StefRe)
+
 v1.4.3
 ------
 
