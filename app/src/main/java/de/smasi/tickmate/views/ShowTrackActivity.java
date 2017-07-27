@@ -275,7 +275,7 @@ public class ShowTrackActivity extends Activity {
 					this.yearsData.set(index, newcount2);
 				}
 
-				int days_since = (int)((tick.date.getTimeInMillis() - last_on.getTimeInMillis()) / (24*60*60*1000));
+				int days_since = daysBetween(last_on, tick.date);
 				if (days_since > this.streakOffMaximum) {
 					this.streakOffMaximum = days_since - 1;
 				}
@@ -294,7 +294,7 @@ public class ShowTrackActivity extends Activity {
 				last_on = tick.date;
 			}
 
-			int days_since = (int)((today.getTimeInMillis() - last_on.getTimeInMillis()) / (24*60*60*1000));
+			int days_since = daysBetween(last_on, today);
 			if (days_since > 0) {
 				streaksData.add(-days_since);
 				if (days_since > this.streakOffMaximum) {
@@ -310,7 +310,7 @@ public class ShowTrackActivity extends Activity {
 			try {
 				while (tickReverseIterator.hasPrevious()) {
 					tick = tickReverseIterator.previous();
-					days = (int) ((today.getTimeInMillis() - tick.date.getTimeInMillis()) / (24 * 60 * 60 * 1000));
+					days = daysBetween(tick.date, today);
 					trendData[days]++;
 				}
 			} catch (IndexOutOfBoundsException stopHere) {
@@ -334,7 +334,21 @@ public class ShowTrackActivity extends Activity {
 		if (this.yearsMaximum < 31)
 			this.yearsMaximum = 31;
 	}
-	
+
+	/**
+	 * Number of day switches between {@code date1} and {@code date2}, Example: daysBetween( yesterday, today ) = 1.
+	 * Both dates are assumed to have all time fields set to zero.
+	 * @param date1 first date
+	 * @param date2 second date (greater than or equal to first date)
+	 * @return number of day switches between {@code date1} and {@code date2}
+	 */
+	private int daysBetween( Calendar date1, Calendar date2){
+		// There can be 23, 24, or 25 hours per day due to DST, so the millis difference divided
+		// by millis per day can have a remainder of 1/24. Therefore it must be ROUNDED to the
+		// next whole number.
+		return (int) ((date2.getTimeInMillis() - date1.getTimeInMillis() + 12*60*60*1000) / (24*60*60*1000));
+	}
+
 	private void loadTrack(int track_id) {
 		track = ds.getTrack(track_id);
 		tickCount = ds.getTickCount(track_id);
@@ -381,11 +395,10 @@ public class ShowTrackActivity extends Activity {
 
 		retrieveGraphData();
 
-		double milliSecsInADay = 1000.0 * 3600 * 24;
 		double weeklymean = -1;
 
 		if (firstTickDate != null && lastTickDate != null) {
-			double days = Math.ceil(((double)(today.getTimeInMillis() - firstTickDate.getTimeInMillis())) / milliSecsInADay); 
+			double days = daysBetween(firstTickDate, today) + 1;
 			weeklymean = (tickCount/days)*7.0;
 		}
 
@@ -401,7 +414,7 @@ public class ShowTrackActivity extends Activity {
 			int i = 0;							 // cumulative index into trendData
 			for (int j = 0; j < trendAngles.length; j++){
 				n = trendRangeValues[j] - 1;
-				if ((int) ((today.getTimeInMillis() - firstTickDate.getTimeInMillis()) / (24 * 60 * 60 * 1000)) >= n) {
+				if (daysBetween(firstTickDate, today) >= n) {
 					sx = n * (n + 1) / 2;        // some shortcuts for sequential x values, although
 					sxx = sx * (2 * n + 1) / 3;  // time saving is negligible for our small values of n
 					for ( ; i <= n; i++) {
