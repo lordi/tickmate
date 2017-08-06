@@ -1,3 +1,8 @@
+v1.4.5
+------
+
+ * Fix calculation of days during DST changes (@StefRe)
+
 v1.4.4
 ------
 
