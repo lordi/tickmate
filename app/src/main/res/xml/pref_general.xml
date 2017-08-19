@@ -48,7 +48,7 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="notify-me"
+            android:key="notification-enabled"
             android:title="Tick reminder"
             android:summary="Issue a daily notification to do my ticks"
              />
