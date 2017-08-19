@@ -53,14 +53,10 @@
             android:summary="Issue a daily notification to do my ticks"
              />
 
-        <ListPreference
+        <de.smasi.tickmate.prefs.TimePickerPreference
             android:defaultValue="20:00"
-            android:entries="@array/pref_titles_active_date"
-            android:entryValues="@array/pref_values_active_date"
-            android:key="active-date-key"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="Remind me at" />
+            android:key="notification-time"
+            android:title="Time of day" />
 
     </PreferenceCategory>
 
