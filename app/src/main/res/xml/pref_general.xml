@@ -18,6 +18,29 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_title_limit_active_date" />
 
+        <ListPreference
+            android:defaultValue="LONGCLICK_DECREMENT"
+            android:entries="@array/pref_titles_long_click"
+            android:entryValues="@array/pref_values_long_click"
+            android:key="long-click-key"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_long_click" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Track screen">
+
+        <ListPreference
+            android:defaultValue="14"
+            android:entries="@array/pref_titles_trend_range"
+            android:entryValues="@array/pref_values_trend_range"
+            android:key="trend-range-key"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_trend_range" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -25,11 +48,10 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="reverse-date-order-key"
+            android:key="notify-me"
             android:title="Tick reminder"
             android:summary="Issue a daily notification to do my ticks"
              />
-
 
         <ListPreference
             android:defaultValue="20:00"
@@ -41,23 +63,5 @@
             android:title="Remind me at" />
 
     </PreferenceCategory>
-
-    <ListPreference
-        android:defaultValue="LONGCLICK_DECREMENT"
-        android:entries="@array/pref_titles_long_click"
-        android:entryValues="@array/pref_values_long_click"
-        android:key="long-click-key"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_long_click" />
-
-    <ListPreference
-        android:defaultValue="14"
-        android:entries="@array/pref_titles_trend_range"
-        android:entryValues="@array/pref_values_trend_range"
-        android:key="trend-range-key"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_trend_range" />
 
 </PreferenceScreen>
