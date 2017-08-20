@@ -57,7 +57,7 @@ public class TickmateNotificationBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
-    public static void activateAlarm(Context context)
+    public static void updateAlarm(Context context)
     {
         Calendar cal = Calendar.getInstance();
         java.text.DateFormat timeFmt = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT);

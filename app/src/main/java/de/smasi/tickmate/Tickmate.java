@@ -11,6 +11,7 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -90,7 +91,17 @@ public class Tickmate extends ListActivity implements
         mListView.getEmptyView().setOnClickListener(this);
         mListView.getEmptyView().setOnTouchListener(mListHeader);
 
-        TickmateNotificationBroadcastReceiver.activateAlarm(this);
+        // Update Notification alarm whenever the relevant preferences change
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
+                    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                        if(key.equals("notification-enabled") || key.equals("notification-time"))
+                            TickmateNotificationBroadcastReceiver.updateAlarm(Tickmate.this);
+                    }
+                });
+
+
     }
 
     @Override
