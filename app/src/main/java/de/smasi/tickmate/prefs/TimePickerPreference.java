@@ -3,6 +3,7 @@ package de.smasi.tickmate.prefs;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
+import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
@@ -11,12 +12,14 @@ import android.util.TimeUtils;
 import android.view.View;
 import android.widget.TimePicker;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
 public class TimePickerPreference extends DialogPreference {
     private int lastHour = 0;
     private int lastMinute = 0;
+    private static final String TAG = "Tickmate";
     private TimePicker picker = null;
 
     public static int getHour(String time) {
@@ -71,9 +74,10 @@ public class TimePickerPreference extends DialogPreference {
             cal.set(Calendar.SECOND, 0);
 
             String time = df.format(cal.getTime());
-            setSummary("Remind me at " + time);
 
-            Log.d("Tickmate", "Selected time: " + time);
+            updateSummary();
+
+            Log.d(TAG, "Selected time: " + time);
 
             if (callChangeListener(time)) {
                 persistString(time);
@@ -81,9 +85,22 @@ public class TimePickerPreference extends DialogPreference {
         }
     }
 
+
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return a.getString(index);
+    }
+
+    private void updateSummary() {
+        java.text.DateFormat df = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, lastHour);
+        cal.set(Calendar.MINUTE, lastMinute);
+        cal.set(Calendar.SECOND, 0);
+
+        String time = df.format(cal.getTime());
+        setSummary("Remind me at " + time);
     }
 
     @Override
@@ -102,7 +119,18 @@ public class TimePickerPreference extends DialogPreference {
             time = defaultValue.toString();
         }
 
-        lastHour = getHour(time);
-        lastMinute = getMinute(time);
+        Calendar cal = Calendar.getInstance();
+        java.text.DateFormat timeFmt = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT);
+
+        try {
+            cal.setTime(timeFmt.parse(time));
+        } catch (ParseException e) {
+            Log.w(TAG, "Error parsing time: " + time);
+        }
+
+        lastHour = cal.get(Calendar.HOUR_OF_DAY);
+        lastMinute = cal.get(Calendar.MINUTE);
+
+        updateSummary();
     }
 }
