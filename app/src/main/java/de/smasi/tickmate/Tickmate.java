@@ -96,6 +96,7 @@ public class Tickmate extends ListActivity implements
         prefs.registerOnSharedPreferenceChangeListener(
                 new SharedPreferences.OnSharedPreferenceChangeListener() {
                     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                        Log.d(TAG, "Settings key changed: " + key);
                         if(key.equals("notification-enabled") || key.equals("notification-time"))
                             TickmateNotificationBroadcastReceiver.updateAlarm(Tickmate.this);
                     }

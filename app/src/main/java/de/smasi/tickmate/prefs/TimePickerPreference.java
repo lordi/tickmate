@@ -22,18 +22,6 @@ public class TimePickerPreference extends DialogPreference {
     private static final String TAG = "Tickmate";
     private TimePicker picker = null;
 
-    public static int getHour(String time) {
-        String[] pieces = time.split(":");
-
-        return Integer.parseInt(pieces[0]);
-    }
-
-    public static int getMinute(String time) {
-        String[] pieces = time.split(":");
-
-        return Integer.parseInt(pieces[1]);
-    }
-
     public TimePickerPreference(Context ctxt, AttributeSet attrs) {
         super(ctxt, attrs);
 
@@ -88,7 +76,16 @@ public class TimePickerPreference extends DialogPreference {
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
-        return a.getString(index);
+        // This should return 8 pm in local time.
+
+        java.text.DateFormat df = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 20);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
+        return df.format(cal.getTime());
     }
 
     private void updateSummary() {
@@ -109,7 +106,7 @@ public class TimePickerPreference extends DialogPreference {
 
         if (restoreValue) {
             if (defaultValue == null) {
-                time = getPersistedString("00:00");
+                time = getPersistedString("20:00");
             }
             else {
                 time = getPersistedString(defaultValue.toString());

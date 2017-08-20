@@ -54,7 +54,6 @@
              />
 
         <de.smasi.tickmate.prefs.TimePickerPreference
-            android:defaultValue="20:00"
             android:key="notification-time"
             android:title="Time of day" />
 
