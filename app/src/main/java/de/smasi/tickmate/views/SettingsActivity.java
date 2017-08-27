@@ -2,15 +2,20 @@
 
 package de.smasi.tickmate.views;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import de.smasi.tickmate.R;
+import de.smasi.tickmate.notifications.TickmateNotificationBroadcastReceiver;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String TAG = "Tickmate";
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -82,5 +87,31 @@ public class SettingsActivity extends PreferenceActivity {
                 PreferenceManager.getDefaultSharedPreferences(
                         preference.getContext()).getString(preference.getKey(),
                         ""));
+    }
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        Log.d(TAG, "Settings key changed: " + key);
+        if (key.equals("notification-enabled") || key.equals("notification-time"))
+            TickmateNotificationBroadcastReceiver.updateAlarm(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Update Notification alarm whenever the relevant preferences change
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
+        Log.d(TAG, "Installed listener");
+    }
+
+    @Override
+    public void onPause() {
+        // Update Notification alarm whenever the relevant preferences change
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.unregisterOnSharedPreferenceChangeListener(this);
+        Log.d(TAG, "Deinstalled listener");
+        super.onPause();
     }
 }

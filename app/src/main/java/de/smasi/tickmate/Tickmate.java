@@ -53,7 +53,7 @@ public class Tickmate extends ListActivity implements
         View.OnClickListener,
         TickHeader.TickHeaderListener {
 
-    private static final String TAG = "Tickmate";
+    private static final String TAG = "Settings";
 
     // views
     private TickHeader mListHeader;
@@ -90,20 +90,7 @@ public class Tickmate extends ListActivity implements
         mListView.setOnTouchListener(mListHeader);
         mListView.getEmptyView().setOnClickListener(this);
         mListView.getEmptyView().setOnTouchListener(mListHeader);
-
-        // Update Notification alarm whenever the relevant preferences change
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.registerOnSharedPreferenceChangeListener(
-                new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                        Log.d(TAG, "Settings key changed: " + key);
-                        if(key.equals("notification-enabled") || key.equals("notification-time"))
-                            TickmateNotificationBroadcastReceiver.updateAlarm(Tickmate.this);
-                    }
-                });
-
-
-    }
+	}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
