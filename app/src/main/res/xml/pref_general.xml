@@ -1,7 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-        android:title="Main screen">
+        android:title="@string/pref_category_main">
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -30,7 +30,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Track screen">
+        android:title="@string/pref_category_track">
 
         <ListPreference
             android:defaultValue="14"
@@ -44,18 +44,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Notifications">
+        android:title="@string/pref_category_notifications">
 
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="notification-enabled"
-            android:title="Tick reminder"
-            android:summary="Issue a daily notification to do my ticks"
+            android:title="@string/reminder_settings_title"
+            android:summary="@string/reminder_settings_summary"
              />
 
         <de.smasi.tickmate.prefs.TimePickerPreference
             android:key="notification-time"
-            android:title="Time of day" />
+            android:title="@string/reminder_notification_time" />
 
     </PreferenceCategory>
 

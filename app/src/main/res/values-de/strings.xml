@@ -115,4 +115,15 @@
         <item>Jahrestrend</item>
     </string-array>
 
+    <!-- New in 1.4.6 -->
+    <string name="pref_category_main">Hauptansicht</string>
+    <string name="pref_category_track">Trackansicht</string>
+    <string name="pref_category_notifications">Benachrichtigungen</string>
+    <string name="reminder_title">Tickmate-Erinnerung</string>
+    <string name="reminder_text">Ticks für heute ausfüllen</string>
+    <string name="reminder_settings_title">Erinnerung</string>
+    <string name="reminder_settings_summary">Tägliche Erinnerung, meine Ticks auszufüllen</string>
+    <string name="reminder_notification_time">Uhrzeit</string>
+    <string name="remind_me_at">Erinner mich um</string>
+
 </resources>

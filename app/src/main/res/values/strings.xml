@@ -115,4 +115,15 @@
         <item>1-year trend</item>
     </string-array>
 
+    <!-- New in 1.4.6 -->
+    <string name="pref_category_main">Main screen</string>
+    <string name="pref_category_track">Track screen</string>
+    <string name="pref_category_notifications">Notifications</string>
+    <string name="reminder_title">Tickmate reminder</string>
+    <string name="reminder_text">Tap to enter your ticks for today</string>
+    <string name="reminder_settings_title">Tickmate reminder</string>
+    <string name="reminder_settings_summary">Issue a daily notification to do my ticks</string>
+    <string name="reminder_notification_time">Time of day</string>
+    <string name="remind_me_at">Remind me at</string>
+
 </resources>

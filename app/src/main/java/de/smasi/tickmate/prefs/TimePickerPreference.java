@@ -16,6 +16,8 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+import de.smasi.tickmate.R;
+
 public class TimePickerPreference extends DialogPreference {
     private int lastHour = 0;
     private int lastMinute = 0;
@@ -97,7 +99,7 @@ public class TimePickerPreference extends DialogPreference {
         cal.set(Calendar.SECOND, 0);
 
         String time = df.format(cal.getTime());
-        setSummary("Remind me at " + time);
+        setSummary(getContext().getString(R.string.remind_me_at) + " " + time);
     }
 
     @Override

@@ -35,18 +35,15 @@ public class TickmateNotificationBroadcastReceiver extends BroadcastReceiver {
 
         if (enabled) {
 
-            Locale locale = Locale.getDefault();
+            //Locale locale = Locale.getDefault();
+            //Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale)
 
-            java.text.DateFormat dateFormat = android.text.format.DateFormat
-                    .getDateFormat(context);
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.drawable.glyphicons_054_clock_white)
-                            .setContentTitle("Tick reminder")
+                            .setSmallIcon(R.drawable.glyphicons_152_check_white)
+                            .setContentTitle(context.getString(R.string.reminder_title))
                             .setAutoCancel(true)
-                            .setContentText("Tap to enter your ticks for " +
-                                    Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, locale)
-                            );
+                            .setContentText(context.getString(R.string.reminder_text));
             Intent resultIntent = new Intent(context, Tickmate.class);
 
 
