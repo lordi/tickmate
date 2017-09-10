@@ -6,6 +6,18 @@ Tickmate is basically a one bit journal. For each day, you can specify whether s
 
 Tickmate is an Android App and is available from the [Play Store](https://play.google.com/store/apps/details?id=de.smasi.tickmate) and [F-Droid](https://f-droid.org/repository/browse/?fdid=de.smasi.tickmate).
 
+### Features
+
+* Choose name, icon and color per track
+* Analytics like streaks, breaks, day of week distribution, histograms
+* Track groups
+* Daily reminder notification
+* Export database for backup and further analysis
+
+See the [change log](CHANGES.md) for the recent changes.
+
+### Screenshots
+
 ![Screenshot](artwork/screenshot.png)
 
 ### Analysis
