@@ -20,6 +20,8 @@ import java.util.Locale;
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.Tickmate;
 
+import static android.content.Intent.FLAG_INCLUDE_STOPPED_PACKAGES;
+
 public class TickmateNotificationBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "Tickmate";
 
@@ -81,6 +83,7 @@ public class TickmateNotificationBroadcastReceiver extends BroadcastReceiver {
 
         Intent intent = new Intent(context, TickmateNotificationBroadcastReceiver.class);
         intent.putExtra("onetime", Boolean.FALSE);
+        intent.addFlags(FLAG_INCLUDE_STOPPED_PACKAGES);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
         // cancel any previous alarms
         am.cancel(pi);
