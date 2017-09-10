@@ -1,3 +1,8 @@
+v1.4.6
+------
+
+ * Tickmate can install a daily notification to do your ticks
+
 v1.4.5
 ------
 
