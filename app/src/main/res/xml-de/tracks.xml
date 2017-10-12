@@ -102,7 +102,7 @@
 
 	<section name="Allgemein">
 		<track icon="@drawable/glyphicons_152_check_white" name="Todo"
-			description="Sachen von der Todo-Liste abgehackt" />
+			description="Sachen von der Todo-Liste abgehakt" />
 
 		<track icon="@drawable/glyphicons_343_thumbs_up_white" name="Guter Tag"
 			description="Insgesamt einen schönen Tag gehabt" />
