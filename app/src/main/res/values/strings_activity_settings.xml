@@ -13,5 +13,15 @@
         <item>LONGCLICK_DECREMENT</item>
     </string-array>
 
+    <!-- MUST be in ascending order for trend slopes calculation in ShotTrackActivity to work correctly -->
+    <!-- if number of entries is being changed, initialization of trendSlopes[] in ShotTrackActivity must be changed accordingly-->
+    <string-array name="pref_values_trend_range">
+        <item>7</item>
+        <item>14</item>
+        <item>30</item>
+        <item>91</item>
+        <item>183</item>
+        <item>365</item>
+    </string-array>
 
 </resources>

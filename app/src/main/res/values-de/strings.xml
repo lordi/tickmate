@@ -92,7 +92,7 @@
     <string name="pref_title_color">Farbe</string>
 
     <!-- New in 1.4.2 -->
-    <string name="title_section_streaks">Ketten</string>
+    <string name="title_section_streaks">Ketten/Pausen</string>
     <string name="longest_streak_on">Längste Kette</string>
     <string name="longest_streak_off">Längste Pause</string>
     <string name="pref_multiple_entries_enabled_summary">Pro Tag werden mehrere Klicks gezählt. Durch langes Drücken wird der Wert wieder vermindert.</string>
@@ -105,5 +105,25 @@
         <item>Entfernt letzten Tick</item>
     </string-array>
     <string name="set_number_of_ticks">Anzahl Ticks %1$s</string>
+    <string name="pref_title_trend_range">Trendbereich</string>
+    <string-array name="pref_titles_trend_range">
+        <item>Wochentrend</item>
+        <item>14-Tage-Trend</item>
+        <item>Monatstrend</item>
+        <item>Quartalstrend</item>
+        <item>Halbjahrestrend</item>
+        <item>Jahrestrend</item>
+    </string-array>
+
+    <!-- New in 1.4.6 -->
+    <string name="pref_category_main">Hauptansicht</string>
+    <string name="pref_category_track">Trackansicht</string>
+    <string name="pref_category_notifications">Benachrichtigungen</string>
+    <string name="reminder_title">Tickmate-Erinnerung</string>
+    <string name="reminder_text">Ticks für heute ausfüllen</string>
+    <string name="reminder_settings_title">Erinnerung</string>
+    <string name="reminder_settings_summary">Tägliche Erinnerung, meine Ticks auszufüllen</string>
+    <string name="reminder_notification_time">Uhrzeit</string>
+    <string name="remind_me_at">Erinner mich um</string>
 
 </resources>

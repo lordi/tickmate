@@ -4,20 +4,24 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.lang.Math;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -77,6 +81,14 @@ public class ShowTrackActivity extends Activity {
     private int streakOnMaximum;
     private int streakOffMaximum;
 
+	private int trendData[] = null;
+	int[] trendRangeValues;						// from pref_values_trend_range
+	String[] trendRangeTitles;
+	int trendRangeIndex;
+	double[] trendAngles = {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0 }; // length = length of pref_values_trend_range
+	int[] trendAvailable = {0, 0, 0, 0, 0, 0}; 	// same length as trendAngles[], 0 = trend not available, -1 = trend available
+
+	private final static int NUMBER_OF_CATEGORIES = 7;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,39 +117,59 @@ public class ShowTrackActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
-	
+
+	/**
+	 * Returns the week year of {@code cal} which is in sync with the week cycle.
+	 * (Calendar#getWeekYear() is only available for API level 24 and newer, so we have to roll
+	 * our own version)
+	 *
+	 * @param cal date for which the week year is being calculated
+	 * @return the week year
+	 */
+	private int getWeekYear( Calendar cal ){
+		int year = cal.get(Calendar.YEAR);
+		int week = cal.get(Calendar.WEEK_OF_YEAR);
+
+		if (cal.get(Calendar.MONTH) == Calendar.JANUARY) {
+			if (week >= 52) {
+				year--;
+			}
+		} else {
+			if (week == 1) {
+				year++;
+			}
+		}
+
+		return year;
+	}
+
+
 	private void retrieveGraphData() {
 		Locale locale = Locale.getDefault();
 		
 		// Collect week days
 		this.weekdaysKeys = new LinkedList<String>();
-		Calendar day = (Calendar) today.clone();
-		day.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        this.weekdaysData = new LinkedList<Integer>();
+        Calendar day = (Calendar) today.clone();
+		day.set(Calendar.DAY_OF_WEEK, today.getFirstDayOfWeek());
 		
 		for (int i = 0; i < 7; i++) {
 			this.weekdaysKeys.add(day.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, locale).toUpperCase(locale));
 			day.add(Calendar.DATE, 1);
-		}		
-		this.weekdaysData = new LinkedList<Integer>();
-		this.weekdaysData.add(0);
-		this.weekdaysData.add(0);
-		this.weekdaysData.add(0);
-		this.weekdaysData.add(0);		
-		this.weekdaysData.add(0);
-		this.weekdaysData.add(0);	
-		this.weekdaysData.add(0);
+            this.weekdaysData.add(0);
+		}
+
 
 		// Prepare weeks
 		Map<Integer, Integer> weekyear_to_index = new HashMap<Integer, Integer>();
 		this.weeksKeys = new LinkedList<String>();
 		this.weeksData = new LinkedList<Integer>();
 		Calendar week = (Calendar) today.clone();
-		week.clear(Calendar.HOUR);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			//month.getDisplayName(Calendar.WEEK_OF_YEAR, Calendar.SHORT, Locale.getDefault())
 			this.weeksKeys.add(0, Integer.toString(week.get(Calendar.WEEK_OF_YEAR)));
-			int index = week.get(Calendar.YEAR) + week.get(Calendar.WEEK_OF_YEAR) * 10000;
-			weekyear_to_index.put(index, 6-i);
+			int index = getWeekYear(week) + week.get(Calendar.WEEK_OF_YEAR) * 10000;
+			weekyear_to_index.put(index, NUMBER_OF_CATEGORIES-1-i);
 			week.add(Calendar.WEEK_OF_YEAR, -1);
 			this.weeksData.add(0, 0);
 		}
@@ -148,11 +180,10 @@ public class ShowTrackActivity extends Activity {
 		this.monthsKeys = new LinkedList<String>();
 		this.monthsData = new LinkedList<Integer>();
 		Calendar month = (Calendar) today.clone();
-		month.clear(Calendar.HOUR);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			this.monthsKeys.add(0, month.getDisplayName(Calendar.MONTH, Calendar.SHORT, locale));
 			int index = month.get(Calendar.YEAR) + month.get(Calendar.MONTH) * 10000;
-			monthyear_to_index.put(index, 6-i);
+			monthyear_to_index.put(index, NUMBER_OF_CATEGORIES-1-i);
 			month.add(Calendar.MONTH, -1);
 			this.monthsData.add(0, 0);			
 		}
@@ -162,12 +193,11 @@ public class ShowTrackActivity extends Activity {
 		this.quarterKeys = new LinkedList<String>();
 		this.quarterData = new LinkedList<Integer>();
 		Calendar quarter = (Calendar) today.clone();
-		quarter.clear(Calendar.HOUR);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			//month.getDisplayName(Calendar.WEEK_OF_YEAR, Calendar.SHORT, Locale.getDefault())
 			this.quarterKeys.add(0, "Q" + Integer.toString(quarter.get(Calendar.MONTH)/3+1));
 			int index = quarter.get(Calendar.YEAR) * 4 + quarter.get(Calendar.MONTH) / 3;
-			quarteryear_to_index.put(index, 6-i);
+			quarteryear_to_index.put(index, NUMBER_OF_CATEGORIES-1-i);
 			quarter.add(Calendar.MONTH, -3);
 			this.quarterData.add(0, 0);			
 		}
@@ -177,11 +207,10 @@ public class ShowTrackActivity extends Activity {
 		this.yearsKeys = new LinkedList<String>();
 		this.yearsData = new LinkedList<Integer>();
 		Calendar year = (Calendar) today.clone();
-		year.clear(Calendar.HOUR);
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < NUMBER_OF_CATEGORIES; i++) {
 			this.yearsKeys.add(0, Integer.toString(year.get(Calendar.YEAR)));
 			int index = year.get(Calendar.YEAR);
-			year_to_index.put(index, 6-i);
+			year_to_index.put(index, NUMBER_OF_CATEGORIES-1-i);
 			year.add(Calendar.YEAR, -1);
 			this.yearsData.add(0, 0);
 		}
@@ -189,93 +218,108 @@ public class ShowTrackActivity extends Activity {
         // Prepare streaks
         this.streaksData = new LinkedList<>();
         this.streaksKeys = new LinkedList<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 2 * NUMBER_OF_CATEGORIES; i++) {
             this.streaksData.add(0);
             this.streaksKeys.add(0, "");
         }
         this.streakOnMaximum = ticks.size() > 0 ? 1 : 0;
         this.streakOffMaximum = 0;
-        Calendar last_on = null;
 
-		// Collect all data
-		for (Tick tick : ticks) {
-            int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - 2;
-            if (day_of_week < 0) day_of_week = 6;
-			int newcount = this.weekdaysData.get(day_of_week)+1;
-			if (newcount > this.weekdaysMaximum) {
-				this.weekdaysMaximum = newcount;
-			}
-			this.weekdaysData.set(day_of_week, newcount);
-			
-			int weekyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.WEEK_OF_YEAR) * 10000;
-			if (weekyear_to_index.containsKey(weekyear)) {
-				int index = weekyear_to_index.get(weekyear);
-				int newcount2 = this.weeksData.get(index)+1;
-				if (newcount2 > this.weeksMaximum)
-					this.weeksMaximum = newcount2;
-				this.weeksData.set(index, newcount2);
-			}
-			
-			int monthyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.MONTH) * 10000;
-			if (monthyear_to_index.containsKey(monthyear)) {
-				int index = monthyear_to_index.get(monthyear);
-				int newcount2 = this.monthsData.get(index)+1;
-				if (newcount2 > this.monthsMaximum)
-					this.monthsMaximum = newcount2;
-				this.monthsData.set(index, newcount2);
-			}
-			
-			int quarteryear = tick.date.get(Calendar.YEAR) * 4 + tick.date.get(Calendar.MONTH) / 3;
-			if (quarteryear_to_index.containsKey(quarteryear)) {
-				int index = quarteryear_to_index.get(quarteryear);
-				int newcount2 = this.quarterData.get(index)+1;
-				if (newcount2 > this.quarterMaximum)
-					this.quarterMaximum = newcount2;
-				this.quarterData.set(index, newcount2);
+		if (ticks.size() > 0) {
+			Calendar last_on = firstTickDate;
+			streaksData.set(streaksData.size() - 1, 1);
+
+			// Collect all data
+			for (Tick tick : ticks) {
+				int day_of_week = tick.date.get(Calendar.DAY_OF_WEEK) - today.getFirstDayOfWeek();
+				if (day_of_week < 0) day_of_week += 7;
+				int newcount = this.weekdaysData.get(day_of_week)+1;
+				if (newcount > this.weekdaysMaximum) {
+					this.weekdaysMaximum = newcount;
+				}
+				this.weekdaysData.set(day_of_week, newcount);
+
+				int weekyear = getWeekYear(tick.date) + tick.date.get(Calendar.WEEK_OF_YEAR) * 10000;
+				if (weekyear_to_index.containsKey(weekyear)) {
+					int index = weekyear_to_index.get(weekyear);
+					int newcount2 = this.weeksData.get(index)+1;
+					if (newcount2 > this.weeksMaximum)
+						this.weeksMaximum = newcount2;
+					this.weeksData.set(index, newcount2);
+				}
+
+				int monthyear = tick.date.get(Calendar.YEAR) + tick.date.get(Calendar.MONTH) * 10000;
+				if (monthyear_to_index.containsKey(monthyear)) {
+					int index = monthyear_to_index.get(monthyear);
+					int newcount2 = this.monthsData.get(index)+1;
+					if (newcount2 > this.monthsMaximum)
+						this.monthsMaximum = newcount2;
+					this.monthsData.set(index, newcount2);
+				}
+
+				int quarteryear = tick.date.get(Calendar.YEAR) * 4 + tick.date.get(Calendar.MONTH) / 3;
+				if (quarteryear_to_index.containsKey(quarteryear)) {
+					int index = quarteryear_to_index.get(quarteryear);
+					int newcount2 = this.quarterData.get(index)+1;
+					if (newcount2 > this.quarterMaximum)
+						this.quarterMaximum = newcount2;
+					this.quarterData.set(index, newcount2);
+				}
+
+				int cyear = tick.date.get(Calendar.YEAR);
+				if (year_to_index.containsKey(cyear)) {
+					int index = year_to_index.get(cyear);
+					int newcount2 = this.yearsData.get(index) + 1;
+					if (newcount2 > this.yearsMaximum)
+						this.yearsMaximum = newcount2;
+					this.yearsData.set(index, newcount2);
+				}
+
+				int days_since = daysBetween(last_on, tick.date);
+				if (days_since > this.streakOffMaximum) {
+					this.streakOffMaximum = days_since - 1;
+				}
+				if (days_since == 1) {
+					// increase last streak by one day
+					int currentStreak = streaksData.get(streaksData.size() - 1) + 1;
+					streaksData.set(streaksData.size() - 1, currentStreak);
+					if (currentStreak > this.streakOnMaximum) {
+						this.streakOnMaximum = currentStreak;
+					}
+				}
+				else if (days_since > 1){
+					streaksData.add(-days_since + 1);	// add a new pause
+					streaksData.add(1);					// add a new streak
+				}
+				last_on = tick.date;
 			}
 
-			int cyear = tick.date.get(Calendar.YEAR);
-			if (year_to_index.containsKey(cyear)) {
-				int index = year_to_index.get(cyear);
-				int newcount2 = this.yearsData.get(index) + 1;
-				if (newcount2 > this.yearsMaximum)
-					this.yearsMaximum = newcount2;
-				this.yearsData.set(index, newcount2);
+			int days_since = daysBetween(last_on, today);
+			if (days_since > 0) {
+				streaksData.add(-days_since);
+				if (days_since > this.streakOffMaximum) {
+					this.streakOffMaximum = days_since;
+				}
 			}
 
-            if (last_on == null) {
-                streaksData.add(1);
-            }
-            else {
-                tick.date.set(Calendar.MILLISECOND, 0);
-                last_on.set(Calendar.MILLISECOND, 0);
-                int days_since = (int)((tick.date.getTimeInMillis() - last_on.getTimeInMillis()) / (24*60*60*1000));
-                //Log.d("Tickmate", String.format("Days_since=%d, from %d to %d", days_since, tick.date.getTimeInMillis(), last_on.getTimeInMillis()));
-                if (days_since > this.streakOffMaximum) {
-                    this.streakOffMaximum = days_since - 1;
-                }
+			// trend calculation (for longest possible range)
+			this.trendData = new int[trendRangeValues[trendRangeValues.length-1]];
+			ListIterator<Tick> tickReverseIterator = ticks.listIterator(ticks.size()); // credits to stackoverflow.com/a/15005226/3944322
+			int days;       // number of days from today
+			Tick tick;
+			try {
+				while (tickReverseIterator.hasPrevious()) {
+					tick = tickReverseIterator.previous();
+					days = daysBetween(tick.date, today);
+					trendData[days]++;
+				}
+			} catch (IndexOutOfBoundsException stopHere) {
+				// stop iterating over ordered list here, as we've left the trend range
+			}
+		}
 
-                if (days_since == 0) {
-                    // multi-tick, ignore
-                }
-                else if (days_since == 1) {
-                    // increase last streak by one day
-                    int currentStreak = streaksData.get(streaksData.size() - 1) + 1;
-                    streaksData.set(streaksData.size() - 1, currentStreak);
-                    if (currentStreak > this.streakOnMaximum) {
-                        this.streakOnMaximum = currentStreak;
-                    }
-                }
-                else {
-                    // add a new streak
-                    streaksData.add(1);
-                }
-            }
-            last_on = tick.date;
-        }
-
-        if (streaksData.size() > 7) {
-            streaksData = streaksData.subList(streaksData.size() - 7, streaksData.size());
+        if (streaksData.size() > 2 * NUMBER_OF_CATEGORIES) {
+            streaksData = streaksData.subList(streaksData.size() - 2 * NUMBER_OF_CATEGORIES, streaksData.size());
         }
 
         if (this.weeksMaximum < 7)
@@ -290,7 +334,21 @@ public class ShowTrackActivity extends Activity {
 		if (this.yearsMaximum < 31)
 			this.yearsMaximum = 31;
 	}
-	
+
+	/**
+	 * Number of day switches between {@code date1} and {@code date2}, Example: daysBetween( yesterday, today ) = 1.
+	 * Both dates are assumed to have all time fields set to zero.
+	 * @param date1 first date
+	 * @param date2 second date (greater than or equal to first date)
+	 * @return number of day switches between {@code date1} and {@code date2}
+	 */
+	private int daysBetween( Calendar date1, Calendar date2){
+		// There can be 23, 24, or 25 hours per day due to DST, so the millis difference divided
+		// by millis per day can have a remainder of 1/24. Therefore it must be ROUNDED to the
+		// next whole number.
+		return (int) ((date2.getTimeInMillis() - date1.getTimeInMillis() + 12*60*60*1000) / (24*60*60*1000));
+	}
+
 	private void loadTrack(int track_id) {
 		track = ds.getTrack(track_id);
 		tickCount = ds.getTickCount(track_id);
@@ -305,7 +363,23 @@ public class ShowTrackActivity extends Activity {
 			lastTickDate = null;
 		}
 		today = Calendar.getInstance();
-	
+		today.set(Calendar.HOUR_OF_DAY,0);
+		today.set(Calendar.MINUTE,0);
+		today.set(Calendar.SECOND,0);
+		today.set(Calendar.MILLISECOND,0);
+
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		int trendRange = Integer.parseInt(sharedPrefs.getString("trend-range-key", "14"));
+		String[] tmp = getResources().getStringArray(R.array.pref_values_trend_range);
+		trendRangeValues = new int[tmp.length];
+		for (int i = 0; i < tmp.length; i++){
+			trendRangeValues[i] = Integer.parseInt(tmp[i]);
+			if (trendRangeValues[i] == trendRange){
+				trendRangeIndex = i;
+			}
+		}
+		trendRangeTitles = getResources().getStringArray(R.array.pref_titles_trend_range);
+
 		fillTrackUI();
 		
 	}
@@ -315,28 +389,62 @@ public class ShowTrackActivity extends Activity {
 		text_name.setText(track.getName());
 		text_description = (TextView) findViewById(R.id.TextView_description);
 		text_description.setText(track.getDescription());
-		SummaryNumber sn1 = (SummaryNumber) findViewById(R.id.summaryNumber1);
-		SummaryNumber sn2 = (SummaryNumber) findViewById(R.id.summaryNumber2);
-		SummaryNumber sn3 = (SummaryNumber) findViewById(R.id.summaryNumber3);
+		final SummaryNumber sn1 = (SummaryNumber) findViewById(R.id.summaryNumber1);
+		final SummaryNumber sn2 = (SummaryNumber) findViewById(R.id.summaryNumber2);
+		final SummaryNumber sn3 = (SummaryNumber) findViewById(R.id.summaryNumber3);
 
-		double milliSecsInADay = 1000.0 * 3600 * 24;
+		retrieveGraphData();
+
 		double weeklymean = -1;
-		double days_since_last = -1;
-		
+
 		if (firstTickDate != null && lastTickDate != null) {
-			double days = Math.ceil(((double)(today.getTimeInMillis() - firstTickDate.getTimeInMillis())) / milliSecsInADay); 
-			days_since_last = ((double)(today.getTimeInMillis() - lastTickDate.getTimeInMillis())) / milliSecsInADay; 
+			double days = daysBetween(firstTickDate, today) + 1;
 			weeklymean = (tickCount/days)*7.0;
 		}
 
 		sn1.setData(tickCount, 0, (String) getText(R.string.show_track_total));
-        sn1.setColor(track.getTickColor().getColorValue());
+		sn1.setColor(track.getTickColor().getColorValue());
 		sn2.setData(weeklymean, 1, (String) getText(R.string.show_track_weeklymean));
-        sn2.setColor(track.getTickColor().getColorValue());
-        sn3.setData(days_since_last, 0, (String) getText(R.string.show_track_dayssincelast));
-        sn3.setColor(track.getTickColor().getColorValue());
+		sn2.setColor(track.getTickColor().getColorValue());
 
-		retrieveGraphData();
+		// Trend indicator
+		if (trendData != null) {
+			int n;								 // number of day in range
+			long sx, sxx, sy = 0L, sxy = 0L;
+			int i = 0;							 // cumulative index into trendData
+			for (int j = 0; j < trendAngles.length; j++){
+				n = trendRangeValues[j] - 1;
+				if (daysBetween(firstTickDate, today) >= n) {
+					sx = n * (n + 1) / 2;        // some shortcuts for sequential x values, although
+					sxx = sx * (2 * n + 1) / 3;  // time saving is negligible for our small values of n
+					for ( ; i <= n; i++) {
+						sy += trendData[i];
+						sxy += i * trendData[i];
+					}
+					trendAngles[j] = Math.toDegrees(Math.atan((double) (sx * sy - (n + 1) * sxy) / ((n + 1) * sxx - sx * sx)));
+					// scale to biggest possible angle for single tick track, see github.com/lordi/tickmate/issues/98#issuecomment-300133172
+					double maxAngle = Math.toDegrees(Math.atan((n + 1) % 2 == 0 ? 3. / (2. * (n + 1)- 2. / (n + 1)) : 3. / (2. * (n + 1))));
+					trendAngles[j] *= 90. / maxAngle;
+					trendAvailable[j] = -1;  	 // trend is available
+				} else {
+					break;						 // no longer trends available
+				}
+			}
+		}
+		sn3.setData(trendAngles[trendRangeIndex], trendAvailable[trendRangeIndex], trendRangeTitles[trendRangeIndex]);
+		sn3.setColor(track.getTickColor().getColorValue());
+		sn3.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {		// cycle through ranges
+				trendRangeIndex++;
+				if (trendRangeIndex >= trendRangeTitles.length){
+					trendRangeIndex = 0;
+				}
+				sn3.setData(trendAngles[trendRangeIndex], trendAvailable[trendRangeIndex], trendRangeTitles[trendRangeIndex]);
+				sn3.invalidate();
+			}
+		});
+
 
         /* Streaks */
         SummaryNumber streakOnNumber = (SummaryNumber) findViewById(R.id.summaryNumberStreakOn);
@@ -349,7 +457,7 @@ public class ShowTrackActivity extends Activity {
         streakOffNumber.setColor(track.getTickColor().getColorValue());
 
         graph_streaks = (SummaryGraph) findViewById(R.id.summaryGraph_streaks);
-        graph_streaks.setData(this.streaksData, this.streaksKeys, this.streakOnMaximum);
+        graph_streaks.setData(this.streaksData, this.streaksKeys, this.streakOnMaximum, this.streakOffMaximum);
         graph_streaks.setColor(track.getTickColor().getColorValue());
 
         graph_weekdays = (SummaryGraph) findViewById(R.id.summaryGraph_weekdays);
@@ -381,7 +489,7 @@ public class ShowTrackActivity extends Activity {
         header.invalidate();
         getActionBar().setBackgroundDrawable(track.getTickColor().getDrawable(255));
     }
-	
+
 	private void deleteTrack() {
 		this.ds.deleteTrack(this.track);
 		NavUtils.navigateUpFromSameTask(this);

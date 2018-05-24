@@ -1,3 +1,21 @@
+v1.4.6
+------
+
+ * Tickmate can install a daily notification to do your ticks
+
+v1.4.5
+------
+
+ * Fix calculation of days during DST changes (@StefRe)
+
+v1.4.4
+------
+
+ * Trend indicator (@StefRe)
+ * Option to enter tick count on long click (@StefRe)
+ * Can set editable days to include the weekend (@StefRe)
+ * Various bugfixes related to time info (@StefRe)
+
 v1.4.3
 ------
 

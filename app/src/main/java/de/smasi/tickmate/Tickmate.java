@@ -5,11 +5,17 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ListActivity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,6 +39,7 @@ import java.util.Calendar;
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.models.Group;
+import de.smasi.tickmate.notifications.TickmateNotificationBroadcastReceiver;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditGroupsActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
@@ -46,7 +53,7 @@ public class Tickmate extends ListActivity implements
         View.OnClickListener,
         TickHeader.TickHeaderListener {
 
-    private static final String TAG = "Tickmate";
+    private static final String TAG = "Settings";
 
     // views
     private TickHeader mListHeader;
@@ -83,7 +90,7 @@ public class Tickmate extends ListActivity implements
         mListView.setOnTouchListener(mListHeader);
         mListView.getEmptyView().setOnClickListener(this);
         mListView.getEmptyView().setOnTouchListener(mListHeader);
-    }
+	}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

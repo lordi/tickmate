@@ -70,7 +70,6 @@ public class Track {
     }
 
 	public void setIcon(String resName) {
-        Log.d(TAG, "setIcon(" + resName + ")");
         this.iconId = -1;
 		this.icon = resName;
 	}

@@ -577,13 +577,9 @@ public class DataSource {
 
 	private Tick cursorToTick(Cursor cursor) {
 		Calendar c = Calendar.getInstance();
-		c.set(Calendar.YEAR, cursor.getInt(2));
-		c.set(Calendar.MONTH, cursor.getInt(3));
-		c.set(Calendar.DAY_OF_MONTH, cursor.getInt(4));
-		c.set(Calendar.HOUR_OF_DAY, cursor.getInt(5));
-		c.set(Calendar.MINUTE, cursor.getInt(6));
-		c.set(Calendar.SECOND, cursor.getInt(7));
-		Tick tick = new Tick(cursor.getInt(1), c);
+		c.set(cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), 0, 0, 0 );
+		c.set(Calendar.MILLISECOND, 0);
+		Tick tick = new Tick(cursor.getInt(1), c);	// implicitly sets tick.hasTimeInfo to false
 		tick.tick_id = cursor.getInt(0);
 		return tick;
 	}

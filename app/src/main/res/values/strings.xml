@@ -92,7 +92,7 @@
     <string name="pref_title_color">Color</string>
 
     <!-- New in 1.4.2 -->
-    <string name="title_section_streaks">Streaks</string>
+    <string name="title_section_streaks">Streaks/Breaks</string>
     <string name="longest_streak_on">Longest streak</string>
     <string name="longest_streak_off">Longest break</string>
     <string name="pref_multiple_entries_enabled_summary">Multiple taps on a day will be counted. Use long press to decrease the counter.</string>
@@ -105,5 +105,25 @@
         <item>Remove last tick</item>
     </string-array>
     <string name="set_number_of_ticks">Number of ticks %1$s</string>
+    <string name="pref_title_trend_range">Trend range</string>
+    <string-array name="pref_titles_trend_range">
+        <item>1-week trend</item>
+        <item>2-week trend</item>
+        <item>1-month trend</item>
+        <item>3-month trend</item>
+        <item>6-month trend</item>
+        <item>1-year trend</item>
+    </string-array>
+
+    <!-- New in 1.4.6 -->
+    <string name="pref_category_main">Main screen</string>
+    <string name="pref_category_track">Track screen</string>
+    <string name="pref_category_notifications">Notifications</string>
+    <string name="reminder_title">Tickmate reminder</string>
+    <string name="reminder_text">Tap to enter your ticks for today</string>
+    <string name="reminder_settings_title">Tickmate reminder</string>
+    <string name="reminder_settings_summary">Issue a daily notification to do my ticks</string>
+    <string name="reminder_notification_time">Time of day</string>
+    <string name="remind_me_at">Remind me at</string>
 
 </resources>
