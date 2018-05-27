@@ -104,6 +104,25 @@
         <item>Usuń ostatnie zdarzenie</item>
     </string-array>
     <string name="set_number_of_ticks">Ilość zdarzeń %1$s</string>
+    <string name="pref_title_trend_range">Zakres trendu</string>
+    <string-array name="pref_titles_trend_range">
+        <item>1 tyg. trend</item>
+        <item>2 tyg. trend</item>
+        <item>1 m-c trend</item>
+        <item>3 m-ce trend</item>
+        <item>6 m-cy trend</item>
+        <item>1 rok trend</item>
+    </string-array>
 
+    <!-- New in 1.4.6 -->
+    <string name="pref_category_main">Ekran główny</string>
+    <string name="pref_category_track">Ekran śladów</string>
+    <string name="pref_category_notifications">Powiadomienia</string>
+    <string name="reminder_title">Przypomnienie Tickmate</string>
+    <string name="reminder_text">Dotknij aby podać dzisiejsze zaznaczenia</string>
+    <string name="reminder_settings_title">Przypomnienie Tickmate</string>
+    <string name="reminder_settings_summary">Dodaj dzienne powiadomienie dla moich zaznaczeń</string>
+    <string name="reminder_notification_time">Czas dnia</string>
+    <string name="remind_me_at">Przypomnij mi o</string>
 
 </resources>
