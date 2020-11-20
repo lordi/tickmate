@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "de.smasi.tickmate"
-        minSdkVersion 11
+        minSdkVersion 19
         targetSdkVersion 25
     }
 
