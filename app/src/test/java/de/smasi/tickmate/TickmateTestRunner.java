@@ -11,8 +11,6 @@ import org.robolectric.res.FsFile;
  * Created by avanpelt on 10/9/15.
  */
 public class TickmateTestRunner extends RobolectricGradleTestRunner {
-    private static final String MODULE_ROOT = "app";
-
     public TickmateTestRunner(Class<?> klass) throws InitializationError {
         super(klass);
     }
@@ -24,9 +22,9 @@ public class TickmateTestRunner extends RobolectricGradleTestRunner {
         if (androidManifestFile.exists()) {
             return appManifest;
         } else {
-            androidManifestFile = FileFsFile.from(MODULE_ROOT, "src/main/AndroidManifest.xml");
-            FsFile resDirectory = FileFsFile.from(MODULE_ROOT, "src/main/res");
-            FsFile assetsDirectory = FileFsFile.from(MODULE_ROOT, "src/main/assets");
+            androidManifestFile = FileFsFile.from("src/main/AndroidManifest.xml");
+            FsFile resDirectory = FileFsFile.from("src/main/res");
+            FsFile assetsDirectory = FileFsFile.from("src/main/assets");
 
             return new AndroidManifest(androidManifestFile, resDirectory, assetsDirectory);
         }
