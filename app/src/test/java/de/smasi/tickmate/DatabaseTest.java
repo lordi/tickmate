@@ -1,11 +1,19 @@
 package de.smasi.tickmate;
 
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.os.Build;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
+import org.robolectric.annotation.LooperMode;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -20,15 +28,18 @@ import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 
+import static android.os.Looper.getMainLooper;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.robolectric.Shadows.shadowOf;
 
-@Config(sdk = 17, constants = BuildConfig.class)
-@RunWith(TickmateTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.O)
+@RunWith(RobolectricTestRunner.class)
 public class DatabaseTest {
+    ActivityController<Tickmate> activityController;
     Tickmate tickmate;
     DataSource dataSource;
 
@@ -36,7 +47,9 @@ public class DatabaseTest {
 
     @Before
     public void setUp() throws NoSuchMethodException {
-        tickmate = new Tickmate();
+
+        activityController = Robolectric.buildActivity(Tickmate.class).create().start().pause();
+        tickmate = activityController.get();
         dataSource = DataSource.getInstance();
 
         // set TracksDataSource open method accessible
@@ -53,6 +66,8 @@ public class DatabaseTest {
         Field databseOpenHelperInstance, tracksDataSourceInstance;
 
         try {
+            activityController.stop().destroy();
+
             databseOpenHelperInstance = DatabaseOpenHelper.class.getDeclaredField("sharedInstance");
             databseOpenHelperInstance.setAccessible(true);
             databseOpenHelperInstance.set(null, null);
@@ -108,7 +123,7 @@ public class DatabaseTest {
 
     @Test
     public void tickmateShouldAppearInDescription() throws Exception {
-        String hello = new Tickmate().getResources().getString(
+        String hello = tickmate.getResources().getString(
                 R.string.about_description);
         assertThat(hello, containsString("Tickmate"));
 
@@ -125,7 +140,6 @@ public class DatabaseTest {
 
     @Test
     public void legacyDatabaseVersion10ShouldBeImportable() throws Exception {
-        // File testDb = new File(getClass().getResource("test.sql").getFile());
         InputStream is = tickmate.getAssets().open("test/smiley-version10.db");
         File intDb = tickmate.getApplicationContext().getDatabasePath("tickmate.db");
         intDb.getParentFile().mkdirs();
@@ -151,7 +165,6 @@ public class DatabaseTest {
         InputStream is = tickmate.getAssets().open("test/tickmate-version12.db");
         DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tickmate);
         File intDb = tickmate.getApplicationContext().getDatabasePath("tickmate.db");
-        intDb.getParentFile().mkdirs();
         db.importDatabase(is);
 
         // the legacy db should have 8 tracks (6 active)
@@ -170,7 +183,6 @@ public class DatabaseTest {
     public void legacyDatabaseVersion13ShouldBeImportable() throws Exception {
         InputStream is = tickmate.getAssets().open("test/tickmate-version13.db");
         File intDb = tickmate.getApplicationContext().getDatabasePath("tickmate.db");
-        intDb.getParentFile().mkdirs();
 
         DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tickmate);
         db.importDatabase(is);
@@ -266,7 +278,6 @@ public class DatabaseTest {
     public void legacyDatabaseVersion14ShouldBeImportable() throws Exception {
         InputStream is = tickmate.getAssets().open("test/tickmate-version14.db");
         File intDb = tickmate.getApplicationContext().getDatabasePath("tickmate.db");
-        intDb.getParentFile().mkdirs();
 
         DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tickmate);
         db.importDatabase(is);

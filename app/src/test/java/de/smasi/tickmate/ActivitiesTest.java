@@ -2,6 +2,7 @@ package de.smasi.tickmate;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 
@@ -10,9 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.ActivityController;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -29,8 +31,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@Config(sdk = 17, constants = BuildConfig.class)
-@RunWith(TickmateTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.O)
+@RunWith(RobolectricTestRunner.class)
 public class ActivitiesTest {
     Tickmate tickmate;
     DataSource dataSource;
@@ -85,8 +87,7 @@ public class ActivitiesTest {
 
         Intent i = new Intent(RuntimeEnvironment.application.getApplicationContext(), tickmate.getClass());
         i.putExtra("track_id", t.getId());
-        Robolectric.buildActivity(ShowTrackActivity.class)
-                .withIntent(i)
+        Robolectric.buildActivity(ShowTrackActivity.class, i)
                 .create(new Bundle())
                 .start();
     }
@@ -102,8 +103,7 @@ public class ActivitiesTest {
 
         Intent i = new Intent(RuntimeEnvironment.application.getApplicationContext(), tickmate.getClass());
         i.putExtra("track_id", t.getId());
-        ActivityController<TrackPreferenceActivity> r_eta = Robolectric.buildActivity(TrackPreferenceActivity.class)
-                .withIntent(i)
+        ActivityController<TrackPreferenceActivity> r_eta = Robolectric.buildActivity(TrackPreferenceActivity.class, i)
                 .create(new Bundle())
                 .start()
                 .resume();
