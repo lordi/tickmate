@@ -118,7 +118,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_HOUR + "\" integer;");
 				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_MINUTE + "\" integer;");
 				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_SECOND + "\" integer;");
-				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0;");
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_HAS_TIME_INFO + "\" integer DEFAULT 0;");
 			}
 			if (oldVersion <= 10) {
 				Log.d("tickmate", "Migrating database to version 11");
