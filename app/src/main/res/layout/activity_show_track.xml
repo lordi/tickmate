@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="top"
     android:gravity="top"
-                tools:context=".ShowTrackActivity" >
+                tools:context=".views.ShowTrackActivity" >
 
     <LinearLayout
         android:orientation="vertical"
