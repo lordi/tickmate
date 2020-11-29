@@ -1,3 +1,8 @@
+v1.4.7
+------
+
+ * Fix backup import/exports on Android 11 (@0xDB)
+
 v1.4.6
 ------
 
