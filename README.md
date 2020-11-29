@@ -48,7 +48,4 @@ Bitcoin Cash (BCH): [bitcoincash:qza9pl6udy30whn5ux3uw4egrcmckdj6gucpjqa44d](bit
 
 Ethereum (ETH): [0x4c3cbbeed535b05e9cbe4c32616f7798869298e2](https://etherscan.io/address/0x4c3cbbeed535b05e9cbe4c32616f7798869298e2)
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=&url=https://github.com/lordi/tickmate&title=Tickmate&language=&tags=github&category=software) 
-
 [Translations](LOCALIZATION.md) are gratefully accepted as well.
-
