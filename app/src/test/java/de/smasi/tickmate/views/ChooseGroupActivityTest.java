@@ -1,23 +1,23 @@
 package de.smasi.tickmate.views;
 
+import android.os.Build;
+
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.ActivityController;
 
-import de.smasi.tickmate.BuildConfig;
-import de.smasi.tickmate.TickmateTestRunner;
 import de.smasi.tickmate.models.Group;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
-@Config(sdk = 17, constants = BuildConfig.class)
-@RunWith(TickmateTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.O)
+@RunWith(RobolectricTestRunner.class)
 public class ChooseGroupActivityTest {
 
     private ActivityController<ChooseGroupActivity> mActivityController;

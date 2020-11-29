@@ -1,13 +1,20 @@
 apply plugin: 'com.android.application'
 
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.google.com' }
+    }
+}
+
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
-        applicationId "de.smasi.tickmate"
-        minSdkVersion 11
-        targetSdkVersion 25
+        applicationId 'de.smasi.tickmate'
+        minSdkVersion 19
+        targetSdkVersion 26
     }
 
     buildTypes {
@@ -17,11 +24,22 @@ android {
             zipAlignEnabled true
         }
     }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.0.1'
+    implementation 'com.android.support:support-v4:26.1.0'
 
-    testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.0"
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:4.4'
 }

@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     private static DatabaseOpenHelper sharedInstance;
@@ -116,41 +118,40 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_HOUR + "\" integer;");
 				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_MINUTE + "\" integer;");
 				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_SECOND + "\" integer;");
-				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0;");
+				db.execSQL("ALTER TABLE " + TABLE_TICKS + " ADD COLUMN \"" + COLUMN_HAS_TIME_INFO + "\" integer DEFAULT 0;");
 			}
 			if (oldVersion <= 10) {
 				Log.d("tickmate", "Migrating database to version 11");
-				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_ORDER + "\" integer DEFAULT -1;");			
+				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_ORDER + "\" integer DEFAULT -1;");
 			}
 			if (oldVersion == 11) {
 				try {
 					db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_ORDER + "\" integer DEFAULT -1;");
-				}
-				catch (SQLException e) {
+				} catch (SQLException e) {
 					Log.d("tickmate", "Ignoring SQL error: " + e.toString());
 				}
 			}
-            if (oldVersion <= 12) {
-                db.execSQL(DATABASE_CREATE_GROUPS);
-                db.execSQL(DATABASE_CREATE_TRACK2GROUPS);
-            }
-            if (oldVersion <= 13) {
-                Log.d("tickmate", "Migrating database to version 14");
-                db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_COLOR + "\" integer DEFAULT " + Integer.toString(0x4ea6e0));
-            }
+			if (oldVersion <= 12) {
+				db.execSQL(DATABASE_CREATE_GROUPS);
+				db.execSQL(DATABASE_CREATE_TRACK2GROUPS);
+			}
+			if (oldVersion <= 13) {
+				Log.d("tickmate", "Migrating database to version 14");
+				db.execSQL("ALTER TABLE " + TABLE_TRACKS + " ADD COLUMN \"" + COLUMN_COLOR + "\" integer DEFAULT " + Integer.toString(0x4ea6e0));
+			}
 		} else {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRACKS);
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKS);
-		    onCreate(db);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKS);
+			onCreate(db);
 		}
 	}
-	
-	private String getDatabasePath() {
+
+	public String getDatabasePath() {
 		String db_path = context.getDatabasePath(DATABASE_NAME).getAbsolutePath();
 		Log.v("tickmate", "internal database path: " + db_path);
 		return db_path;
 	}
-	
+
 	public String getExternalDatabasePath(String name) throws IOException {
 		String db_path = new File(getExternalDatabaseFolder(), name).getAbsolutePath();
 		Log.v("tickmate", "external database path: " + db_path);
@@ -158,41 +159,33 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Copies the database file at the specified location over the current
-	 * internal application database.
-	 * */
-	public boolean exportDatabase(String externalName) throws IOException {
-	    // Close the SQLiteOpenHelper so it will commit the created empty
-	    // database to internal storage.
-	    close();
-	    
-	    File extDb = new File(getExternalDatabasePath(externalName));
-	    File myDb = new File(getDatabasePath());
-	    
-	    FileUtils.copyFile(new FileInputStream(myDb), new FileOutputStream(extDb));
-	    return true;
+	 * Copies internal database to outputStream.
+	 */
+	public boolean exportDatabase(OutputStream outputStream) throws IOException {
+		// Close the SQLiteOpenHelper so it will commit the created empty
+		// database to internal storage.
+		close();
+
+		File myDb = new File(getDatabasePath());
+		FileInputStream inFile = new FileInputStream(myDb);
+		FileUtils.copyFile(inFile, outputStream);
+
+		return true;
 	}
-	
+
 	/**
 	 * Copies the database file at the specified location over the current
 	 * internal application database.
-	 * */
-	public boolean importDatabase(String externalName) throws IOException {
+	 */
+	public boolean importDatabase(InputStream inputStream) throws IOException {
+		// Close the SQLiteOpenHelper so it will commit the created empty
+		// database to internal storage.
+		close();
 
-	    // Close the SQLiteOpenHelper so it will commit the created empty
-	    // database to internal storage.
-	    close();
-	    
-	    File extDb = new File(getExternalDatabasePath(externalName));
-	    File myDb = new File(getDatabasePath());
-	    if (extDb.exists()) {
-	        FileUtils.copyFile(new FileInputStream(extDb), new FileOutputStream(myDb));
-	        // Access the copied database so SQLiteHelper will cache it and mark
-	        // it as created.
-	        getWritableDatabase().close();
-	        return true;
-	    }
-	    return false;
+		File myDb = new File(getDatabasePath());
+		FileUtils.copyFile(inputStream, new FileOutputStream(myDb));
+		getWritableDatabase().close();
+		return true;
 	}
 
 	public String[] getExternalDatabaseNames() {

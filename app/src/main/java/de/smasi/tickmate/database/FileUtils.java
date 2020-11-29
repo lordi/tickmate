@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +55,23 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Copies content of <code>fromFile</code> to <code>toStream</code> and closes both streams.
+     *
+     * @param fromStream - FileInputStream for the file to copy from.
+     * @param toStream   - FileInputStream for the file to copy to.
+     */
+    public static void copyFile(InputStream fromStream, OutputStream toStream) throws IOException {
+        byte[] buffer = new byte[1024];
+        int len = fromStream.read(buffer);
+        while (len != -1) {
+            toStream.write(buffer, 0, len);
+            len = fromStream.read(buffer);
+        }
+        fromStream.close();
+        toStream.close();
+    }
+
     public static void saveStreamToFile(InputStream fromStream, FileOutputStream toFile) throws IOException {
         byte[] buffer = new byte[fromStream.available()];
         fromStream.read(buffer);
@@ -62,33 +80,33 @@ public class FileUtils {
 
     public static class StorageInfo {
 
-            public final String path;
-            public final boolean readonly;
-            public final boolean removable;     
-            public final int number;
+        public final String path;
+        public final boolean readonly;
+        public final boolean removable;
+        public final int number;
 
-            StorageInfo(String path, boolean readonly, boolean removable, int number) {
-                this.path = path;
-                this.readonly = readonly;
-                this.removable = removable;         
-                this.number = number;
-            }
-
-            public String getDisplayName() {
-                StringBuilder res = new StringBuilder();
-                if (!removable) {
-                    res.append("Internal SD card");
-                } else if (number > 1) {
-                    res.append("SD card " + number);
-                } else {
-                    res.append("SD card");
-                }
-                if (readonly) {
-                    res.append(" (Read only)");
-                }
-                return res.toString();
-            }
+        StorageInfo(String path, boolean readonly, boolean removable, int number) {
+            this.path = path;
+            this.readonly = readonly;
+            this.removable = removable;
+            this.number = number;
         }
+
+        public String getDisplayName() {
+            StringBuilder res = new StringBuilder();
+            if (!removable) {
+                res.append("Internal SD card");
+            } else if (number > 1) {
+                res.append("SD card " + number);
+            } else {
+                res.append("SD card");
+            }
+            if (readonly) {
+                res.append(" (Read only)");
+            }
+            return res.toString();
+        }
+    }
         
         public static String getRemovableStorageDirectory() {
         	List<StorageInfo> lst = getStorageList();

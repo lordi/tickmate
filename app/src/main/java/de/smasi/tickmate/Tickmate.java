@@ -1,45 +1,37 @@
 package de.smasi.tickmate;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ListActivity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.Objects;
 
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.models.Group;
-import de.smasi.tickmate.notifications.TickmateNotificationBroadcastReceiver;
 import de.smasi.tickmate.views.AboutActivity;
 import de.smasi.tickmate.views.EditGroupsActivity;
 import de.smasi.tickmate.views.EditTracksActivity;
@@ -54,6 +46,8 @@ public class Tickmate extends ListActivity implements
         TickHeader.TickHeaderListener {
 
     private static final String TAG = "Settings";
+    private static final int REQUEST_BACKUP_WRITE_URI = 1;
+    private static final int REQUEST_BACKUP_READ_URI = 2;
 
     // views
     private TickHeader mListHeader;
@@ -170,106 +164,57 @@ public class Tickmate extends ListActivity implements
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-    public void exportDB() {
-        DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(this);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        final EditText input = new EditText(this);
+        if (resultCode == RESULT_OK) {
+            try {
 
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
+                // data is the uri the database should be backed up to
+                if (requestCode == REQUEST_BACKUP_WRITE_URI) {
+                    OutputStream outputStream = getContentResolver().openOutputStream(Objects.requireNonNull(data.getData()));
+                    DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(this);
+                    db.exportDatabase(outputStream);
+                    Toast.makeText(Tickmate.this, R.string.export_db_success, Toast.LENGTH_LONG).show();
+                }
 
-        layout.addView(input);
+                // data is the uri the database should be imported from
+                else if (requestCode == REQUEST_BACKUP_READ_URI) {
+                    InputStream inputStream = getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
+                    DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(this);
+                    db.importDatabase(inputStream);
+                    Toast.makeText(Tickmate.this, R.string.import_db_success, Toast.LENGTH_LONG).show();
+                }
 
-        try {
-            final TextView descriptionBox = new TextView(this);
-            descriptionBox.setText(getString(R.string.backup_folder) + " " + db.getExternalDatabaseFolder ().getAbsoluteFile());
-            layout.addView(descriptionBox);
-        } catch (IOException e) {
-            Log.e("Tickmate", "IOException: " + e.getMessage());
+            } catch (FileNotFoundException e) {
+                // Should not happen since source/destination file was picked by create document activity
+                Toast.makeText(Tickmate.this, e.toString(), Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                Toast.makeText(Tickmate.this, e.toString(), Toast.LENGTH_LONG).show();
+            }
         }
+    }
 
+    public void exportDB() {
         Calendar today = Calendar.getInstance();
-
         int year = today.get(Calendar.YEAR);
         int month = today.get(Calendar.MONTH) + 1;
         int day = today.get(Calendar.DAY_OF_MONTH);
+        String defaultFileName = String.format((Locale) null, "tickmate-backup-%04d%02d%02d.db", year, month, day);
 
-        input.setText(String.format("tickmate-backup-%04d%02d%02d.db", year, month, day));
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.export_db)
-                .setView(layout)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Editable value = input.getText();
-                        String name = value.toString();
-                        try {
-                            DatabaseOpenHelper.getInstance(Tickmate.this).exportDatabase(name);
-                            Toast.makeText(Tickmate.this, R.string.export_db_success, Toast.LENGTH_LONG).show();
-                        } catch (IOException e) {
-                            Toast.makeText(Tickmate.this, e.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Do nothing.
-            }
-        }).show();
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/x-sqlite3");
+        intent.putExtra(Intent.EXTRA_TITLE, defaultFileName);
+        startActivityForResult(intent, REQUEST_BACKUP_WRITE_URI);
     }
 
     public void importDB() {
-        DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(this);
-        final String[] items = db.getExternalDatabaseNames();
-
-        String backupFolderText = "";
-        try {
-            backupFolderText = "\n\n" + getString(R.string.backup_folder) + " " + db.getExternalDatabaseFolder ().getAbsoluteFile();
-        } catch (IOException e) {
-            Log.e("Tickmate", "IOException: " + e.getMessage());
-        }
-
-        if (items.length == 0) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(getString(R.string.import_db_none_found) + backupFolderText)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .show();
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.import_db);
-
-            builder.setItems(items, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    final int that = which;
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Tickmate.this);
-                    builder.setMessage(R.string.import_db_really)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    try {
-                                        DatabaseOpenHelper.getInstance(Tickmate.this).importDatabase(items[that]);
-                                        Toast.makeText(Tickmate.this, R.string.import_db_success, Toast.LENGTH_LONG).show();
-                                        refresh();
-                                    } catch (IOException e) {
-                                        Toast.makeText(Tickmate.this, e.toString(), Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            })
-                            .setNeutralButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Toast.makeText(Tickmate.this, "xx", Toast.LENGTH_LONG).show();
-                                }
-                            })
-                            .show();
-                }
-            });
-            builder.show();
-        }
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/x-sqlite3");
+        startActivityForResult(intent, REQUEST_BACKUP_READ_URI);
     }
 
     public void jumpToToday() {
