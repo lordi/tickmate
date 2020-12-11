@@ -1,3 +1,8 @@
+v1.4.8
+------
+
+* Fix rotation in track details (@0xDB)
+
 v1.4.7
 ------
 
