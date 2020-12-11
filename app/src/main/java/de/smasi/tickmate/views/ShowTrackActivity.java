@@ -15,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.lang.Math;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -94,7 +92,7 @@ public class ShowTrackActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_track);
-		
+
 		this.ds = DataSource.getInstance();
 		Bundle extras = getIntent().getExtras();
 		if (extras == null) {
@@ -102,11 +100,26 @@ public class ShowTrackActivity extends Activity {
 			return;
 		}
 		int track_id = extras.getInt("track_id");
-		
 		loadTrack(track_id);
-				
+
+		// restore selected trend on rotation
+		if (savedInstanceState != null) {
+			int storedIndex = savedInstanceState.getInt("trend_range_index", -1);
+			if (storedIndex >= 0 && storedIndex < getResources().getStringArray(R.array.pref_values_trend_range).length) {
+				trendRangeIndex = storedIndex;
+			}
+		}
+
+		fillTrackUI();
+
 		// Show the Up button in the action bar.
 		setupActionBar();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("trend_range_index", trendRangeIndex);
 	}
 
 	/**
@@ -379,9 +392,6 @@ public class ShowTrackActivity extends Activity {
 			}
 		}
 		trendRangeTitles = getResources().getStringArray(R.array.pref_titles_trend_range);
-
-		fillTrackUI();
-		
 	}
 	
 	private void fillTrackUI() {
@@ -543,6 +553,7 @@ public class ShowTrackActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		loadTrack(track.getId());
+		fillTrackUI();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
