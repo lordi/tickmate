@@ -8,13 +8,13 @@ allprojects {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 29
     buildToolsVersion '29.0.2'
 
     defaultConfig {
         applicationId 'de.smasi.tickmate'
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 29
     }
 
     buildTypes {
