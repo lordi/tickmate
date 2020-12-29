@@ -6,10 +6,11 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Path;
 import android.graphics.Rect;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
+
+import androidx.core.content.ContextCompat;
 
 import de.smasi.tickmate.R;
 

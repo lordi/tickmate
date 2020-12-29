@@ -1,8 +1,10 @@
 package de.smasi.tickmate.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -14,25 +16,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static android.database.sqlite.SQLiteDatabase.OPEN_READONLY;
+
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
-    private static DatabaseOpenHelper sharedInstance;
+	private static DatabaseOpenHelper sharedInstance;
 	private Context context;
-    private static final String TAG = "DatabaseOpenHelper";
+	private static final String TAG = "DatabaseOpenHelper";
 
-    /* Table names */
-    public static final String TABLE_TRACKS = "tracks";
-    public static final String TABLE_TICKS = "ticks";
-    public static final String TABLE_GROUPS = "groups";
-    public static final String TABLE_TRACK2GROUPS = "track2groups";
+	/* Table names */
+	public static final String TABLE_TRACKS = "tracks";
+	public static final String TABLE_TICKS = "ticks";
+	public static final String TABLE_GROUPS = "groups";
+	public static final String TABLE_TRACK2GROUPS = "track2groups";
 
-    /* Field names */
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_DESCRIPTION = "description";
-    public static final String COLUMN_ICON = "icon";
-    public static final String COLUMN_ENABLED = "enabled";
-    public static final String COLUMN_ORDER = "order";
-    public static final String COLUMN_YEAR = "year";
+	/* Field names */
+	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_NAME = "name";
+	public static final String COLUMN_DESCRIPTION = "description";
+	public static final String COLUMN_ICON = "icon";
+	public static final String COLUMN_ENABLED = "enabled";
+	public static final String COLUMN_ORDER = "order";
+	public static final String COLUMN_YEAR = "year";
     public static final String COLUMN_MONTH = "month";
     public static final String COLUMN_DAY = "day";
     public static final String COLUMN_HOUR = "hour";
@@ -46,64 +50,66 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "tickmate.db";
     private static final int DATABASE_VERSION = 14;
-    
-    public DatabaseOpenHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
-    }
-    
-    public static DatabaseOpenHelper getInstance(Context context) {
-    	if (sharedInstance == null) {
+
+	public DatabaseOpenHelper(Context context) {
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		this.context = context;
+	}
+
+	public static DatabaseOpenHelper getInstance(Context context) {
+		if (sharedInstance == null) {
 			sharedInstance = new DatabaseOpenHelper(context.getApplicationContext());
 		}
-    	return sharedInstance;
-    }
-    
-    // Database creation sql statement
-    private static final String DATABASE_CREATE_TRACKS = 
-    	"create table " + TABLE_TRACKS + "(" 
-    	+ COLUMN_ID + " integer primary key autoincrement, "
-        + COLUMN_NAME + " text not null, "
-        + COLUMN_DESCRIPTION + " text not null, "
-        + COLUMN_ICON + " text not null, "
-        + COLUMN_ENABLED + " integer not null,"
-        + COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0,"
-        + COLUMN_COLOR + " integer DEFAULT 0,"
-        + "\"" + COLUMN_ORDER + "\" integer DEFAULT -1"
-        + ");";
-    private static final String DATABASE_CREATE_TICKS =
-        "create table " + TABLE_TICKS + "("
-        + COLUMN_ID + " integer primary key autoincrement, "
-        + COLUMN_TRACK_ID + " integer,"
-        + COLUMN_YEAR + " integer,"
-        + COLUMN_MONTH + " integer,"
-        + COLUMN_DAY + " integer,"
-        + COLUMN_HOUR + " integer,"
-        + COLUMN_MINUTE + " integer,"
-        + COLUMN_SECOND + " integer,"
-        + COLUMN_HAS_TIME_INFO + " integer DEFAULT 0"
-        + ");";
-    private static final String DATABASE_CREATE_GROUPS =
-            "create table " + TABLE_GROUPS + "("
-                    + COLUMN_ID + " integer primary key autoincrement, "
-                    + COLUMN_NAME + " text not null, "
-                    + COLUMN_DESCRIPTION + " text not null, "
-                    + "\"" + COLUMN_ORDER + "\" integer DEFAULT -1"
-                    + ");";
-    private static final String DATABASE_CREATE_TRACK2GROUPS =
+		return sharedInstance;
+	}
+
+	// Database creation sql statement
+	private static final String DATABASE_CREATE_TRACKS =
+			"create table " + TABLE_TRACKS + "("
+					+ COLUMN_ID + " integer primary key autoincrement, "
+					+ COLUMN_NAME + " text not null, "
+					+ COLUMN_DESCRIPTION + " text not null, "
+					+ COLUMN_ICON + " text not null, "
+					+ COLUMN_ENABLED + " integer not null,"
+					+ COLUMN_MULTIPLE_ENTRIES_PER_DAY + " integer DEFAULT 0,"
+					+ COLUMN_COLOR + " integer DEFAULT 0,"
+					+ "\"" + COLUMN_ORDER + "\" integer DEFAULT -1"
+					+ ");";
+	private static final String DATABASE_CREATE_TICKS =
+			"create table " + TABLE_TICKS + "("
+					+ COLUMN_ID + " integer primary key autoincrement, "
+					+ COLUMN_TRACK_ID + " integer,"
+					+ COLUMN_YEAR + " integer,"
+					+ COLUMN_MONTH + " integer,"
+					+ COLUMN_DAY + " integer,"
+					+ COLUMN_HOUR + " integer,"
+					+ COLUMN_MINUTE + " integer,"
+					+ COLUMN_SECOND + " integer,"
+					+ COLUMN_HAS_TIME_INFO + " integer DEFAULT 0"
+					+ ");";
+	private static final String DATABASE_CREATE_GROUPS =
+			"create table " + TABLE_GROUPS + "("
+					+ COLUMN_ID + " integer primary key autoincrement, "
+					+ COLUMN_NAME + " text not null, "
+					+ COLUMN_DESCRIPTION + " text not null, "
+					+ "\"" + COLUMN_ORDER + "\" integer DEFAULT -1"
+					+ ");";
+	private static final String DATABASE_CREATE_TRACK2GROUPS =
 			"create table " + TABLE_TRACK2GROUPS + "("
 					+ COLUMN_ID + " integer primary key autoincrement, "
 					+ COLUMN_TRACK_ID + " integer not null, "
-                    + COLUMN_GROUP_ID + " integer not null "
-                    + ");";
+					+ COLUMN_GROUP_ID + " integer not null "
+					+ ");";
+	private static final String DATABASE_VALIDITY_CHECK =
+			"select tbl_name from sqlite_master where tbl_name = '" + TABLE_TICKS + "'";
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		Log.d("tickmate", "Creating database");
 		db.execSQL(DATABASE_CREATE_TRACKS);
 		db.execSQL(DATABASE_CREATE_TICKS);
-        db.execSQL(DATABASE_CREATE_GROUPS);
-        db.execSQL(DATABASE_CREATE_TRACK2GROUPS);
+		db.execSQL(DATABASE_CREATE_GROUPS);
+		db.execSQL(DATABASE_CREATE_TRACK2GROUPS);
 
 	}
 
@@ -182,27 +188,72 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 		// database to internal storage.
 		close();
 
-		File myDb = new File(getDatabasePath());
-		FileUtils.copyFile(inputStream, new FileOutputStream(myDb));
-		getWritableDatabase().close();
-		return true;
+		// copy external db to internal storage
+		String currentDbPath = getDatabasePath();
+		String tempImportFilePath = currentDbPath.substring(0, currentDbPath.lastIndexOf("/") + 1) + "tempDbImport.db";
+		File tempImportFile = new File(tempImportFilePath);
+		FileUtils.copyFile(inputStream, new FileOutputStream(tempImportFile));
+
+		// check validity of import db
+		boolean isValid = false;
+		try {
+			SQLiteDatabase newDb = SQLiteDatabase.openDatabase(tempImportFilePath, null, OPEN_READONLY);
+			isValid = isValidDb(newDb);
+			newDb.close();
+		} catch (SQLiteException e) {
+			Log.v("tickmate", "Could not open import db file: " + e.toString());
+		}
+
+		if (!isValid) {
+			if (!tempImportFile.delete()) {
+				Log.v("tickmate", "Failed to delete temporary import db file.");
+			}
+			return false;
+		}
+
+		// delete old db and replace with imported db
+		boolean success;
+		File currentDb = new File(currentDbPath);
+		success = currentDb.delete();
+		success &= tempImportFile.renameTo(currentDb);
+		if (!success) {
+			Log.v("tickmate", "Failed to replace current db with imported db.");
+		}
+		return success;
+	}
+
+	/**
+	 * Perform basic validity check on given db. (check if ticks table exists)
+	 * Used to check if compatible file was selected for db import
+	 *
+	 * @param db the database to test
+	 * @return true if db can be imported
+	 */
+	public boolean isValidDb(SQLiteDatabase db) {
+		boolean isValid = false;
+		Cursor cursor = db.rawQuery(DATABASE_VALIDITY_CHECK, null);
+		if (cursor != null) {
+			isValid = cursor.getCount() > 0;
+			cursor.close();
+		}
+		return isValid;
 	}
 
 	public String[] getExternalDatabaseNames() {
-		
-		 File ext_dir;
+
+		File ext_dir;
 		try {
 			ext_dir = getExternalDatabaseFolder();
 		} catch (IOException e) {
 			return new String[0];
 		}
-        FilenameFilter filter = new FilenameFilter() {
-            public boolean accept(File dir, String filename) {
-                File sel = new File(dir, filename);
-                return filename.endsWith(".db") && !sel.isDirectory();
-            }
-        };
-        return ext_dir.list(filter);
+		FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(File dir, String filename) {
+				File sel = new File(dir, filename);
+				return filename.endsWith(".db") && !sel.isDirectory();
+			}
+		};
+		return ext_dir.list(filter);
 
 	}
 

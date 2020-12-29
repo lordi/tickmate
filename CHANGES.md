@@ -1,3 +1,8 @@
+v1.4.9
+------
+
+* Fix db import in Android 11 (@0xDB)
+
 v1.4.8
 ------
 

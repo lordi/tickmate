@@ -183,8 +183,11 @@ public class Tickmate extends ListActivity implements
                 else if (requestCode == REQUEST_BACKUP_READ_URI) {
                     InputStream inputStream = getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
                     DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(this);
-                    db.importDatabase(inputStream);
-                    Toast.makeText(Tickmate.this, R.string.import_db_success, Toast.LENGTH_LONG).show();
+                    if (db.importDatabase(inputStream)) {
+                        Toast.makeText(Tickmate.this, R.string.import_db_success, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(Tickmate.this, R.string.import_db_failed, Toast.LENGTH_LONG).show();
+                    }
                 }
 
             } catch (FileNotFoundException e) {
@@ -213,7 +216,9 @@ public class Tickmate extends ListActivity implements
     public void importDB() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/x-sqlite3");
+        String[] mimetypes = {"application/x-sqlite3", "application/octet-stream"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+        intent.setType("*/*");
         startActivityForResult(intent, REQUEST_BACKUP_READ_URI);
     }
 
