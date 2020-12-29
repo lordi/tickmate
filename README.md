@@ -1,6 +1,6 @@
 # Tickmate
 
-![Unit Tests](https://github.com/lordi/tickmate/workflows/Unit%20Tests/badge.svg)
+![Unit Tests](https://github.com/lordi/tickmate/workflows/Unit%20Tests/badge.svg) ![F-Droid (including pre-releases)](https://img.shields.io/f-droid/v/de.smasi.tickmate?include_prereleases) ![Play Store](https://img.shields.io/badge/Play%20Store-de.smasi.tickmate-green)
 
 ### About
 
