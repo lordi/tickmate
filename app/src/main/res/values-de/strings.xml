@@ -40,6 +40,7 @@
     <string name="import_db">Datenbank importieren</string>
     <string name="export_db">Datenbank sichern</string>
     <string name="import_db_success">Datenbank erfolgreich importiert.</string>
+    <string name="import_db_failed">Datenbankimport fehlgeschlagen.</string>
     <string name="export_db_success">Datenbank erfolgreich gesichert. </string>
     <string name="import_db_none_found">Es konnten keine gesicherten Datenbanken gefunden werden.</string>
     <string name="import_db_really">Sind Sie sicher, dass Sie die ausgewählte Datenbank importieren möchten? Dies kann NICHT rückgängig gemacht werden und wird alle vorhandenen Tracks und Ticks ersetzen.</string>

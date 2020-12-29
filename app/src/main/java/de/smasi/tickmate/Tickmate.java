@@ -183,8 +183,11 @@ public class Tickmate extends ListActivity implements
                 else if (requestCode == REQUEST_BACKUP_READ_URI) {
                     InputStream inputStream = getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
                     DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(this);
-                    db.importDatabase(inputStream);
-                    Toast.makeText(Tickmate.this, R.string.import_db_success, Toast.LENGTH_LONG).show();
+                    if (db.importDatabase(inputStream)) {
+                        Toast.makeText(Tickmate.this, R.string.import_db_success, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(Tickmate.this, R.string.import_db_failed, Toast.LENGTH_LONG).show();
+                    }
                 }
 
             } catch (FileNotFoundException e) {

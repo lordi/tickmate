@@ -1,7 +1,5 @@
 package de.smasi.tickmate;
 
-import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Build;
 
 import org.junit.After;
@@ -13,7 +11,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
-import org.robolectric.annotation.LooperMode;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,13 +25,11 @@ import de.smasi.tickmate.database.DatabaseOpenHelper;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 
-import static android.os.Looper.getMainLooper;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.robolectric.Shadows.shadowOf;
 
 @Config(sdk = Build.VERSION_CODES.O)
 @RunWith(RobolectricTestRunner.class)
@@ -116,6 +111,50 @@ public class DatabaseTest {
         db.importDatabase(importDb);
 
         // reimported previous database, so track count should be one again:
+        openMethod.invoke(dataSource);
+        assertThat(dataSource.getTracks().size(), is(1));
+        closeMethod.invoke(dataSource);
+    }
+
+    @Test
+    public void databaseTestImportValidityCheck() throws Exception {
+        openMethod.invoke(dataSource);
+        assertThat(dataSource.getTracks().size(), is(0));
+        closeMethod.invoke(dataSource);
+
+        Track t = new Track("Testing", "Run my tests");
+        t.setEnabled(true);
+        assertThat(t.isEnabled(), is(true));
+        assertThat(t.isSectionHeader(), is(false));
+
+        openMethod.invoke(dataSource);
+        dataSource.storeTrack(t);
+        closeMethod.invoke(dataSource);
+
+        openMethod.invoke(dataSource);
+        assertThat(dataSource.getTracks().size(), is(1));
+        closeMethod.invoke(dataSource);
+
+        // attempt import of invalid file
+        byte[] invalidDb = "This is not a valid SQLite Database".getBytes();
+        ByteArrayInputStream importDb = new ByteArrayInputStream(invalidDb);
+        DatabaseOpenHelper db = DatabaseOpenHelper.getInstance(tickmate);
+        boolean isImportSuccessful = db.importDatabase(importDb);
+
+        assertThat(isImportSuccessful, is(false));
+
+        // assert that db contains previous values
+        openMethod.invoke(dataSource);
+        assertThat(dataSource.getTracks().size(), is(1));
+        closeMethod.invoke(dataSource);
+
+        // attempt import of empty sqlite db
+        InputStream is = tickmate.getAssets().open("test/empty-sqlitedb.db");
+        isImportSuccessful = db.importDatabase(importDb);
+
+        assertThat(isImportSuccessful, is(false));
+
+        // assert that db contains previous values
         openMethod.invoke(dataSource);
         assertThat(dataSource.getTracks().size(), is(1));
         closeMethod.invoke(dataSource);
