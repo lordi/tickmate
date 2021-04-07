@@ -127,4 +127,7 @@
     <string name="reminder_notification_time">Time of day</string>
     <string name="remind_me_at">Remind me at</string>
 
+    <string name="export_error_activity_not_found">ACTION_CREATE_DOCUMENT not available: Please enable File Manager for export.</string>
+    <string name="import_error_activity_not_found">ACTION_CREATE_DOCUMENT not available: Please enable File Manager for import.</string>
+
 </resources>
