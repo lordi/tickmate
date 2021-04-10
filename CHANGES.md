@@ -1,3 +1,8 @@
+v1.4.10
+------
+
+* Show error message when file manager is not available (@0xDB)
+
 v1.4.9
 ------
 
