@@ -210,7 +210,16 @@ public class Tickmate extends ListActivity implements
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/x-sqlite3");
         intent.putExtra(Intent.EXTRA_TITLE, defaultFileName);
-        startActivityForResult(intent, REQUEST_BACKUP_WRITE_URI);
+
+        // issue #142:
+        //      Deactivating File Manager on some phones may make ACTION_CREATE_DOCUMENT unavailable.
+        //      Check if activity is available and fail gracefully otherwise.
+        boolean isActivityAvailable = intent.resolveActivity(getPackageManager()) != null;
+        if (isActivityAvailable) {
+            startActivityForResult(intent, REQUEST_BACKUP_WRITE_URI);
+        } else {
+            Toast.makeText(this,R.string.export_error_activity_not_found,Toast.LENGTH_LONG).show();
+        }
     }
 
     public void importDB() {
@@ -219,7 +228,17 @@ public class Tickmate extends ListActivity implements
         String[] mimetypes = {"application/x-sqlite3", "application/octet-stream"};
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
         intent.setType("*/*");
-        startActivityForResult(intent, REQUEST_BACKUP_READ_URI);
+
+        // issue #142:
+        //      Deactivating File Manager on some phones may make ACTION_OPEN_DOCUMENT unavailable.
+        //      Check if activity is available and fail gracefully otherwise.
+        boolean isActivityAvailable = intent.resolveActivity(getPackageManager()) != null;
+        if (isActivityAvailable) {
+            startActivityForResult(intent, REQUEST_BACKUP_READ_URI);
+        } else {
+            Toast.makeText(this,R.string.import_error_activity_not_found,Toast.LENGTH_LONG).show();
+        }
+
     }
 
     public void jumpToToday() {
