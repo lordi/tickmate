@@ -68,6 +68,7 @@
     <string-array name="pref_titles_active_date">
         <item>Solo i giorni attivi</item>
         <item>Giorno attivo e il giorno precedente</item>
+        <item>Giorno attivo e il giorno/fine-settimana precedente</item>
         <item>Tutti i giorni</item>
     </string-array>
     <string name="notify_user_ticking_disabled">La modifica di questo tick è disabilitata. Puoi specificare quali giorni sono modificabili nelle impostazioni.</string>
