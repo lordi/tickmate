@@ -1,3 +1,8 @@
+v1.4.11
+-------
+
+* Fixed issue with Italian language
+
 v1.4.10
 ------
 
