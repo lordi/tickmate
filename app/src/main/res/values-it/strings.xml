@@ -68,6 +68,7 @@
     <string-array name="pref_titles_active_date">
         <item>Solo i giorni attivi</item>
         <item>Giorno attivo e il giorno precedente</item>
+        <item>Giorno attivo e il giorno/fine-settimana precedente</item>
         <item>Tutti i giorni</item>
     </string-array>
     <string name="notify_user_ticking_disabled">La modifica di questo tick è disabilitata. Puoi specificare quali giorni sono modificabili nelle impostazioni.</string>
@@ -86,4 +87,45 @@
     <string name="no_groups_found">Nessun gruppo trovato. Vuoi aprire l\'editor dei gruppi?</string>
     <string name="group_all_name">Tutti</string>
 
+    <!-- New in 1.4.0 -->
+    <string name="title_color_chooser">Scegli il colore</string>
+    <string name="pref_title_color">Colore</string>
+
+    <!-- New in 1.4.2 -->
+    <string name="title_section_streaks">Serie/interruzioni</string>
+    <string name="longest_streak_on">Serie più lunga</string>
+    <string name="longest_streak_off">Interruzione più lunga</string>
+    <string name="pref_multiple_entries_enabled_summary">Premi più volte per aumentare il contatore del giorno. Tieni premuto per diminuire il contatore.</string>
+    <string name="backup_folder">La cartella di backup è:</string>
+
+    <!-- New in 1.4.4 -->
+    <string name="pref_title_long_click">Premi a lungo sul tick</string>
+    <string-array name="pref_titles_long_click">
+        <item>Inserisci il numero di ticks</item>
+        <item>Rimuovi ultimo tick</item>
+    </string-array>
+    <string name="set_number_of_ticks">Numero di ticks %1$s</string>
+    <string name="pref_title_trend_range">Intervallo del trend</string>
+    <string-array name="pref_titles_trend_range">
+        <item>trend di 1 settimana</item>
+        <item>trend di 2 settimane</item>
+        <item>trend di 1 mese</item>
+        <item>trend di 3 mesi</item>
+        <item>trend di 6 mesi</item>
+        <item>trend di 1 anno</item>
+    </string-array>
+
+    <!-- New in 1.4.6 -->
+    <string name="pref_category_main">Schermata principale</string>
+    <string name="pref_category_track">Schermata di tracking</string>
+    <string name="pref_category_notifications">Notifiche</string>
+    <string name="reminder_title">Promemoria di Tickmate</string>
+    <string name="reminder_text">Premi per inserire i tuoi tick del giorno</string>
+    <string name="reminder_settings_title">Promemoria di Tickmate</string>
+    <string name="reminder_settings_summary">Rilascia una notifica giornaliera per i miei tick</string>
+    <string name="reminder_notification_time">Ora del giorno</string>
+    <string name="remind_me_at">Ricordamelo alle</string>
+
+    <string name="export_error_activity_not_found">ACTION_CREATE_DOCUMENT non disponibile: abilita File Manager per esportare.</string>
+    <string name="import_error_activity_not_found">ACTION_CREATE_DOCUMENT non disponibile: abilita File Manager per importare.</string>
 </resources>
