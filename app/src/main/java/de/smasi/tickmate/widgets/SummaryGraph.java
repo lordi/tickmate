@@ -59,7 +59,7 @@ public class SummaryGraph extends View {
 	}
 
 	private void init(Context context) {
-		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));		
+		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		path = new Path();
 
@@ -92,7 +92,7 @@ public class SummaryGraph extends View {
 
 	    paint.setAntiAlias(true);
 	    paint.setTextAlign(Align.CENTER);
-	
+
 		// normal
 		paint.setStrokeWidth(0);
         paint.setAlpha(255);
@@ -104,12 +104,16 @@ public class SummaryGraph extends View {
 		final int fontTop = -fontMetricsInt.top; // distances above baseline are negative
 		final int fontBottom = fontMetricsInt.bottom;
 
-		float margin = MARKER_RADIUS + fontBottom + fontTop;  // for point/axis labels below/above chart area
+		float marginTop = MARKER_RADIUS + fontBottom + fontTop;  // for point/axis labels below/above chart area
+		float marginBottom = marginTop;
+		if (this.cyclic) {
+			marginTop = 2 * marginBottom;
+		}
 		if (this.maximum <= 0)
 			this.maximum = 1f;
-		float height0 = this.maximum / (this.maximum + this.minimum) * (getHeight() - 2 * margin);
+		float height0 = this.maximum / (this.maximum + this.minimum) * (getHeight() - (marginTop + marginBottom));
 		                // height of positive section of chart
-		float height = height0 + margin; // distance from top to abscissa
+		float height = height0 + marginTop; // distance from top to abscissa
 		float width = getWidth();
 
 		float deltaX = width/len;
@@ -120,13 +124,13 @@ public class SummaryGraph extends View {
 		path.reset();
 		path.moveTo(x, height);
 		if (this.cyclic) {
-			h = margin + height0 - this.data.get(len - 1) / this.maximum * height0;
+			h = marginTop + height0 - this.data.get(len - 1) / this.maximum * height0;
 			path.lineTo(x, h);
 			oldH = h;
 		}
-		
+
 		for (int i=0; i < len; i++) {
-			h = margin + height0 - this.data.get(i) / this.maximum * height0;
+			h = marginTop + height0 - this.data.get(i) / this.maximum * height0;
 			x0 += deltaX;
 			x += deltaX;
 			path.cubicTo(x0, oldH, x0, h, x, h);
@@ -135,11 +139,11 @@ public class SummaryGraph extends View {
 
 		x += deltaX;
 		if (this.cyclic) {
-			h = margin + height0 - this.data.get(0) / this.maximum * height0;
+			h = marginTop + height0 - this.data.get(0) / this.maximum * height0;
 			path.cubicTo(width, oldH, width, h, x, h);
 			path.lineTo(x, height);
 		}
-		else 
+		else
 			path.cubicTo(x, oldH, width, height, width, height);
 
         int dpSize = 2;
@@ -160,16 +164,26 @@ public class SummaryGraph extends View {
         paint.setStyle(Style.FILL);
 
 		x = -0.5f * deltaX;
+		double sum = 0.0;
+		for (int i = 0; i < len; i++) {
+			int val = this.data.get(i);
+			sum += val;
+		}
 		for (int i=0; i < len; i++) {
 			int val = this.data.get(i);
-			h =  margin + height0 - val / this.maximum * height0;
+			h = marginTop + height0 - val / this.maximum * height0;
 			x += deltaX;
 			paint.setStrokeWidth(1);
 			paint.setColor(mColor);
 			if (val != 0) {
 				paint.setColor(mTextColor);
 				if (val > 0 ) {
-					canvas.drawText(Integer.toString(val), x, h - MARKER_RADIUS - fontBottom, paint);
+					if (this.cyclic) {
+						canvas.drawText(" " + Math.round((val / sum) * 100) + "%", x, h - MARKER_RADIUS - fontBottom - (marginTop / 2), paint);
+						canvas.drawText(Integer.toString(val), x, h - MARKER_RADIUS - fontBottom, paint);
+					} else {
+						canvas.drawText(Integer.toString(val), x, h - MARKER_RADIUS - fontBottom, paint);
+					}
 				} else {
 					canvas.drawText(Integer.toString(-val), x, h + MARKER_RADIUS + fontTop, paint);
 				}
