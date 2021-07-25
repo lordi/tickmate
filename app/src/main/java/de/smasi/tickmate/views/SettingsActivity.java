@@ -10,8 +10,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import android.widget.Toast;
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.notifications.TickmateNotificationBroadcastReceiver;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "Tickmate";
@@ -33,6 +37,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference("active-date-key"));
         bindPreferenceSummaryToValue(findPreference("long-click-key"));
         bindPreferenceSummaryToValue(findPreference("trend-range-key"));
+        bindPreferenceSummaryToValue(findPreference("date_format"));
     }
 
 
@@ -93,6 +98,19 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         Log.d(TAG, "Settings key changed: " + key);
+        if (key.equals("date_format")) {
+            Locale locale = Locale.getDefault();
+            String dateFormatString = PreferenceManager.getDefaultSharedPreferences(this).
+                    getString("date_format", "");
+            if(!dateFormatString.isEmpty()) {
+                try{
+                    new SimpleDateFormat(dateFormatString, locale);
+                } catch (IllegalArgumentException e) {
+                    String javaErrorMessage = e.getMessage();
+                    Toast.makeText(this, "Date Format: " + javaErrorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
         if (key.equals("notification-enabled") || key.equals("notification-time"))
             TickmateNotificationBroadcastReceiver.updateAlarm(this);
     }

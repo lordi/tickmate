@@ -27,6 +27,12 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_title_long_click" />
 
+        <EditTextPreference
+                android:key="date_format"
+                android:hint="@string/pref_title_date_format_hint"
+                android:title="@string/pref_title_date_format"
+        />
+
     </PreferenceCategory>
 
     <PreferenceCategory

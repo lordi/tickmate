@@ -13,19 +13,14 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.widgets.MultiTickButton;
 import de.smasi.tickmate.widgets.TickButton;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class TickAdapter extends BaseAdapter {
 
@@ -183,8 +178,16 @@ public class TickAdapter extends BaseAdapter {
     public View buildRow(Calendar cal) {
         Locale locale = Locale.getDefault();
         Date date = cal.getTime();
-        java.text.DateFormat dateFormat = android.text.format.DateFormat
-                .getDateFormat(context);
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
+        String dateFormatString = PreferenceManager.getDefaultSharedPreferences(context).
+                getString("date_format", "");
+        if(!dateFormatString.isEmpty()) {
+            try{
+                dateFormat = new SimpleDateFormat(dateFormatString, locale);
+            } catch (IllegalArgumentException e) {
+                Log.w(TAG, "Error parsing dateFormat: " + dateFormat + e.getMessage());
+            }
+        }
 
         //Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 

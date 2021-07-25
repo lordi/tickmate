@@ -116,6 +116,9 @@
         <item>1-year trend</item>
     </string-array>
 
+    <string name="pref_title_date_format">Date format</string>
+    <string name="pref_title_date_format_hint">dd-MM-yyyy for 29-03-1999</string>
+
     <!-- New in 1.4.6 -->
     <string name="pref_category_main">Main screen</string>
     <string name="pref_category_track">Track screen</string>
