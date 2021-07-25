@@ -1,61 +1,69 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-        android:title="@string/pref_category_main">
+            android:title="@string/pref_category_main">
 
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="reverse-date-order-key"
-            android:summary="@string/pref_description_reverse_date_display_order"
-            android:title="@string/pref_title_reverse_date_display_order" />
+                android:defaultValue="false"
+                android:key="reverse-date-order-key"
+                android:summary="@string/pref_description_reverse_date_display_order"
+                android:title="@string/pref_title_reverse_date_display_order" />
 
         <ListPreference
-            android:defaultValue="ALLOW_ALL"
-            android:entries="@array/pref_titles_active_date"
-            android:entryValues="@array/pref_values_active_date"
-            android:key="active-date-key"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="@string/pref_title_limit_active_date" />
+                android:defaultValue="ALLOW_ALL"
+                android:entries="@array/pref_titles_active_date"
+                android:entryValues="@array/pref_values_active_date"
+                android:key="active-date-key"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"
+                android:title="@string/pref_title_limit_active_date" />
 
         <ListPreference
-            android:defaultValue="LONGCLICK_DECREMENT"
-            android:entries="@array/pref_titles_long_click"
-            android:entryValues="@array/pref_values_long_click"
-            android:key="long-click-key"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="@string/pref_title_long_click" />
+                android:defaultValue="LONGCLICK_DECREMENT"
+                android:entries="@array/pref_titles_long_click"
+                android:entryValues="@array/pref_values_long_click"
+                android:key="long-click-key"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"
+                android:title="@string/pref_title_long_click" />
+
+        <EditTextPreference
+                android:key="date_format"
+                android:summary="@string/pref_title_date_format_explanation"
+                android:title="@string/pref_title_date_format"
+                android:maxLines="1"
+                android:inputType="text"
+        />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_category_track">
+            android:title="@string/pref_category_track">
 
         <ListPreference
-            android:defaultValue="14"
-            android:entries="@array/pref_titles_trend_range"
-            android:entryValues="@array/pref_values_trend_range"
-            android:key="trend-range-key"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            android:title="@string/pref_title_trend_range" />
+                android:defaultValue="14"
+                android:entries="@array/pref_titles_trend_range"
+                android:entryValues="@array/pref_values_trend_range"
+                android:key="trend-range-key"
+                android:negativeButtonText="@null"
+                android:positiveButtonText="@null"
+                android:title="@string/pref_title_trend_range" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_category_notifications">
+            android:title="@string/pref_category_notifications">
 
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="notification-enabled"
-            android:title="@string/reminder_settings_title"
-            android:summary="@string/reminder_settings_summary"
-             />
+                android:defaultValue="false"
+                android:key="notification-enabled"
+                android:title="@string/reminder_settings_title"
+                android:summary="@string/reminder_settings_summary"
+        />
 
         <de.smasi.tickmate.prefs.TimePickerPreference
-            android:key="notification-time"
-            android:title="@string/reminder_notification_time" />
+                android:key="notification-time"
+                android:title="@string/reminder_notification_time" />
 
     </PreferenceCategory>
 

@@ -13,23 +13,18 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import de.smasi.tickmate.database.DataSource;
 import de.smasi.tickmate.models.Group;
 import de.smasi.tickmate.models.Track;
 import de.smasi.tickmate.widgets.MultiTickButton;
 import de.smasi.tickmate.widgets.TickButton;
 
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 public class TickAdapter extends BaseAdapter {
 
-	private final Context context;
+    private final Context context;
     private Calendar activeDay;  // When set, the display will be fixed to this day.
     // Null value is intentionally used to indicate display should follow the actual current day.
     private Calendar today, yday;
@@ -40,20 +35,20 @@ public class TickAdapter extends BaseAdapter {
 
     private boolean isTodayAtTop = false;  // Reverses the date ordering - most recent dates at the top
     private static final String TAG = "TickAdapter";
-    private static final int DEFAULT_COUNT_PAST = 21; 
+    private static final int DEFAULT_COUNT_PAST = 21;
     private static final int DEFAULT_COUNT_AHEAD = 0;
 
     private int mCurrentGroupId;
 
-	public TickAdapter(Context context, Calendar activeDay, Bundle restoreStateBundle) {
-		// super(context, R.layout.rowlayout, days);
-		this.context = context;
-		this.count = DEFAULT_COUNT_PAST;
-		this.count_ahead = DEFAULT_COUNT_AHEAD;
+    public TickAdapter(Context context, Calendar activeDay, Bundle restoreStateBundle) {
+        // super(context, R.layout.rowlayout, days);
+        this.context = context;
+        this.count = DEFAULT_COUNT_PAST;
+        this.count_ahead = DEFAULT_COUNT_AHEAD;
 
         setActiveDay(activeDay);
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
-                getBoolean("reverse-date-order-key", false);
+            getBoolean("reverse-date-order-key", false);
     }
 
     public void unsetActiveDay() {
@@ -72,31 +67,31 @@ public class TickAdapter extends BaseAdapter {
         yday.add(Calendar.DATE, -1);
     }
 
-	public void setActiveDay(Calendar activeDay) {
+    public void setActiveDay(Calendar activeDay) {
         updateToday();
 
         // null is used to indicate 'not set'
-		if (activeDay != null) {
-			java.text.DateFormat dateFormat = android.text.format.DateFormat
-					.getDateFormat(context);
-			Log.d(TAG, "Active day set to " + dateFormat.format(activeDay.getTime()));
-			activeDay.set(Calendar.HOUR_OF_DAY, 0);
-			activeDay.set(Calendar.MINUTE, 0);
-			activeDay.set(Calendar.SECOND, 0);
-			activeDay.set(Calendar.MILLISECOND, 0);
-		}
-		
-		this.activeDay = activeDay;
+        if (activeDay != null) {
+            java.text.DateFormat dateFormat = android.text.format.DateFormat
+                .getDateFormat(context);
+            Log.d(TAG, "Active day set to " + dateFormat.format(activeDay.getTime()));
+            activeDay.set(Calendar.HOUR_OF_DAY, 0);
+            activeDay.set(Calendar.MINUTE, 0);
+            activeDay.set(Calendar.SECOND, 0);
+            activeDay.set(Calendar.MILLISECOND, 0);
+        }
+
+        this.activeDay = activeDay;
         Log.d(TAG, "Active day set to " + activeDay);
 
         notifyDataSetChanged();
-	}
+    }
 
 
     public Calendar getActiveDay() {
-		if (this.activeDay == null) {
+        if (this.activeDay == null) {
             updateToday();
-            return (Calendar) this.today.clone();  
+            return (Calendar) this.today.clone();
         } else {
             return (Calendar) this.activeDay.clone();
         }
@@ -119,14 +114,14 @@ public class TickAdapter extends BaseAdapter {
         }
 
         if ((mCurrentGroupId != Group.ALL_GROUP.getId())
-                && (ds.getTracksForGroup(mCurrentGroupId).size() == 0)) {
+            && (ds.getTracksForGroup(mCurrentGroupId).size() == 0)) {
             return 0;
         }
 
         return this.count;
     }
 
-	public Object getItem(int position) {
+    public Object getItem(int position) {
         if (isTodayAtTop) {
             return position;
         } else {
@@ -183,8 +178,16 @@ public class TickAdapter extends BaseAdapter {
     public View buildRow(Calendar cal) {
         Locale locale = Locale.getDefault();
         Date date = cal.getTime();
-        java.text.DateFormat dateFormat = android.text.format.DateFormat
-                .getDateFormat(context);
+        java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(context);
+        String dateFormatString = PreferenceManager.getDefaultSharedPreferences(context).
+            getString("date_format", "");
+        if(!dateFormatString.isEmpty()) {
+            try{
+                dateFormat = new SimpleDateFormat(dateFormatString, locale);
+            } catch (IllegalArgumentException e) {
+                Log.w(TAG, "Error parsing dateFormat: " + dateFormat + e.getMessage());
+            }
+        }
 
         //Log.v(TAG, "Inflating row " + dateFormat.format(cal.getTime()));
 
@@ -209,14 +212,14 @@ public class TickAdapter extends BaseAdapter {
         }
 
         String day_name = cal.getDisplayName(Calendar.DAY_OF_WEEK,
-                Calendar.SHORT, locale);
+            Calendar.SHORT, locale);
         t_weekday.setText(day_name.toUpperCase(locale));
 
         t_weekday.setTextAppearance(this.context,
-                android.R.style.TextAppearance_Medium);
+            android.R.style.TextAppearance_Medium);
         t_date.setWidth(120);
         t_date.setTextAppearance(this.context,
-                android.R.style.TextAppearance_Small);
+            android.R.style.TextAppearance_Small);
         t_date.setTextSize((float) 11.0);
         t_date.setTextColor(Color.GRAY);
         t_weekday.setWidth(120);
@@ -242,7 +245,7 @@ public class TickAdapter extends BaseAdapter {
         int rowHeight = (int) (t_weekday.getTextSize() + t_date.getTextSize()) + 40;
 
         l.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                rowHeight, 0.8f));
+            rowHeight, 0.8f));
         l.setGravity(Gravity.CENTER_VERTICAL);
 
         LinearLayout l2 = new LinearLayout(this.context);
@@ -251,22 +254,22 @@ public class TickAdapter extends BaseAdapter {
 
             if (track.multipleEntriesEnabled()) {
                 MultiTickButton counter = new MultiTickButton(this.context,
-                        track, (Calendar) cal.clone());
+                    track, (Calendar) cal.clone());
                 counter.setLayoutParams(new LayoutParams(
-                        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-                        (1.0f) / mTracksCurrentlyDisplayed.size()));
+                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+                    (1.0f) / mTracksCurrentlyDisplayed.size()));
                 l2.addView(counter);
             } else {
                 TickButton checker = new TickButton(this.context, track, cal);
                 checker.setLayoutParams(new LayoutParams(
-                        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-                        (1.0f) / mTracksCurrentlyDisplayed.size()));
+                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+                    (1.0f) / mTracksCurrentlyDisplayed.size()));
                 l2.addView(checker);
             }
         }
         l2.setWeightSum(1.0f);
         l2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                rowHeight, 0.2f));
+            rowHeight, 0.2f));
 
         row.addView(l);
         row.addView(l2);
@@ -295,10 +298,10 @@ public class TickAdapter extends BaseAdapter {
         ((ListActivity) context).getListView().smoothScrollToPositionFromTop(scrollposition, 1, 0);
     }
 
-	@Override
-	public void notifyDataSetChanged() {
-		java.text.DateFormat dateFormat = android.text.format.DateFormat
-				.getDateFormat(context);
+    @Override
+    public void notifyDataSetChanged() {
+        java.text.DateFormat dateFormat = android.text.format.DateFormat
+            .getDateFormat(context);
 
         // Today may have changed, for instance when the App was running in the background
         // for a while and then resumed. So, update today!
@@ -309,7 +312,7 @@ public class TickAdapter extends BaseAdapter {
         boolean previousIsTodayAtTop = isTodayAtTop;  // Used to determine if this value has been toggled since last data set change
 
         isTodayAtTop = PreferenceManager.getDefaultSharedPreferences(context).
-                getBoolean("reverse-date-order-key", false);
+            getBoolean("reverse-date-order-key", false);
 
         if (isTodayAtTop != previousIsTodayAtTop) {
             scrollToLatest();

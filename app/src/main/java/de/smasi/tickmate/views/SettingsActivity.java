@@ -10,8 +10,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import android.widget.Toast;
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.notifications.TickmateNotificationBroadcastReceiver;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "Tickmate";
@@ -53,8 +57,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
                 // Set the summary to reflect the new value.
                 preference
-                        .setSummary(index >= 0 ? listPreference.getEntries()[index]
-                                : null);
+                    .setSummary(index >= 0 ? listPreference.getEntries()[index]
+                        : null);
 
 
             } else {
@@ -78,21 +82,34 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private static void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference
-                .setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+            .setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         // Trigger the listener immediately with the preference's
         // current value.
         sBindPreferenceSummaryToValueListener.onPreferenceChange(
-                preference,
-                PreferenceManager.getDefaultSharedPreferences(
-                        preference.getContext()).getString(preference.getKey(),
-                        ""));
+            preference,
+            PreferenceManager.getDefaultSharedPreferences(
+                preference.getContext()).getString(preference.getKey(),
+                ""));
     }
 
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         Log.d(TAG, "Settings key changed: " + key);
+        if (key.equals("date_format")) {
+            Locale locale = Locale.getDefault();
+            String dateFormatString = PreferenceManager.getDefaultSharedPreferences(this).
+                getString("date_format", "");
+            if(!dateFormatString.isEmpty()) {
+                try{
+                    new SimpleDateFormat(dateFormatString, locale);
+                } catch (IllegalArgumentException e) {
+                    String javaErrorMessage = e.getMessage();
+                    Toast.makeText(this, "Date Format: " + javaErrorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
         if (key.equals("notification-enabled") || key.equals("notification-time"))
             TickmateNotificationBroadcastReceiver.updateAlarm(this);
     }
