@@ -116,9 +116,6 @@
         <item>1-year trend</item>
     </string-array>
 
-    <string name="pref_title_date_format">Date format</string>
-    <string name="pref_title_date_format_explanation">Override system date format (e.g. mm-DD-yyyy)</string>
-
     <!-- New in 1.4.6 -->
     <string name="pref_category_main">Main screen</string>
     <string name="pref_category_track">Track screen</string>
@@ -133,4 +130,7 @@
     <string name="export_error_activity_not_found">ACTION_CREATE_DOCUMENT not available: Please enable File Manager for export.</string>
     <string name="import_error_activity_not_found">ACTION_CREATE_DOCUMENT not available: Please enable File Manager for import.</string>
 
+    <!-- New in 1.4.12 -->
+    <string name="pref_title_date_format">Date format</string>
+    <string name="pref_title_date_format_explanation">Override system date format (e.g. mm-DD-yyyy)</string>
 </resources>

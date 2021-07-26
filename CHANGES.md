@@ -1,3 +1,9 @@
+v1.4.12
+-------
+
+* Weekly graph also shows percentages (@cipo7741)
+* Setting that allows to change the date format (@cipo7741)
+
 v1.4.11
 -------
 
