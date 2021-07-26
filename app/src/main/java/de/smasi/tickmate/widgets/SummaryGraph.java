@@ -22,7 +22,7 @@ import de.smasi.tickmate.R;
 public class SummaryGraph extends View {
 	Path path;
 
-    public SummaryGraph(Context context, AttributeSet attrs, int defStyle) {
+	public SummaryGraph(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context);
 	}
@@ -38,7 +38,7 @@ public class SummaryGraph extends View {
 	private float maximum;
 	private float minimum;
 	private boolean cyclic;
-    private int mColor;
+	private int mColor;
 	private int mTextColor;
 	private int mMarkerColor;
 	final static float MARKER_RADIUS = 6f;
@@ -51,7 +51,7 @@ public class SummaryGraph extends View {
 		this.cyclic = cyclic;
 	}
 
-    public void setColor(int color) { this.mColor = color; }
+	public void setColor(int color) { this.mColor = color; }
 
 	public SummaryGraph(Context context) {
 		super(context);
@@ -59,7 +59,7 @@ public class SummaryGraph extends View {
 	}
 
 	private void init(Context context) {
-		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));		
+		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		path = new Path();
 
@@ -90,26 +90,30 @@ public class SummaryGraph extends View {
 		if (len == 0)
 			return;
 
-	    paint.setAntiAlias(true);
-	    paint.setTextAlign(Align.CENTER);
-	
+		paint.setAntiAlias(true);
+		paint.setTextAlign(Align.CENTER);
+
 		// normal
 		paint.setStrokeWidth(0);
-        paint.setAlpha(255);
+		paint.setAlpha(255);
 
-        int textSize = getResources().getDimensionPixelSize(R.dimen.fontsize_small);
+		int textSize = getResources().getDimensionPixelSize(R.dimen.fontsize_small);
 		paint.setTextSize(textSize);
 
 		Paint.FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
 		final int fontTop = -fontMetricsInt.top; // distances above baseline are negative
 		final int fontBottom = fontMetricsInt.bottom;
 
-		float margin = MARKER_RADIUS + fontBottom + fontTop;  // for point/axis labels below/above chart area
+		float marginTop = MARKER_RADIUS + fontBottom + fontTop;  // for point/axis labels below/above chart area
+		float marginBottom = marginTop;
+		if (this.cyclic) {
+			marginTop = 2 * marginBottom;
+		}
 		if (this.maximum <= 0)
 			this.maximum = 1f;
-		float height0 = this.maximum / (this.maximum + this.minimum) * (getHeight() - 2 * margin);
-		                // height of positive section of chart
-		float height = height0 + margin; // distance from top to abscissa
+		float height0 = this.maximum / (this.maximum + this.minimum) * (getHeight() - (marginTop + marginBottom));
+		// height of positive section of chart
+		float height = height0 + marginTop; // distance from top to abscissa
 		float width = getWidth();
 
 		float deltaX = width/len;
@@ -120,13 +124,13 @@ public class SummaryGraph extends View {
 		path.reset();
 		path.moveTo(x, height);
 		if (this.cyclic) {
-			h = margin + height0 - this.data.get(len - 1) / this.maximum * height0;
+			h = marginTop + height0 - this.data.get(len - 1) / this.maximum * height0;
 			path.lineTo(x, h);
 			oldH = h;
 		}
-		
+
 		for (int i=0; i < len; i++) {
-			h = margin + height0 - this.data.get(i) / this.maximum * height0;
+			h = marginTop + height0 - this.data.get(i) / this.maximum * height0;
 			x0 += deltaX;
 			x += deltaX;
 			path.cubicTo(x0, oldH, x0, h, x, h);
@@ -135,41 +139,51 @@ public class SummaryGraph extends View {
 
 		x += deltaX;
 		if (this.cyclic) {
-			h = margin + height0 - this.data.get(0) / this.maximum * height0;
+			h = marginTop + height0 - this.data.get(0) / this.maximum * height0;
 			path.cubicTo(width, oldH, width, h, x, h);
 			path.lineTo(x, height);
 		}
-		else 
+		else
 			path.cubicTo(x, oldH, width, height, width, height);
 
-        int dpSize = 2;
-        DisplayMetrics dm = getResources().getDisplayMetrics() ;
-        float strokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpSize, dm);
+		int dpSize = 2;
+		DisplayMetrics dm = getResources().getDisplayMetrics() ;
+		float strokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpSize, dm);
 
 		paint.setStyle(Style.FILL);
 		paint.setColor(mColor);
 		paint.setAlpha(128);
-        canvas.drawPath(path, paint);
-        paint.setAlpha(255);
-        paint.setStrokeWidth(strokeWidth);
-        paint.setStyle(Style.STROKE);
-        canvas.drawPath(path, paint);
+		canvas.drawPath(path, paint);
+		paint.setAlpha(255);
+		paint.setStrokeWidth(strokeWidth);
+		paint.setStyle(Style.STROKE);
+		canvas.drawPath(path, paint);
 
-        canvas.drawLine(0, height, width, height, paint);
+		canvas.drawLine(0, height, width, height, paint);
 
-        paint.setStyle(Style.FILL);
+		paint.setStyle(Style.FILL);
 
 		x = -0.5f * deltaX;
+		double sum = 0.0;
+		for (int i = 0; i < len; i++) {
+			int val = this.data.get(i);
+			sum += val;
+		}
 		for (int i=0; i < len; i++) {
 			int val = this.data.get(i);
-			h =  margin + height0 - val / this.maximum * height0;
+			h = marginTop + height0 - val / this.maximum * height0;
 			x += deltaX;
 			paint.setStrokeWidth(1);
 			paint.setColor(mColor);
 			if (val != 0) {
 				paint.setColor(mTextColor);
 				if (val > 0 ) {
-					canvas.drawText(Integer.toString(val), x, h - MARKER_RADIUS - fontBottom, paint);
+					if (this.cyclic) {
+						canvas.drawText(" " + Math.round((val / sum) * 100) + "%", x, h - MARKER_RADIUS - fontBottom - (marginTop / 2), paint);
+						canvas.drawText(Integer.toString(val), x, h - MARKER_RADIUS - fontBottom, paint);
+					} else {
+						canvas.drawText(Integer.toString(val), x, h - MARKER_RADIUS - fontBottom, paint);
+					}
 				} else {
 					canvas.drawText(Integer.toString(-val), x, h + MARKER_RADIUS + fontTop, paint);
 				}
