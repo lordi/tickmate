@@ -1,3 +1,8 @@
+v1.4.13
+-------
+
+* Notifications should work again (@cipo7741)
+
 v1.4.12
 -------
 
