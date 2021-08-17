@@ -1,3 +1,8 @@
+master
+------
+
+* Add scrolling in about page for big font sizes (@yuhuitech)
+
 v1.4.13
 -------
 
