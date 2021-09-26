@@ -125,4 +125,11 @@
     <string name="reminder_notification_time">Czas dnia</string>
     <string name="remind_me_at">Przypomnij mi o</string>
 
+    <string name="export_error_activity_not_found">ACTION_CREATE_DOCUMENT niedostępne: Aktywuj Manadżer Plików aby eksportować.</string>
+    <string name="import_error_activity_not_found">ACTION_CREATE_DOCUMENT niedostępne: Aktywuj Manadżer Plików aby importować.</string>
+
+    <!-- New in 1.4.12 -->
+    <string name="pref_title_date_format">Format daty</string>
+    <string name="pref_title_date_format_explanation">Nadpisz systemowy format daty (np. mm-DD-yyyy)</string>
+
 </resources>
