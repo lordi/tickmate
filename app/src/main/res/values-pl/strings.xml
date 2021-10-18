@@ -6,11 +6,11 @@
     <string name="title_section_ticks">Moje zaznaczenia</string>
     <string name="title_section_weeks">Tygodnie</string>
     <string name="title_section_months">Miesiące</string>
-    <string name="title_activity_edit_tracks">Moje ślady</string>
-    <string name="my_tracks">Moje ślady</string>
-    <string name="title_activity_choose_track">Dodaj ślad</string>
-    <string name="choose_track">Dodaj ślad</string>
-    <string name="title_activity_edit_track">Edytuj ślad</string>
+    <string name="title_activity_edit_tracks">Moje ścieżki</string>
+    <string name="my_tracks">Moje ścieżki</string>
+    <string name="title_activity_choose_track">Dodaj ścieżkę</string>
+    <string name="choose_track">Dodaj ścieżkę</string>
+    <string name="title_activity_edit_track">Edytuj ścieżkę</string>
     <string name="edit_description_hint">Opis</string>
     <string name="today">dziś</string>
     <string name="yesterday">wczoraj</string>
@@ -18,19 +18,19 @@
     <string name="edit">Edycja</string>
     <string name="deactivate">Dezaktywacja</string>
     <string name="delete">Usuń</string>
-    <string name="title_activity_show_track">Szczegóły śladu</string>
+    <string name="title_activity_show_track">Szczegóły ścieżki</string>
     <string name="title_section_weekdays">Dni tygodnia</string>
     <string name="numer_of_occurances">Ilość wystąpień:</string>
-    <string name="no_tracks_found">Nie dodano śladów do tej grupy. Dotknij tu, aby otworzyć edytor listy śladów.</string>
+    <string name="no_tracks_found">Nie dodano ścieżek do tej grupy. Dotknij tu, aby otworzyć edytor listy ścieżek.</string>
     <string name="multiple_entries">Wiele wpisów w ciągu dnia</string>
     <string name="tick_deleted">Usunięto ostatnie zaznaczanie.</string>
-    <string name="alert_delete_track_title">Usuń ślad</string>
+    <string name="alert_delete_track_title">Usuń ścieżkę</string>
     <string name="jump_to_date">Przejdź do daty</string>
     <string name="jump_to_today">Przejdź do dziś</string>
     <string name="title_activity_about">o Tickmate</string>
     <string name="title_icon_chooser">Wybór ikony</string>
     <string name="about_description">Tickmate to po prostu jednobitowy dziennik. Dla każdego dnia możesz określić
-        czy coś się wydarzyło, czy nie. Wystąpienia mogą być określonymi rzeczami, takimi jak czyszceznie zębów nicią
+        czy coś się wydarzyło, czy nie. Wystąpienia mogą być określonymi rzeczami, takimi jak czyszczenie zębów nicią
         albo wypicie drinka. Możesz mierzyć swoje nawyki, a zgromadzone dane mogą być wyświetlane dla ostatnich
         tygodni lub miesięcy, by śledzić zmiany w czasie. W ten sposób może ci pomóc przemóc stare nawyki lub wdrożyć nowe.
 \n\nTickmate to wolne oprogramowanie, na licencji GPLv3.
@@ -41,7 +41,7 @@
     <string name="import_db_success">Baza danych zaimportowana pomyślnie.</string>
     <string name="export_db_success">Baza danych wyeksportowana pomyślnie.</string>
     <string name="import_db_none_found">Nie znaleziono backupów baz danych.</string>
-    <string name="import_db_really">Czy na pewno chcesz zaimportować wybraną bazę danych? Zastąpi ona wszystkie ślady oraz haczyki i NIE będzie możliwe cofnięcie.</string>
+    <string name="import_db_really">Czy na pewno chcesz zaimportować wybraną bazę danych? Zastąpi ona wszystkie ścieżki oraz zaznaczenia i NIE będzie możliwe cofnięcie.</string>
     <string name="show_track_total">Razem</string>
     <string name="show_track_weeklymean">Średnia tygodniowa</string>
     <string name="show_track_dayssincelast">Dni od ostatniego</string>
@@ -57,7 +57,7 @@
     <string name="title_section_quarters">Kwartały</string>
 
     <!-- New in 1.2.2 -->
-    <string name="alert_delete_track_message">Czy na pewno chcesz usunąć ten ślad? Usunięcia nie można cofnąć, a twoje zaznaczenia zostaną utracone, chyba, że masz backup.</string>
+    <string name="alert_delete_track_message">Czy na pewno chcesz usunąć tę ścieżkę? Usunięcia nie można cofnąć, a twoje zaznaczenia zostaną utracone, chyba, że masz backup.</string>
 
     <!-- New in 1.2.3 -->
     <string name="title_section_years">Lata</string>
@@ -74,7 +74,7 @@
 
     <!-- New in 1.3.0 -->
     <string name="pref_title_groups">Grupy</string>
-    <string name="pref_title_tracks">Ślady</string>
+    <string name="pref_title_tracks">Ścieżki</string>
     <string name="menu_edit_groups">Edycja grup</string>
     <string name="title_activity_edit_groups">Moje grupy</string>
     <string name="menu_add_group">Dodaj grupę</string>
@@ -116,7 +116,7 @@
 
     <!-- New in 1.4.6 -->
     <string name="pref_category_main">Ekran główny</string>
-    <string name="pref_category_track">Ekran śladów</string>
+    <string name="pref_category_track">Ekran ścieżek</string>
     <string name="pref_category_notifications">Powiadomienia</string>
     <string name="reminder_title">Przypomnienie Tickmate</string>
     <string name="reminder_text">Dotknij aby podać dzisiejsze zaznaczenia</string>
