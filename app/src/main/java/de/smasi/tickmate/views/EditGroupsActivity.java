@@ -64,13 +64,12 @@ public class EditGroupsActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
+        final int itemId = item.getItemId();
+        if (itemId ==  android.R.id.home) {
                 // Call finish here to have the same behaviour as the the "back" button.
                 finish();
                 return true;
-            case R.id.action_add_group:
-            case R.id.action_add_group_menu:
+        } else if (itemId ==  R.id.action_add_group || itemId == R.id.action_add_group_menu) {
                 Intent intent = new Intent(this, ChooseGroupActivity.class);
                 startActivityForResult(intent, 1);
                 return true;
@@ -99,34 +98,25 @@ public class EditGroupsActivity extends ListActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-
-        switch (item.getItemId()) {
-
-            case R.id.edit_groups_edit: {
+        final int itemId = item.getItemId();
+        if (itemId == R.id.edit_groups_edit) {
                 Group g = groupsAdapter.getItem((int) info.id);
                 editGroup(g);
                 return true;
-            }
-
-            case R.id.edit_groups_moveup: {
+        } else if (itemId == R.id.edit_groups_moveup) {
                 Group g  = groupsAdapter.getItem((int)info.id);
                 DataSource ds = DataSource.getInstance();
                 ds.moveGroup(g, DataSource.DIRECTION_UP);
                 loadGroups();
                 return true;
-            }
-
-            case R.id.edit_groups_movedown: {
+        } else if (itemId == R.id.edit_groups_movedown) {
                 Group g = (Group)groupsAdapter.getItem((int)info.id);
                 DataSource ds = DataSource.getInstance();
                 ds.moveGroup(g, DataSource.DIRECTION_DOWN);
                 loadGroups();
                 return true;
-            }
-
             // Consider whether the user will be able to enable/disable groups.
-
-            case R.id.edit_groups_delete: {
+        } else if (itemId ==  R.id.edit_groups_delete) {
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.alert_delete_group_title)
                         .setMessage(R.string.alert_delete_group_message)
@@ -142,7 +132,6 @@ public class EditGroupsActivity extends ListActivity {
                         })
                         .setNegativeButton(android.R.string.no, null).show();
                 return true;
-            }
         }
         return super.onContextItemSelected(item);
     }

@@ -88,34 +88,33 @@ public class Tickmate extends ListActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_edit_tracks:
-                this.editTracks(getCurrentFocus());
-                return true;
-            case R.id.action_about:
+        final int itemId = item.getItemId();
+        if (itemId == R.id.action_edit_tracks) {
+            this.editTracks(getCurrentFocus());
+            return true;
+        } else if (itemId == R.id.action_about) {
                 this.aboutActivity();
                 return true;
-            case R.id.action_settings:
+        } else if (itemId == R.id.action_settings) {
                 this.settingsActivity();
                 return true;
-            case R.id.action_jump_to_date:
+        } else if (itemId == R.id.action_jump_to_date) {
                 this.jumpToDate();
                 return true;
-            case R.id.action_jump_to_today:
+        } else if (itemId == R.id.action_jump_to_today) {
                 this.jumpToToday();
                 return true;
-            case R.id.action_export_db:
+        } else if (itemId == R.id.action_export_db) {
                 this.exportDB();
                 return true;
-            case R.id.action_import_db:
+        } else if (itemId == R.id.action_import_db) {
                 this.importDB();
                 return true;
-            case R.id.action_edit_groups:
+        } else if (itemId == R.id.action_edit_groups) {
                 this.editGroups();
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void editGroups() {

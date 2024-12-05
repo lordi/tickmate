@@ -60,8 +60,8 @@ public class EditTracksActivity extends ListActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
+		final int itemId = item.getItemId();
+		if (itemId ==  android.R.id.home) {
 			// This ID represents the Home or Up button. In the case of this
 			// activity, the Up button is shown. Use NavUtils to allow users
 			// to navigate up one level in the application structure. For
@@ -71,8 +71,7 @@ public class EditTracksActivity extends ListActivity {
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-		case R.id.action_choose_track:
-		case R.id.action_choose_track_menu:
+		} else if (itemId == R.id.action_choose_track || itemId == R.id.action_choose_track_menu) {
 			Intent intent = new Intent(this, ChooseTrackActivity.class);
 		    startActivityForResult(intent, 1);			
 			return true;
@@ -117,50 +116,38 @@ public class EditTracksActivity extends ListActivity {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 	    final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-	    
-		switch (item.getItemId()) {
-		
-		case R.id.edit_tracks_edit: {
+	    final int itemId = item.getItemId();
+		if (itemId ==  R.id.edit_tracks_edit) {
 				Track t = (Track)tracksAdapter.getItem((int)info.id);
 				editTrack(t);
 				return true;
-			}
-		
-		case R.id.edit_tracks_moveup: {
+		} else if (itemId == R.id.edit_tracks_moveup) {
 				Track t = (Track)tracksAdapter.getItem((int)info.id);
 				DataSource ds = DataSource.getInstance();
 				ds.moveTrack(t, DataSource.DIRECTION_UP);
 				loadTracks();
 				return true;
-			}	
-		
-		case R.id.edit_tracks_movedown: {
-				Track t = (Track)tracksAdapter.getItem((int)info.id);
-				DataSource ds = DataSource.getInstance();
-				ds.moveTrack(t, DataSource.DIRECTION_DOWN);
-				loadTracks();
-				return true;
-			}
-		
-		case R.id.edit_tracks_activate: {
-				Track t = (Track)tracksAdapter.getItem((int)info.id);
-				DataSource ds = DataSource.getInstance();
-				t.setEnabled(true);
-				ds.storeTrack(t);
-				loadTracks();
-				return true;
-			}		
-		
-		case R.id.edit_tracks_deactivate: {
-				Track t = (Track)tracksAdapter.getItem((int)info.id);
-				DataSource ds = DataSource.getInstance();
-				t.setEnabled(false);
-				ds.storeTrack(t);
-				loadTracks();
-				return true;
-			}
-			
-		case R.id.edit_tracks_delete: {
+		} else if (itemId == R.id.edit_tracks_movedown) {
+			Track t = (Track)tracksAdapter.getItem((int)info.id);
+			DataSource ds = DataSource.getInstance();
+			ds.moveTrack(t, DataSource.DIRECTION_DOWN);
+			loadTracks();
+			return true;
+		} else if (itemId == R.id.edit_tracks_activate) {
+			Track t = (Track) tracksAdapter.getItem((int) info.id);
+			DataSource ds = DataSource.getInstance();
+			t.setEnabled(true);
+			ds.storeTrack(t);
+			loadTracks();
+			return true;
+		} else if (itemId == R.id.edit_tracks_deactivate) {
+			Track t = (Track) tracksAdapter.getItem((int) info.id);
+			DataSource ds = DataSource.getInstance();
+			t.setEnabled(false);
+			ds.storeTrack(t);
+			loadTracks();
+			return true;
+		} else if (itemId == R.id.edit_tracks_delete) {
 			new AlertDialog.Builder(this)
 			.setTitle(R.string.alert_delete_track_title)
 			.setMessage(R.string.alert_delete_track_message)
@@ -177,7 +164,6 @@ public class EditTracksActivity extends ListActivity {
 			
 			return true;
 		}
-		}		
 		return super.onContextItemSelected(item);
 	}
 
