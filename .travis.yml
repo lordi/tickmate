@@ -5,8 +5,8 @@ sudo: false
 android:
   components:
     - platform-tools
-    - build-tools-23.0.1
-    - android-23
+    - build-tools-35.0.0
+    - android-35
     - extra-android-support
   licenses:
     - '.+'
