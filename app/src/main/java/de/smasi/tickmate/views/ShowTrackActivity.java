@@ -515,13 +515,13 @@ public class ShowTrackActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_edit:
+		final int itemId = item.getItemId();
+		if (itemId == R.id.action_edit) {
 			Intent intent = new Intent(this, TrackPreferenceActivity.class);
 			intent.putExtra("track_id", track.getId());
 			startActivityForResult(intent, 1);				
 			return true;
-		case R.id.action_delete:
+		} else if (itemId == R.id.action_delete) {
 			new AlertDialog.Builder(this)
 			.setTitle(R.string.alert_delete_track_title)
 		    .setMessage(R.string.alert_delete_track_message)
@@ -537,7 +537,7 @@ public class ShowTrackActivity extends Activity {
 		     })
 		    .show();			
 			return true;
-		case android.R.id.home:
+		} else if (itemId == android.R.id.home) {
 			// This ID represents the Home or Up button. In the case of this
 			// activity, the Up button is shown. Use NavUtils to allow users
 			// to navigate up one level in the application structure. For

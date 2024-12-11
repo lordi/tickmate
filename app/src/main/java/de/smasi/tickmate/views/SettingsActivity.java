@@ -2,7 +2,9 @@
 
 package de.smasi.tickmate.views;
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -110,8 +112,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 }
             }
         }
-        if (key.equals("notification-enabled") || key.equals("notification-time"))
+        if (key.equals("notification-enabled") || key.equals("notification-time")) {
+            /* request permission to show notification */
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requestPermissions(new String[] {Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+
+            /* update alarm */
             TickmateNotificationBroadcastReceiver.updateAlarm(this);
+        }
     }
 
     @Override

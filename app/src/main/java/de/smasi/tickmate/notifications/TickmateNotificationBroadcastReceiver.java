@@ -50,7 +50,7 @@ public class TickmateNotificationBroadcastReceiver extends BroadcastReceiver {
             Intent resultIntent = new Intent(context, Tickmate.class);
 
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             mBuilder.setContentIntent(pendingIntent);
             NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -84,7 +84,7 @@ public class TickmateNotificationBroadcastReceiver extends BroadcastReceiver {
         Intent intent = new Intent(context, TickmateNotificationBroadcastReceiver.class);
         intent.putExtra("onetime", Boolean.FALSE);
         intent.addFlags(FLAG_INCLUDE_STOPPED_PACKAGES);
-        PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         // cancel any previous alarms
         am.cancel(pi);
 

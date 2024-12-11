@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	android:id="@+id/icon_chooser_layout"
+	android:layout_width="match_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent">
 <GridView
 	android:id="@+id/icon_chooser_gridview"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,3 +19,4 @@
     android:gravity="center">
     
 </GridView>
+</LinearLayout>

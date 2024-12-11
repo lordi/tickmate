@@ -6,11 +6,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.TickColor;
@@ -49,6 +51,10 @@ public class TickColorPreference extends EditTextPreference {
                 getDialog().dismiss();
             }
         });
+
+        getEditText().setVisibility(View.GONE);
+        getEditText().setInputType(InputType.TYPE_NULL);
+        ((LinearLayout) view.findViewById(R.id.tick_color_chooser_layout)).addView(getEditText());
     }
 
     // TODO: remove "positive button"

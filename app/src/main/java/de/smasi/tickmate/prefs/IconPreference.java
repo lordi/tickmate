@@ -3,11 +3,13 @@ package de.smasi.tickmate.prefs;
 import android.content.Context;
 import android.content.res.Resources;
 import android.preference.EditTextPreference;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import de.smasi.tickmate.R;
 import de.smasi.tickmate.views.IconListAdapter;
@@ -36,7 +38,10 @@ public class IconPreference extends EditTextPreference {
 					setText((String)arg0.getItemAtPosition(id));
 					getDialog().dismiss();
 				}
-	      });     
+	      });
+		getEditText().setVisibility(View.GONE);
+		getEditText().setInputType(InputType.TYPE_NULL);
+		((LinearLayout) view.findViewById(R.id.icon_chooser_layout)).addView(getEditText());
 	}
 
 	public IconPreference(Context context, AttributeSet attrs) {
