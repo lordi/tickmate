@@ -1,6 +1,8 @@
-master
-------
+v1.4.14
+-------
 
+* Fix crashes and migrate to new SDK in several places (@flyingOwl)
+* Translation fixes (@rozie)
 * Add scrolling in about page for big font sizes (@yuhuitech)
 
 v1.4.13
