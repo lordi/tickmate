@@ -2,6 +2,10 @@
 
 ![Unit Tests](https://github.com/lordi/tickmate/workflows/Unit%20Tests/badge.svg) ![F-Droid (including pre-releases)](https://img.shields.io/f-droid/v/de.smasi.tickmate?include_prereleases) ![Play Store](https://img.shields.io/badge/Play%20Store-de.smasi.tickmate-blue)
 
+### Maintainer Wanted
+
+I'm searching for a co-maintainer for Tickmate since my time to keep the project updated is limited. If you know your way around Android development and are interested in this role, please get in touch.
+
 ### About
 
 Tickmate is basically a one bit journal. For each day, you can specify whether something has occurred or not. The occurrences can be arbitrary things, like flossing your teeth or having a drink. You are able to quantify your habits and the accumulated data can be displayed for the past weeks or months to track changes over time. This way, it may help you to get over your old habits or embody new ones.
