@@ -117,4 +117,12 @@
 
     </application>
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.CREATE_DOCUMENT" />
+            <category android:name="android.intent.category.OPENABLE" />
+            <data android:mimeType="application/x-sqlite3"/>
+        </intent>
+    </queries>
+
 </manifest>
