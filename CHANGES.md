@@ -1,6 +1,7 @@
 master
 ------
 
+* Fix system UI and navbar overlap (@lordi)
 * Fix export/import in SDK 30 (@horsetail-fern)
 
 v1.4.14
